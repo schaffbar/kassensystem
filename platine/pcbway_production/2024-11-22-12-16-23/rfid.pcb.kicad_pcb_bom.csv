@@ -1,0 +1,9 @@
+﻿Designator,Quantity,Value,Footprint,Package,MPN,DNP,Mount_Type,Description,MF,MAXIMUM_PACKAGE_HEIGHT,Price,Check_prices,STANDARD,SnapEDA_Link,MP,Description_1,Availability,MANUFACTURER
+5V GND GP3 GP1,1,Conn_01x04_Socket,PinSocket_1x04_P2.54mm_Vertical,,,,tht,"Generic connector, single row, 01x04, script generated",,,,,,,,,,
+ESP32 C3 Super Mini,1,ESP32-C3_SUPERMINI,MODULE_ESP32-C3_SUPERMINI,Package,,,tht,,Espressif Systems,4.2mm,None,https://www.snapeda.com/parts/ESP32-C3%20SuperMini_TH/Espressif+Systems/view-part/?ref=eda,Manufacturer Recommendations,https://www.snapeda.com/parts/ESP32-C3%20SuperMini_TH/Espressif+Systems/view-part/?ref=snap,ESP32-C3 SuperMini_TH,"
+                        
+                            Super tiny ESP32-C3 board
+                        
+",Not in stock,Espressif
+J1,1,TFT Adafruit_ILI9341,PinSocket_1x14_P2.54mm_Vertical,,,,tht,Pin Header female with pin space 2.54mm. Pin Count - 14,,,,,,,,,,
+J2,1,MFRC522,PinSocket_1x08_P2.54mm_Vertical,,,,tht,Pin Header female with pin space 2.54mm. Pin Count -8,,,,,,,,,,

@@ -1,0 +1,5 @@
+﻿pos_x,pos_y,rotation,side,designator,mpn,pack,footprint,value,mount_type
+161.04,-139.475,90.0,bottom,5V GND GP3 GP1,,,PinSocket_1x04_P2.54mm_Vertical,Conn_01x04_Socket,tht
+160.88,-99.9,180.0,bottom,ESP32 C3 Super Mini,,Package,MODULE_ESP32-C3_SUPERMINI,ESP32-C3_SUPERMINI,tht
+180.0,-132.48,180.0,top,J1,,,PinSocket_1x14_P2.54mm_Vertical,TFT Adafruit_ILI9341,tht
+188.5,-125.08,180.0,top,J2,,,PinSocket_1x08_P2.54mm_Vertical,MFRC522,tht

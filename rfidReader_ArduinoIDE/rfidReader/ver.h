@@ -1,0 +1,19 @@
+// version history
+const char* sw_version = "0.1.0";
+/* 
+ * Reihenfolge major.minor.bugfix
+ *
+ * neuste Änderungen sollen an den Beginn der Liste geschrieben werden
+ *
+ * 0.1.0
+ * -) Darstellung der SW Version beim Start des rfidReaders
+ * -) Für den UseCase "GateKeeper", ist es möglich mit "Weiter mit Touch" die Darstellung abzubrechen, damit ein Stau von Kunden vor dem Gerät vermieden wird 
+
+ * 0.0.0 allgemeiner Ansatz
+ * Beinhaltet folgende UseCases 
+ * -) Counter     Übertragung der RFID in eine Tabelle der Datenbank für die Registrierung am Tresen
+ * -) Gatekeeper  Zeiterfassung für den Kunden wie lange er sich im Werkstattbereich aufhält 
+ + 
+ * Offene Punkte: 
+ * fehlender UseCase Switchbox
+ */

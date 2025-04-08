@@ -17,9 +17,9 @@ Das Lesen der RFID-Tags kann mittels eines RFID-Lesers erfolgen,
 während die Daten in einer Datenbank auf einem Server gespeichert werden.
 
 Daraus ergibt sich für das System folgende Aufteilung
--)rfidReader - Bereitstellung des RFID-Tags an unterschiedlichen Positionen
--)Comm Edge Device (TimeMachine) - Software auf dem Server dient als Schnittstelle zum Datenbanksystem
--)ein Kassensystem
+- rfidReader - Bereitstellung des RFID-Tags an unterschiedlichen Positionen
+- Comm Edge Device (TimeMachine) - Software auf dem Server dient als Schnittstelle zum Datenbanksystem
+- ein Kassensystem
 
 Als Kassensystem wird aktuell mit einer Offline Version von Odoo gearbeitet,
 diese läuft in einem Docker-Container, in einem weiteren Container befindet sich die Datenbank,
@@ -28,9 +28,9 @@ ein weiteren Container wird es für die TimeMachine-Software geben.
 ## rfidReader
 
 An folgenden oben beschriebenen Position kann ein RFID-Reader zur Anwendung kommen.
--) dem Tresen
--) dem Eingangsbereich zur Werkstatt
--) an einem elektrischem Gerät "Gerätekontrolle"
+- dem Tresen
+- dem Eingangsbereich zur Werkstatt
+- an einem elektrischem Gerät "Gerätekontrolle"
 diese Anwendungsfälle werden im weiteren Verlauf auch UseCases genannt.
 
 Aktuell wird die ArduinoIDE zur Entwicklung verwendet, um aber die verwendeten Bibliotheken mitzuliefern
@@ -41,9 +41,9 @@ anderem leichter implementiert werden kann.
 ### Hardwarebeschreibung
 
 Eine Mikroprozessorsystem soll folgende Hardwaremerkmale aufweisen.
--) ein Mikroprozessor mit einer WLan-Schnittstelle zur Kommunikation mit dem Server und den Datenbanken,
--) einem RFID-Modul zum Lesen der ID-Nummer
--) ein Display zur Darstellung von Informationen an den Benutzer,
+- ein Mikroprozessor mit einer WLan-Schnittstelle zur Kommunikation mit dem Server und den Datenbanken,
+- einem RFID-Modul zum Lesen der ID-Nummer
+- ein Display zur Darstellung von Informationen an den Benutzer,
    beziehungsweise Interaktion über die Touch-Funktionalität.
 
 ### Softwarebeschreibung

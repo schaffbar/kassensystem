@@ -54,7 +54,7 @@ int analyseResponse(String strAnswer)
       }
       else
       {
-        Serial.println("errorUnknownUseCase()");
+        Serial.println("errorUnknownUseCase() or state");
         errorUnknownUseCase();
       }
       //}
@@ -260,11 +260,13 @@ void setUseCase(String strUseCase)
     else
     {
       eUC = UnKnown;
+      Serial.println("!!!Unknown Use Case = "+strUseCase);
     }
   }
   else
   {
       eUC = UnKnown;
+      Serial.println("!!!Unknown Use Case = "+strUseCase);
   }
   Serial.println("UseCase = "+String(cUseCase) + " " + strUseCase);
 }
@@ -478,10 +480,10 @@ void evalCounterAction(String strRfidTag)
 
 void evalTouchAction()
 {
-  if(eUC = GateKeeper)
+  if((eUC == GateKeeper) or (eUC == Counter))
   { 
     if(eState == end)
-    {  // use case GateKeeper -> cancel display message on touch event => switch back to idle state
+    {  // use case GateKeeper or GateKeeper -> cancel display message on touch event => switch back to idle state
       chngState2Idle();
     }
   }
@@ -494,7 +496,7 @@ void chngState2Idle()
   lIntStartAt = 0;
   // Switching back to idle mode
   eState      = idle;
-  Serial.println("Switching state to idle ");
+  Serial.println("Switching state to idle (UC="+String(eUC)+")");
   dspClear();
   strHeader = "";
   strMsg    = "";

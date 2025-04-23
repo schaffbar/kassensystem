@@ -1,9 +1,13 @@
 // version history
-const char* sw_version = "0.1.0";
+const char* sw_version = "0.1.1";
 /* 
  * Reihenfolge major.minor.bugfix
  *
  * neuste Änderungen sollen an den Beginn der Liste geschrieben werden
+ *
+ * 0.1.1
+ * -) in der Datei support.ino in der Funktion void evalTouchAction() = ersetzt durch == 
+ *    und ebenfalls den UseCase Counter hinzugefügt
  *
  * 0.1.0
  * -) Darstellung der SW Version beim Start des rfidReaders

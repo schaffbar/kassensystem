@@ -77,11 +77,11 @@
 #include "pinoutdef.h"
 #include "ver.h"
 
-const char* WiFiSsid =  "SSID";
-const char* WiFiPassWd =  "PassWd";
+const char* WiFiSsid =  "WLAN-Name";
+const char* WiFiPassWd =  "WLAN-PassWd";
 
 const uint port = 5000;
-const char* ip = "192.168.178.87";
+const char* ip = "IP-Addr";
 
 
 bool  bWifiInitFlag = false;
@@ -464,7 +464,7 @@ void loop()
     }
     dsplyTime();
     dsplyWifiState();
-    if((eUC == GateKeeper) and ((iIconNo == 9)   or (iIconNo == 10))) // and bGKMinUpdateFlag
+    if((eUC == GateKeeper) and ((iIconNo == 9)  or (iIconNo == 10))) // and bGKMinUpdateFlag
     { // the value of the units shall be displayed when the customer is entering or leving the workshop are every time
       Serial.println("Info: before dsplyUnitSecond() ");
       dsplyUnitSecond();  // the update of minutes will called, when necessary

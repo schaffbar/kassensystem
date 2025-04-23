@@ -469,7 +469,7 @@ void dsplyIdle()
       }
       else
       {
-        Serial.println("Display RFID BMP");  
+        Serial.println("Display RFID BMP "+String(eUC));  
       }
     }
   }
@@ -547,7 +547,7 @@ void dsplyMask()
   }
   else
   {
-    dsplyErrorInfo("Error","Unkown UseCase",5,0,0);
+    dsplyErrorInfo("Error","Unkown UseCase"+String(cDevUseCase),5,0,0);
   }
   if(bWifiLostFlag)
   { // Wifi Connnection lost ->
@@ -569,6 +569,7 @@ void dsplyCounter()
   
   tft.setCursor(iTmpXpos,120); 
   tft.println(strUIdHex);
+  Serial.println("dsplyCounter() - "+strUIdHex);
   waitForTouch();
 }
 

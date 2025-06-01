@@ -1,9 +1,9 @@
-from flask import Flask
+from flask import Flask, flash, redirect, render_template, request, url_for
 from flask_admin import Admin
 from flask_admin.contrib.sqla import ModelView
 from flask_sock import Sock
 from sqlalchemy.orm import configure_mappers
-from models import Device, Card, CardAction
+from models import Clipboard, Device, Card, CardAction
 from database import db
 from messages import (
     DeviceInitRequest,
@@ -11,16 +11,21 @@ from messages import (
     DeviceCardRequest,
     DeviceCardResponse,
 )
-from typing import Optional, Sequence
+from typing import Optional
 import json
 import datetime
 import socket
 import threading
+from templates.forms import CheckoutForm, LookupForm, RegisterForm
 from util import sum_times, validate_data
+from flask_bootstrap import Bootstrap5
 
 
 app = Flask(__name__)
 app.secret_key = "51a9e9a11f8f7134c177bacb"
+
+app.config["BOOTSTRAP_SERVE_LOCAL"] = True
+bootstrap = Bootstrap5(app)
 
 sock = Sock(app)
 
@@ -45,6 +50,60 @@ class CardActionView(ModelView):
 admin.add_view(ModelView(Device, db.session))
 admin.add_view(ModelView(Card, db.session))
 admin.add_view(CardActionView(CardAction, db.session))
+admin.add_view(ModelView(Clipboard, db.session))
+
+
+@app.route("/")
+def index():
+    return render_template("index.html")
+
+
+@app.route("/register", methods=("GET", "POST"))
+def register():
+    form = RegisterForm(request.form)
+
+    if request.method == "POST" and form.validate():
+        Card.set_name(form.rfid.data, form.name.data)
+        flash("Person eingetragen")
+        return redirect(url_for("register"))
+
+    rfid = Clipboard.get_rfid("Counter")
+    form.rfid.data = rfid
+    return render_template("register.html", form=form)
+
+
+@app.route("/lookup", methods=("GET", "POST"))
+def lookup():
+    form = LookupForm()
+
+    if request.method == "POST" and form.validate():
+        return redirect(url_for("checkout", rfid=form.rfid.data))
+
+    rfid = Clipboard.get_rfid("Counter")
+    form.rfid.data = rfid
+    return render_template("lookup.html", form=form)
+
+
+@app.route("/checkout/<rfid>", methods=("GET", "POST"))
+def checkout(rfid: str):
+    form = CheckoutForm()
+
+    if request.method == "POST" and form.validate():
+        CardAction.mark_as_processed(rfid)
+        flash("Als bezahlt markiert")
+        return redirect(url_for("lookup"))
+
+    card = Card.get_by_rfid(rfid)
+    last_actions = CardAction.get_last_actions(card)
+    min, _ = sum_times(last_actions)
+
+    return render_template(
+        "checkout.html",
+        form=form,
+        card=card,
+        last_actions=last_actions,
+        elapsed_min=min,
+    )
 
 
 def handle_client(client_socket):
@@ -147,26 +206,14 @@ def handle_device_card(sock: Sock, request: DeviceCardRequest):
         return
 
     elif device is not None:
-        last_actions: Sequence[CardAction] = (
-            (
-                db.session.execute(
-                    db.select(CardAction)
-                    .filter_by(
-                        device_id=device.id,
-                        card_id=card.id,
-                        processed=False,
-                    )
-                    .order_by(CardAction.created)  # asc
-                )
-            )
-            .scalars()
-            .all()
-        )
+        last_actions = CardAction.get_last_actions(card)
 
         if device.usecase == "C":
+            Clipboard.set_rfid(device.terminal, card.rfid)
+
             min, sec = sum_times(last_actions)
             response = DeviceCardResponse(
-                CUSTOMERNAME="",
+                CUSTOMERNAME=card.name,
                 CUSTOMERSTARTSTOP="",
                 ICON="HI",
                 STATE="END",
@@ -180,7 +227,7 @@ def handle_device_card(sock: Sock, request: DeviceCardRequest):
 
         elif device.usecase == "G":
             response = DeviceCardResponse(
-                CUSTOMERNAME="",
+                CUSTOMERNAME=card.name,
                 CUSTOMERSTARTSTOP="",
                 ICON="",
                 STATE="END",

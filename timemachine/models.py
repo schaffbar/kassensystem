@@ -97,7 +97,7 @@ class Clipboard(db.Model):
     rfid: Mapped[str]
 
     def get_rfid(terminal: str) -> str:
-        clip: Clipboard = (
+        clip: Optional[Clipboard] = (
             db.session.execute(db.select(Clipboard).filter_by(terminal=terminal))
         ).scalar_one_or_none()
         if clip is None:
@@ -105,6 +105,14 @@ class Clipboard(db.Model):
         return clip.rfid
 
     def set_rfid(terminal: str, rfid: str):
-        new_clipboard = Clipboard(terminal=terminal, rfid=rfid)
-        db.session.add(new_clipboard)
+        clip: Optional[Clipboard] = (
+            db.session.execute(db.select(Clipboard).filter_by(terminal=terminal))
+        ).scalar_one_or_none()
+
+        if clip is None:
+            new_clipboard = Clipboard(terminal=terminal, rfid=rfid)
+            db.session.add(new_clipboard)
+        else:
+            clip.rfid = rfid
+
         db.session.commit()

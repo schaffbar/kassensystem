@@ -60,3 +60,20 @@ class DeviceCardResponse(BaseModel):
     UNITS: str
     ERROR: str
     DEVUSECASE: str
+
+
+class CounterCardRequest(BaseModel):
+    MACADDR: str
+    STATE: str
+    DEVUSECASE: str
+    RFID: str
+    TERMINAL: str
+    ICON: str
+    ERROR: str
+
+
+class CounterCardResponse(BaseModel):
+    DEVUSECASE: str
+    ERROR: str
+    STATE: str
+    ICON: str

@@ -6,6 +6,8 @@ from sqlalchemy.orm import configure_mappers
 from models import Clipboard, Device, Card, CardAction
 from database import db
 from messages import (
+    CounterCardRequest,
+    CounterCardResponse,
     DeviceInitRequest,
     DeviceInitResponse,
     DeviceCardRequest,
@@ -119,7 +121,11 @@ def handle_client(client_socket):
                 data = json.loads(message)
 
                 # ORDER MATTERS! Less specific messages to the back
-                accepted_models = [DeviceCardRequest, DeviceInitRequest]
+                accepted_models = [
+                    CounterCardRequest,
+                    DeviceCardRequest,
+                    DeviceInitRequest,
+                ]
 
                 validated_object = validate_data(data, accepted_models)
 
@@ -135,6 +141,10 @@ def handle_client(client_socket):
                 elif DeviceCardRequest.__name__ == validated_object.__class__.__name__:
                     request: DeviceCardRequest = validated_object
                     handle_device_card(sock, request)
+
+                elif CounterCardRequest.__name__ == validated_object.__class__.__name__:
+                    request: CounterCardRequest = validated_object
+                    handle_counter_card(sock, request)
 
                 else:
                     print("{}")
@@ -180,6 +190,46 @@ def handle_device_init(sock: Sock, request: DeviceInitRequest):
     sock.sendall(response.model_dump_json().encode("utf-8"))
 
 
+def handle_counter_card(sock: Sock, request: CounterCardRequest):
+
+    device: Optional[Device] = (
+        db.session.execute(db.select(Device).filter_by(mac=request.MACADDR))
+    ).scalar_one_or_none()
+
+    card: Optional[Card] = (
+        db.session.execute(db.select(Card).filter_by(rfid=request.RFID))
+    ).scalar_one_or_none()
+
+    if card is None:
+        response = DeviceCardResponse(
+            CUSTOMERNAME="XXX",
+            CUSTOMERSTARTSTOP="",
+            ICON="NOREG",
+            STATE="END",
+            UNITS="00:00",
+            ERROR="RFID unbekannt!",
+            DEVUSECASE=device.usecase if device is not None else "",
+        )
+
+        print(response.model_dump_json())
+        sock.sendall(response.model_dump_json().encode("utf-8"))
+        return
+
+    elif device is not None:
+        if device.usecase == "C":
+            Clipboard.set_rfid(device.terminal, card.rfid)
+
+            response = CounterCardResponse(
+                DEVUSECASE="C",
+                ERROR="",
+                STATE="END",
+                ICON="OK",
+            )
+            print(response.model_dump_json())
+            sock.sendall(response.model_dump_json().encode("utf-8"))
+            return
+
+
 def handle_device_card(sock: Sock, request: DeviceCardRequest):
 
     device: Optional[Device] = (
@@ -208,24 +258,7 @@ def handle_device_card(sock: Sock, request: DeviceCardRequest):
     elif device is not None:
         last_actions = CardAction.get_last_actions(card)
 
-        if device.usecase == "C":
-            Clipboard.set_rfid(device.terminal, card.rfid)
-
-            min, sec = sum_times(last_actions)
-            response = DeviceCardResponse(
-                CUSTOMERNAME=card.name,
-                CUSTOMERSTARTSTOP="",
-                ICON="HI",
-                STATE="END",
-                UNITS=f"{min}:{sec}",
-                ERROR="",
-                DEVUSECASE="C",
-            )
-            print(response.model_dump_json())
-            sock.sendall(response.model_dump_json().encode("utf-8"))
-            return
-
-        elif device.usecase == "G":
+        if device.usecase == "G":
             response = DeviceCardResponse(
                 CUSTOMERNAME=card.name,
                 CUSTOMERSTARTSTOP="",

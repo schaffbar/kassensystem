@@ -200,23 +200,17 @@ def handle_counter_card(sock: Sock, request: CounterCardRequest):
         db.session.execute(db.select(Card).filter_by(rfid=request.RFID))
     ).scalar_one_or_none()
 
-    if card is None:
-        response = DeviceCardResponse(
-            CUSTOMERNAME="XXX",
-            CUSTOMERSTARTSTOP="",
-            ICON="NOREG",
-            STATE="END",
-            UNITS="00:00",
-            ERROR="RFID unbekannt!",
-            DEVUSECASE=device.usecase if device is not None else "",
-        )
-
-        print(response.model_dump_json())
-        sock.sendall(response.model_dump_json().encode("utf-8"))
-        return
-
-    elif device is not None:
+    if device is not None:
         if device.usecase == "C":
+
+            if card is None:
+                card = Card(
+                    rfid=request.RFID,
+                    name="Neue Karte",
+                )
+                db.session.add(card)
+                db.session.commit()
+
             Clipboard.set_rfid(device.terminal, card.rfid)
 
             response = CounterCardResponse(

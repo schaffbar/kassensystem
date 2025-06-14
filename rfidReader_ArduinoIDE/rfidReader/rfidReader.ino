@@ -80,9 +80,9 @@
 const char* WiFiSsid =  "WLAN-Name";
 const char* WiFiPassWd =  "WLAN-PassWd";
 
-const uint port = 5000;
-const char* ip = "IP-Addr";
 
+const uint port = 5000;
+const char* ip = "odoo"; 
 
 bool  bWifiInitFlag = false;
 bool  bWifiLostFlag = false;
@@ -111,7 +111,13 @@ String strUnits           = "ZZZZZZ";      // usecase SwitchBox
 String strError           = "";
 String strFlagOK          = "";            // OK - access to tool granted / KO - access of tool not allowed
 
+// the following variables are used to display the good-bye message for the usecase "SwitchBox"
 String strWorkID          = "";            // store the card id that nobody else can switch off the machine
+String strWorkStartTime   = "";            // Start-Zeitstempel vom ESP32 bestimmt
+String strWorkEndTime     = "";            // Stop-Zeitstemper vom ESP32 bestimmt 
+String strWorkUnitMin     = "";
+String strWorkUnitSec     = "";
+bool bDsplySwitchBoxInit  = false;
 
 String strHeader          = "";
 String strMsg             = "";
@@ -275,6 +281,7 @@ void setup()
 
   Serial.println(F("Scan PICC to see UID, SAK, type, and data blocks..."));
   mfrc522.PCD_Init();   // Init MFRC522 board.
+  delay(10); // for is requested for slow ICs 
   MFRC522Debug::PCD_DumpVersionToSerial(mfrc522, Serial);	// Show details of PCD - MFRC522 Card Reader details.
 	
   eState = start;
@@ -464,8 +471,9 @@ void loop()
     }
     dsplyTime();
     dsplyWifiState();
-    if((eUC == GateKeeper) and ((iIconNo == 9)  or (iIconNo == 10))) // and bGKMinUpdateFlag
+    if((eUC == GateKeeper) and ((iIconNo == 9)  or (iIconNo == 10)) or ((eUC == SwitchBox) and  (iIconNo == 10))) // and bGKMinUpdateFlag
     { // the value of the units shall be displayed when the customer is entering or leving the workshop are every time
+      // or switch of the tool 
       Serial.println("Info: before dsplyUnitSecond() ");
       dsplyUnitSecond();  // the update of minutes will called, when necessary
     }

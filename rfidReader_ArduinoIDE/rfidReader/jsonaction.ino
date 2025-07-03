@@ -337,7 +337,7 @@ JsonDocument getJSONUserData(String strRfidTag)
   jDoc["CUSTOMERNAME"] = "";
   strTime = rtc.getTime();
   jDoc["CUSTOMERSTARTSTOP"] = strTime;  // Startzeit, wenn State = IDLE und Endzeit, wenn State = Working beim Senden der Botschaft an den Server
-                                        // Beim Empfang der zugehörigen Botschaft vom Server steht in diesem Eintrag die Summe der bisher aufgelaufenen Einheiten
+                                        // Beim Empfang der zugehï¿½rigen Botschaft vom Server steht in diesem Eintrag die Summe der bisher aufgelaufenen Einheiten
   jDoc["STATE"]   = getState();
   if (eState == working)
   {
@@ -356,7 +356,8 @@ JsonDocument getJSONUserData(String strRfidTag)
   /*
   if(eSolState == SolenoidOff)
   { // state is off -> request state on
-    // jDoc["REQUEST"] = "ON";                // wurde für eine einheitliche Struktur des JSON-Doks entfernt => die Entscheidung erfolgt jetzt über den State-Eintrag
+
+    // jDoc["REQUEST"] = "ON";                // wurde fÃ¼r eine einheitliche Struktur des JSON-Doks entfernt => die Entscheidung erfolgt jetzt Ã¼ber den State-Eintrag
     // jDoc["STATE"]   = "IDLE";
     jDoc["UNITS"]   = 0;                        
   }

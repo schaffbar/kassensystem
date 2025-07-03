@@ -34,8 +34,8 @@
 //  with the parameter RFIDREADERRIGHT the pins of the TFT display are on the right side 
 //  and the rfid reader is on the right side of the TFT display
 
-//#define BREADBOARD
-#define PCB                 // C3 on PCB
+//#define BREADBOARD          // ESP32 Dev Module
+#define PCB                 // ESP32 C3 on PCB
 #define RFIDREADERRIGHT     // processor settings are to modify
 
 // The used pins of this project are defined in the pinoutdef.h file
@@ -48,7 +48,6 @@
 #include <WiFi.h>
 #include <esp_wifi.h> // get the mac address
 #include <HTTPClient.h>
-//#include <HttpClient.h>
 #define wifiNoTries 50      // number of tries to get WLan connection
 
 //-----------------------------
@@ -77,12 +76,18 @@
 #include "pinoutdef.h"
 #include "ver.h"
 
-const char* WiFiSsid =  "WLAN-Name";
-const char* WiFiPassWd =  "WLAN-PassWd";
+//const char* WiFiSsid =  "WLAN-Name";
+//const char* WiFiPassWd =  "WLAN-PassWd";
+
+//const uint port = 5000;
+//const char* ip = "IP-Addr";
+
+const char* WiFiSsid   =  "GL-A1300-12a";             //  Schaffbar   OldFRITZ
+const char* WiFiPassWd =  "TXCKZNE2WS"; // gYC7DPMNqfQy!HwHNEcfn   39206303363753190530
 
 const uint port = 5000;
-const char* ip = "IP-Addr";
-
+const char* ip = "raspberrypi"; // "192.168.178.87";
+//const char* ip = "odoo"; 
 
 bool  bWifiInitFlag = false;
 bool  bWifiLostFlag = false;
@@ -111,7 +116,13 @@ String strUnits           = "ZZZZZZ";      // usecase SwitchBox
 String strError           = "";
 String strFlagOK          = "";            // OK - access to tool granted / KO - access of tool not allowed
 
+// the following variables are used to display the good-bye message for the usecase "SwitchBox"
 String strWorkID          = "";            // store the card id that nobody else can switch off the machine
+String strWorkStartTime   = "";            // Start-Zeitstempel vom ESP32 bestimmt
+String strWorkEndTime     = "";            // Stop-Zeitstemper vom ESP32 bestimmt 
+String strWorkUnitMin     = "";
+String strWorkUnitSec     = "";
+bool bDsplySwitchBoxInit  = false;
 
 String strHeader          = "";
 String strMsg             = "";
@@ -275,6 +286,7 @@ void setup()
 
   Serial.println(F("Scan PICC to see UID, SAK, type, and data blocks..."));
   mfrc522.PCD_Init();   // Init MFRC522 board.
+  delay(10); // for is requested for slow ICs 
   MFRC522Debug::PCD_DumpVersionToSerial(mfrc522, Serial);	// Show details of PCD - MFRC522 Card Reader details.
 	
   eState = start;
@@ -288,6 +300,7 @@ void setup()
   }
   else
   {
+    Serial.println(F("SD begin() ok :-)"));
     uiSDCardFlag = 1;
   }
   ImageReturnCode stat;
@@ -464,8 +477,9 @@ void loop()
     }
     dsplyTime();
     dsplyWifiState();
-    if((eUC == GateKeeper) and ((iIconNo == 9)  or (iIconNo == 10))) // and bGKMinUpdateFlag
+    if((eUC == GateKeeper) and ((iIconNo == 9)  or (iIconNo == 10)) or ((eUC == SwitchBox) and  (iIconNo == 10))) // and bGKMinUpdateFlag
     { // the value of the units shall be displayed when the customer is entering or leving the workshop are every time
+      // or switch of the tool 
       Serial.println("Info: before dsplyUnitSecond() ");
       dsplyUnitSecond();  // the update of minutes will called, when necessary
     }

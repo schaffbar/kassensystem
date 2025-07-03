@@ -216,13 +216,14 @@ int jsExtractSwitchBoxData(JsonDocument jDoc)
   }
 }
 
+/*
 int jsExtractSBUpdateData(JsonDocument jDoc)
 {
   sTimeStart = jsExtractDate(jDoc);
   sTimeRunning = sTimeStart;
   ulTimeStart = rtc.getLocalEpoch();
 
-  if((String(jDoc["DEVACCESS"])=="Yes") and (eState == working) and (String(jDoc["ERROR"])==""))
+ if((String(jDoc["DEVACCESS"])=="Yes") and (eState == working) and (String(jDoc["ERROR"])=="")) // !!!
   { // already checked DEVACCESS = YES, ERROR = "", STATE = WORKING
     SolenoidON();
     if(eSolState == SolenoidOn)
@@ -238,6 +239,7 @@ int jsExtractSBUpdateData(JsonDocument jDoc)
   }
   return 0;
 }
+*/
 
 int jsExtractGateKeeperData(JsonDocument jDoc)
 /****************************************************************************************************
@@ -325,23 +327,48 @@ JsonDocument getJSONUserData(String strRfidTag)
 ****************************************************************************************************/
 {
   JsonDocument jDoc;
-  jDoc["MACADDR"]   = WiFi.macAddress();
-  jDoc["STATE"]     = "IDLE";
-  jDoc["RFID"]      =  strRfidTag;
+  String strTime = "";
+  jDoc["MACADDR"]      = WiFi.macAddress();
+  
+  jDoc["RFID"]         =  strRfidTag;
   jDoc["DEVUSECASE"]   = getUseCase(); // +'\"';
-  jDoc["ICON"]      = "";
-  jDoc["ERROR"]     = "";
+  jDoc["ICON"]         = "";
+  jDoc["ERROR"]        = "";
+  jDoc["CUSTOMERNAME"] = "";
+  strTime = rtc.getTime();
+  jDoc["CUSTOMERSTARTSTOP"] = strTime;  // Startzeit, wenn State = IDLE und Endzeit, wenn State = Working beim Senden der Botschaft an den Server
+                                        // Beim Empfang der zugehörigen Botschaft vom Server steht in diesem Eintrag die Summe der bisher aufgelaufenen Einheiten
+  jDoc["STATE"]   = getState();
+  if (eState == working)
+  {
+    char cATmpSec[6];
+    itoa(liUnitMinutes,cATmpSec,10);
+    strWorkUnitMin   = String(cATmpSec);
+    itoa(uiUnitSeconds,cATmpSec,10);
+    strWorkUnitSec   = String(cATmpSec);;
+
+    strWorkEndTime = strTime;
+  }
+  else if (eState == idle)
+  {
+    strWorkStartTime = strTime;
+  }
+  /*
   if(eSolState == SolenoidOff)
   { // state is off -> request state on
-    jDoc["REQUEST"] = "ON";       
-    jDoc["UNITS"]   = 0;
+    // jDoc["REQUEST"] = "ON";                // wurde für eine einheitliche Struktur des JSON-Doks entfernt => die Entscheidung erfolgt jetzt über den State-Eintrag
+    // jDoc["STATE"]   = "IDLE";
+    jDoc["UNITS"]   = 0;                        
   }
   else 
   { // state is on -> request state off
-    jDoc["REQUEST"] = "OFF";       
-    jDoc["UNITS"]   = fSolUnitsMin;
+    // jDoc["REQUEST"] = "OFF";    
+    // jDoc["STATE"]   = "WORKING";   
+    jDoc["UNITS"]   = fSolUnitsMin;           // aufgelaufene Einheiten in Minuten und Sekunden, beim Abmelden bzw. Ausschalten, des aktuellen Intervalls
   }
+  */
   Serial.println("MISSING CODE:  Request und Units anpassen!");
+  Serial.println("State: "+getState()+"  jDoc[CUSTOMERSTARTSTOP]: "+ strTime);
   // answer = "[\n {\n  \"macaddr\" : \""+WiFi.macAddress()+"\", \n  \"ID\" : \""+strRfidTag+"\"\n  } \n]";
   //serializeJson(jDoc, Serial);
   return jDoc;

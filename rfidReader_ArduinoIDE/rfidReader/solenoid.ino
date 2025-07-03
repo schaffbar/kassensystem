@@ -26,6 +26,7 @@ void SolenoidON(void)
   delay(100);
   httpClient.end();
   eSolState = SolenoidOn;
+  Serial.println("SolenoidON()");
 }
 
 void SolenoidTOGGLE(void)
@@ -35,4 +36,5 @@ void SolenoidTOGGLE(void)
   iHttpCode = httpClient.GET();
   delay(100);
   httpClient.end();
+  Serial.println("SolenoidOFF()");
 }

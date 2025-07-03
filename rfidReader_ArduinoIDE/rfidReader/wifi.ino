@@ -123,11 +123,9 @@ void sendRequest(JsonDocument jDoc)
   if(!bCnFlag)
   {
     dsplyErrorInfo("Error","Server not available",5,0,2);
-    Serial.println("Message NOT sent");
+    Serial.println("Message sent, no success");
     playError();
-    stop();
+    softReset(); //stop();
   }
- 
-
-
 }
+

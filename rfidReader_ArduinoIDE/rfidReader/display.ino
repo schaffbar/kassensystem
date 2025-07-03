@@ -608,7 +608,7 @@ void dsplySwitchBox()
   if(bDsplySwitchBoxInit)
   {
     bDsplySwitchBoxInit = false;
-    bUnitMinInitDisplay = true;     // Darstellung der Minuten, bei der ersten Darstellung bzw. erneuten Darstellung, wenn eine falscher rfid-Tag während des BEtriebes gelesen wurde
+    bUnitMinInitDisplay = true;     // Darstellung der Minuten, bei der ersten Darstellung bzw. erneuten Darstellung, wenn eine falscher rfid-Tag während des Betriebes gelesen wurde
     dspClear();
     dsplyWorking();
 

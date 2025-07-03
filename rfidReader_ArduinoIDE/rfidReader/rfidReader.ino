@@ -34,8 +34,8 @@
 //  with the parameter RFIDREADERRIGHT the pins of the TFT display are on the right side 
 //  and the rfid reader is on the right side of the TFT display
 
-//#define BREADBOARD
-#define PCB                 // C3 on PCB
+//#define BREADBOARD          // ESP32 Dev Module
+#define PCB                 // ESP32 C3 on PCB
 #define RFIDREADERRIGHT     // processor settings are to modify
 
 // The used pins of this project are defined in the pinoutdef.h file
@@ -48,7 +48,6 @@
 #include <WiFi.h>
 #include <esp_wifi.h> // get the mac address
 #include <HTTPClient.h>
-//#include <HttpClient.h>
 #define wifiNoTries 50      // number of tries to get WLan connection
 
 //-----------------------------
@@ -79,7 +78,6 @@
 
 const char* WiFiSsid =  "WLAN-Name";
 const char* WiFiPassWd =  "WLAN-PassWd";
-
 
 const uint port = 5000;
 const char* ip = "odoo"; 
@@ -295,6 +293,7 @@ void setup()
   }
   else
   {
+    Serial.println(F("SD begin() ok :-)"));
     uiSDCardFlag = 1;
   }
   ImageReturnCode stat;

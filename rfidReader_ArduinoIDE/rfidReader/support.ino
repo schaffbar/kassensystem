@@ -102,6 +102,7 @@ void evalSwitchBoxResp(JsonDocument jDoc)
 	  iIconNo = 7; // noreg.bmp
     strUnits = String(jDoc["UNITS"]);
     Serial.println("evalSwitchBoxResp - Customer uses unregistered RFID-TAG");
+    playError();
   }
   else if(String(jDoc["ICON"]) == "STOP")
   {
@@ -178,6 +179,7 @@ void evalGateKeeperResp(JsonDocument jDoc)
 	   iIconNo = 7; // noreg.bmp
      strUnits = String(jDoc["UNITS"]);
      Serial.println("evalGateKeeperResp - Customer uses unregistered RFID-TAG");
+     playError();
    }
    else if(String(jDoc["ICON"]) == "STOP") 
    { // User has no general access to the workshop area  -> info message -> end -> idle
@@ -190,6 +192,7 @@ void evalGateKeeperResp(JsonDocument jDoc)
 	   iIconNo = 6; // no access bmp	 
      strUnits = String(jDoc["UNITS"]);
      Serial.println("evalGateKeeperResp - Customer has no access");
+     playError();
    }
    // User has access to workshop area -> end -> idle
    //else if((String(jDoc["ERROR"]) == "") and (String(jDoc["CUSTOMERSTARTSTOP"]) != "") and (String(jDoc["ICON"]) == "HI"))  
@@ -205,6 +208,7 @@ void evalGateKeeperResp(JsonDocument jDoc)
      strUnits = String(jDoc["UNITS"]);
      initUnitCounter();
      Serial.println("evalGateKeeperResp - Customer is starting");
+     playOK();
    }
    //else if((String(jDoc["ERROR"]) == "") and (String(jDoc["CUSTOMERSTARTSTOP"]) != "") and (String(jDoc["ICON"]) == "BYE")) 
    else if(String(jDoc["ICON"]) == "BYE") 
@@ -219,6 +223,7 @@ void evalGateKeeperResp(JsonDocument jDoc)
 	   iIconNo = 10; // bye.bmp	    
      initUnitCounter();
      Serial.println("evalGateKeeperResp - Customer leaving");
+     playOK();
    }
    else
    {
@@ -251,7 +256,7 @@ void evalCounterResp(JsonDocument jDoc)
      strMsg    = String(jDoc["ERROR"]);
      //dsplyErrorInfo("Error",strMsg,5,1,25);       // wenn zum angegebenen rfid-Tag
      Serial.println("Error: "+strMsg);            // keine Daten gefunden werden konnten
-     playError();
+     playError();   
    }
 }
 
@@ -355,7 +360,7 @@ void setInitData(JsonDocument jDoc)
   {
     strDevName = String(jDoc["DEVNAME"]);
     Serial.println("jDoc[DEVNAME] = "+strDevName);
-  } 
+  }   
   if(cDevUseCase == 'S') // SwitchBox
   {
     Serial.println("SwitchBox");
@@ -566,6 +571,7 @@ void evalCounterAction(String strRfidTag)
 
 void evalTouchAction()
 {
+
   // auskommentiert da auch für den UseCse SwitchBox bei unbekannter Karte diese Funktion erfordert
   //if((eUC == GateKeeper) or (eUC == Counter))
   //{ 

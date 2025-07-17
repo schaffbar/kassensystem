@@ -114,6 +114,8 @@ void MFRC522Debug::PCD_DumpVersionToSerial(MFRC522 &device, Print &logPrint) {
       break;
     default:
       logPrint.println(F(" = (unknown)"));
+	  logPrint.print("Found version =");
+	  logPrint.println(version, HEX);
   }
   // When 0x00 or 0xFF is returned, communication probably failed
   if(version == PCD_Version::Version_Unknown) {

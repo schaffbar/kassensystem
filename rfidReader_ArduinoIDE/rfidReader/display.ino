@@ -27,7 +27,7 @@ const uint cDspErrInfoTxtX          =  15;
 const uint cDspErrInfoTxtY          =  75;
 
 const uint cDspSwitchHeadX          =  15;
-const uint cDspSwitchHeadY          =  15;
+const uint cDspSwitchHeadY          =  10;  // <- 15
 
 const uint cDspSwitchRfidX          =  15;
 const uint cDspSwitchRfidY          =  40;
@@ -37,28 +37,28 @@ const uint cDspSwitchRfidValLen     = 150;
 const uint cDspSwitchRfidValHeight  =  20;
 
 const uint cDspSwitchNameX          =  15;
-const uint cDspSwitchNameY          =  60;
+const uint cDspSwitchNameY          =  30;
 const uint cDspSwitchNameValX       = 120; 
 const uint cDspSwitchNameValY       =  60;
 const uint cDspSwitchNameValLen     = 180;
 const uint cDspSwitchNameValHeight  =  20;
 
       const uint cDspSwitchTimeX          = 200;
-      const uint cDspSwitchTimeY          =  40;
+      const uint cDspSwitchTimeY          =  50;
       const uint cDspSwitchTimeValX       = 280;
       const uint cDspSwitchTimeValY       =  40;
       const uint cDspSwitchTimeValLen     = 180;
       const uint cDspSwitchTimeValHeight  =  20;
 
-      const uint cDspSwitchUnitX          = 200;
-      const uint cDspSwitchUnitY          =  80;
+      const uint cDspSwitchUnitX          =  15;
+      const uint cDspSwitchUnitY          =  60;
       const uint cDspSwitchUnitValX       = 220;
       const uint cDspSwitchUnitValY       =  80;
       const uint cDspSwitchUnitValLen     =  90;
       const uint cDspSwitchUnitValHeight  =  20;
 
 const uint cDspSwitchStartX         =  15;
-const uint cDspSwitchStartY         = 180;
+const uint cDspSwitchStartY         = 160; // 50
 const uint cDspSwitchStartValX      = 100;
 const uint cDspSwitchStartValY      =  80;
 const uint cDspSwitchStartValLen    = 100;
@@ -220,6 +220,13 @@ void dsplyWifiConnect(uint8_t uiStep, float fProgress)
   }
 }
 
+void dsplyWorking()
+{
+  //<a href="https://www.flaticon.com/de/kostenlose-icons/nervenzusammenbruch" title="nervenzusammenbruch Icons">Nervenzusammenbruch Icons erstellt von Freepik - Flaticon</a>
+  ImageReturnCode stat; 
+  stat = reader.drawBMP("/work.bmp", tft, 110, 55);
+}
+
 bool  dsplyErrorInfo(String strHeader,String strErrMessage, uint8_t uiLevel, uint8_t uiTouch, uint8_t uiIconNo)
 /****************************************************************************************************
  * void dsplyErrorInfo(String strErrMessage) - if an error occures it will be displayed on the tft
@@ -370,6 +377,26 @@ bool  dsplyErrorInfo(String strHeader,String strErrMessage, uint8_t uiLevel, uin
     }      
     Serial.println("Display error Bmp");
   }
+  else if (uiIconNo == 12)
+  { //  <a href="https://www.flaticon.com/free-icons/rfid-chip" title="rfid chip icons">Rfid chip icons created by Hexagon075 - Flaticon</a>
+    stat = reader.drawBMP("/rfiderr.bmp", tft, 90, 40);
+    if(stat == IMAGE_ERR_FILE_NOT_FOUND)
+    {
+      int iXPosStart = 0;
+      sQdrupel result;
+      String strMessage = "falschen rfid-Tag gefunden!";
+      tft.setTextSize(3);
+      result = getWidthHeight(iXPosStart, 120, strMessage);
+      iXPosStart = iCenterTxt(iXPosStart, 120, strMessage);
+      tft.fillRect(cDspXMax-result.w,120,result.w,result.h,ILI9341_BLACK);
+      tft.setCursor(cDspXMax-result.w,120);
+      tft.println(strMessage); 
+      tft.setTextSize(2);
+    }      
+    Serial.println("Display falscher rfid-Tag Bmp");
+    // im Anschluss soll der SwitchBox-Screen dargestellt werden. 
+    bDsplySwitchBoxInit = true;                       
+  }
   else if (uiIconNo == 99)
   { 
     int iXPosStart = 0;
@@ -452,6 +479,7 @@ void dsplyIdle()
   ImageReturnCode stat;
   dsplyTime();
   dsplyWifiState();
+  dsplyUpdateHeadline();
   if((rtc.getSecond() < 15) or ((rtc.getSecond()>30) and rtc.getSecond()<45))
   {
     if(uiUpdatedRFID != 0)
@@ -469,7 +497,7 @@ void dsplyIdle()
       }
       else
       {
-        Serial.println("Display RFID BMP");  
+        Serial.println("Display RFID BMP "+String(eUC));  
       }
     }
   }
@@ -531,7 +559,6 @@ void dsplyMask()
  * void dsplyMask() - in dependency of the use case the basic mask will be displayed
  ****************************************************************************************************/
   {
-  dspClear();
   if (cDevUseCase == 'S')
   {
     dsplySwitchBox();
@@ -547,7 +574,7 @@ void dsplyMask()
   }
   else
   {
-    dsplyErrorInfo("Error","Unkown UseCase",5,0,0);
+    dsplyErrorInfo("Error","Unkown UseCase"+String(cDevUseCase),5,0,0);
   }
   if(bWifiLostFlag)
   { // Wifi Connnection lost ->
@@ -569,39 +596,64 @@ void dsplyCounter()
   
   tft.setCursor(iTmpXpos,120); 
   tft.println(strUIdHex);
+  Serial.println("dsplyCounter() - "+strUIdHex);
   waitForTouch();
 }
 
 void dsplySwitchBox()
 {
-  tft.fillScreen(ILI9341_BLACK);
-  tft.setCursor(cDspSwitchHeadX,cDspSwitchHeadY); 
-  tft.println("Geraetname");
+  String strLblTime  = "ges Zeit:";
+  String strDevState = "";
+  sQdrupel sQuadPos;
+  if(bDsplySwitchBoxInit)
+  {
+    bDsplySwitchBoxInit = false;
+    bUnitMinInitDisplay = true;     // Darstellung der Minuten, bei der ersten Darstellung bzw. erneuten Darstellung, wenn eine falscher rfid-Tag während des Betriebes gelesen wurde
+    dspClear();
+    dsplyWorking();
 
-  tft.setCursor(cDspSwitchRfidX,cDspSwitchRfidY); 
-  tft.println("Tag-ID :");
+    //tft.fillScreen(ILI9341_BLACK);
+    tft.setCursor(cDspSwitchHeadX,cDspSwitchHeadY); 
+    tft.println(strDevName);
 
-  tft.setCursor(cDspSwitchNameX,cDspSwitchNameY); 
-  tft.println("Name :");
+    //tft.setCursor(cDspSwitchRfidX,cDspSwitchRfidY); 
+    //tft.println("Tag-ID :");
 
-  tft.setCursor(cDspSwitchTimeX,cDspSwitchTimeY); 
-  tft.println("Zeit :");
+    tft.setCursor(cDspSwitchNameX,cDspSwitchNameY); 
+    tft.println(strCustName);
 
-  tft.setCursor(cDspSwitchStartX,cDspSwitchStartY); 
-  tft.println("Startzeit :");
+    //tft.setCursor(cDspSwitchTimeX,cDspSwitchTimeY); 
+    //tft.println("Zeit :");
 
-  tft.setCursor(cDspSwitchUnitX,cDspSwitchUnitY); 
-  tft.println("Einheit :");
+    tft.setCursor(cDspSwitchStartX,cDspSwitchStartY); 
+    tft.println("Startzeit :" + strStartEnd);
 
-  tft.setCursor(cDspSwitchRunUnitX,cDspSwitchRunUnitY); 
-  tft.println("lfd. Einheit :");
+    //tft.setCursor(cDspSwitchUnitX,cDspSwitchUnitY); 
+    //tft.println(strLblTime); 
 
-  tft.setCursor(cDspSwitchStateX,cDspSwitchStateY); 
-  tft.println("Gerätestatus :");
+    if (eSolState == SolenoidOn)
+    {
+      strDevState = "EIN";
+    }
+    else
+    {
+      strDevState = "AUS";
+    }
+    tft.setCursor(cDspSwitchStateX,cDspSwitchStateY); 
+    tft.println("Geraetestatus :" + strDevState);
+  }
+  // Ausgabe des Zeitintervalls
+  //sQuadPos = getWidthHeight(cDspSwitchUnitX, cDspSwitchUnitY, strLblTime);
+  //tft.fillRect(cDspSwitchUnitX + sQuadPos.w + 5, cDspSwitchUnitY, sQuadPos.w, sQuadPos.h,ILI9341_BLACK); // 205 -> 180
+  //tft.setCursor(cDspSwitchUnitX + sQuadPos.w + 5,cDspSwitchUnitY); 
+  //tft.println(strUnits); 
 
-  waitForTouch();
+  dsplyUnitSecond();
+
+  dsplyTime();
+  dsplyWifiState();
 }
-
+/*
 void localupdtSwitchBox()
 {
   Serial.println("lokal Update");
@@ -609,7 +661,7 @@ void localupdtSwitchBox()
   // Updeate der Zeit
   // Update der Einheiten
 }
-
+*/
 void dsplyGateKeeper()
 {
   // draw border

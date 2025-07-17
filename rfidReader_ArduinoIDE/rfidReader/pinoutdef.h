@@ -14,21 +14,19 @@
  * The parameter BREADBOARD and PCB are defined in the main file of the project
  */
 #ifdef BREADBOARD
-  #define BUZZZER_PIN  14 // ESP32 pin GPIO14 connected to piezo buzzer
-
-
-  //-----------------------------
-  #define SD_CS   26  // SD card select pin
-
-  #define TFT_CS  4
-  #define TFT_DC  17
-  #define TFT_RST 16
+  #define BUZZZER_PIN  12// ESP32 pin GPIO14 connected to piezo buzzer
 
   //------------------------------
+  #define Pin_MFRC522_Reset  25 
+  #define Pin_MFRC522_IRQ    26
+  #define Pin_MFRC522_CS     2  
 
-  //#define Pin_MFRC522_Reset 25 // not used
-  //#define Pin_MFRC522_IRQ   26 // not used
-  #define Pin_MFRC522_CS    27  
+  //-----------------------------
+  #define SD_CS   14  // SD card select pin
+
+  #define TFT_CS   4
+  #define TFT_DC  17
+  #define TFT_RST 16
 
   //------ Touch Driver ------------------
   #define Touch_INT_PIN      0

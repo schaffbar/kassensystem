@@ -76,18 +76,13 @@
 #include "pinoutdef.h"
 #include "ver.h"
 
-//const char* WiFiSsid =  "WLAN-Name";
-//const char* WiFiPassWd =  "WLAN-PassWd";
-
-//const uint port = 5000;
-//const char* ip = "IP-Addr";
-
-const char* WiFiSsid   =  "GL-A1300-12a";             //  Schaffbar   OldFRITZ
-const char* WiFiPassWd =  "TXCKZNE2WS"; // gYC7DPMNqfQy!HwHNEcfn   39206303363753190530
+const char* WiFiSsid =  "WLAN-Name";
+const char* WiFiPassWd =  "WLAN-PassWd";
 
 const uint port = 5000;
-const char* ip = "raspberrypi"; // "192.168.178.87";
-//const char* ip = "odoo"; 
+const char* ip = "IP-Addr";
+
+
 
 bool  bWifiInitFlag = false;
 bool  bWifiLostFlag = false;
@@ -186,6 +181,7 @@ typedef enum eDevUseCase_t
   SwitchBox,     // is switching the different tools on and off
   GateKeeper,    // start and stops the timer 
   Counter,       // support the hero at the counter
+  AddTag,        // add tag to the card table, to create a closed pool of tags
   UnKnown        // unkown use case
 } eDevUseCase_t;
 
@@ -387,11 +383,10 @@ void loop()
         Serial.println("evalGateKeeperAction("+String(chArCardID)+"))");
         evalGateKeeperAction(String(chArCardID));
       }
-      else if (eUC == Counter)
+      else if ((eUC == Counter) or (eUC == AddTag))
       {
         Serial.println("evalCounterAction("+String(chArCardID)+"))");
-        evalCounterAction(String(chArCardID));
-          
+        evalCounterAction(String(chArCardID));   
       }
       else
       {

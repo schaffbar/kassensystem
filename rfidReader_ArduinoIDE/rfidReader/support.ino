@@ -52,6 +52,11 @@ int analyseResponse(String strAnswer)
         Serial.println("evalCounterResp(jDoc)");
         evalCounterResp(jDoc);
       }
+      else if ((eUC == AddTag) and (eState == end))
+      {
+        Serial.println("evalAddTagResp(jDoc)");
+        evalAddTagResp(jDoc);
+      }
       else
       {
         Serial.println("errorUnknownUseCase() or state or unknownAnything");
@@ -233,31 +238,56 @@ void evalGateKeeperResp(JsonDocument jDoc)
    }
 }
 
+void evalAddTagResp(JsonDocument jDoc)
+{
+  if((String(jDoc["ERROR"]) == "") and (String(jDoc["ICON"]) == "OK") and (String(jDoc["STATE"]) == "END"))
+  { // display RFID-TAG-No+ " added"
+    bIntChange = true;
+    bIntRunning = false;
+	  eState = end;
+	  strHeader = "RFID-Tag";
+	  strMsg = strWorkID+" added";
+	  iIconNo = 8;
+	  //dsplyErrorInfo(strHeader,strMsg,0,0,iIconNo);
+	  Serial.println("evalAddTagResp(JsonDocument jDoc) Data added");
+  }
+  else
+  { // unexpected answer received -> display error message
+    bIntChange = true;
+	  eState = end;
+	  strHeader = String(jDoc["CUSTOMERNAME"]);
+    strMsg    = String(jDoc["ERROR"]);
+    iIconNo = 12;                                // rfiderr bitmap darstellen
+    Serial.println("Error: "+strMsg);            // keine Daten gefunden werden konnten
+    playError();   
+  }
+}
+
 void evalCounterResp(JsonDocument jDoc)
 {
-   // Copy RFID-Tag to temporary, other action are to define on the front end side
-   if((String(jDoc["ERROR"]) == "") and (String(jDoc["ICON"]) == "OK") and (String(jDoc["STATE"]) == "END"))
-   { // display RFID-TAG-No+ " transferred"
-     bIntChange = true;
-     bIntRunning = false;
-	   eState = end;
-	   strHeader = "RFID-Tag";
-	   strMsg = strWorkID+" transferred";
-	   iIconNo = 8;
-	   //dsplyErrorInfo(strHeader,strMsg,0,0,iIconNo);
-	   Serial.println("evalCounterResp(JsonDocument jDoc) Data transferred");
-   }
-   else
-   { // unexpected answer received -> display error message
-     bIntChange = true;
-	 eState = end;
-	 Serial.println("Is missing missing??? : evalCounterResp(JsonDocument jDoc) Data extraction");
-	 strHeader = String(jDoc["CUSTOMERNAME"]);
-     strMsg    = String(jDoc["ERROR"]);
-     //dsplyErrorInfo("Error",strMsg,5,1,25);       // wenn zum angegebenen rfid-Tag
-     Serial.println("Error: "+strMsg);            // keine Daten gefunden werden konnten
-     playError();   
-   }
+  // Copy RFID-Tag to temporary, other action are to define on the front end side
+  if((String(jDoc["ERROR"]) == "") and (String(jDoc["ICON"]) == "OK") and (String(jDoc["STATE"]) == "END"))
+  { // display RFID-TAG-No+ " transferred"
+    bIntChange = true;
+    bIntRunning = false;
+    eState = end;
+    strHeader = "RFID-Tag";
+    strMsg = strWorkID+" transferred";
+	  iIconNo = 8;
+	  //dsplyErrorInfo(strHeader,strMsg,0,0,iIconNo);
+	  Serial.println("evalCounterResp(JsonDocument jDoc) Data transferred");
+  }
+  else
+  { // unexpected answer received -> display error message
+    bIntChange = true;
+	  eState = end;
+	  Serial.println("Is missing missing??? : evalCounterResp(JsonDocument jDoc) Data extraction");
+	  strHeader = String(jDoc["CUSTOMERNAME"]);
+    strMsg    = String(jDoc["ERROR"]);
+    //dsplyErrorInfo("Error",strMsg,5,1,25);       // wenn zum angegebenen rfid-Tag
+    Serial.println("Error: "+strMsg);            // keine Daten gefunden werden konnten
+    playError();   
+  }
 }
 
 String getState()
@@ -334,6 +364,10 @@ void setUseCase(String strUseCase)
     {
       eUC = Counter;
     }
+    else if (cUseCase == 'A')
+    {
+      eUC = AddTag;
+    }
     else
     {
       eUC = UnKnown;
@@ -393,6 +427,14 @@ void setInitData(JsonDocument jDoc)
     Serial.print("Received Data for UseCase GateKeeper : ");
     serializeJson(jDoc,Serial);
     Serial.println();
+  }
+  else if (cDevUseCase == 'A')
+  {
+    Serial.println("AddTag");
+    eState = idle;
+    Serial.print("Received Data for UseCase AddTag : ");
+    serializeJson(jDoc,Serial);
+    Serial.println();    
   }
   else
   {
@@ -497,6 +539,10 @@ String getUseCase()
   {
     strReturn = "GetInit";
   }
+  else if (eUC == AddTag)
+  {
+    strReturn = "A";
+  }
   else if (eUC == UnKnown)
   {
     strReturn = "Unknown";
@@ -563,7 +609,8 @@ void evalGateKeeperAction(String strRfidTag)
 }
 
 void evalCounterAction(String strRfidTag)
-{
+{ // evaluation of the activity at the counter or
+  // to add the rfidTag to the Card table on the server 
   jsonSendDoc = getJDocCounter(strRfidTag);
   playOK();
   sendRequest(jsonSendDoc);

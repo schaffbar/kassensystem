@@ -1,13 +1,19 @@
 // version history
 
-const char* sw_version = "0.2.1";
+const char* sw_version = "0.3.1";
 
 /* 
  * Reihenfolge major.minor.bugfix
  *
  * neuste Änderungen sollen an den Beginn der Liste geschrieben werden
  *
-
+ * 0.3.1
+ *-) In getUseCase die Abkürzung "A" ersetzt jetzt "AddTag"
+ *
+ * 0.3.0
+ * -) Implementierung des UseCase "AddTag" (A), damit die rfidTags in die Card-Tabelle eingelesen 
+ *    werden können und ein geschlossener Pool an IDs zur Verfügung steht
+ *
  * 0.2.1
  * -) erneuter Aufbau des Breadboards - Anpassung der vorhergehenden Pin-Defintiotionen
  * -) kleine Änderungen bzgl der Tonausgabe, wenn die Antwort vom Server kommt 

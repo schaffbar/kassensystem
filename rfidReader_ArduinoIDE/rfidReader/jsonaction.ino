@@ -356,7 +356,6 @@ JsonDocument getJSONUserData(String strRfidTag)
   /*
   if(eSolState == SolenoidOff)
   { // state is off -> request state on
-
     // jDoc["REQUEST"] = "ON";                // wurde für eine einheitliche Struktur des JSON-Doks entfernt => die Entscheidung erfolgt jetzt über den State-Eintrag
     // jDoc["STATE"]   = "IDLE";
     jDoc["UNITS"]   = 0;                        
@@ -397,7 +396,7 @@ JsonDocument getJDocGKData(String strRfidTag)
 JsonDocument getJDocCounter(String strRfidTag)
 /***************************************
 *
-* Create the JsonDocument for the Counter functionality
+* Create the JsonDocument for the Counter functionality or the AddTag UseCase
 *
 ***************************************/
 {

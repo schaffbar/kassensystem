@@ -121,7 +121,7 @@ void evalSwitchBoxResp(JsonDocument jDoc)
 	  iIconNo = 6; // no access bmp	 
     strUnits = String(jDoc["UNITS"]);
     Serial.println("evalSwitchBoxResp - Customer has no access");
-    Serial.println("??? Ist stete End gesetzte f�r tempor�re Darstellung und �bergang in den Idle-State");
+    Serial.println("??? Ist stete End gesetzte für temporäre Darstellung und Übergang in den Idle-State");
   }  
   else if((String(jDoc["ICON"]) == "") and (String(jDoc["STATE"])=="WORKING") and (String(jDoc["ERROR"]) == ""))
   {  // Usere has access to the tool -> enable power -> measure the time
@@ -618,7 +618,8 @@ void evalCounterAction(String strRfidTag)
 
 void evalTouchAction()
 {
-  // auskommentiert da auch f�r den UseCse SwitchBox bei unbekannter Karte diese Funktion erfordert
+
+  // auskommentiert da auch für den UseCse SwitchBox bei unbekannter Karte diese Funktion erfordert
   //if((eUC == GateKeeper) or (eUC == Counter))
   //{ 
     if(eState == end)

@@ -1,14 +1,16 @@
 // version history
 
-const char* sw_version = "0.3.1";
+const char* sw_version = "0.3.2";
 
 /* 
  * Reihenfolge major.minor.bugfix
  *
  * neuste Änderungen sollen an den Beginn der Liste geschrieben werden
+ * 0.3.2
+ * -) UseCase AddTag im State Idle den Wechsel zwischen den rfid und dem UseCase-Bild berichtigt
  *
  * 0.3.1
- *-) In getUseCase die Abkürzung "A" ersetzt jetzt "AddTag"
+ * -) In getUseCase die Abkürzung "A" ersetzt jetzt "AddTag"
  *
  * 0.3.0
  * -) Implementierung des UseCase "AddTag" (A), damit die rfidTags in die Card-Tabelle eingelesen 

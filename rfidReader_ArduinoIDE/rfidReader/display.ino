@@ -536,7 +536,7 @@ void dsplyIdle()
           Serial.println("GateKeeper");  
         }
       }
-      else if( eUC == Counter)
+      else if(( eUC == Counter) or ( eUC == AddTag))
       {
         // <a href="https://www.flaticon.com/free-icons/cash-register" title="cash register icons">Cash register icons created by Earthz Stocker - Flaticon</a>
         if(uiSDCardFlag == 1)

@@ -1,5 +1,7 @@
 // version history
+
 const char* sw_version = "0.3.2";
+
 /* 
  * Reihenfolge major.minor.bugfix
  *
@@ -22,6 +24,7 @@ const char* sw_version = "0.3.2";
  * -) UseCase SwitchBox implementiert, 
  *     bei positiver Rückmeldung vom Server wird über das Funkrelais die Stromversorgung für das Werkzeug eingeschaltet 
  *     und bei der Abmeldung auch wieder ausgeschaltet. *
+
  * 0.1.1
  * -) in der Datei support.ino in der Funktion void evalTouchAction() = ersetzt durch == 
  *    und ebenfalls den UseCase Counter hinzugefügt
@@ -34,6 +37,4 @@ const char* sw_version = "0.3.2";
  * Beinhaltet folgende UseCases 
  * -) Counter     Übertragung der RFID in eine Tabelle der Datenbank für die Registrierung am Tresen
  * -) Gatekeeper  Zeiterfassung für den Kunden wie lange er sich im Werkstattbereich aufhält 
- * 
- *
  */

@@ -76,18 +76,13 @@
 #include "pinoutdef.h"
 #include "ver.h"
 
-//const char* WiFiSsid =  "WLAN-Name";
-//const char* WiFiPassWd =  "WLAN-PassWd";
-
-//const uint port = 5000;
-//const char* ip = "IP-Addr";
-
-const char* WiFiSsid   =  "GL-A1300-12a"; //"Schaffbar";            //    OldFRITZ GL-A1300-12a
-const char* WiFiPassWd =  "TXCKZNE2WS"; // "gYC7DPMNqfQy!HwHNEcfn"; //    39206303363753190530  TXCKZNE2WS
+const char* WiFiSsid =  "WLAN-Name";
+const char* WiFiPassWd =  "WLAN-PassWd";
 
 const uint port = 5000;
-const char* ip = "raspberrypi"; // "192.168.178.87";
-//const char* ip = "odoo"; 
+const char* ip = "IP-Addr";
+
+
 
 bool  bWifiInitFlag = false;
 bool  bWifiLostFlag = false;

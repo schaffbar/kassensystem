@@ -618,7 +618,7 @@ void evalCounterAction(String strRfidTag)
 
 void evalTouchAction()
 {
-  // auskommentiert da auch f�r den UseCse SwitchBox bei unbekannter Karte diese Funktion erfordert
+  // auskommentiert da auch für den UseCse SwitchBox bei unbekannter Karte diese Funktion erfordert
   //if((eUC == GateKeeper) or (eUC == Counter))
   //{ 
     if(eState == end)

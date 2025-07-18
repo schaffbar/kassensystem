@@ -408,5 +408,6 @@ JsonDocument getJDocCounter(String strRfidTag)
   jDoc["TERMINAL"] =  strTerminal;
   jDoc["ICON"]     = "";
   jDoc["ERROR"]    = "";
+  strWorkID = strRfidTag;
   return jDoc;
 }

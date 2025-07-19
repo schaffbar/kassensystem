@@ -1,0 +1,36 @@
+{% from 'bootstrap5/form.html' import render_form %}
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+  <div class="row g-4">
+    <h1 class="col-12">{% block title %}Bezahlen: {{ card.name }} ({{ card.rfid}}){% endblock %}</h1>
+    <h2 class="col-12">
+      Offene Gesamtzeit: {{ elapsed_min }} Minuten
+    </h2>
+    <div class="col-12">
+      {{ render_form(form) }}
+    </div>
+    <div class="col-12">
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th scope="col">Gerät</th>
+            <th scope="col">Typ</th>
+            <th scope="col">Datum/Uhrzeit</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for action in last_actions %}
+          <tr>
+            <td>{{ action.device.name }}</td>
+            <td>{{ action.type }}</td>
+            <td>{{ action.created.strftime('%Y-%m-%d %H:%M:%S') }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+{% endblock %}

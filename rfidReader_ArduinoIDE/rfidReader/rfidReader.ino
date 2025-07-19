@@ -76,13 +76,7 @@
 #include "pinoutdef.h"
 #include "ver.h"
 
-const char* WiFiSsid =  "WLAN-Name";
-const char* WiFiPassWd =  "WLAN-PassWd";
-
-const uint port = 5000;
-const char* ip = "IP-Addr";
-
-
+#include "netcred.h"              // WLan-Zugangs bzw. Server-Information
 
 bool  bWifiInitFlag = false;
 bool  bWifiLostFlag = false;

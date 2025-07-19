@@ -75,6 +75,7 @@
 // #include "pitches.h"  def of tones
 #include "pinoutdef.h"
 #include "ver.h"
+
 #include "netcred.h"              // WLan-Zugangs bzw. Server-Information
 
 bool  bWifiInitFlag = false;

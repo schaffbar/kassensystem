@@ -356,7 +356,7 @@ JsonDocument getJSONUserData(String strRfidTag)
   /*
   if(eSolState == SolenoidOff)
   { // state is off -> request state on
-    // jDoc["REQUEST"] = "ON";                // wurde f�r eine einheitliche Struktur des JSON-Doks entfernt => die Entscheidung erfolgt jetzt �ber den State-Eintrag
+    // jDoc["REQUEST"] = "ON";                // wurde für eine einheitliche Struktur des JSON-Doks entfernt => die Entscheidung erfolgt jetzt über den State-Eintrag
     // jDoc["STATE"]   = "IDLE";
     jDoc["UNITS"]   = 0;                        
   }

@@ -5,7 +5,7 @@ services:
       context: .
       dockerfile: Dockerfile.admin
     ports:
-      - "127.0.0.1:5001:5001"
+      - "0.0.0.0:5001:5001"
     volumes:
       - timemachine-data:/app/instance
 

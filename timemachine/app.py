@@ -14,12 +14,9 @@ from messages import (
     DeviceCardResponse,
 )
 from typing import Optional
-import json
 import datetime
-import socket
-import threading
 from templates.forms import CheckoutForm, LookupForm, RegisterForm
-from util import sum_times, validate_data
+from util import create_balancing_record, send_response, sum_times
 from flask_bootstrap import Bootstrap5
 
 
@@ -50,15 +47,11 @@ class CardActionView(ModelView):
 
 
 admin.add_view(ModelView(Device, db.session))
-admin.add_view(
-    ModelView(Tools, db.session)
-)  # <- Tool-Tabelle einbinden, normalerweise keine Notwendigkeit für den ThekenHelden auf dieser Tabelle zu arbeiten
+admin.add_view(ModelView(Tools, db.session))
 admin.add_view(ModelView(Card, db.session))
 admin.add_view(CardActionView(CardAction, db.session))
 admin.add_view(ModelView(Clipboard, db.session))
-admin.add_view(
-    ModelView(Customers, db.session)
-)  # <- Kunden-Tabelle einbinden, diese sollte in die Standardansicht wechseln!!
+admin.add_view(ModelView(Customers, db.session))
 
 
 @app.route("/")
@@ -92,10 +85,6 @@ def lookup():
     return render_template("lookup.html", form=form)
 
 
-# @app.route("/customer", methods=("GET", "POST"))
-# def customer():
-
-
 @app.route("/checkout/<rfid>", methods=("GET", "POST"))
 def checkout(rfid: str):
     form = CheckoutForm()
@@ -118,57 +107,17 @@ def checkout(rfid: str):
     )
 
 
-def handle_client(client_socket):
-    with app.app_context():
-        with client_socket as sock:
-            while True:
-                message = sock.recv(1024).decode("utf-8")
-                if len(message) == 0:
-                    continue
+@app.route("/device/init", methods=["POST"])
+def device_init():
+    data = DeviceInitRequest.model_validate_json(request.get_data(as_text=True))
 
-                print(message, flush=True)
-
-                data = json.loads(message)
-
-                # ORDER MATTERS! Less specific messages to the back
-                accepted_models = [
-                    CounterCardRequest,
-                    DeviceCardRequest,
-                    DeviceInitRequest,
-                ]
-
-                validated_object = validate_data(data, accepted_models)
-
-                if not validated_object:
-                    continue
-
-                print(validated_object.__class__.__name__)
-
-                if DeviceInitRequest.__name__ == validated_object.__class__.__name__:
-                    request: DeviceInitRequest = validated_object
-                    handle_device_init(sock, request)
-
-                elif DeviceCardRequest.__name__ == validated_object.__class__.__name__:
-                    request: DeviceCardRequest = validated_object
-                    handle_device_card(sock, request)
-
-                elif CounterCardRequest.__name__ == validated_object.__class__.__name__:
-                    request: CounterCardRequest = validated_object
-                    handle_counter_card(sock, request)
-
-                else:
-                    print("{}")
-                    sock.sendall("{}")
-
-
-def handle_device_init(sock: Sock, request: DeviceInitRequest):
     device = (
-        db.session.execute(db.select(Device).filter_by(mac=request.MACADDR))
+        db.session.execute(db.select(Device).filter_by(mac=data.MACADDR))
     ).scalar_one_or_none()
 
     if device is None or device.usecase == "":
         if device is None:
-            new_device = Device(mac=request.MACADDR)
+            new_device = Device(mac=data.MACADDR)
             db.session.add(new_device)
             db.session.commit()
 
@@ -230,104 +179,19 @@ def handle_device_init(sock: Sock, request: DeviceInitRequest):
         )
 
     print(response.model_dump_json())
-    sock.sendall(response.model_dump_json().encode("utf-8"))
+    return send_response(response)
 
 
-def handle_counter_card(sock: Sock, request: CounterCardRequest):
-
-    device: Optional[Device] = ().scalar_one_or_none()
-
-    card: Optional[Card] = (
-        db.session.execute(db.select(Card).filter_by(rfid=request.RFID))
-    ).scalar_one_or_none()
-
-    if device is not None:
-        if device.usecase == "C":
-            if card is None:
-                # Für den UseCase Counter
-                # hier wirde der Fehlerfall behandelt
-                # das der rfid-Tag nicht im Pool erfasst wurde
-                response = DeviceCardResponse(
-                    CUSTOMERNAME="XXX",
-                    CUSTOMERSTARTSTOP="",
-                    ICON="NOREG",
-                    STATE="END",
-                    UNITS="00:00",
-                    ERROR="RFID unbekannt!",
-                    DEVUSECASE=device.usecase if device is not None else "",
-                )
-                print(response.model_dump_json())
-                sock.sendall(response.model_dump_json().encode("utf-8"))
-                return
-            else:
-                Clipboard.set_rfid(
-                    request.TERMINAL, request.RFID
-                )  # device.terminal, card.rfid)
-                print("ClipBoard-Data : " + request.TERMINAL + " <- " + request.RFID)
-                response = CounterCardResponse(
-                    DEVUSECASE="C",
-                    ERROR="",
-                    STATE="END",
-                    ICON="OK",
-                )
-                print(response.model_dump_json())
-                sock.sendall(response.model_dump_json().encode("utf-8"))
-                return
-        elif device.usecase == "A":
-            if card is None:
-                # add new card to pool
-                print("Add new Card to pool")
-                new_card = Card(rfid=request.RFID, name="dummy")
-                db.session.add(new_card)
-                db.session.commit()
-                # send feedback
-                response = CounterCardResponse(
-                    DEVUSECASE="A",
-                    ERROR="",
-                    STATE="END",
-                    ICON="OK",
-                )
-                print(response.model_dump_json())
-                sock.sendall(response.model_dump_json().encode("utf-8"))
-                return
-            else:
-                # rfid-Tag exist already in pool
-                print("rfid-Tag exist already in the pool")
-                response = DeviceCardResponse(
-                    CUSTOMERNAME="Fehler",
-                    CUSTOMERSTARTSTOP="",
-                    ICON="RFID",  # <- nur OK für den Gut-Fall wird kontrolliert, auf der ESP Seite wird die rfiderr Bitmap dargestellt
-                    STATE="END",
-                    UNITS="00:00",
-                    ERROR="RFID bereits vorhanden!",
-                    DEVUSECASE=device.usecase if device is not None else "",
-                )
-                print(response.model_dump_json())
-                sock.sendall(response.model_dump_json().encode("utf-8"))
-            return
-
-
-def create_balancing_record(action, device, card):
-    # wenn durch einen Neustart des rfidReaders keine Abmeldung möglich ist (im UseCase: SwitchBox)
-    # oder der Kunde vergisst für eine Pause auszuchecken (im UseCase: GateKeeper)
-    bal_action = CardAction(
-        device=device,
-        card=card,
-        type=action,
-        processed=False,
-    )
-    db.session.add(bal_action)
-    db.session.commit()
-
-
-def handle_device_card(sock: Sock, request: DeviceCardRequest):
+@app.route("/device/card", methods=["POST"])
+def device_card():
+    data = DeviceCardRequest.model_validate_json(request.get_data(as_text=True))
 
     device: Optional[Device] = (
-        db.session.execute(db.select(Device).filter_by(mac=request.MACADDR))
+        db.session.execute(db.select(Device).filter_by(mac=data.MACADDR))
     ).scalar_one_or_none()
 
     card: Optional[Card] = (
-        db.session.execute(db.select(Card).filter_by(rfid=request.RFID))
+        db.session.execute(db.select(Card).filter_by(rfid=data.RFID))
     ).scalar_one_or_none()
 
     if card is None:
@@ -342,8 +206,7 @@ def handle_device_card(sock: Sock, request: DeviceCardRequest):
         )
 
         print(response.model_dump_json())
-        sock.sendall(response.model_dump_json().encode("utf-8"))
-        return
+        return send_response(response)
 
     elif device is not None:
         last_actions = CardAction.get_last_actions(card, device)
@@ -422,7 +285,7 @@ def handle_device_card(sock: Sock, request: DeviceCardRequest):
                 response.UNITS = f"{min}:{sec}"
 
             print(response.model_dump_json())
-            sock.sendall(response.model_dump_json().encode("utf-8"))
+            return send_response(response)
         elif device.usecase == "S":
             print("UseCase SwitchBox")
             # customer use an unregistered card is handeled above
@@ -481,11 +344,11 @@ def handle_device_card(sock: Sock, request: DeviceCardRequest):
             if certificate is not None:
                 # Schulungseintrag für Kundennummer und Werkzeug gefunden
                 now = datetime.datetime.now()
-                print("Request-State:" + request.STATE + ":")
+                print("Request-State:" + data.STATE + ":")
                 #                if len(last_actions) == 0 or last_actions[-1].type == "checkout":
                 #                    # wenn kein Eintrag zufinden war bzw. der letzte Eintrag ein "checkout"-Event war
                 #                    # dann ist dies ein "checkin"-Event
-                if request.STATE == "Idle":
+                if data.STATE == "Idle":
                     # Durch irgendwelche Aktionen sind die Datenbank und der refidReader nicht im Takt
                     if len(last_actions) > 0:
                         if last_actions[-1].type == "checkin":
@@ -518,7 +381,7 @@ def handle_device_card(sock: Sock, request: DeviceCardRequest):
                         card.name + "+" + customer_name.vorname
                     )  # <- Namensdarstellung ist später anzupassen
 
-                else:  # <- hier request.STATE = "Working"
+                else:  # <- hier data.STATE = "Working"
                     # Dann muss es sich hier um ein "checkout"-Event handeln
                     if (
                         last_actions[-1].type == "checkout"
@@ -560,22 +423,76 @@ def handle_device_card(sock: Sock, request: DeviceCardRequest):
                 response.CUSTOMERNAME = card.name + "+" + customer_name.vorname
 
             print(response.model_dump_json())
-            sock.sendall(response.model_dump_json().encode("utf-8"))
+            return send_response(response)
 
 
-def main():
-    server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-    server.bind(("0.0.0.0", 5000))
-    server.listen(5)
-    print("Server listening on port 5000")
+@app.route("/device/counter", methods=["POST"])
+def handle_counter_card():
+    data = CounterCardRequest.model_validate_json(request.get_data(as_text=True))
 
-    while True:
-        client_socket, addr = server.accept()
-        print(f"Accepted connection from {addr}")
-        client_handler = threading.Thread(target=handle_client, args=(client_socket,))
-        client_handler.start()
+    device: Optional[Device] = ().scalar_one_or_none()
 
+    card: Optional[Card] = (
+        db.session.execute(db.select(Card).filter_by(rfid=data.RFID))
+    ).scalar_one_or_none()
 
-if __name__ == "__main__":
-    main()
+    if device is not None:
+        if device.usecase == "C":
+            if card is None:
+                # Für den UseCase Counter
+                # hier wirde der Fehlerfall behandelt
+                # das der rfid-Tag nicht im Pool erfasst wurde
+                response = DeviceCardResponse(
+                    CUSTOMERNAME="XXX",
+                    CUSTOMERSTARTSTOP="",
+                    ICON="NOREG",
+                    STATE="END",
+                    UNITS="00:00",
+                    ERROR="RFID unbekannt!",
+                    DEVUSECASE=device.usecase if device is not None else "",
+                )
+                print(response.model_dump_json())
+                return send_response(response)
+            else:
+                Clipboard.set_rfid(
+                    data.TERMINAL, data.RFID
+                )  # device.terminal, card.rfid)
+                print("ClipBoard-Data : " + data.TERMINAL + " <- " + data.RFID)
+                response = CounterCardResponse(
+                    DEVUSECASE="C",
+                    ERROR="",
+                    STATE="END",
+                    ICON="OK",
+                )
+                print(response.model_dump_json())
+                return send_response(response)
+        elif device.usecase == "A":
+            if card is None:
+                # add new card to pool
+                print("Add new Card to pool")
+                new_card = Card(rfid=data.RFID, name="dummy")
+                db.session.add(new_card)
+                db.session.commit()
+                # send feedback
+                response = CounterCardResponse(
+                    DEVUSECASE="A",
+                    ERROR="",
+                    STATE="END",
+                    ICON="OK",
+                )
+                print(response.model_dump_json())
+                return send_response(response)
+            else:
+                # rfid-Tag exist already in pool
+                print("rfid-Tag exist already in the pool")
+                response = DeviceCardResponse(
+                    CUSTOMERNAME="Fehler",
+                    CUSTOMERSTARTSTOP="",
+                    ICON="RFID",  # <- nur OK für den Gut-Fall wird kontrolliert, auf der ESP Seite wird die rfiderr Bitmap dargestellt
+                    STATE="END",
+                    UNITS="00:00",
+                    ERROR="RFID bereits vorhanden!",
+                    DEVUSECASE=device.usecase if device is not None else "",
+                )
+                print(response.model_dump_json())
+                return send_response(response)

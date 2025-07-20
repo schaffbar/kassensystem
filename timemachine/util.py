@@ -1,6 +1,6 @@
-from typing import Any, Dict, Optional, Type
+from typing import Type
 
-from pydantic import BaseModel, ValidationError
+from pydantic import BaseModel
 from models import CardAction
 
 
@@ -18,14 +18,18 @@ def sum_times(card_actions: list[CardAction]) -> tuple[int, int]:
     return divmod(seconds, 60)
 
 
-# Function to validate data against multiple models
-def validate_data(
-    data: Dict[str, Any], models: list[Type[BaseModel]]
-) -> Optional[BaseModel]:
-    for model in models:
-        try:
-            validated_object = model(**data)
-            return validated_object
-        except ValidationError as e:
-            continue
-    return None
+def send_response(response: Type[BaseModel]):
+    return response.model_dump_json(), 200, {"Content-Type": "application/json"}
+
+
+def create_balancing_record(action, device, card):
+    # wenn durch einen Neustart des rfidReaders keine Abmeldung möglich ist (im UseCase: SwitchBox)
+    # oder der Kunde vergisst für eine Pause auszuchecken (im UseCase: GateKeeper)
+    bal_action = CardAction(
+        device=device,
+        card=card,
+        type=action,
+        processed=False,
+    )
+    db.session.add(bal_action)
+    db.session.commit()

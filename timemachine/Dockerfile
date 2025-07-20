@@ -8,4 +8,4 @@ ADD . /app
 WORKDIR /app
 RUN uv sync --frozen
 
-CMD ["uv", "run", "flask", "run", "--host", "0.0.0.0", "--debug", "--port",   "5001"]
+CMD ["uv", "run", "flask", "run", "--host", "0.0.0.0", "--debug", "--port",   "5000"]

@@ -1,19 +1,9 @@
 services:
-  admin_backend:
-    restart: unless-stopped
-    build:
-      context: .
-      dockerfile: Dockerfile.admin
-    ports:
-      - "0.0.0.0:5001:5001"
-    volumes:
-      - timemachine-data:/app/instance
-
   timemachine:
     restart: unless-stopped
     build:
       context: .
-      dockerfile: Dockerfile.timemachine
+      dockerfile: Dockerfile
     ports:
       - "0.0.0.0:5000:5000"
     volumes:

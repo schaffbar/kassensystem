@@ -1,5 +1,6 @@
 services:
   admin_backend:
+    restart: unless-stopped
     build:
       context: .
       dockerfile: Dockerfile.admin
@@ -9,6 +10,7 @@ services:
       - timemachine-data:/app/instance
 
   timemachine:
+    restart: unless-stopped
     build:
       context: .
       dockerfile: Dockerfile.timemachine

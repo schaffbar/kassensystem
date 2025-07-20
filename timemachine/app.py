@@ -233,7 +233,7 @@ def handle_device_init(sock: Sock, request: DeviceInitRequest):
     sock.sendall(response.model_dump_json().encode("utf-8"))
 
 
-def handle_counter_card_notreg(device: Device):
+def handle_counter_card_notreg(sock: Sock, device: Device):
     # Für den UseCase Counter
     # hier wirde der Fehlerfall behandelt
     # das der rfid-Tag nicht im Pool erfasst wurde
@@ -253,9 +253,7 @@ def handle_counter_card_notreg(device: Device):
 
 def handle_counter_card(sock: Sock, request: CounterCardRequest):
 
-    device: Optional[Device] = (
-        db.session.execute(db.select(Device).filter_by(mac=request.MACADDR))
-    ).scalar_one_or_none()
+    device: Optional[Device] = ().scalar_one_or_none()
 
     card: Optional[Card] = (
         db.session.execute(db.select(Card).filter_by(rfid=request.RFID))
@@ -264,7 +262,7 @@ def handle_counter_card(sock: Sock, request: CounterCardRequest):
     if device is not None:
         if device.usecase == "C":
             if card is None:
-                handle_counter_card_notreg(device)
+                handle_counter_card_notreg(sock, device)
             else:
                 Clipboard.set_rfid(
                     request.TERMINAL, request.RFID

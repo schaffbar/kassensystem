@@ -1,0 +1,6 @@
+{
+    "cSpell.words": [
+        "jsonify"
+    ],
+    "nixEnvSelector.nixFile": "${workspaceFolder}/shell.nix"
+}

@@ -1,0 +1,41 @@
+@if (detailsStore.user(); as user) {
+  <div class="user-detail-header">
+    <div class="user-detail-header__title">
+      <h1>{{ detailsStore.userName() }}</h1>
+      <button matIconButton color="primary" (click)="reloadUser()">
+        <mat-icon>refresh</mat-icon>
+      </button>
+      @if (detailsStore.isTokenAssigned() || detailsStore.waitingForAssignment()) {
+        <mat-chip-set aria-label="Dog selection">
+          <mat-chip>
+            {{ detailsStore.tokenAssignment()?.tokenType }}
+          </mat-chip>
+          @if (detailsStore.isTokenAssigned()) {
+            <mat-chip>
+              {{ detailsStore.tokenAssignment()?.tokenId }}
+            </mat-chip>
+          } @else if (detailsStore.waitingForAssignment()) {
+            <mat-chip> WAITING </mat-chip>
+          }
+        </mat-chip-set>
+      } @else {
+        <mat-chip> No Token </mat-chip>
+      }
+    </div>
+    @if (detailsStore.showAssignActions()) {
+      <div class="user-detail-header__actions">
+        <button mat-flat-button color="primary" (click)="assignTemporaryToken()">Assign Temp Token</button>
+        <button mat-flat-button color="primary" (click)="assignToken()">Assign Token</button>
+      </div>
+    }
+  </div>
+
+  <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="center" dynamicHeight>
+    <mat-tab label="Details">
+      <div class="tab-content">
+        <schbar-user-contact [user]="user" />
+        <schbar-user-address [userAddress]="user.address" />
+      </div>
+    </mat-tab>
+  </mat-tab-group>
+}

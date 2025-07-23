@@ -1,0 +1,24 @@
+.new-user-form {
+  min-width: 300px;
+  max-width: 800px;
+  width: 100%;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.row {
+  display: flex;
+  flex-direction: row;
+  margin-top: 10px;
+}
+
+.col {
+  flex: 1;
+  margin-right: 20px;
+}
+
+.col:last-child {
+  margin-right: 0;
+}

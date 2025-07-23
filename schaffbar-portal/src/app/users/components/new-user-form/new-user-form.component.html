@@ -1,0 +1,115 @@
+<h2 mat-dialog-title>Create New User</h2>
+
+<mat-divider></mat-divider>
+
+<mat-dialog-content [formGroup]="userForm">
+  <h3>Contact Information</h3>
+
+  <div class="row">
+    <div class="col">
+      <mat-form-field class="full-width" appearance="outline">
+        <mat-label>First Name</mat-label>
+        <input id="firstName" matInput placeholder="First Name" formControlName="firstName" />
+        @if (userForm.controls['firstName'].hasError('required')) {
+          <mat-error>First name is <strong>required</strong></mat-error>
+        }
+      </mat-form-field>
+    </div>
+    <div class="col">
+      <mat-form-field class="full-width" appearance="outline">
+        <mat-label>Last Name</mat-label>
+        <input id="lastName" matInput placeholder="Last Name" formControlName="lastName" />
+        @if (userForm.controls['lastName'].hasError('required')) {
+          <mat-error>Last name is <strong>required</strong></mat-error>
+        }
+      </mat-form-field>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col">
+      <mat-form-field class="full-width" appearance="outline">
+        <mat-label>Email</mat-label>
+        <input id="email" matInput placeholder="Email" formControlName="email" />
+        @if (userForm.controls['email'].hasError('required')) {
+          <mat-error>Email is <strong>required</strong></mat-error>
+        }
+      </mat-form-field>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col">
+      <mat-form-field class="full-width" appearance="outline">
+        <mat-label>Phone</mat-label>
+        <input id="phone" matInput placeholder="Phone" formControlName="phone" />
+        @if (userForm.controls['phone'].hasError('required')) {
+          <mat-error>Phone is <strong>required</strong></mat-error>
+        }
+      </mat-form-field>
+    </div>
+  </div>
+
+  <h3>Billing Information</h3>
+
+  <div class="row">
+    <div class="col">
+      <mat-form-field class="full-width" appearance="outline">
+        <mat-label>Address</mat-label>
+        <input id="addressLine1" matInput placeholder="Address" formControlName="addressLine1" />
+        @if (userForm.controls['addressLine1'].hasError('required')) {
+          <mat-error>Address is <strong>required</strong></mat-error>
+        }
+      </mat-form-field>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col">
+      <mat-form-field class="full-width" appearance="outline">
+        <mat-label>Address Line 2</mat-label>
+        <input id="addressLine2" matInput formControlName="addressLine2" />
+      </mat-form-field>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col">
+      <mat-form-field class="full-width" appearance="outline">
+        <mat-label>Postal Code</mat-label>
+        <input
+          id="postalCode"
+          matInput
+          #postalCode
+          maxlength="5"
+          placeholder="Postal Code"
+          formControlName="postalCode" />
+        <mat-hint [align]="'end'">{{ postalCode.value.length }} / 5</mat-hint>
+        @if (userForm.controls['postalCode'].hasError('required')) {
+          <mat-error>Postal code is <strong>required</strong></mat-error>
+        }
+      </mat-form-field>
+    </div>
+    <div class="col">
+      <mat-form-field class="full-width" appearance="outline">
+        <mat-label>City</mat-label>
+        <input id="city" matInput placeholder="City" formControlName="city" />
+        @if (userForm.controls['city'].hasError('required')) {
+          <mat-error>City is <strong>required</strong></mat-error>
+        }
+      </mat-form-field>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col">
+      <mat-form-field class="full-width" appearance="outline">
+        <mat-label>Country</mat-label>
+        <input id="country" matInput placeholder="Country" formControlName="country" />
+        @if (userForm.controls['country'].hasError('required')) {
+          <mat-error>Country is <strong>required</strong></mat-error>
+        }
+      </mat-form-field>
+    </div>
+  </div>
+</mat-dialog-content>
+
+<mat-dialog-actions>
+  <button mat-stroked-button mat-dialog-close>Close</button>
+  <button mat-flat-button color="primary" type="submit" (click)="save()">Save</button>
+</mat-dialog-actions>

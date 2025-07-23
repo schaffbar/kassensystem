@@ -1,0 +1,57 @@
+<div class="user-list-header">
+  <h1>Users</h1>
+  <button mat-flat-button color="primary" (click)="newUserDialog()">Add User</button>
+</div>
+
+<mat-form-field class="user-list-filter" appearance="outline">
+  <mat-label>Search</mat-label>
+  <input matInput (keyup)="applyFilter($event)" placeholder="Ex. Max" #input />
+  <mat-icon matSuffix>search</mat-icon>
+
+  <!-- TODO: try with two-way binding
+  <input matInput [(ngModel)]="filterValue" (keyup)="applyFilter($event)" placeholder="Ex. Max" #input />
+  <mat-icon matSuffix>search</mat-icon>
+  @if (filterValue()) {
+    <button matSuffix matIconButton aria-label="Clear" (click)="clearFilter($event)">
+      <mat-icon>close</mat-icon>
+    </button>
+  }
+  -->
+</mat-form-field>
+
+<div class="mat-elevation-z2">
+  <table mat-table class="full-width-table" [dataSource]="dataSource()" matSort>
+    <!-- Columns -->
+    <ng-container matColumnDef="lastName">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Last Name</th>
+      <td mat-cell *matCellDef="let row">{{ row.lastName }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="firstName">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>First Name</th>
+      <td mat-cell *matCellDef="let row">{{ row.firstName }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Actions</th>
+      <td mat-cell *matCellDef="let row">
+        <button mat-icon-button type="button" color="warn" (click)="deleteUserDialog($event, row)">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </td>
+    </ng-container>
+
+    <!-- Header and Row Declarations -->
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row (click)="userDetails(row)" *matRowDef="let row; columns: displayedColumns"></tr>
+  </table>
+
+  <mat-paginator
+    #paginator
+    [length]="usersCount()"
+    [pageIndex]="0"
+    [pageSize]="10"
+    [pageSizeOptions]="[5, 10, 20]"
+    aria-label="Select page">
+  </mat-paginator>
+</div>

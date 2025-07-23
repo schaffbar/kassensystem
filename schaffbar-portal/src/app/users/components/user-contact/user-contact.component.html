@@ -1,0 +1,20 @@
+<div class="user-contact">
+  <h3>Contact:</h3>
+
+  <div class="row">
+    <div class="col">
+      <mat-form-field class="full-width" appearance="outline" [floatLabel]="'always'" [hideRequiredMarker]="true">
+        <mat-label>Email</mat-label>
+        <input matInput placeholder="Email" [value]="user().email" readonly />
+      </mat-form-field>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col">
+      <mat-form-field class="full-width" appearance="outline" [floatLabel]="'always'" [hideRequiredMarker]="true">
+        <mat-label>Phone</mat-label>
+        <input matInput placeholder="Phone" [value]="user().phone" readonly />
+      </mat-form-field>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,87 @@
+spring:
+  application:
+    name: core-pos
+  profiles:
+    active: local
+  threads:
+    virtual:
+      enabled: false
+  datasource:
+    driverClassName: org.postgresql.Driver
+    url: ${SCHAFFBAR_DS_URL}
+    username: ${SCHAFFBAR_DS_USERNAME}
+    password: ${SCHAFFBAR_DS_PASSWORD}
+  jpa:
+    properties:
+      hibernate:
+        default_schema: schaffbar
+    hibernate:
+      ddl-auto: validate
+    open-in-view: true
+  flyway:
+    baseline-on-migrate: true
+    schemas: schaffbar
+    locations: classpath:/db/migration
+
+logging:
+  pattern:
+    level: "%5p [${spring.application.name:},%X{traceId:-},%X{spanId:-}]"
+  level:
+    ROOT: INFO
+
+management:
+  server:
+    port: 9000
+  health:
+    defaults:
+      enabled: false
+    db:
+      enabled: true
+    ping:
+      enabled: true
+    livenessstate:
+      enabled: true
+    readinessstate:
+      enabled: true
+  endpoints:
+    web:
+      exposure:
+        include:
+          - "*"
+    access:
+      default: none
+  endpoint:
+    env:
+      access: read_only
+    flyway:
+      access: read_only
+    loggers:
+      access: unrestricted
+    beans:
+      access: read_only
+    configprops:
+      access: read_only
+    info:
+      access: read_only
+    metrics:
+      access: read_only
+    prometheus:
+      access: read_only
+    health:
+      access: read_only
+      show-details: always
+      probes:
+        enabled: true
+      group:
+        liveness:
+          include:
+            - livenessState
+            - ping
+            - db
+        readiness:
+          include:
+            - readinessState
+            - db
+  info:
+    git:
+      mode: full

@@ -1,0 +1,1 @@
+-------------------- ${AnsiColor.BRIGHT_RED} ${spring.application.name}${application.formatted-version} [${spring.profiles.active}] - Spring Boot ${spring-boot.formatted-version} ${AnsiColor.BLACK}

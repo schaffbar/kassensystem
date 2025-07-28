@@ -21,6 +21,10 @@ public class ResourceNotFoundException extends RuntimeException {
         return new ResourceNotFoundException(Resource.CUSTOMER, customerId.getValue().toString());
     }
 
+    public static ResourceNotFoundException tool(ToolId toolId) {
+        return new ResourceNotFoundException(Resource.TOOL, toolId.getValue().toString());
+    }
+
     // ------------------------------------------------------------------------
     // helper
 
@@ -33,6 +37,7 @@ public class ResourceNotFoundException extends RuntimeException {
     public enum Resource {
 
         CUSTOMER("customer"), //
+        TOOL("tool"), //
         TOKEN("token");
 
         private final String value;

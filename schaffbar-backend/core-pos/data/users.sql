@@ -32,3 +32,9 @@ VALUES --
     (gen_random_uuid(), 'Melanie', 'Peters', 'melanie.peters@example.com', '+4917812345678', 'Friedrichstraße 6', NULL, '28195', 'Bremen', 'Deutschland', NOW(), NOW()), --
     (gen_random_uuid(), 'Fabian', 'Jung', 'fabian.jung@example.com', '+4917912345678', 'Königsallee 9', NULL, '40212', 'Düsseldorf', 'Deutschland', NOW(), NOW()), --
     (gen_random_uuid(), 'Carolin', 'Bergmann', 'carolin.bergmann@example.com', '+4918012345678', 'Wilhelmstraße 17', NULL, '34117', 'Kassel', 'Deutschland', NOW(), NOW());
+
+INSERT INTO schaffbar.tool --
+    (id, name, description, ip_address, http_start_command, on_command, off_command, created_at, updated_at) --
+VALUES --
+    (gen_random_uuid(), 'Kreissäge', 'Elektrische Kreissäge', '192.168.33.1', 'http://bohrmaschine/start', 'bohrmaschine_on', 'bohrmaschine_off', NOW(), NOW()), --
+    (gen_random_uuid(), 'Hobel', 'Elektrische Hobel', '192.168.33.2', 'http://schleifmaschine/start', 'schleifmaschine_on', 'schleifmaschine_off', NOW(), NOW()); --

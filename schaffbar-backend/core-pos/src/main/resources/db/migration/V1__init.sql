@@ -18,6 +18,34 @@ CREATE TABLE schaffbar.customer
 
 GRANT ALL ON TABLE schaffbar.customer TO schadmin;
 
+CREATE TABLE schaffbar.tool
+(
+    id UUID NOT NULL,
+    name VARCHAR(255) NOT NULL,
+    description VARCHAR(255),
+    ip_address VARCHAR(255),
+    http_start_command VARCHAR(255),
+    on_command VARCHAR(255),
+    off_command VARCHAR(255),
+    created_at TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+    updated_at TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+    CONSTRAINT pk_tool PRIMARY KEY (id)
+);
+
+GRANT ALL ON TABLE schaffbar.tool TO schadmin;
+
+CREATE TABLE schaffbar.rfid_reader
+(
+    id UUID NOT NULL,
+    mac_address VARCHAR(255),
+    type VARCHAR(255),
+    created_at TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+    updated_at TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+    CONSTRAINT pk_rfid_reader PRIMARY KEY (id)
+);
+
+GRANT ALL ON TABLE schaffbar.rfid_reader TO schadmin;
+
 CREATE TABLE schaffbar.token_assignment
 (
     id UUID NOT NULL,

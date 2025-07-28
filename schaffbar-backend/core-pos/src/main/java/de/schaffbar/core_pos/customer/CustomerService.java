@@ -40,7 +40,6 @@ public class CustomerService {
 
     public CustomerId createCustomer(@NotNull @Valid CreateCustomerCommand command) {
         Customer customer = Customer.of(command);
-        System.out.println("Creating customer: " + customer);
         Customer savedCustomer = this.customerRepository.save(customer);
 
         return savedCustomer.getCustomerId();

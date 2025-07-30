@@ -1,5 +1,6 @@
 package de.schaffbar.core_pos.token;
 
+import de.schaffbar.core_pos.token.TokenAssignmentViews.TokenAssignmentView;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
 import org.mapstruct.factory.Mappers;

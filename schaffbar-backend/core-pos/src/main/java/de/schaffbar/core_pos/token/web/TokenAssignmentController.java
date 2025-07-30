@@ -11,10 +11,11 @@ import de.schaffbar.core_pos.ResourceNotFoundException;
 import de.schaffbar.core_pos.TokenId;
 import de.schaffbar.core_pos.customer.CustomerService;
 import de.schaffbar.core_pos.customer.view.CustomerView;
+import de.schaffbar.core_pos.token.TokenAssignmentCommands.RequestTokenAssignmentCommand;
 import de.schaffbar.core_pos.token.TokenAssignmentService;
-import de.schaffbar.core_pos.token.commands.RequestTokenAssignmentCommand;
-import de.schaffbar.core_pos.token.web.TokenAssignmentApiMapper.AssignTokenRequestBody;
-import de.schaffbar.core_pos.token.web.TokenAssignmentApiMapper.RequestTokenAssignmentRequestBody;
+import de.schaffbar.core_pos.token.web.TokenAssignmentApiModel.AssignTokenRequestBody;
+import de.schaffbar.core_pos.token.web.TokenAssignmentApiModel.RequestTokenAssignmentRequestBody;
+import de.schaffbar.core_pos.token.web.TokenAssignmentApiModel.TokenAssignmentApiDto;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.NonNull;
@@ -39,6 +40,9 @@ public class TokenAssignmentController {
     private final @NonNull TokenAssignmentService tokenAssignmentService;
 
     private final @NonNull CustomerService customerService;
+
+    // ------------------------------------------------------------------------
+    // query
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<TokenAssignmentApiDto>> getAllTokenAssignments( //
@@ -68,6 +72,9 @@ public class TokenAssignmentController {
 
         return ResponseEntity.ok(result);
     }
+
+    // ------------------------------------------------------------------------
+    // command
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> requestTokenAssignment(@RequestBody @Valid @NotNull RequestTokenAssignmentRequestBody requestBody) {

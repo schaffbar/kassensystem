@@ -5,7 +5,8 @@ import java.util.Optional;
 
 import de.schaffbar.core_pos.CustomerId;
 import de.schaffbar.core_pos.TokenId;
-import de.schaffbar.core_pos.token.commands.RequestTokenAssignmentCommand;
+import de.schaffbar.core_pos.token.TokenAssignmentCommands.RequestTokenAssignmentCommand;
+import de.schaffbar.core_pos.token.TokenAssignmentViews.TokenAssignmentView;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
@@ -45,8 +46,8 @@ public class TokenAssignmentService {
 
     @Transactional
     public void requestTokenAssignment(@NotNull @Valid RequestTokenAssignmentCommand command) {
-        if (getTokenAssignment(command.getCustomerId()).isPresent()) {
-            throw new RuntimeException("Token assignment already exists for customer with id: " + command.getCustomerId());
+        if (getTokenAssignment(command.customerId()).isPresent()) {
+            throw new RuntimeException("Token assignment already exists for customer with id: " + command.customerId().getValue());
         }
 
         if (this.tokenAssignmentRepository.findWaitingForAssignment().isPresent()) {

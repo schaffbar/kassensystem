@@ -1,13 +1,10 @@
 package de.schaffbar.core_pos.token.web;
 
-import java.util.UUID;
-
 import de.schaffbar.core_pos.ValueObjectMapper;
-import de.schaffbar.core_pos.token.TokenAssignmentView;
-import de.schaffbar.core_pos.token.TokenType;
-import de.schaffbar.core_pos.token.commands.RequestTokenAssignmentCommand;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
+import de.schaffbar.core_pos.token.TokenAssignmentCommands.RequestTokenAssignmentCommand;
+import de.schaffbar.core_pos.token.TokenAssignmentViews.TokenAssignmentView;
+import de.schaffbar.core_pos.token.web.TokenAssignmentApiModel.RequestTokenAssignmentRequestBody;
+import de.schaffbar.core_pos.token.web.TokenAssignmentApiModel.TokenAssignmentApiDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.ReportingPolicy;
@@ -30,12 +27,5 @@ public interface TokenAssignmentApiMapper extends ValueObjectMapper {
     // mapping request body to command
 
     RequestTokenAssignmentCommand toRequestTokenAssignmentCommand(RequestTokenAssignmentRequestBody requestBody);
-
-    // ------------------------------------------------------------------------
-    // request body
-
-    record RequestTokenAssignmentRequestBody(@NotNull UUID customerId, @NotNull TokenType tokenType) {}
-
-    record AssignTokenRequestBody(@NotBlank String tokenId) {}
 
 }

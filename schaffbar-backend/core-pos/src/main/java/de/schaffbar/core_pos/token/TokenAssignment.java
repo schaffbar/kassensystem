@@ -6,7 +6,7 @@ import java.util.UUID;
 import de.schaffbar.core_pos.CustomerId;
 import de.schaffbar.core_pos.TokenAssignmentId;
 import de.schaffbar.core_pos.TokenId;
-import de.schaffbar.core_pos.token.commands.RequestTokenAssignmentCommand;
+import de.schaffbar.core_pos.token.TokenAssignmentCommands.RequestTokenAssignmentCommand;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -60,8 +60,8 @@ class TokenAssignment {
     public static TokenAssignment of(RequestTokenAssignmentCommand command) {
         TokenAssignment result = new TokenAssignment();
         result.setId(UUID.randomUUID());
-        result.setCustomerId(command.getCustomerId().getValue());
-        result.setTokenType(command.getTokenType());
+        result.setCustomerId(command.customerId().getValue());
+        result.setTokenType(command.tokenType());
         result.setStatus(TokenAssignmentStatus.WAITING_FOR_ASSIGNMENT);
 
         return result;

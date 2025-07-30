@@ -1,5 +1,6 @@
 package de.schaffbar.core_pos.tool.web;
 
+import de.schaffbar.core_pos.ValueObjectMapper;
 import de.schaffbar.core_pos.tool.ToolCommands.CreateToolCommand;
 import de.schaffbar.core_pos.tool.ToolViews.ToolView;
 import de.schaffbar.core_pos.tool.web.ToolApiModel.CreateToolRequestBody;
@@ -10,7 +11,7 @@ import org.mapstruct.ReportingPolicy;
 import org.mapstruct.factory.Mappers;
 
 @Mapper(unmappedTargetPolicy = ReportingPolicy.ERROR)
-public interface ToolApiMapper {
+public interface ToolApiMapper extends ValueObjectMapper {
 
     ToolApiMapper MAPPER = Mappers.getMapper(ToolApiMapper.class);
 

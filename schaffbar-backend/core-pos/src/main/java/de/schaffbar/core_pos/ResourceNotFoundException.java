@@ -17,12 +17,16 @@ public class ResourceNotFoundException extends RuntimeException {
         super(buildExceptionMessage(resource, id), null);
     }
 
-    public static ResourceNotFoundException customer(CustomerId customerId) {
-        return new ResourceNotFoundException(Resource.CUSTOMER, customerId.getValue().toString());
+    public static ResourceNotFoundException customer(CustomerId id) {
+        return new ResourceNotFoundException(Resource.CUSTOMER, id.getValue().toString());
     }
 
-    public static ResourceNotFoundException tool(ToolId toolId) {
-        return new ResourceNotFoundException(Resource.TOOL, toolId.getValue().toString());
+    public static ResourceNotFoundException tool(ToolId id) {
+        return new ResourceNotFoundException(Resource.TOOL, id.getValue().toString());
+    }
+
+    public static ResourceNotFoundException rfidReader(RfidReaderId id) {
+        return new ResourceNotFoundException(Resource.RFID_READER, id.getValue().toString());
     }
 
     // ------------------------------------------------------------------------
@@ -38,6 +42,7 @@ public class ResourceNotFoundException extends RuntimeException {
 
         CUSTOMER("customer"), //
         TOOL("tool"), //
+        RFID_READER("RFID reader"), //
         TOKEN("token");
 
         private final String value;

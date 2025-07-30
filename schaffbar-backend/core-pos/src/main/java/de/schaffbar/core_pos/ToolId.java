@@ -11,7 +11,7 @@ public class ToolId {
     UUID value;
 
     private ToolId(UUID id) {
-        ValueObjectAssert.notNull(id, ValueObject.CUSTOMER_ID);
+        ValueObjectAssert.notNull(id, ValueObject.TOOL_ID);
         this.value = id;
     }
 

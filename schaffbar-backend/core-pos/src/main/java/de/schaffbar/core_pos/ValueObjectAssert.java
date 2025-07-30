@@ -62,6 +62,8 @@ public class ValueObjectAssert {
     public enum ValueObject {
 
         CUSTOMER_ID("customer id"), //
+        TOOL_ID("tool id"), //
+        RFID_READER_ID("rfid reader id"), //
         TOKEN_ASSIGNMENT_ID("token assignment id"), //
         TOKEN_ID("token id");
 

@@ -33,8 +33,17 @@ VALUES --
     (gen_random_uuid(), 'Fabian', 'Jung', 'fabian.jung@example.com', '+4917912345678', 'Königsallee 9', NULL, '40212', 'Düsseldorf', 'Deutschland', NOW(), NOW()), --
     (gen_random_uuid(), 'Carolin', 'Bergmann', 'carolin.bergmann@example.com', '+4918012345678', 'Wilhelmstraße 17', NULL, '34117', 'Kassel', 'Deutschland', NOW(), NOW());
 
+-- Insert tools
 INSERT INTO schaffbar.tool --
     (id, name, description, ip_address, http_start_command, on_command, off_command, created_at, updated_at) --
 VALUES --
     (gen_random_uuid(), 'Kreissäge', 'Elektrische Kreissäge', '192.168.33.1', 'http://bohrmaschine/start', 'bohrmaschine_on', 'bohrmaschine_off', NOW(), NOW()), --
     (gen_random_uuid(), 'Hobel', 'Elektrische Hobel', '192.168.33.2', 'http://schleifmaschine/start', 'schleifmaschine_on', 'schleifmaschine_off', NOW(), NOW()); --
+
+-- Insert RFID readers
+INSERT INTO schaffbar.rfid_reader --
+    (id, mac_address, type, created_at, updated_at) --
+VALUES --
+    (gen_random_uuid(), '00:1A:2B:3C:4D:5E', 'SWITCH_BOX', NOW(), NOW()), --
+    (gen_random_uuid(), '00:1A:2B:3C:4D:5F', 'GATE_KEEPER', NOW(), NOW()), --
+    (gen_random_uuid(), '00:1A:2B:3C:4D:61', 'COUNTER', NOW(), NOW());

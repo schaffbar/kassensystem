@@ -10,4 +10,12 @@ public interface ValueObjectMapper {
         return isNull(id) ? null : CustomerId.of(id);
     }
 
+    default RfidReaderId toRfidReader(UUID id) {
+        return isNull(id) ? null : RfidReaderId.of(id);
+    }
+
+    default ToolId toToolId(UUID id) {
+        return isNull(id) ? null : ToolId.of(id);
+    }
+
 }

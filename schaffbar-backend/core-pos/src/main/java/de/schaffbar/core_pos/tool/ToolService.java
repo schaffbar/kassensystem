@@ -30,11 +30,11 @@ public class ToolService {
                 .toList();
     }
 
-    public Optional<ToolView> getTool(@NotNull @Valid ToolId toolId) {
-        return this.toolRepository.findById(toolId.getValue()) //
+    public Optional<ToolView> getTool(@NotNull @Valid ToolId id) {
+        return this.toolRepository.findById(id.getValue()) //
                 .map(ToolViewMapper.MAPPER::toToolView);
     }
-    
+
     // ------------------------------------------------------------------------
     // command
 
@@ -46,10 +46,10 @@ public class ToolService {
     }
 
     public void deleteTool(@NotNull @Valid ToolId id) {
-        ToolView toolView = getTool(id) //
+        ToolView tool = getTool(id) //
                 .orElseThrow(() -> ResourceNotFoundException.tool(id));
 
-        this.toolRepository.deleteById(toolView.id().getValue());
+        this.toolRepository.deleteById(tool.id().getValue());
     }
 
 }

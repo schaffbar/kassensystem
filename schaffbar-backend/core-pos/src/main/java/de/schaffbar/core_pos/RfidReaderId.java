@@ -11,7 +11,7 @@ public class RfidReaderId {
     UUID value;
 
     private RfidReaderId(UUID id) {
-        ValueObjectAssert.notNull(id, ValueObject.CUSTOMER_ID);
+        ValueObjectAssert.notNull(id, ValueObject.RFID_READER_ID);
         this.value = id;
     }
 

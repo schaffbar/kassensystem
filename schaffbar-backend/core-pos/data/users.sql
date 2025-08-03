@@ -38,7 +38,10 @@ INSERT INTO schaffbar.tool --
     (id, name, description, ip_address, http_start_command, on_command, off_command, created_at, updated_at) --
 VALUES --
     (gen_random_uuid(), 'Kreissäge', 'Elektrische Kreissäge', '192.168.33.1', 'http://bohrmaschine/start', 'bohrmaschine_on', 'bohrmaschine_off', NOW(), NOW()), --
-    (gen_random_uuid(), 'Hobel', 'Elektrische Hobel', '192.168.33.2', 'http://schleifmaschine/start', 'schleifmaschine_on', 'schleifmaschine_off', NOW(), NOW()); --
+    (gen_random_uuid(), 'Hobel', 'Elektrische Hobel', '192.168.33.2', 'http://schleifmaschine/start', 'schleifmaschine_on', 'schleifmaschine_off', NOW(), NOW()), --
+    (gen_random_uuid(), 'Schleifmaschine', 'Elektrische Schleifmaschine', '192.168.33.3', 'http://schleifmaschine/start', 'schleifmaschine_on', 'schleifmaschine_off', NOW(), NOW()), --
+    (gen_random_uuid(), 'Bohrmaschine', 'Elektrische Bohrmaschine', '192.168.33.4', 'http://bohrmaschine/start', 'bohrmaschine_on', 'bohrmaschine_off', NOW(), NOW()), --
+    (gen_random_uuid(), 'Fräse', 'Elektrische Fräse', '192.168.33.5', 'http://fraese/start', 'fraese_on', 'fraese_off', NOW(), NOW());
 
 -- Insert RFID readers
 INSERT INTO schaffbar.rfid_reader --

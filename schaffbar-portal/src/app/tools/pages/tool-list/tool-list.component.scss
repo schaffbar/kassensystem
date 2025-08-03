@@ -1,13 +1,8 @@
-.user-list-header {
+.tool-list-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
   margin-bottom: 16px;
-}
-
-.user-list-filter {
-  display: flex;
-  max-width: 500px;
 }
 
 // styling columns using their auto-generated column names
@@ -25,14 +20,4 @@
 
 .mat-mdc-row:hover .mat-mdc-cell {
   border-color: currentColor;
-}
-
-// TODO: check if this is needed
-.mat-mdc-form-field {
-  font-size: 14px;
-  width: 100%;
-}
-
-.full-width-table {
-  width: 100%;
 }

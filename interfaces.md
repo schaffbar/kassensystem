@@ -1,3 +1,8 @@
+# Offene Frage:
+
+- Was passiert, wenn der Kunde Werkstatt verlässt, aber seine Werkzeuge laufen noch. Beispiel 3D-Druker.
+- Ist tämporer Kunde für max ein Tag begränzt?
+
 # Ideen:
 
 - Nutze so was wie Session (eine pro Abrechnung), WerkstattSession und WerkzeugSession für die Abrechnung.
@@ -36,8 +41,8 @@
 
 ## Allgemeine Fragen:
 
-- So wie ich es sehe ist RFID-Tag nicht am Kunden angebunden, sondern er speichert nur Name. Ist das korrekt?
-- Wie unterscheidet RFID-Reader welchen Request er verschickt? Anhand vom Typ?
+- So wie ich es sehe ist RFID-Tag nicht am Kunden angebunden, sondern er speichert nur Name. Ist das korrekt? Das ist noch zu tun.
+- Wie unterscheidet RFID-Reader welchen Request er verschickt? Anhand vom Typ? Ja
 - Welche usecases/RFID-Reader types gibt es?
 
   - S -> SwitchBox
@@ -46,14 +51,14 @@
   - G -> GateKeeper ???
   - "" -> wenn RFID-Reader started und noch keine Konfiguration vorhanden ist
 
-- Wie wird RFID-Reader Typ gesetzt? Manuell?
-- Wie passeirt die Zuweisung zum Werkzeug? Manuell?
+- Wie wird RFID-Reader Typ gesetzt? Manuell? Ja
+- Wie passeirt die Zuweisung zum Werkzeug? Manuell? Ja
 - Über welche Schnittstelle bekommt der RFID-Reader sein Typ. Ich gehe davon aus, dass er kurz nach dem Start noch sein Typ nicht kennt und ihn von Backend bekommen muss. Oder ist das falsch?
-- Wie werden die Einweisung eingetragen? Manuell?
+- Wie werden die Einweisung eingetragen? Manuell? Ja
 - Wer entscheidet in welchem Zustand ist ein Werkzeug? Backend oder RFID-Reader?
 - Wieso request enthalten Daten die wir im Backend nicht nutzen?
 - Ist state in DeviceInitRequest/Response und in DeviceCardRequest/Response gleich?
-- Was ist mit der Überprüfung, wie viele Werkzeuge darf der Kunde nutzen?
+- Was ist mit der Überprüfung, wie viele Werkzeuge darf der Kunde nutzen? Beliebig viele?
 
 ## Überblick 'usecase':
 
@@ -74,7 +79,7 @@
 
 - CounterCardRequest: setze den RFID-Tag in den Clipboard
 
-### ??? (A):
+### Add Tag (A):
 
 - CounterCardRequest: registriere RFID-Tag wenn noch nicht existiert
 
@@ -135,7 +140,6 @@ class DeviceInitResponse(DeviceResponse):
 ### Fragen:
 
 - Wozu im request STATE und DEVUSECASE wenn nur MAC-Adresse genutzt wird?
-- Wo wird beim Einschalten die Einweisung überprüft?
 
 ## CounterCardRequest
 
@@ -171,7 +175,7 @@ class CounterCardResponse(BaseModel):
 
 ### Fragen:
 
-- Wieso wird ein RFID-Tag hinzugefügt in die Datenbank. Jeder kann doch kommen mit eigenem RFID-Tag
+- Wieso wird ein RFID-Tag hinzugefügt in die Datenbank. Jeder kann doch kommen mit eigenem RFID-Tag. Nein
 
 ## DeviceCardRequest
 
@@ -215,8 +219,6 @@ class DeviceCardResponse(BaseModel):
 
 #### Fragen:
 
-- Wieso wird Abrechnung gemacht beim 'checkin' und an RFID-Reader als DeviceCardResponse.UNITS gegeben
-
 ### Ein-/Aus-Schalten von Werkzeugen
 
 - wenn der Typ von RFID-Reader ist SwitchBox
@@ -227,8 +229,8 @@ class DeviceCardResponse(BaseModel):
 #### Fragen:
 
 - Wieso wird zweites Mal Kundenname geholt und geprüft?
-- Was ist DeviceCardRequest.STATE == "Idle" / "Working"? Wie wird es beim Neustart gesetzt?
-- Die kuünstlichen CardActions welchen Zeitstempel sie haben?
+- Was ist DeviceCardRequest.STATE == "Start", "Idle" / "Working" / "END"? Wie wird es beim Neustart gesetzt?
+- Die künstlichen CardActions welchen Zeitstempel sie haben?
 
 # Glossar
 

@@ -4,7 +4,7 @@ import java.time.Instant;
 import java.util.UUID;
 
 import de.schaffbar.core_pos.CustomerId;
-import de.schaffbar.core_pos.customer.command.CreateCustomerCommand;
+import de.schaffbar.core_pos.customer.CustomerCommands.CreateCustomerCommand;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
@@ -52,25 +52,25 @@ class Customer {
     // ------------------------------------------------------------------------
     // constructor
 
-    static Customer of(CreateCustomerCommand command) {
-        Customer customer = new Customer();
-        customer.id = UUID.randomUUID();
-        customer.firstName = command.getFirstName();
-        customer.email = command.getEmail();
-        customer.phone = command.getPhone();
-        customer.lastName = command.getLastName();
-        customer.address = CustomerAddress.of(command);
-        customer.createdAt = Instant.now();
-        customer.updatedAt = Instant.now();
-
-        return customer;
+    public CustomerId getCustomerId() {
+        return CustomerId.of(this.id);
     }
 
     // ------------------------------------------------------------------------
     // query
 
-    public CustomerId getCustomerId() {
-        return CustomerId.of(this.id);
+    static Customer of(CreateCustomerCommand command) {
+        Customer customer = new Customer();
+        customer.id = UUID.randomUUID();
+        customer.firstName = command.firstName();
+        customer.email = command.email();
+        customer.phone = command.phone();
+        customer.lastName = command.lastName();
+        customer.address = CustomerAddress.of(command);
+        customer.createdAt = Instant.now();
+        customer.updatedAt = Instant.now();
+
+        return customer;
     }
 
     // ------------------------------------------------------------------------

@@ -5,8 +5,8 @@ import java.util.Optional;
 
 import de.schaffbar.core_pos.CustomerId;
 import de.schaffbar.core_pos.ResourceNotFoundException;
-import de.schaffbar.core_pos.customer.command.CreateCustomerCommand;
-import de.schaffbar.core_pos.customer.view.CustomerView;
+import de.schaffbar.core_pos.customer.CustomerCommands.CreateCustomerCommand;
+import de.schaffbar.core_pos.customer.CustomerViews.CustomerView;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.NonNull;
@@ -30,8 +30,8 @@ public class CustomerService {
                 .toList();
     }
 
-    public Optional<CustomerView> getCustomer(@NotNull @Valid CustomerId customerId) {
-        return this.customerRepository.findById(customerId.getValue()) //
+    public Optional<CustomerView> getCustomer(@NotNull @Valid CustomerId id) {
+        return this.customerRepository.findById(id.getValue()) //
                 .map(CustomerViewMapper.MAPPER::toCustomerView);
     }
 
@@ -49,7 +49,7 @@ public class CustomerService {
         CustomerView customerView = getCustomer(id) //
                 .orElseThrow(() -> ResourceNotFoundException.customer(id));
 
-        this.customerRepository.deleteById(customerView.getId().getValue());
+        this.customerRepository.deleteById(customerView.id().getValue());
     }
 
 }

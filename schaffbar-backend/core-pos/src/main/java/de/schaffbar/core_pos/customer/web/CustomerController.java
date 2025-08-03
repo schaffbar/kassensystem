@@ -6,10 +6,10 @@ import java.util.UUID;
 
 import de.schaffbar.core_pos.CustomerId;
 import de.schaffbar.core_pos.ResourceNotFoundException;
+import de.schaffbar.core_pos.customer.CustomerCommands.CreateCustomerCommand;
 import de.schaffbar.core_pos.customer.CustomerService;
-import de.schaffbar.core_pos.customer.command.CreateCustomerCommand;
-import de.schaffbar.core_pos.customer.web.CustomerApiMapper.CreateCustomerRequestBody;
-import de.schaffbar.core_pos.customer.web.CustomerApiMapper.CustomerApiDto;
+import de.schaffbar.core_pos.customer.web.CustomerApiModel.CreateCustomerRequestBody;
+import de.schaffbar.core_pos.customer.web.CustomerApiModel.CustomerApiDto;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.NonNull;
@@ -47,10 +47,10 @@ public class CustomerController {
 
     @GetMapping(value = "/{customerId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<CustomerApiDto> getCustomer(@PathVariable @NotNull UUID customerId) {
-        CustomerId customerIdObj = CustomerId.of(customerId);
-        CustomerApiDto customer = this.customerService.getCustomer(customerIdObj) //
+        CustomerId id = CustomerId.of(customerId);
+        CustomerApiDto customer = this.customerService.getCustomer(id) //
                 .map(CustomerApiMapper.MAPPER::toCustomerApiDto) //
-                .orElseThrow(() -> ResourceNotFoundException.customer(customerIdObj));
+                .orElseThrow(() -> ResourceNotFoundException.customer(id));
 
         return ResponseEntity.ok(customer);
     }
@@ -69,8 +69,8 @@ public class CustomerController {
 
     @DeleteMapping(value = "/{customerId}")
     public ResponseEntity<Void> deleteCustomer(@PathVariable @NotNull UUID customerId) {
-        CustomerId customerIdObj = CustomerId.of(customerId);
-        this.customerService.deleteCustomer(customerIdObj);
+        CustomerId id = CustomerId.of(customerId);
+        this.customerService.deleteCustomer(id);
 
         return ResponseEntity.noContent().build();
     }

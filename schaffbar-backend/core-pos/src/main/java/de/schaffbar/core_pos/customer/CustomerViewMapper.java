@@ -1,6 +1,6 @@
 package de.schaffbar.core_pos.customer;
 
-import de.schaffbar.core_pos.customer.view.CustomerView;
+import de.schaffbar.core_pos.customer.CustomerViews.CustomerView;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.ReportingPolicy;

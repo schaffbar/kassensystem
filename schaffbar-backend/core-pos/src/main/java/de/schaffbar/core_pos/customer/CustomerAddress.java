@@ -1,6 +1,6 @@
 package de.schaffbar.core_pos.customer;
 
-import de.schaffbar.core_pos.customer.command.CreateCustomerCommand;
+import de.schaffbar.core_pos.customer.CustomerCommands.CreateCustomerCommand;
 import jakarta.persistence.Embeddable;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AccessLevel;
@@ -30,11 +30,11 @@ public class CustomerAddress {
 
     static CustomerAddress of(CreateCustomerCommand command) {
         CustomerAddress address = new CustomerAddress();
-        address.addressLine1 = command.getAddressLine1();
-        address.addressLine2 = command.getAddressLine2();
-        address.postalCode = command.getPostalCode();
-        address.city = command.getCity();
-        address.country = command.getCountry();
+        address.addressLine1 = command.addressLine1();
+        address.addressLine2 = command.addressLine2();
+        address.postalCode = command.postalCode();
+        address.city = command.city();
+        address.country = command.country();
 
         return address;
     }

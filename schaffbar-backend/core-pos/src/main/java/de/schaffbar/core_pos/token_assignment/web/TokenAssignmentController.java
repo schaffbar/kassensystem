@@ -10,7 +10,7 @@ import de.schaffbar.core_pos.CustomerId;
 import de.schaffbar.core_pos.ResourceNotFoundException;
 import de.schaffbar.core_pos.TokenId;
 import de.schaffbar.core_pos.customer.CustomerService;
-import de.schaffbar.core_pos.customer.view.CustomerView;
+import de.schaffbar.core_pos.customer.CustomerViews.CustomerView;
 import de.schaffbar.core_pos.token_assignment.TokenAssignmentCommands.RequestTokenAssignmentCommand;
 import de.schaffbar.core_pos.token_assignment.TokenAssignmentService;
 import de.schaffbar.core_pos.token_assignment.web.TokenAssignmentApiModel.AssignTokenRequestBody;
@@ -60,7 +60,7 @@ public class TokenAssignmentController {
             CustomerView customer = this.customerService.getCustomer(customerIdObj) //
                     .orElseThrow(() -> ResourceNotFoundException.customer(customerIdObj));
 
-            result = this.tokenAssignmentService.getTokenAssignment(customer.getId()).stream() //
+            result = this.tokenAssignmentService.getTokenAssignment(customer.id()).stream() //
                     .map(TokenAssignmentApiMapper.MAPPER::toTokenAssignmentApiDto) //
                     .toList();
         }

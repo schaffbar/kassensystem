@@ -1,10 +1,10 @@
-package de.schaffbar.core_pos.token.web;
+package de.schaffbar.core_pos.token_assignment.web;
 
 import de.schaffbar.core_pos.ValueObjectMapper;
-import de.schaffbar.core_pos.token.TokenAssignmentCommands.RequestTokenAssignmentCommand;
-import de.schaffbar.core_pos.token.TokenAssignmentViews.TokenAssignmentView;
-import de.schaffbar.core_pos.token.web.TokenAssignmentApiModel.RequestTokenAssignmentRequestBody;
-import de.schaffbar.core_pos.token.web.TokenAssignmentApiModel.TokenAssignmentApiDto;
+import de.schaffbar.core_pos.token_assignment.TokenAssignmentCommands.RequestTokenAssignmentCommand;
+import de.schaffbar.core_pos.token_assignment.TokenAssignmentViews.TokenAssignmentView;
+import de.schaffbar.core_pos.token_assignment.web.TokenAssignmentApiModel.RequestTokenAssignmentRequestBody;
+import de.schaffbar.core_pos.token_assignment.web.TokenAssignmentApiModel.TokenAssignmentApiDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.ReportingPolicy;

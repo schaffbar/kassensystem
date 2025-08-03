@@ -1,4 +1,4 @@
-package de.schaffbar.core_pos.token;
+package de.schaffbar.core_pos.token_assignment;
 
 import java.time.Instant;
 

@@ -1,4 +1,4 @@
-package de.schaffbar.core_pos.token;
+package de.schaffbar.core_pos.token_assignment;
 
 import java.time.Instant;
 import java.util.UUID;
@@ -6,7 +6,7 @@ import java.util.UUID;
 import de.schaffbar.core_pos.CustomerId;
 import de.schaffbar.core_pos.TokenAssignmentId;
 import de.schaffbar.core_pos.TokenId;
-import de.schaffbar.core_pos.token.TokenAssignmentCommands.RequestTokenAssignmentCommand;
+import de.schaffbar.core_pos.token_assignment.TokenAssignmentCommands.RequestTokenAssignmentCommand;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;

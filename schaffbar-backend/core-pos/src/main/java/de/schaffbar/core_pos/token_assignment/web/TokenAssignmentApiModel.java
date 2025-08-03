@@ -1,10 +1,10 @@
-package de.schaffbar.core_pos.token.web;
+package de.schaffbar.core_pos.token_assignment.web;
 
 import java.time.Instant;
 import java.util.UUID;
 
-import de.schaffbar.core_pos.token.TokenAssignmentStatus;
-import de.schaffbar.core_pos.token.TokenType;
+import de.schaffbar.core_pos.token_assignment.TokenAssignmentStatus;
+import de.schaffbar.core_pos.token_assignment.TokenType;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 

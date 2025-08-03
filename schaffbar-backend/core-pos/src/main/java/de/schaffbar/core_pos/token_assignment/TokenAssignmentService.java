@@ -1,12 +1,12 @@
-package de.schaffbar.core_pos.token;
+package de.schaffbar.core_pos.token_assignment;
 
 import java.util.List;
 import java.util.Optional;
 
 import de.schaffbar.core_pos.CustomerId;
 import de.schaffbar.core_pos.TokenId;
-import de.schaffbar.core_pos.token.TokenAssignmentCommands.RequestTokenAssignmentCommand;
-import de.schaffbar.core_pos.token.TokenAssignmentViews.TokenAssignmentView;
+import de.schaffbar.core_pos.token_assignment.TokenAssignmentCommands.RequestTokenAssignmentCommand;
+import de.schaffbar.core_pos.token_assignment.TokenAssignmentViews.TokenAssignmentView;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;

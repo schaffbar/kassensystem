@@ -1,4 +1,4 @@
-package de.schaffbar.core_pos.token.web;
+package de.schaffbar.core_pos.token_assignment.web;
 
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
@@ -11,11 +11,11 @@ import de.schaffbar.core_pos.ResourceNotFoundException;
 import de.schaffbar.core_pos.TokenId;
 import de.schaffbar.core_pos.customer.CustomerService;
 import de.schaffbar.core_pos.customer.view.CustomerView;
-import de.schaffbar.core_pos.token.TokenAssignmentCommands.RequestTokenAssignmentCommand;
-import de.schaffbar.core_pos.token.TokenAssignmentService;
-import de.schaffbar.core_pos.token.web.TokenAssignmentApiModel.AssignTokenRequestBody;
-import de.schaffbar.core_pos.token.web.TokenAssignmentApiModel.RequestTokenAssignmentRequestBody;
-import de.schaffbar.core_pos.token.web.TokenAssignmentApiModel.TokenAssignmentApiDto;
+import de.schaffbar.core_pos.token_assignment.TokenAssignmentCommands.RequestTokenAssignmentCommand;
+import de.schaffbar.core_pos.token_assignment.TokenAssignmentService;
+import de.schaffbar.core_pos.token_assignment.web.TokenAssignmentApiModel.AssignTokenRequestBody;
+import de.schaffbar.core_pos.token_assignment.web.TokenAssignmentApiModel.RequestTokenAssignmentRequestBody;
+import de.schaffbar.core_pos.token_assignment.web.TokenAssignmentApiModel.TokenAssignmentApiDto;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.NonNull;

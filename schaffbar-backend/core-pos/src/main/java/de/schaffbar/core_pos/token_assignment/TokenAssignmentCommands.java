@@ -1,4 +1,4 @@
-package de.schaffbar.core_pos.token;
+package de.schaffbar.core_pos.token_assignment;
 
 import de.schaffbar.core_pos.CustomerId;
 import jakarta.validation.constraints.NotNull;

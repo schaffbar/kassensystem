@@ -47,8 +47,7 @@ public class ResourceNotFoundException extends RuntimeException {
         CUSTOMER("customer"), //
         TOOL("tool"), //
         RFID_READER("RFID reader"), //
-        RFID_TAG("RFID tag"), //
-        TOKEN("token");
+        RFID_TAG("RFID tag");
 
         private final String value;
 

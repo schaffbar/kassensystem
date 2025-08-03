@@ -1,16 +1,17 @@
 package de.schaffbar.core_pos;
 
+import java.util.UUID;
+
 import de.schaffbar.core_pos.ValueObjectAssert.ValueObject;
 import lombok.Value;
 
-@Deprecated
 @Value(staticConstructor = "of")
-public class TokenId {
+public class RfidTagId {
 
-    String value;
+    UUID value;
 
-    private TokenId(String id) {
-        ValueObjectAssert.notBlank(id, ValueObject.TOKEN_ID);
+    private RfidTagId(UUID id) {
+        ValueObjectAssert.notNull(id, ValueObject.RFID_READER_ID);
         this.value = id;
     }
 

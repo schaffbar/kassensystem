@@ -29,6 +29,10 @@ public class ResourceNotFoundException extends RuntimeException {
         return new ResourceNotFoundException(Resource.RFID_READER, id.getValue().toString());
     }
 
+    public static ResourceNotFoundException rfidTag(RfidTagId id) {
+        return new ResourceNotFoundException(Resource.RFID_TAG, id.getValue().toString());
+    }
+
     // ------------------------------------------------------------------------
     // helper
 
@@ -43,6 +47,7 @@ public class ResourceNotFoundException extends RuntimeException {
         CUSTOMER("customer"), //
         TOOL("tool"), //
         RFID_READER("RFID reader"), //
+        RFID_TAG("RFID tag"), //
         TOKEN("token");
 
         private final String value;

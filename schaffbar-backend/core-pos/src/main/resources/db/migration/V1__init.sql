@@ -37,7 +37,7 @@ GRANT ALL ON TABLE schaffbar.tool TO schadmin;
 CREATE TABLE schaffbar.rfid_reader
 (
     id UUID NOT NULL,
-    mac_address VARCHAR(255),
+    mac_address VARCHAR(255) NOT NULL UNIQUE,
     type VARCHAR(255),
     created_at TIMESTAMP WITHOUT TIME ZONE NOT NULL,
     updated_at TIMESTAMP WITHOUT TIME ZONE NOT NULL,
@@ -45,6 +45,18 @@ CREATE TABLE schaffbar.rfid_reader
 );
 
 GRANT ALL ON TABLE schaffbar.rfid_reader TO schadmin;
+
+CREATE TABLE schaffbar.rfid_tag
+(
+    id UUID NOT NULL,
+    tag_id VARCHAR(255) NOT NULL UNIQUE,
+    active BOOLEAN NOT NULL DEFAULT TRUE,
+    created_at TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+    updated_at TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+    CONSTRAINT pk_rfid_tag PRIMARY KEY (id)
+);
+
+GRANT ALL ON TABLE schaffbar.rfid_tag TO schadmin;
 
 CREATE TABLE schaffbar.token_assignment
 (

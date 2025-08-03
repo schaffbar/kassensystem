@@ -28,6 +28,7 @@ class RfidReader {
     @Id
     private UUID id;
 
+    // TODO: check unique constraint for mac address
     @NotBlank
     private String macAddress;
 

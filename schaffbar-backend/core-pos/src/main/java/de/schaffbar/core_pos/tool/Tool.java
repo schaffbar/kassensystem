@@ -33,6 +33,8 @@ class Tool {
 
     private String description;
 
+    // TODO: add WLAN-Relais configuration
+
     @NotNull
     private Instant createdAt;
 

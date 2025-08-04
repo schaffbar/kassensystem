@@ -1,1 +1,29 @@
-<p>tool-detail works!</p>
+@if (detailsStore.tool(); as tool) {
+  <div class="tool-detail-header">
+    <div class="tool-detail-header__title">
+      <h1>{{ tool.name }}</h1>
+      <button matIconButton color="primary" (click)="reloadTool()">
+        <mat-icon>refresh</mat-icon>
+      </button>
+    </div>
+  </div>
+
+  <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="center" dynamicHeight>
+    <mat-tab label="Details">
+      <div class="tab-content">
+          <div class="row">
+            <div class="col">
+              <mat-form-field class="full-width" appearance="outline" [floatLabel]="'always'" [hideRequiredMarker]="true">
+                <mat-label>Description</mat-label>
+                <input matInput placeholder="Description" [value]="tool.description" readonly />
+              </mat-form-field>
+            </div>
+          </div>
+      </div>
+    </mat-tab>
+    <mat-tab label="WLAN-Relais">
+      <div class="tab-content">
+      </div>
+    </mat-tab>
+  </mat-tab-group>
+}

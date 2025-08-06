@@ -1,8 +1,8 @@
 /*
   netcred = networkcredentials
-  hier werden die WLan- und Server-Informationen hinterlegt
-  im Anschlauss wird die Datei für github auf ignore 
 
+  hier werden die WLan- und Server-Informationen hinterlegt
+  im Anschlauss wird die Datei für github auf ignore gesetzt
 
 */
 

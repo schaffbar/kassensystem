@@ -43,6 +43,7 @@ void initWifi(void)
   }
 }
 
+#if RawComFlag == 1
 void sendRequest(JsonDocument jDoc) 
 /****************************************************************************************************
  * void sendRequest(JsonDocument jDoc) - When an exchange with the server or the database is necessary 
@@ -129,3 +130,54 @@ void sendRequest(JsonDocument jDoc)
   }
 }
 
+#else
+
+void sendHTTPRequest(String  strRoute, JsonDocument jDoc)
+{
+  uint uiCnCnt = 0;
+  HTTPClient http;
+  String strServerName = String("http://")+ip+":"+String(port)+strRoute;
+
+  
+  int httpResponseCode = -111;			// fikitiver fehlerhafter initwert
+  
+  while((uiCnCnt < wifiNoTries ) and (httpResponseCode < 0))
+  {
+    Serial.println("Server :"+strServerName+" Port:"+String(port));
+    Serial.println();
+    http.begin(wifiClient, strServerName); // server
+    http.addHeader("Content-Type", "application/json"); 
+    
+	  // JSON send
+    String strTmpMsg="";
+    serializeJson(jDoc, strTmpMsg);
+	  httpResponseCode = http.POST(strTmpMsg);
+	  
+	  //get response
+	  if (httpResponseCode > 0) 
+	  {
+		String strResponse = http.getString();
+		Serial.println("answer received!");
+		Serial.println(strResponse);
+		analyseResponse(strResponse);
+		Serial.println("response: " + strResponse);
+	  }
+	  else 
+	  {  // Fehlerhafte Kommunikation mit dem Server - Ausgabe einer Fehlermeldung - starte erneuten Versuch
+      uiCnCnt = uiCnCnt + 1;
+      dsplyWifiTryCnt(uiCnCnt);
+		  Serial.println("Try "+String(uiCnCnt)+" HTTP failed. error code: " + String(httpResponseCode));
+		  delay(100);
+	  }
+  }
+  // HTTP end
+  http.end();
+  if(httpResponseCode < 0)
+  {
+    dsplyErrorInfo("Error","Server not available",5,0,2);
+    Serial.println("Message sent, no success");
+    playError();
+    softReset(); 
+  }
+}
+#endif

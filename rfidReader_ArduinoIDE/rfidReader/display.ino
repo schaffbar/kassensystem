@@ -456,7 +456,7 @@ void dsplyIdleText(String strParam)
 {
   int iXPosStart = 0;
   uint8_t uiTxtFlag=0;
-  String StringTxt = StringUseCaseName[uint8_t(eUC)];
+  String StringTxt = strUseCaseName[uint8_t(eUC)];
   tft.fillRect(0,100,320,60,ILI9341_BLACK);
   if(strParam == "")
   {

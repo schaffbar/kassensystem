@@ -1,9 +1,18 @@
 // version history
-const char* sw_version = "0.3.3";
+const char* sw_version = "0.4.0";
 /* 
  * Reihenfolge major.minor.bugfix
  *
  * neuste Änderungen sollen an den Beginn der Liste geschrieben werden
+ *
+ * 0.4.0
+ * -) Wechsel von Raw-Package Kommunikation zu HTTP-Requests
+ *    damit kann eine einheitliche SW für die Kommunikation mit den ESP32-Prozessoren und 
+ *    dem Web-Frontend am Counter oder anderen Positionen erfolgen.
+ *    In der Datrei rfidReader.ino gibt es ein #define RawComFlag  
+ *    0 - HTTP-Kommunikation
+ *    1 - RawPackage-Kommunikation
+ * -) Sleep-Mode-Handling wurde vorbereite ist aber aktuell auskommentiert 
  *
  * 0.3.3 
  * -) Server- und Netzwerkdaten in eine extra Datei verlagert

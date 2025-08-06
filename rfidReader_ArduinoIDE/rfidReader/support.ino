@@ -213,7 +213,7 @@ void evalGateKeeperResp(JsonDocument jDoc)
      strUnits = String(jDoc["UNITS"]);
      initUnitCounter();
      Serial.println("evalGateKeeperResp - Customer is starting");
-     playOK();
+     //playOK();
    }
    //else if((String(jDoc["ERROR"]) == "") and (String(jDoc["CUSTOMERSTARTSTOP"]) != "") and (String(jDoc["ICON"]) == "BYE")) 
    else if(String(jDoc["ICON"]) == "BYE") 
@@ -228,7 +228,7 @@ void evalGateKeeperResp(JsonDocument jDoc)
 	   iIconNo = 10; // bye.bmp	    
      initUnitCounter();
      Serial.println("evalGateKeeperResp - Customer leaving");
-     playOK();
+     //playOK();
    }
    else
    {
@@ -330,7 +330,6 @@ void setState(String strState)
   }
   else if (strState == "IDLE") 
   {
-    eState = idle;
     chngState2Idle(); 
   }
   else if (strState == "WORKING")
@@ -385,7 +384,6 @@ void setUseCase(String strUseCase)
 void setInitData(JsonDocument jDoc)
 {
   int iAnswer = 0;
-  eState = idle;
   chngState2Idle();
   cDevUseCase = char(String(jDoc["DEVUSECASE"])[0]);
   Serial.println("Start of setInitData(JsonDocument jDoc) - UC" +String(jDoc["DEVUSECASE"])+" "+String(cDevUseCase)+" State "+getState());
@@ -405,7 +403,7 @@ void setInitData(JsonDocument jDoc)
       if(sTimeRunning.uiFlagValid == 1)
       {
         //dsplyMask();
-        eState = idle;
+        setIdleStart(); // eState = idle;
         Serial.println("End of analyseResponse -  SwitchBox");
         //return 0;
       }
@@ -416,14 +414,14 @@ void setInitData(JsonDocument jDoc)
       Serial.println("Counter: Check Code what is missing!!");
       strTerminal = String(jDoc["TERMINAL"]);
       Serial.print("Received Data for UseCase Counter : ");
-      eState = idle;
+      setIdleStart(); // eState = idle;
       serializeJson(jDoc,Serial);
       Serial.println();
   }
   else if(cDevUseCase == 'G') // GateKeeper
   {
     Serial.println("GateKeeper");
-    eState = idle;
+    setIdleStart(); // eState = idle;
     Serial.print("Received Data for UseCase GateKeeper : ");
     serializeJson(jDoc,Serial);
     Serial.println();
@@ -431,7 +429,7 @@ void setInitData(JsonDocument jDoc)
   else if (cDevUseCase == 'A')
   {
     Serial.println("AddTag");
-    eState = idle;
+    setIdleStart(); //eState = idle;
     Serial.print("Received Data for UseCase AddTag : ");
     serializeJson(jDoc,Serial);
     Serial.println();    
@@ -573,7 +571,11 @@ void evalSwitchBoxAction(String strRfidTag)
     jsonSendDoc = getJSONUserData(strRfidTag);
     strWorkID = strRfidTag;   // sichere die ID, damit Dich niemand anders abmelden kann :-)
     dsplyErrorInfo("Info","Lade Daten", 1, 0, 5);
-    sendRequest(jsonSendDoc);
+    #if RawComFlag == 1
+          sendRequest(jsonSendDoc);
+    #else
+          sendHTTPRequest(strRouteCard,jsonSendDoc);
+    #endif    
     if( uiFlagRunTimer == 1)
     {
       fSolUnitsMin  = 0;
@@ -589,7 +591,11 @@ void evalSwitchBoxAction(String strRfidTag)
       uiFlagRunTimer = 0;
       dsplyErrorInfo("Info","Schreibe Daten", 1, 0, 5);
       jsonSendDoc = getJSONUserData(strRfidTag);
-      sendRequest(jsonSendDoc);
+      #if RawComFlag == 1
+        sendRequest(jsonSendDoc);
+      #else
+        sendHTTPRequest(strRouteCard,jsonSendDoc);
+      #endif
       fSolUnitsMin  = 0;
     }
     else
@@ -605,7 +611,11 @@ void evalGateKeeperAction(String strRfidTag)
 {
   jsonSendDoc = getJDocGKData(strRfidTag);
   playOK();
-  sendRequest(jsonSendDoc);
+  #if RawComFlag == 1
+    sendRequest(jsonSendDoc);
+  #else
+    sendHTTPRequest(strRouteCard,jsonSendDoc);
+  #endif
 }
 
 void evalCounterAction(String strRfidTag)
@@ -613,12 +623,17 @@ void evalCounterAction(String strRfidTag)
   // to add the rfidTag to the Card table on the server 
   jsonSendDoc = getJDocCounter(strRfidTag);
   playOK();
-  sendRequest(jsonSendDoc);
+  #if RawComFlag == 1
+    sendRequest(jsonSendDoc);
+  #else
+    sendHTTPRequest(strRouteCounter,jsonSendDoc);
+  #endif  
 }
 
 void evalTouchAction()
 {
   // auskommentiert da auch für den UseCse SwitchBox bei unbekannter Karte diese Funktion erfordert
+  // und nicht nur im UseCase GAteKeeper benötigt wird
   //if((eUC == GateKeeper) or (eUC == Counter))
   //{ 
     if(eState == end)
@@ -628,13 +643,52 @@ void evalTouchAction()
   //}
 }
 
+void setIdleStart()
+{
+  ulIdleStart = rtc.getLocalEpoch();
+  eState = idle; 
+}
+
+void checkIdleDuration()
+{
+  unsigned long ulTimeTemp = rtc.getLocalEpoch();
+  if (ulIdleStart + ulIdleMaxDuration < ulTimeTemp)
+  {
+    enterSleepMode();
+  }
+}
+
+void enterSleepMode()
+{
+  esp_err_t tErrMsg;
+  Serial.println("Enter SleepMode ...");
+  Serial.flush(); 
+  dspClear();
+  // Deep-Sleep-Info für ESP32-C3
+  // https://docs.espressif.com/projects/esp-idf/en/stable/esp32c3/api-reference/system/sleep_modes.html
+  tErrMsg = esp_sleep_enable_gpio_wakeup(); // Touch_INT_PIN, 0);          // In Ruhe ist der Pin high => neg Logik
+  //tErrMsg = esp_deep_sleep_enable_gpio_wakeup((1<<Touch_INT_PIN),ESP_GPIO_WAKEUP_GPIO_HIGH); // Pin_MFRC522_IRQ, 1); // In Ruhe ist der Pin low  => pos Logik
+  esp_deep_sleep_start();
+}
+
+bool checkWakeUp()
+{
+  bool bWakeUpEvent = false;
+  if (esp_sleep_is_valid_wakeup_gpio((gpio_num_t)Touch_INT_PIN))
+  {
+    Serial.println("WakeUp regarding touch event");
+    bWakeUpEvent = true;
+  }
+  return bWakeUpEvent;
+}
+
 void chngState2Idle()
 { // reset intervall settings 
   bIntChange  = false;
   bIntRunning = false;
   lIntStartAt = 0;
   // Switching back to idle mode
-  eState      = idle;
+  setIdleStart(); // eState = idle;
   Serial.println("Switching state to idle (UC="+String(eUC)+")");
   dspClear();
   strHeader = "";

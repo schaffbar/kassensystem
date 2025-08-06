@@ -79,6 +79,7 @@
 // #include "pitches.h"  def of tones
 #include "pinoutdef.h"
 #include "ver.h"
+
 #include "netcred.h"              // WLan-Zugangs bzw. Server-Information
 
 #define RawComFlag  0          // 1 <= der rfidReaader sendet ein RawPaket, 0 <= der rfidReader sendet http-Anfragen an den Server

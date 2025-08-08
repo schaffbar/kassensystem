@@ -1,14 +1,9 @@
 package de.schaffbar.core_pos.rfid_tag;
 
-import java.util.Optional;
-import java.util.UUID;
-
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-interface RfidTagRepository extends JpaRepository<RfidTag, UUID> {
-
-    Optional<RfidTag> findByTagId(String rfidTagId);
+interface RfidTagRepository extends JpaRepository<RfidTag, String> {
 
 }

@@ -9,7 +9,6 @@ public interface RfidTagApiModel {
 
     record RfidTagApiDto( //
             @NotBlank String id, //
-            @NotBlank String tagId, //
             boolean active //
     ) {}
 

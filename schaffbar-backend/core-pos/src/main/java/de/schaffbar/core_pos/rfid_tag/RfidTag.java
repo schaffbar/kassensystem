@@ -1,7 +1,6 @@
 package de.schaffbar.core_pos.rfid_tag;
 
 import java.time.Instant;
-import java.util.UUID;
 
 import de.schaffbar.core_pos.RfidTagId;
 import de.schaffbar.core_pos.rfid_tag.RfidTagCommands.CreateRfidTagCommand;
@@ -9,7 +8,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.persistence.Version;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -26,10 +24,7 @@ import lombok.ToString;
 class RfidTag {
 
     @Id
-    private UUID id;
-
-    @NotBlank
-    private String tagId;
+    private String id;
 
     private boolean active;
 
@@ -45,9 +40,8 @@ class RfidTag {
 
     public static RfidTag of(CreateRfidTagCommand command) {
         RfidTag rfidTag = new RfidTag();
-        rfidTag.setId(UUID.randomUUID());
-        rfidTag.setTagId(command.tagId());
-        // TODO: implement it
+        rfidTag.setId(command.rfidTagId());
+        rfidTag.setActive(true);
         rfidTag.setCreatedAt(Instant.now());
 
         return rfidTag;

@@ -48,8 +48,7 @@ GRANT ALL ON TABLE schaffbar.rfid_reader TO schadmin;
 
 CREATE TABLE schaffbar.rfid_tag
 (
-    id UUID NOT NULL,
-    tag_id VARCHAR(255) NOT NULL UNIQUE,
+    id VARCHAR(255) NOT NULL,
     active BOOLEAN NOT NULL DEFAULT TRUE,
     created_at TIMESTAMP WITHOUT TIME ZONE NOT NULL,
     updated_at TIMESTAMP WITHOUT TIME ZONE NOT NULL,

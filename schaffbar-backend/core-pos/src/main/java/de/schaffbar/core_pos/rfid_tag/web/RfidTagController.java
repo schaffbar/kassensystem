@@ -2,7 +2,6 @@ package de.schaffbar.core_pos.rfid_tag.web;
 
 import java.net.URI;
 import java.util.List;
-import java.util.UUID;
 
 import de.schaffbar.core_pos.ResourceNotFoundException;
 import de.schaffbar.core_pos.RfidTagId;
@@ -46,7 +45,7 @@ public class RfidTagController {
     }
 
     @GetMapping(value = "/{rfidTagId}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<RfidTagApiDto> getRfidTag(@PathVariable @NotNull UUID rfidTagId) {
+    public ResponseEntity<RfidTagApiDto> getRfidTag(@PathVariable @NotNull String rfidTagId) {
         RfidTagId id = RfidTagId.of(rfidTagId);
         RfidTagApiDto rfidTag = this.rfidTagService.getRfidTag(id) //
                 .map(RfidTagApiMapper.MAPPER::toRfidTagApiDto) //
@@ -68,7 +67,7 @@ public class RfidTagController {
     }
 
     @DeleteMapping(value = "/{rfidTagId}")
-    public ResponseEntity<Void> deleteRfidTag(@PathVariable @NotNull UUID rfidTagId) {
+    public ResponseEntity<Void> deleteRfidTag(@PathVariable @NotNull String rfidTagId) {
         RfidTagId id = RfidTagId.of(rfidTagId);
         this.rfidTagService.deleteRfidTag(id);
 

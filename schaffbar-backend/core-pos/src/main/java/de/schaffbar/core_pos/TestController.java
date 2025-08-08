@@ -73,7 +73,9 @@ public class TestController {
         System.out.println("Received mac address: " + requestBody.MACADDR());
         System.out.println("Received rfid id: " + requestBody.RFID());
 
-        Optional<RfidTagView> rfidTag = this.rfidTagService.getRfidTag(requestBody.RFID());
+        RfidTagId id = RfidTagId.of(requestBody.RFID());
+
+        Optional<RfidTagView> rfidTag = this.rfidTagService.getRfidTag(id);
         if (rfidTag.isPresent()) {
             CounterResponse response = CounterResponse.builder() //
                     .DEVUSECASE("A") //

@@ -18,7 +18,7 @@ public interface ValueObjectMapper {
         return isNull(macAddress) ? null : MacAddress.of(macAddress);
     }
 
-    default RfidTagId toRfidTagId(UUID id) {
+    default RfidTagId toRfidTagId(String id) {
         return isNull(id) ? null : RfidTagId.of(id);
     }
 

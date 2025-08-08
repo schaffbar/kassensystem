@@ -57,17 +57,17 @@ CREATE TABLE schaffbar.rfid_tag
 
 GRANT ALL ON TABLE schaffbar.rfid_tag TO schadmin;
 
-CREATE TABLE schaffbar.token_assignment
+CREATE TABLE schaffbar.rfid_tag_assignment
 (
     id UUID NOT NULL,
     customer_id UUID NOT NULL UNIQUE,
-    token_id VARCHAR(255) UNIQUE,
-    token_type VARCHAR(255) NOT NULL,
+    rfid_tag_id VARCHAR(255) UNIQUE,
+    assignment_type VARCHAR(255) NOT NULL,
     assignment_date TIMESTAMP WITHOUT TIME ZONE,
     unassignment_date TIMESTAMP WITHOUT TIME ZONE,
     status VARCHAR(255) NOT NULL,
     update_time TIMESTAMP WITHOUT TIME ZONE,
-    CONSTRAINT pk_token_assignment PRIMARY KEY (id)
+    CONSTRAINT pk_rfid_tag_assignment PRIMARY KEY (id)
 );
 
-GRANT ALL ON TABLE schaffbar.token_assignment TO schadmin;
+GRANT ALL ON TABLE schaffbar.rfid_tag_assignment TO schadmin;

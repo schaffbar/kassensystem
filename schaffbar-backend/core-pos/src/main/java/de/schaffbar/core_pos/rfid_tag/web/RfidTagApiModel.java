@@ -16,7 +16,7 @@ public interface RfidTagApiModel {
     // request body
 
     record CreateRfidTagRequestBody( //
-            @NotBlank String tagId //
+            @NotBlank String rfidTagId //
     ) {}
 
 }

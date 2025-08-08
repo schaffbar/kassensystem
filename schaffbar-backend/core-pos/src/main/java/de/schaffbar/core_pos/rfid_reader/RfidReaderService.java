@@ -46,6 +46,7 @@ public class RfidReaderService {
 
     public RfidReaderId createRfidReader(@NotNull @Valid CreateRfidReaderCommand command) {
         RfidReader rfidReader = RfidReader.of(command);
+        // TODO: check if rfidReader with same mac address already exists
         RfidReader savedRfidReader = this.rfidReaderRepository.save(rfidReader);
 
         return savedRfidReader.getId();

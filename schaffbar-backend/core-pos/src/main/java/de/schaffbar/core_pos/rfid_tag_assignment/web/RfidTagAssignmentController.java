@@ -1,4 +1,4 @@
-package de.schaffbar.core_pos.token_assignment.web;
+package de.schaffbar.core_pos.rfid_tag_assignment.web;
 
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
@@ -8,14 +8,14 @@ import java.util.UUID;
 
 import de.schaffbar.core_pos.CustomerId;
 import de.schaffbar.core_pos.ResourceNotFoundException;
-import de.schaffbar.core_pos.TokenId;
+import de.schaffbar.core_pos.RfidTagId;
 import de.schaffbar.core_pos.customer.CustomerService;
 import de.schaffbar.core_pos.customer.CustomerViews.CustomerView;
-import de.schaffbar.core_pos.token_assignment.TokenAssignmentCommands.RequestTokenAssignmentCommand;
-import de.schaffbar.core_pos.token_assignment.TokenAssignmentService;
-import de.schaffbar.core_pos.token_assignment.web.TokenAssignmentApiModel.AssignTokenRequestBody;
-import de.schaffbar.core_pos.token_assignment.web.TokenAssignmentApiModel.RequestTokenAssignmentRequestBody;
-import de.schaffbar.core_pos.token_assignment.web.TokenAssignmentApiModel.TokenAssignmentApiDto;
+import de.schaffbar.core_pos.rfid_tag_assignment.RfidTagAssignmentCommands.RequestRfidTagAssignmentCommand;
+import de.schaffbar.core_pos.rfid_tag_assignment.RfidTagAssignmentService;
+import de.schaffbar.core_pos.rfid_tag_assignment.web.RfidTagAssignmentApiModel.AssignRfidTagRequestBody;
+import de.schaffbar.core_pos.rfid_tag_assignment.web.RfidTagAssignmentApiModel.RequestRfidTagAssignmentRequestBody;
+import de.schaffbar.core_pos.rfid_tag_assignment.web.RfidTagAssignmentApiModel.RfidTagAssignmentApiDto;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.NonNull;
@@ -34,10 +34,10 @@ import org.springframework.web.bind.annotation.RestController;
 @Validated
 @RestController
 @RequiredArgsConstructor
-@RequestMapping(path = "/api/v1/token-assignments")
-public class TokenAssignmentController {
+@RequestMapping(path = "/api/v1/rfid-tag-assignments")
+public class RfidTagAssignmentController {
 
-    private final @NonNull TokenAssignmentService tokenAssignmentService;
+    private final @NonNull RfidTagAssignmentService rfidTagAssignmentService;
 
     private final @NonNull CustomerService customerService;
 
@@ -45,14 +45,14 @@ public class TokenAssignmentController {
     // query
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<TokenAssignmentApiDto>> getAllTokenAssignments( //
-            @RequestParam(value = "token-id", required = false) String tokenId, //
+    public ResponseEntity<List<RfidTagAssignmentApiDto>> getAllRfidTagAssignments( //
+            @RequestParam(value = "rfid-tag-id", required = false) String rfidTagId, //
             @RequestParam(value = "customer-id", required = false) String customerId) {
 
-        List<TokenAssignmentApiDto> result;
-        if (isNotBlank(tokenId)) {
-            result = this.tokenAssignmentService.getTokenAssignment(TokenId.of(tokenId)).stream() //
-                    .map(TokenAssignmentApiMapper.MAPPER::toTokenAssignmentApiDto) //
+        List<RfidTagAssignmentApiDto> result;
+        if (isNotBlank(rfidTagId)) {
+            result = this.rfidTagAssignmentService.getRfidTagAssignment(RfidTagId.of(rfidTagId)).stream() //
+                    .map(RfidTagAssignmentApiMapper.MAPPER::toRfidTagAssignmentApiDto) //
                     .toList();
         }
         else if (isNotBlank(customerId)) {
@@ -60,13 +60,13 @@ public class TokenAssignmentController {
             CustomerView customer = this.customerService.getCustomer(customerIdObj) //
                     .orElseThrow(() -> ResourceNotFoundException.customer(customerIdObj));
 
-            result = this.tokenAssignmentService.getTokenAssignment(customer.id()).stream() //
-                    .map(TokenAssignmentApiMapper.MAPPER::toTokenAssignmentApiDto) //
+            result = this.rfidTagAssignmentService.getRfidTagAssignment(customer.id()).stream() //
+                    .map(RfidTagAssignmentApiMapper.MAPPER::toRfidTagAssignmentApiDto) //
                     .toList();
         }
         else {
-            result = this.tokenAssignmentService.getTokenAssignments().stream() //
-                    .map(TokenAssignmentApiMapper.MAPPER::toTokenAssignmentApiDto) //
+            result = this.rfidTagAssignmentService.getRfidTagAssignments().stream() //
+                    .map(RfidTagAssignmentApiMapper.MAPPER::toRfidTagAssignmentApiDto) //
                     .toList();
         }
 
@@ -77,22 +77,22 @@ public class TokenAssignmentController {
     // command
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Void> requestTokenAssignment(@RequestBody @Valid @NotNull RequestTokenAssignmentRequestBody requestBody) {
+    public ResponseEntity<Void> requestRfidTagAssignment(@RequestBody @Valid @NotNull RequestRfidTagAssignmentRequestBody requestBody) {
         Optional<CustomerView> customer = this.customerService.getCustomer(CustomerId.of(requestBody.customerId()));
         if (customer.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
 
-        RequestTokenAssignmentCommand requestTokenAssignmentCommand = TokenAssignmentApiMapper.MAPPER.toRequestTokenAssignmentCommand(requestBody);
-        this.tokenAssignmentService.requestTokenAssignment(requestTokenAssignmentCommand);
+        RequestRfidTagAssignmentCommand requestRfidTagAssignmentCommand = RfidTagAssignmentApiMapper.MAPPER.toRequestRfidTagAssignmentCommand(requestBody);
+        this.rfidTagAssignmentService.requestRfidTagAssignment(requestRfidTagAssignmentCommand);
 
         return ResponseEntity.ok().build();
     }
 
     @PutMapping(value = "/assign", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Void> assignToken(@RequestBody @Valid @NotNull AssignTokenRequestBody requestBody) {
-        TokenId tokenId = TokenId.of(requestBody.tokenId());
-        this.tokenAssignmentService.assignToken(tokenId);
+    public ResponseEntity<Void> assignRfidTag(@RequestBody @Valid @NotNull AssignRfidTagRequestBody requestBody) {
+        RfidTagId rfidTagId = RfidTagId.of(requestBody.rfidTagId());
+        this.rfidTagAssignmentService.assignRfidTag(rfidTagId);
 
         return ResponseEntity.ok().build();
     }

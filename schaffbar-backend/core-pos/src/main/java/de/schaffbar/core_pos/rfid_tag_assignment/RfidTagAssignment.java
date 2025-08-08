@@ -1,12 +1,14 @@
-package de.schaffbar.core_pos.token_assignment;
+package de.schaffbar.core_pos.rfid_tag_assignment;
+
+import static org.apache.commons.lang3.StringUtils.isBlank;
 
 import java.time.Instant;
 import java.util.UUID;
 
 import de.schaffbar.core_pos.CustomerId;
-import de.schaffbar.core_pos.TokenAssignmentId;
-import de.schaffbar.core_pos.TokenId;
-import de.schaffbar.core_pos.token_assignment.TokenAssignmentCommands.RequestTokenAssignmentCommand;
+import de.schaffbar.core_pos.RfidTagAssignmentId;
+import de.schaffbar.core_pos.RfidTagId;
+import de.schaffbar.core_pos.rfid_tag_assignment.RfidTagAssignmentCommands.RequestRfidTagAssignmentCommand;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -26,8 +28,8 @@ import lombok.ToString;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @ToString
 @Entity
-@Table(name = "TOKEN_ASSIGNMENT", schema = "SCHAFFBAR")
-class TokenAssignment {
+@Table(name = "RFID_TAG_ASSIGNMENT", schema = "SCHAFFBAR")
+class RfidTagAssignment {
 
     @Id
     private UUID id;
@@ -38,10 +40,10 @@ class TokenAssignment {
 
     @NotNull
     @Enumerated(EnumType.STRING)
-    private TokenType tokenType;
+    private RfidTagAssignmentType assignmentType;
 
     @Column(unique = true)
-    private String tokenId;
+    private String rfidTagId;
 
     private Instant assignmentDate;
 
@@ -49,7 +51,7 @@ class TokenAssignment {
 
     @NotNull
     @Enumerated(EnumType.STRING)
-    private TokenAssignmentStatus status;
+    private RfidTagAssignmentStatus status;
 
     @Version
     private Instant updateTime;
@@ -57,12 +59,12 @@ class TokenAssignment {
     // ------------------------------------------------------------------------
     // static constructor
 
-    public static TokenAssignment of(RequestTokenAssignmentCommand command) {
-        TokenAssignment result = new TokenAssignment();
+    public static RfidTagAssignment of(RequestRfidTagAssignmentCommand command) {
+        RfidTagAssignment result = new RfidTagAssignment();
         result.setId(UUID.randomUUID());
         result.setCustomerId(command.customerId().getValue());
-        result.setTokenType(command.tokenType());
-        result.setStatus(TokenAssignmentStatus.WAITING_FOR_ASSIGNMENT);
+        result.setAssignmentType(command.assignmentType());
+        result.setStatus(RfidTagAssignmentStatus.WAITING_FOR_ASSIGNMENT);
 
         return result;
     }
@@ -70,41 +72,41 @@ class TokenAssignment {
     // ------------------------------------------------------------------------
     // query
 
-    public TokenAssignmentId getId() {
-        return TokenAssignmentId.of(this.id);
+    public RfidTagAssignmentId getId() {
+        return RfidTagAssignmentId.of(this.id);
     }
 
     public CustomerId getCustomerId() {
         return CustomerId.of(this.customerId);
     }
 
-    public TokenId getTokenId() {
-        if (this.tokenId == null) {
+    public RfidTagId getRfidTagId() {
+        if (isBlank(this.rfidTagId)) {
             return null;
         }
 
-        return TokenId.of(this.tokenId);
+        return RfidTagId.of(this.rfidTagId);
     }
 
     // ------------------------------------------------------------------------
     // command
 
-    public void assignToken(TokenId tokenId) {
-        // TODO: check if token is in the correct state
-        this.tokenId = tokenId.getValue();
+    public void assignRfidTag(RfidTagId rfidTagId) {
+        // TODO: check if assignment is in the correct state
+        this.rfidTagId = rfidTagId.getValue();
+        this.status = RfidTagAssignmentStatus.ASSIGNED;
         this.assignmentDate = Instant.now();
-        this.status = TokenAssignmentStatus.ASSIGNED;
     }
 
     public void requestUnassignment() {
-        // TODO: check if token is in the correct state
-        this.status = TokenAssignmentStatus.WAITING_FOR_UNASSIGNMENT;
+        // TODO: check if assignment is in the correct state
+        this.status = RfidTagAssignmentStatus.WAITING_FOR_UNASSIGNMENT;
     }
 
-    public void unassignToken() {
-        // TODO: check if token is in the correct state
+    public void unassignRfidTag() {
+        // TODO: check if assignment is in the correct state
         this.unassignmentDate = Instant.now();
-        this.status = TokenAssignmentStatus.UNASSIGNED;
+        this.status = RfidTagAssignmentStatus.UNASSIGNED;
     }
 
 }

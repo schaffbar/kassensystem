@@ -40,6 +40,7 @@ public class RfidTagService {
 
     public RfidTagId createRfidTag(@NotNull @Valid CreateRfidTagCommand command) {
         RfidTag rfidTag = RfidTag.of(command);
+        // TODO: check if rfidTag with given id already exists
         RfidTag savedRfidTag = this.rfidTagRepository.save(rfidTag);
 
         return savedRfidTag.getId();

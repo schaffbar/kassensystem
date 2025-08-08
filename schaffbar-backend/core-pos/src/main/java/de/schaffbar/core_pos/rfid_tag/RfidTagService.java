@@ -35,6 +35,11 @@ public class RfidTagService {
                 .map(RfidTagViewMapper.MAPPER::toRfidTagView);
     }
 
+    public Optional<RfidTagView> getRfidTag(@NotNull @Valid String tagId) {
+        return this.rfidTagRepository.findByTagId(tagId) //
+                .map(RfidTagViewMapper.MAPPER::toRfidTagView);
+    }
+
     // ------------------------------------------------------------------------
     // command
 

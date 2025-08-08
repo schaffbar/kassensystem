@@ -21,7 +21,6 @@ import lombok.ToString;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @ToString
 @Entity
-//@Table(name = "RES_PARTNER", schema = "PUBLIC")
 @Table(name = "CUSTOMER", schema = "SCHAFFBAR")
 class Customer {
 

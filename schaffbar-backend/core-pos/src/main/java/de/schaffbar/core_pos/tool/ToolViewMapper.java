@@ -6,7 +6,7 @@ import org.mapstruct.ReportingPolicy;
 import org.mapstruct.factory.Mappers;
 
 @Mapper(unmappedTargetPolicy = ReportingPolicy.ERROR)
-public interface ToolViewMapper {
+interface ToolViewMapper {
 
     ToolViewMapper MAPPER = Mappers.getMapper(ToolViewMapper.class);
 

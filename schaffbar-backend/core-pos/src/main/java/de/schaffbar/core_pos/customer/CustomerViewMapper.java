@@ -7,7 +7,7 @@ import org.mapstruct.ReportingPolicy;
 import org.mapstruct.factory.Mappers;
 
 @Mapper(unmappedTargetPolicy = ReportingPolicy.ERROR)
-public interface CustomerViewMapper {
+interface CustomerViewMapper {
 
     CustomerViewMapper MAPPER = Mappers.getMapper(CustomerViewMapper.class);
 

@@ -5,7 +5,7 @@ import { Observable } from 'rxjs';
 
 import { User } from './user.model';
 
-const USERS_API_URL = 'http://localhost:8080/api/v1/customers';
+const USERS_API_URL = 'http://localhost:5000/api/v1/customers';
 
 @Injectable({ providedIn: 'root' })
 export class UsersService {
@@ -14,7 +14,7 @@ export class UsersService {
   private httpOptions = {
     headers: new HttpHeaders({
       'Content-Type': 'application/json', //
-      // Authorization: 'Bearer my-token', //
+      // Authorization: 'Bearer my-bearer', //
     }),
   };
 

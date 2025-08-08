@@ -9,7 +9,7 @@ import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 
-import { ROUTE_TOKENS } from '../../../app.routes';
+import { ROUTE } from '../../../app.routes';
 import { Tool } from '../../tool.model';
 import { ToolsStore } from '../../tools.store';
 
@@ -46,7 +46,7 @@ export class ToolListComponent {
   });
 
   protected toolDetails(tool: Tool): void {
-    this.router.navigate([ROUTE_TOKENS.TOOLS, tool.id]);
+    this.router.navigate([ROUTE.TOOLS, tool.id]);
   }
 
   protected newToolDialog(): void {

@@ -8,7 +8,7 @@ import { ToolListComponent } from './tools/pages/tool-list/tool-list.component';
 import { UserDetailComponent } from './users/pages/user-detail/user-detail.component';
 import { UserListComponent } from './users/pages/user-list/user-list.component';
 
-export const ROUTE_TOKENS = {
+export const ROUTE = {
   HOME: 'home',
   ABOUT: 'about',
   USERS: 'users',
@@ -17,32 +17,32 @@ export const ROUTE_TOKENS = {
 
 export const routes: Routes = [
   {
-    path: ROUTE_TOKENS.HOME,
+    path: ROUTE.HOME,
     component: HomeComponent,
   },
   {
-    path: ROUTE_TOKENS.USERS,
+    path: ROUTE.USERS,
     component: UserListComponent,
   },
   {
-    path: `${ROUTE_TOKENS.USERS}/:id`,
+    path: `${ROUTE.USERS}/:id`,
     component: UserDetailComponent,
   },
   {
-    path: ROUTE_TOKENS.TOOLS,
+    path: ROUTE.TOOLS,
     component: ToolListComponent,
   },
   {
-    path: `${ROUTE_TOKENS.TOOLS}/:id`,
+    path: `${ROUTE.TOOLS}/:id`,
     component: ToolDetailComponent,
   },
   {
-    path: ROUTE_TOKENS.ABOUT,
+    path: ROUTE.ABOUT,
     component: AboutComponent,
   },
   {
     path: '',
-    redirectTo: ROUTE_TOKENS.HOME,
+    redirectTo: ROUTE.HOME,
     pathMatch: 'full',
   },
   {

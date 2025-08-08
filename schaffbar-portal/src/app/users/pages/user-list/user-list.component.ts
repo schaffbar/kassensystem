@@ -10,7 +10,7 @@ import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 
-import { ROUTE_TOKENS } from '../../../app.routes';
+import { ROUTE } from '../../../app.routes';
 import { NewUserFormComponent } from '../../components/new-user-form/new-user-form.component';
 import { User } from '../../user.model';
 import { UsersStore } from '../../users.store';
@@ -59,7 +59,7 @@ export class UserListComponent {
   }
 
   protected userDetails(user: User): void {
-    this.router.navigate([ROUTE_TOKENS.USERS, user.id]);
+    this.router.navigate([ROUTE.USERS, user.id]);
   }
 
   protected newUserDialog(): void {

@@ -5,27 +5,27 @@
       <button matIconButton color="primary" (click)="reloadUser()">
         <mat-icon>refresh</mat-icon>
       </button>
-      @if (detailsStore.isTokenAssigned() || detailsStore.waitingForAssignment()) {
+      @if (detailsStore.isRfidTagAssigned() || detailsStore.waitingForAssignment()) {
         <mat-chip-set aria-label="Dog selection">
           <mat-chip>
-            {{ detailsStore.tokenAssignment()?.tokenType }}
+            {{ detailsStore.rfidTagAssignment()?.assignmentType }}
           </mat-chip>
-          @if (detailsStore.isTokenAssigned()) {
+          @if (detailsStore.isRfidTagAssigned()) {
             <mat-chip>
-              {{ detailsStore.tokenAssignment()?.tokenId }}
+              {{ detailsStore.rfidTagAssignment()?.rfidTagId }}
             </mat-chip>
           } @else if (detailsStore.waitingForAssignment()) {
             <mat-chip> WAITING </mat-chip>
           }
         </mat-chip-set>
       } @else {
-        <mat-chip> No Token </mat-chip>
+        <mat-chip> No RFID Tag </mat-chip>
       }
     </div>
     @if (detailsStore.showAssignActions()) {
       <div class="user-detail-header__actions">
-        <button mat-flat-button color="primary" (click)="assignTemporaryToken()">Assign Temp Token</button>
-        <button mat-flat-button color="primary" (click)="assignToken()">Assign Token</button>
+        <button mat-flat-button color="primary" (click)="assignTemporaryRfidTag()">Assign Temp RFID Tag</button>
+        <button mat-flat-button color="primary" (click)="assignFixedRfidTag()">Assign Fixed RFID Tag</button>
       </div>
     }
   </div>

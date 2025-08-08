@@ -7,7 +7,7 @@ import { MatTabsModule } from '@angular/material/tabs';
 
 import { UserAddressComponent } from '../../components/user-address/user-address.component';
 import { UserContactComponent } from '../../components/user-contact/user-contact.component';
-import { TokenService } from '../../token.service';
+import { RfidTagAssignmentService } from '../../rfid-tag-assignment.service';
 import { UserDetailStore } from './user-detail.store';
 
 @Component({
@@ -16,7 +16,7 @@ import { UserDetailStore } from './user-detail.store';
   styleUrl: './user-detail.component.scss',
   standalone: true,
   imports: [UserAddressComponent, UserContactComponent, MatTabsModule, MatButtonModule, MatChipsModule, MatIconModule],
-  providers: [UserDetailStore, TokenService],
+  providers: [UserDetailStore, RfidTagAssignmentService],
 })
 export class UserDetailComponent {
   protected readonly detailsStore = inject(UserDetailStore);
@@ -31,11 +31,11 @@ export class UserDetailComponent {
     this.detailsStore.reloadUser();
   }
 
-  protected assignToken(): void {
-    this.detailsStore.assignToken(this.id);
+  protected assignFixedRfidTag(): void {
+    this.detailsStore.assignFixedRfidTag(this.id);
   }
 
-  protected assignTemporaryToken(): void {
-    this.detailsStore.assignTemporaryToken(this.id);
+  protected assignTemporaryRfidTag(): void {
+    this.detailsStore.assignTemporaryRfidTag(this.id);
   }
 }

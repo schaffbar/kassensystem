@@ -15,41 +15,43 @@ import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { delay, exhaustMap, filter, pipe, tap } from 'rxjs';
 
 import { setError, setFulfilled, setPending, withRequestStatus } from '../../../shared/state/request-status.feature';
-import { TokenAssignment, TokenAssignmentStatus } from '../../token.model';
-import { TokenService } from '../../token.service';
+import { RfidTagAssignment, RfidTagAssignmentStatus } from '../../rfid-tag-assignment.model';
+import { RfidTagAssignmentService } from '../../rfid-tag-assignment.service';
 import { User } from '../../user.model';
 import { UsersService } from '../../users.service';
 
 interface UserDetailState {
   userId: string | null;
   user: User | null;
-  tokenAssignment: TokenAssignment | null;
+  rfidTagAssignment: RfidTagAssignment | null;
   dirty: boolean;
 }
 
 const initialState: UserDetailState = {
   userId: null,
   user: null,
-  tokenAssignment: null,
+  rfidTagAssignment: null,
   dirty: false,
 };
 
 export const UserDetailStore = signalStore(
   withState(initialState),
-  withComputed(({ user, tokenAssignment }) => ({
+  withComputed(({ user, rfidTagAssignment }) => ({
     userName: computed(() => (user() ? user()?.firstName + ' ' + user()?.lastName : 'N/A')),
-    isTokenAssigned: computed(() => !!tokenAssignment() && tokenAssignment()?.status == TokenAssignmentStatus.Assigned),
+    isRfidTagAssigned: computed(
+      () => !!rfidTagAssignment() && rfidTagAssignment()?.status == RfidTagAssignmentStatus.Assigned,
+    ),
     waitingForAssignment: computed(
-      () => !!tokenAssignment() && tokenAssignment()?.status == TokenAssignmentStatus.WaitingForAssignment,
+      () => !!rfidTagAssignment() && rfidTagAssignment()?.status == RfidTagAssignmentStatus.WaitingForAssignment,
     ),
     showAssignActions: computed(
-      () => !tokenAssignment() || tokenAssignment()?.status == TokenAssignmentStatus.Unassigned,
+      () => !rfidTagAssignment() || rfidTagAssignment()?.status == RfidTagAssignmentStatus.Unassigned,
     ),
   })),
   withRequestStatus(),
   withProps(() => ({
     _usersService: inject(UsersService),
-    _tokenService: inject(TokenService),
+    _assignmentService: inject(RfidTagAssignmentService),
   })),
   withMethods((store) => ({
     setUserId: signalMethod<string>((userId) => {
@@ -75,16 +77,16 @@ export const UserDetailStore = signalStore(
         }),
       ),
     ),
-    loadTokenAssignments: rxMethod<string>(
+    loadRfidTagAssignments: rxMethod<string>(
       pipe(
         filter((userId: string) => !!userId),
         tap(() => patchState(store, setPending())),
         delay(100), // TODO: Simulate network latency
         exhaustMap((userId: string) => {
-          return store._tokenService.getTokenAssignmetByUser(userId).pipe(
+          return store._assignmentService.getRfidTagAssignmetByUser(userId).pipe(
             tapResponse({
-              next: (tokenAssignment) => {
-                patchState(store, { tokenAssignment }, setFulfilled());
+              next: (rfidTagAssignment) => {
+                patchState(store, { rfidTagAssignment }, setFulfilled());
               },
               error: (error: { message: string }) => patchState(store, setError(error.message)),
             }),
@@ -92,11 +94,11 @@ export const UserDetailStore = signalStore(
         }),
       ),
     ),
-    assignToken: rxMethod<string>(
+    assignFixedRfidTag: rxMethod<string>(
       pipe(
         tap(() => patchState(store, setPending())),
         exhaustMap((userId: string) => {
-          return store._tokenService.assignToken(userId).pipe(
+          return store._assignmentService.assignFixedRfidTag(userId).pipe(
             tapResponse({
               next: () => {
                 patchState(store, setFulfilled(), setDirty());
@@ -107,11 +109,11 @@ export const UserDetailStore = signalStore(
         }),
       ),
     ),
-    assignTemporaryToken: rxMethod<string>(
+    assignTemporaryRfidTag: rxMethod<string>(
       pipe(
         tap(() => patchState(store, setPending())),
         exhaustMap((userId: string) => {
-          return store._tokenService.assignTemporaryToken(userId).pipe(
+          return store._assignmentService.assignTemporaryRfidTag(userId).pipe(
             tapResponse({
               next: () => {
                 patchState(store, setFulfilled(), setDirty());
@@ -132,7 +134,7 @@ export const UserDetailStore = signalStore(
           if (dirty && userId) {
             console.log('[Store - onInit] Loading user details for userId:', userId, 'Dirty:', dirty);
             store.loadSelectedUser(userId);
-            store.loadTokenAssignments(userId);
+            store.loadRfidTagAssignments(userId);
             patchState(store, { dirty: false });
           }
         },

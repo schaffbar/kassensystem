@@ -14,6 +14,10 @@ public interface ValueObjectMapper {
         return isNull(id) ? null : RfidReaderId.of(id);
     }
 
+    default MacAddress toMacAddress(String macAddress) {
+        return isNull(macAddress) ? null : MacAddress.of(macAddress);
+    }
+
     default RfidTagId toRfidTagId(UUID id) {
         return isNull(id) ? null : RfidTagId.of(id);
     }

@@ -3,6 +3,7 @@ package de.schaffbar.core_pos.rfid_reader;
 import java.util.List;
 import java.util.Optional;
 
+import de.schaffbar.core_pos.MacAddress;
 import de.schaffbar.core_pos.ResourceNotFoundException;
 import de.schaffbar.core_pos.RfidReaderId;
 import de.schaffbar.core_pos.rfid_reader.RfidReaderCommands.CreateRfidReaderCommand;
@@ -32,6 +33,11 @@ public class RfidReaderService {
 
     public Optional<RfidReaderView> getRfidReader(@NotNull @Valid RfidReaderId id) {
         return this.rfidReaderRepository.findById(id.getValue()) //
+                .map(RfidReaderViewMapper.MAPPER::toRfidReaderView);
+    }
+
+    public Optional<RfidReaderView> getRfidReader(@NotNull @Valid MacAddress macAddress) {
+        return this.rfidReaderRepository.findByMacAddress(macAddress.getValue()) //
                 .map(RfidReaderViewMapper.MAPPER::toRfidReaderView);
     }
 

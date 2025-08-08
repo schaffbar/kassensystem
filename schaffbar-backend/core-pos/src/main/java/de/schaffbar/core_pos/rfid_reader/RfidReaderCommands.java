@@ -1,11 +1,12 @@
 package de.schaffbar.core_pos.rfid_reader;
 
-import jakarta.validation.constraints.NotBlank;
+import de.schaffbar.core_pos.MacAddress;
+import jakarta.validation.constraints.NotNull;
 
 public interface RfidReaderCommands {
 
     record CreateRfidReaderCommand( //
-            @NotBlank String macAddress //
+            @NotNull MacAddress macAddress //
     ) {}
 
 }

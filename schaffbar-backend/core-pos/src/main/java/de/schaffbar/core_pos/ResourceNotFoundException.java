@@ -29,8 +29,13 @@ public class ResourceNotFoundException extends RuntimeException {
         return new ResourceNotFoundException(Resource.RFID_READER, id.getValue().toString());
     }
 
+    // TODO: Consider using a more specific exception for RFID reader MAC address not found
+    public static ResourceNotFoundException rfidReader(MacAddress macAddress) {
+        return new ResourceNotFoundException(Resource.RFID_READER, macAddress.getValue());
+    }
+
     public static ResourceNotFoundException rfidTag(RfidTagId id) {
-        return new ResourceNotFoundException(Resource.RFID_TAG, id.getValue().toString());
+        return new ResourceNotFoundException(Resource.RFID_TAG, id.getValue());
     }
 
     // ------------------------------------------------------------------------

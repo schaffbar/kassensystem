@@ -49,6 +49,9 @@ public class CustomerService {
         CustomerView customerView = getCustomer(id) //
                 .orElseThrow(() -> ResourceNotFoundException.customer(id));
 
+        // TODO: Deletion concept needed
+        // TODO: check if customer is assigned to a RFID tag before deleting, ...
+
         this.customerRepository.deleteById(customerView.id().getValue());
     }
 

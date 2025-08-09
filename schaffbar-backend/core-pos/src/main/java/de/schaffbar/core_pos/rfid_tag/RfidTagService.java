@@ -50,6 +50,9 @@ public class RfidTagService {
         RfidTagView rfidTag = getRfidTag(id) //
                 .orElseThrow(() -> ResourceNotFoundException.rfidTag(id));
 
+        // TODO: check if RFID tag is assigned to a customer before deleting
+        // TODO: maybe force delete in some cases?
+
         this.rfidTagRepository.deleteById(rfidTag.id().getValue());
     }
 

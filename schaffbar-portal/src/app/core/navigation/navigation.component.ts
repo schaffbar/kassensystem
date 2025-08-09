@@ -39,6 +39,8 @@ export class NavigationComponent {
     { icon: 'home', name: 'Home', route: 'home' },
     { icon: 'people', name: 'Users', route: 'users' },
     { icon: 'construction', name: 'Tools', route: 'tools' },
+    { icon: 'memory', name: 'RFID Tags', route: 'rfid-tags' },
+    { icon: 'developer_board', name: 'RFID Readers', route: 'rfid-readers' },
     { icon: 'info', name: 'About', route: 'about' },
   ]);
 

@@ -1,0 +1,23 @@
+.rfid-tag-list-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+// styling columns using their auto-generated column names
+.mat-column-actions {
+  width: 100px;
+  text-align: center;
+}
+
+// needed for selecting current row
+.mat-mdc-row .mat-mdc-cell {
+  border-bottom: 1px solid transparent;
+  border-top: 1px solid transparent;
+  cursor: pointer;
+}
+
+.mat-mdc-row:hover .mat-mdc-cell {
+  border-color: currentColor;
+}

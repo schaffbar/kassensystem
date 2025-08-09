@@ -50,3 +50,11 @@ VALUES --
     (gen_random_uuid(), '00:1A:2B:3C:4D:5E', 'SWITCH_BOX', NOW(), NOW()), --
     (gen_random_uuid(), '00:1A:2B:3C:4D:5F', 'GATE_KEEPER', NOW(), NOW()), --
     (gen_random_uuid(), '00:1A:2B:3C:4D:61', 'COUNTER', NOW(), NOW());
+
+-- Insert RFID tags
+INSERT INTO schaffbar.rfid_tag --
+    (id, active, created_at, updated_at) --
+VALUES --
+    (gen_random_uuid(), true, NOW(), NOW()), --
+    (gen_random_uuid(), true, NOW(), NOW()), --
+    (gen_random_uuid(), true, NOW(), NOW());

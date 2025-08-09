@@ -43,6 +43,10 @@ export class RfidReaderListComponent {
     return result;
   });
 
+  protected reloadRfidReaders(): void {
+    this.store.loadAllRfidReaders();
+  }
+
   protected deleteRfidReaderDialog(event: Event, rfidReader: RfidReader): void {
     event.stopPropagation();
 

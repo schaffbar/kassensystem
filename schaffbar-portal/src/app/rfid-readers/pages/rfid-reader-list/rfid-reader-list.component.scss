@@ -1,8 +1,8 @@
 .rfid-reader-list-header {
   display: flex;
   align-items: center;
-  justify-content: space-between;
   margin-bottom: 16px;
+  gap: 16px;
 }
 
 // styling columns using their auto-generated column names

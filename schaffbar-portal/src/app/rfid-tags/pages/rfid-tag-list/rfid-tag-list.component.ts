@@ -43,6 +43,10 @@ export class RfidTagListComponent {
     return result;
   });
 
+  protected reloadRfidTags(): void {
+    this.store.loadAllRfidTags();
+  }
+
   protected deleteRfidTagDialog(event: Event, rfidTag: RfidTag): void {
     event.stopPropagation();
 

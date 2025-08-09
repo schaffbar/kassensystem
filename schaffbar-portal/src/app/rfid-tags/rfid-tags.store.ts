@@ -8,7 +8,7 @@ import { delay, exhaustMap, pipe, tap } from 'rxjs';
 
 import { setError, setFulfilled, setPending, withRequestStatus } from '../shared/state/request-status.feature';
 import { RfidTag } from './rfid-tag.model';
-import { RfidTagService } from './rfid-tag.service';
+import { RfidTagService } from './rfid-tags.service';
 
 export const RfidTagStore = signalStore(
   { providedIn: 'root' },

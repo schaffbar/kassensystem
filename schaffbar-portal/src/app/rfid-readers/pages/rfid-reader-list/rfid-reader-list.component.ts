@@ -9,13 +9,13 @@ import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 
-import { RfidTag } from '../../rfid-tag.model';
-import { RfidTagStore } from '../../rfid-tags.store';
+import { RfidReader } from '../../rfid-reader.model';
+import { RfidReaderStore } from '../../rfid-readers.store';
 
 @Component({
-  selector: 'schbar-rfid-tag-list',
-  templateUrl: './rfid-tag-list.component.html',
-  styleUrl: './rfid-tag-list.component.scss',
+  selector: 'schbar-rfid-reader-list',
+  templateUrl: './rfid-reader-list.component.html',
+  styleUrl: './rfid-reader-list.component.scss',
   imports: [
     MatButtonModule,
     MatTableModule,
@@ -25,32 +25,32 @@ import { RfidTagStore } from '../../rfid-tags.store';
     MatIconModule,
     MatInputModule,
   ],
-  providers: [RfidTagStore],
+  providers: [RfidReaderStore],
 })
-export class RfidTagListComponent {
-  readonly store = inject(RfidTagStore);
+export class RfidReaderListComponent {
+  readonly store = inject(RfidReaderStore);
   readonly router = inject(Router);
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
-  protected displayedColumns = ['id', 'active', 'actions'];
-  protected rfidTagsCount = computed(() => this.store.entities().length);
+  protected displayedColumns = ['id', 'macAddress', 'actions'];
+  protected rfidReadersCount = computed(() => this.store.entities().length);
   protected dataSource = computed(() => {
-    const result = new MatTableDataSource<RfidTag>(this.store.entities());
+    const result = new MatTableDataSource<RfidReader>(this.store.entities());
     result.sort = this.sort;
     result.paginator = this.paginator;
     return result;
   });
 
-  protected deleteRfidTagDialog(event: Event, rfidTag: RfidTag): void {
+  protected deleteRfidReaderDialog(event: Event, rfidReader: RfidReader): void {
     event.stopPropagation();
 
-    if (!rfidTag || !rfidTag.id) {
-      console.warn('No RFID tag selected for deletion');
+    if (!rfidReader || !rfidReader.id) {
+      console.warn('No RFID reader selected for deletion');
       return;
     }
 
-    this.store.deleteRfidTag(rfidTag.id);
+    this.store.deleteRfidReader(rfidReader.id);
   }
 }

@@ -59,3 +59,6 @@ replay_pid*
 *-local.yml
 *-local.yaml
 *-local*.yaml
+
+### Environment Variables
+.env

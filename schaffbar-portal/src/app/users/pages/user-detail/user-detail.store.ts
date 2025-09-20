@@ -12,7 +12,7 @@ import {
   withState,
 } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
-import { delay, exhaustMap, filter, pipe, tap } from 'rxjs';
+import { exhaustMap, filter, pipe, tap } from 'rxjs';
 
 import { setError, setFulfilled, setPending, withRequestStatus } from '../../../shared/state/request-status.feature';
 import { RfidTagAssignment, RfidTagAssignmentStatus } from '../../rfid-tag-assignment.model';
@@ -64,7 +64,7 @@ export const UserDetailStore = signalStore(
       pipe(
         filter((userId: string) => !!userId),
         tap(() => patchState(store, setPending())),
-        delay(200), // TODO: Simulate network latency
+        // delay(200), // TODO: Simulate network latency
         exhaustMap((userId: string) => {
           return store._usersService.getUser(userId).pipe(
             tapResponse({
@@ -81,7 +81,7 @@ export const UserDetailStore = signalStore(
       pipe(
         filter((userId: string) => !!userId),
         tap(() => patchState(store, setPending())),
-        delay(100), // TODO: Simulate network latency
+        // delay(100), // TODO: Simulate network latency
         exhaustMap((userId: string) => {
           return store._assignmentService.getRfidTagAssignmetByUser(userId).pipe(
             tapResponse({

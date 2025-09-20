@@ -4,7 +4,7 @@ import { tapResponse } from '@ngrx/operators';
 import { patchState, signalStore, withHooks, withMethods, withProps } from '@ngrx/signals';
 import { setAllEntities, setEntity, withEntities } from '@ngrx/signals/entities';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
-import { delay, exhaustMap, pipe, tap } from 'rxjs';
+import { exhaustMap, pipe, tap } from 'rxjs';
 
 import { setError, setFulfilled, setPending, withRequestStatus } from '../shared/state/request-status.feature';
 import { User } from './user.model';
@@ -24,10 +24,10 @@ export const UsersStore = signalStore(
     loadAllUsers: rxMethod<void>(
       pipe(
         tap(() => patchState(store, setPending())),
-        delay(100), // TODO: Simulate network latency
+        // delay(100), // TODO: Simulate network latency
         exhaustMap(() => {
           return store._usersService.getUsers().pipe(
-            delay(400),
+            // delay(400),
             tapResponse({
               next: (users) => patchState(store, setAllEntities(users), setFulfilled()),
               error: (error: { message: string }) => patchState(store, setError(error.message)),

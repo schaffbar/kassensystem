@@ -3,7 +3,7 @@ import { effect, inject } from '@angular/core';
 import { tapResponse } from '@ngrx/operators';
 import { patchState, signalMethod, signalStore, withHooks, withMethods, withProps, withState } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
-import { delay, exhaustMap, filter, pipe, tap } from 'rxjs';
+import { exhaustMap, filter, pipe, tap } from 'rxjs';
 
 import { setError, setFulfilled, setPending, withRequestStatus } from '../../../shared/state/request-status.feature';
 import { Tool } from '../../tool.model';
@@ -38,7 +38,7 @@ export const ToolDetailStore = signalStore(
       pipe(
         filter((toolId: string) => !!toolId),
         tap(() => patchState(store, setPending())),
-        delay(200), // TODO: Simulate network latency
+        // delay(200), // TODO: Simulate network latency
         exhaustMap((toolId: string) => {
           return store._toolsService.getTool(toolId).pipe(
             tapResponse({

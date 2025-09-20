@@ -4,7 +4,7 @@ import { tapResponse } from '@ngrx/operators';
 import { patchState, signalStore, withHooks, withMethods, withProps } from '@ngrx/signals';
 import { setAllEntities, withEntities } from '@ngrx/signals/entities';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
-import { delay, exhaustMap, pipe, tap } from 'rxjs';
+import { exhaustMap, pipe, tap } from 'rxjs';
 
 import { setError, setFulfilled, setPending, withRequestStatus } from '../shared/state/request-status.feature';
 import { Tool } from './tool.model';
@@ -21,10 +21,10 @@ export const ToolsStore = signalStore(
     loadAllTools: rxMethod<void>(
       pipe(
         tap(() => patchState(store, setPending())),
-        delay(100), // TODO: Simulate network latency
+        // delay(100), // TODO: Simulate network latency
         exhaustMap(() => {
           return store._toolsService.getTools().pipe(
-            delay(400),
+            // delay(400),
             tapResponse({
               next: (tools) => patchState(store, setAllEntities(tools), setFulfilled()),
               error: (error: { message: string }) => patchState(store, setError(error.message)),

@@ -54,7 +54,7 @@ class RfidTagAssignment {
     private RfidTagAssignmentStatus status;
 
     @Version
-    private Instant updateTime;
+    private Instant updatedAt;
 
     // ------------------------------------------------------------------------
     // static constructor

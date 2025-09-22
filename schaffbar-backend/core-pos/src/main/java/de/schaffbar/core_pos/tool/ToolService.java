@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import de.schaffbar.core_pos.ResourceNotFoundException;
+import de.schaffbar.core_pos.RfidReaderId;
 import de.schaffbar.core_pos.ToolId;
 import de.schaffbar.core_pos.tool.ToolCommands.CreateToolCommand;
 import de.schaffbar.core_pos.tool.ToolViews.ToolView;
@@ -35,6 +36,11 @@ public class ToolService {
                 .map(ToolViewMapper.MAPPER::toToolView);
     }
 
+    public Optional<ToolView> getTool(@NotNull @Valid RfidReaderId id) {
+        return this.toolRepository.findByRfidReaderId(id) //
+                .map(ToolViewMapper.MAPPER::toToolView);
+    }
+
     // ------------------------------------------------------------------------
     // command
 
@@ -44,6 +50,9 @@ public class ToolService {
 
         return savedTool.getId();
     }
+
+    // TODO: assignment of rfid reader
+    // TODO: rfid reader id uniqueness check
 
     public void deleteTool(@NotNull @Valid ToolId id) {
         ToolView tool = getTool(id) //

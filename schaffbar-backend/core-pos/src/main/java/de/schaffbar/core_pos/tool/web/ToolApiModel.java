@@ -10,7 +10,8 @@ public interface ToolApiModel {
     record ToolApiDto( //
             @NotBlank String id, //
             @NotBlank String name, //
-            String description //
+            String description, //
+            String rfidReaderId //
     ) {}
 
     // ------------------------------------------------------------------------

@@ -19,6 +19,7 @@ public interface ToolApiMapper extends ValueObjectMapper {
     // mapping view to response
 
     @Mapping(target = "id", source = "id.value")
+    @Mapping(target = "rfidReaderId", source = "rfidReaderId.value")
     ToolApiDto toToolApiDto(ToolView tool);
 
     // ------------------------------------------------------------------------

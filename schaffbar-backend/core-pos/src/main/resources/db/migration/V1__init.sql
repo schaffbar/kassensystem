@@ -23,6 +23,7 @@ CREATE TABLE schaffbar.tool
     id UUID NOT NULL,
     name VARCHAR(255) NOT NULL,
     description VARCHAR(255),
+    rfid_reader_id UUID,
     ip_address VARCHAR(255),
     http_start_command VARCHAR(255),
     on_command VARCHAR(255),
@@ -66,7 +67,7 @@ CREATE TABLE schaffbar.rfid_tag_assignment
     assignment_date TIMESTAMP WITHOUT TIME ZONE,
     unassignment_date TIMESTAMP WITHOUT TIME ZONE,
     status VARCHAR(255) NOT NULL,
-    update_time TIMESTAMP WITHOUT TIME ZONE,
+    updated_at TIMESTAMP WITHOUT TIME ZONE,
     CONSTRAINT pk_rfid_tag_assignment PRIMARY KEY (id)
 );
 

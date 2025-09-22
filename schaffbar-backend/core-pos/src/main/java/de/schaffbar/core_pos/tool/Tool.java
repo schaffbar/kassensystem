@@ -1,8 +1,11 @@
 package de.schaffbar.core_pos.tool;
 
+import static java.util.Objects.isNull;
+
 import java.time.Instant;
 import java.util.UUID;
 
+import de.schaffbar.core_pos.RfidReaderId;
 import de.schaffbar.core_pos.ToolId;
 import de.schaffbar.core_pos.tool.ToolCommands.CreateToolCommand;
 import jakarta.persistence.Entity;
@@ -33,6 +36,8 @@ class Tool {
 
     private String description;
 
+    private UUID rfidReaderId;
+
     // TODO: add WLAN-Relais configuration
 
     @NotNull
@@ -61,6 +66,14 @@ class Tool {
 
     public ToolId getId() {
         return ToolId.of(this.id);
+    }
+
+    public RfidReaderId getRfidReaderId() {
+        if (isNull(this.rfidReaderId)) {
+            return null;
+        }
+
+        return RfidReaderId.of(this.rfidReaderId);
     }
 
     // ------------------------------------------------------------------------

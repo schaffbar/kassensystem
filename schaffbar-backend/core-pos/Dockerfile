@@ -12,6 +12,9 @@ WORKDIR /build
 # Copy Maven project files
 COPY pom.xml .
 
+# Pre-download dependencies to leverage Docker layer caching
+RUN mvn dependency:go-offline
+
 # Copy source code
 COPY src ./src
 COPY lombok.config ./lombok.config

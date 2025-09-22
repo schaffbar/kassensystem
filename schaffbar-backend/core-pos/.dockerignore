@@ -1,0 +1,9 @@
+# Exclude the target directory and its contents
+target/
+
+# Exclude IDE specific files
+.idea/
+*.iml
+
+# Exclude local profiles
+src/**/application-local*.yaml

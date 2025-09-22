@@ -14,6 +14,7 @@ COPY pom.xml .
 
 # Copy source code
 COPY src ./src
+COPY lombok.config ./lombok.config
 
 # Build the application and skip tests to speed up the build process
 RUN mvn clean package -DskipTests

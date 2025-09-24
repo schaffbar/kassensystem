@@ -13,6 +13,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 
 @Service
@@ -44,6 +45,7 @@ public class ToolService {
     // ------------------------------------------------------------------------
     // command
 
+    @Transactional
     public ToolId createTool(@NotNull @Valid CreateToolCommand command) {
         Tool tool = Tool.of(command);
         Tool savedTool = this.toolRepository.save(tool);
@@ -51,14 +53,31 @@ public class ToolService {
         return savedTool.getId();
     }
 
-    // TODO: assignment of rfid reader
-    // TODO: rfid reader id uniqueness check
+    @Transactional
+    public void assignRfidReader(@NotNull @Valid ToolId toolId, @NotNull @Valid RfidReaderId rfidReaderId) {
+        Tool tool = this.toolRepository.findById(toolId.getValue()) //
+                .orElseThrow(() -> ResourceNotFoundException.tool(toolId));
 
+        // check that the RFID reader is not already assigned to another tool
+        this.toolRepository.findByRfidReaderId(rfidReaderId) //
+                .ifPresent(existingTool -> throwRfidReaderAlreadyAssignedException(rfidReaderId, existingTool));
+
+        tool.assignRfidReader(rfidReaderId);
+    }
+
+    @Transactional
     public void deleteTool(@NotNull @Valid ToolId id) {
         ToolView tool = getTool(id) //
                 .orElseThrow(() -> ResourceNotFoundException.tool(id));
 
         this.toolRepository.deleteById(tool.id().getValue());
+    }
+
+    // ------------------------------------------------------------------------
+    // helper
+
+    private void throwRfidReaderAlreadyAssignedException(RfidReaderId rfidReaderId, Tool existingTool) {
+        throw new IllegalStateException("RFID reader " + rfidReaderId + " is already assigned to tool " + existingTool.getId());
     }
 
 }

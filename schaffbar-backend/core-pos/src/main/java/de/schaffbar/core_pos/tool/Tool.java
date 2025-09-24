@@ -79,4 +79,8 @@ class Tool {
     // ------------------------------------------------------------------------
     // command
 
+    public void assignRfidReader(RfidReaderId rfidReaderId) {
+        this.setRfidReaderId(rfidReaderId.getValue());
+    }
+
 }

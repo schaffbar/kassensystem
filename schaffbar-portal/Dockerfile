@@ -21,7 +21,7 @@ RUN --mount=type=cache,target=/root/.npm npm ci --force
 COPY . .
 
 # Build the Angular application
-ARG FRONTEND_ENV="development"
+ARG FRONTEND_ENV
 RUN npm run build:$FRONTEND_ENV
 
 # ---------------------------------------------------------

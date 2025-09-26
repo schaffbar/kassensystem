@@ -28,7 +28,7 @@ services:
       SCHAFFBAR_DS_URL: "jdbc:postgresql://postgres:5432/${POSTGRES_DB}"
       SCHAFFBAR_DS_USERNAME: ${POSTGRES_USER}
       SCHAFFBAR_DS_PASSWORD: ${POSTGRES_PASSWORD}
-      SPRING_PROFILES_ACTIVE: ${BACKEND_ENV}
+      SPRING_PROFILES_ACTIVE: ${BACKEND_ENV:-dev}
     ports:
       - "5000:5000"
     restart: unless-stopped
@@ -37,7 +37,7 @@ services:
     build:
       context: ../schaffbar-portal
       args:
-        FRONTEND_ENV: ${FRONTEND_ENV}
+        FRONTEND_ENV: ${FRONTEND_ENV:-development}
     depends_on:
       - backend
     ports:

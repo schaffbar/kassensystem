@@ -14,7 +14,7 @@
         </encoder>
     </appender>
 
-    <springProfile name="local,prod">
+    <springProfile name="local,dev,prod">
         <root level="INFO">
             <appender-ref ref="default"/>
         </root>

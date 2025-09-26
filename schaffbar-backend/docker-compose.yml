@@ -5,8 +5,6 @@ services:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       POSTGRES_DB: ${POSTGRES_DB}
-      # POS_DB_USER: ${POS_DB_USER}
-      # POS_DB_PASSWORD: ${POS_DB_PASSWORD}
     ports:
       - "5432:5432"
     volumes:
@@ -30,7 +28,7 @@ services:
       SCHAFFBAR_DS_URL: "jdbc:postgresql://postgres:5432/${POSTGRES_DB}"
       SCHAFFBAR_DS_USERNAME: ${POSTGRES_USER}
       SCHAFFBAR_DS_PASSWORD: ${POSTGRES_PASSWORD}
-      SPRING_PROFILES_ACTIVE: "prod"
+      SPRING_PROFILES_ACTIVE: ${BACKEND_ENV}
     ports:
       - "5000:5000"
     restart: unless-stopped

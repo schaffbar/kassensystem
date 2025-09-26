@@ -1,5 +1,6 @@
 # Exclude the target directory and its contents
 target/
+data/
 
 # Exclude IDE specific files
 .idea/

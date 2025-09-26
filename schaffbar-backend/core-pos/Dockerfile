@@ -27,7 +27,7 @@ RUN mvn clean package -DskipTests
 # ---------------------------------------------------------
 
 # Use Eclipse Temurin JDK for Java 21 apps
-FROM eclipse-temurin:21-jre-alpine
+FROM eclipse-temurin:21-jre-alpine AS runner
 
 # Set working directory
 WORKDIR /app

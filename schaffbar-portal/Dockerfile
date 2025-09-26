@@ -21,7 +21,8 @@ RUN --mount=type=cache,target=/root/.npm npm ci --force
 COPY . .
 
 # Build the Angular application
-RUN npm run build
+ARG FRONTEND_ENV="development"
+RUN npm run build:$FRONTEND_ENV
 
 # ---------------------------------------------------------
 # Stage 2: Prepare Nginx to Serve Static Files

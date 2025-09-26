@@ -38,10 +38,10 @@ services:
   frontend:
     build:
       context: ../schaffbar-portal
+      args:
+        FRONTEND_ENV: ${FRONTEND_ENV}
     depends_on:
       - backend
-    environment:
-      NODE_ENV: production
     ports:
       - 8080:8080
 

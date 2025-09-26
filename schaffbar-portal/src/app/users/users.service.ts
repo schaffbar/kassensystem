@@ -3,9 +3,10 @@ import { inject, Injectable } from '@angular/core';
 
 import { Observable } from 'rxjs';
 
+import { environment } from '../../environments/environment';
 import { User } from './user.model';
 
-const USERS_API_URL = 'http://localhost:5000/api/v1/customers';
+const USERS_API_URL = `${environment.apiBaseUrl}/api/v1/customers`;
 
 @Injectable({ providedIn: 'root' })
 export class UsersService {

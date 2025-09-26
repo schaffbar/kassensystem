@@ -3,9 +3,10 @@ import { inject, Injectable } from '@angular/core';
 
 import { Observable } from 'rxjs';
 
+import { environment } from '../../environments/environment';
 import { RfidReader } from './rfid-reader.model';
 
-const RFID_READERS_API_URL = 'http://localhost:5000/api/v1/rfid-readers';
+const RFID_READERS_API_URL = `${environment.apiBaseUrl}/api/v1/rfid-readers`;
 
 @Injectable({ providedIn: 'root' })
 export class RfidReaderService {

@@ -3,9 +3,10 @@ import { inject, Injectable } from '@angular/core';
 
 import { Observable } from 'rxjs';
 
+import { environment } from '../../environments/environment';
 import { Tool } from './tool.model';
 
-const TOOLS_API_URL = 'http://localhost:5000/api/v1/tools';
+const TOOLS_API_URL = `${environment.apiBaseUrl}/api/v1/tools`;
 
 @Injectable({ providedIn: 'root' })
 export class ToolsService {

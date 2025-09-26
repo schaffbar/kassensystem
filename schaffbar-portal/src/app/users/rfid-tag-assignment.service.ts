@@ -3,10 +3,10 @@ import { inject, Injectable } from '@angular/core';
 
 import { map, Observable } from 'rxjs';
 
+import { environment } from '../../environments/environment';
 import { RfidTagAssignment } from './rfid-tag-assignment.model';
 
-const RFID_TAG_ASSIGNMENT_API_URL = 'http://localhost:5000/api/v1/rfid-tag-assignments';
-
+const RFID_TAG_ASSIGNMENT_API_URL = `${environment.apiBaseUrl}/api/v1/rfid-tag-assignments`;
 @Injectable({ providedIn: 'root' })
 export class RfidTagAssignmentService {
   readonly http = inject(HttpClient);

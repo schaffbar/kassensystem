@@ -38,8 +38,6 @@ services:
       context: ../schaffbar-portal
       args:
         FRONTEND_ENV: ${FRONTEND_ENV:-development}
-    depends_on:
-      - backend
     ports:
       - 8080:8080
 

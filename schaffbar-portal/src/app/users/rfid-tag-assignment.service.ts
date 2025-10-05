@@ -7,6 +7,7 @@ import { environment } from '../../environments/environment';
 import { RfidTagAssignment } from './rfid-tag-assignment.model';
 
 const RFID_TAG_ASSIGNMENT_API_URL = `${environment.apiBaseUrl}/api/v1/rfid-tag-assignments`;
+
 @Injectable({ providedIn: 'root' })
 export class RfidTagAssignmentService {
   readonly http = inject(HttpClient);

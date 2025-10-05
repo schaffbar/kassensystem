@@ -72,3 +72,29 @@ CREATE TABLE schaffbar.rfid_tag_assignment
 );
 
 GRANT ALL ON TABLE schaffbar.rfid_tag_assignment TO schadmin;
+
+CREATE TABLE schaffbar.workshop_session
+(
+    id UUID NOT NULL,
+    customer_id UUID NOT NULL,
+    start_time TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+    close_time TIMESTAMP WITHOUT TIME ZONE,
+    status VARCHAR(255),
+    updated_at TIMESTAMP WITHOUT TIME ZONE,
+    CONSTRAINT pk_workshop_session PRIMARY KEY (id)
+);
+
+GRANT ALL ON TABLE schaffbar.workshop_session TO schadmin;
+
+CREATE TABLE schaffbar.workshop_usage
+(
+    id UUID NOT NULL,
+    customer_id UUID NOT NULL,
+    workshop_session_id UUID NOT NULL,
+    entry_time TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+    exit_time TIMESTAMP WITHOUT TIME ZONE,
+    updated_at TIMESTAMP WITHOUT TIME ZONE,
+    CONSTRAINT pk_workshop_usage PRIMARY KEY (id)
+);
+
+GRANT ALL ON TABLE schaffbar.workshop_usage TO schadmin;

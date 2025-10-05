@@ -17,6 +17,9 @@ public class ResourceNotFoundException extends RuntimeException {
         super(buildExceptionMessage(resource, id), null);
     }
 
+    // ------------------------------------------------------------------------
+    // static factories
+
     public static ResourceNotFoundException customer(CustomerId id) {
         return new ResourceNotFoundException(Resource.CUSTOMER, id.getValue().toString());
     }
@@ -52,7 +55,9 @@ public class ResourceNotFoundException extends RuntimeException {
         CUSTOMER("customer"), //
         TOOL("tool"), //
         RFID_READER("RFID reader"), //
-        RFID_TAG("RFID tag");
+        RFID_TAG("RFID tag"), //
+        WORKSHOP_SESSION("Workshop session"), //
+        WORKSHOP_USAGE("Workshop usage");
 
         private final String value;
 

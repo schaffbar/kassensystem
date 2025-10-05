@@ -8,6 +8,7 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { UserAddressComponent } from '../../components/user-address/user-address.component';
 import { UserContactComponent } from '../../components/user-contact/user-contact.component';
 import { RfidTagAssignmentService } from '../../rfid-tag-assignment.service';
+import { UserOpenSessionComponent } from '../user-open-session/user-open-session.component';
 import { UserDetailStore } from './user-detail.store';
 
 @Component({
@@ -15,7 +16,15 @@ import { UserDetailStore } from './user-detail.store';
   templateUrl: './user-detail.component.html',
   styleUrl: './user-detail.component.scss',
   standalone: true,
-  imports: [UserAddressComponent, UserContactComponent, MatTabsModule, MatButtonModule, MatChipsModule, MatIconModule],
+  imports: [
+    UserAddressComponent,
+    UserContactComponent,
+    UserOpenSessionComponent,
+    MatTabsModule,
+    MatButtonModule,
+    MatChipsModule,
+    MatIconModule,
+  ],
   providers: [UserDetailStore, RfidTagAssignmentService],
 })
 export class UserDetailComponent {

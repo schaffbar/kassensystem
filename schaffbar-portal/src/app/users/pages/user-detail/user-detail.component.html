@@ -37,5 +37,10 @@
         <schbar-user-address [userAddress]="user.address" />
       </div>
     </mat-tab>
+    <mat-tab label="Open Session">
+      <div class="tab-content">
+        <schbar-user-open-session [userId]="user.id" />
+      </div>
+    </mat-tab>
   </mat-tab-group>
 }

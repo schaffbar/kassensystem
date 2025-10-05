@@ -8,9 +8,8 @@ describe('RfidTagListComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [RfidTagListComponent]
-    })
-    .compileComponents();
+      imports: [RfidTagListComponent],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(RfidTagListComponent);
     component = fixture.componentInstance;

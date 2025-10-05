@@ -8,9 +8,8 @@ describe('UserOpenSessionComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [UserOpenSessionComponent]
-    })
-    .compileComponents();
+      imports: [UserOpenSessionComponent],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(UserOpenSessionComponent);
     component = fixture.componentInstance;

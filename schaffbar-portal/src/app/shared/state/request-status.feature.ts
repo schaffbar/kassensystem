@@ -4,7 +4,9 @@ import { signalStoreFeature, withComputed, withState } from '@ngrx/signals';
 
 export type RequestStatus = 'idle' | 'pending' | 'fulfilled' | { error: string };
 
-export type RequestStatusState = { requestStatus: RequestStatus };
+export interface RequestStatusState {
+  requestStatus: RequestStatus;
+}
 
 export function withRequestStatus() {
   return signalStoreFeature(

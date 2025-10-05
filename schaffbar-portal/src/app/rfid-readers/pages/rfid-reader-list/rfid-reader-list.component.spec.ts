@@ -8,9 +8,8 @@ describe('RfidReaderListComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [RfidReaderListComponent]
-    })
-    .compileComponents();
+      imports: [RfidReaderListComponent],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(RfidReaderListComponent);
     component = fixture.componentInstance;

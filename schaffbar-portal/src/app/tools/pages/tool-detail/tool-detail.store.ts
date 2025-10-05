@@ -54,19 +54,15 @@ export const ToolDetailStore = signalStore(
   })),
   withHooks({
     onInit(store) {
-      effect(
-        () => {
-          const toolId = store.toolId();
-          const dirty = store.dirty();
-          if (dirty && toolId) {
-            console.log('[Store - onInit] Loading tool details for toolId:', toolId, 'Dirty:', dirty);
-            store.loadSelectedTool(toolId);
-          }
-          patchState(store, { dirty: false });
-        },
-        // TODO: do we neet it?
-        { allowSignalWrites: true },
-      );
+      effect(() => {
+        const toolId = store.toolId();
+        const dirty = store.dirty();
+        if (dirty && toolId) {
+          console.log('[Store - onInit] Loading tool details for toolId:', toolId, 'Dirty:', dirty);
+          store.loadSelectedTool(toolId);
+        }
+        patchState(store, { dirty: false });
+      });
     },
   }),
 );

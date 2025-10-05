@@ -127,20 +127,16 @@ export const UserDetailStore = signalStore(
   })),
   withHooks({
     onInit(store) {
-      effect(
-        () => {
-          const userId = store.userId();
-          const dirty = store.dirty();
-          if (dirty && userId) {
-            console.log('[Store - onInit] Loading user details for userId:', userId, 'Dirty:', dirty);
-            store.loadSelectedUser(userId);
-            store.loadRfidTagAssignments(userId);
-            patchState(store, { dirty: false });
-          }
-        },
-        // TODO: do we neet it?
-        { allowSignalWrites: true },
-      );
+      effect(() => {
+        const userId = store.userId();
+        const dirty = store.dirty();
+        if (dirty && userId) {
+          console.log('[Store - onInit] Loading user details for userId:', userId, 'Dirty:', dirty);
+          store.loadSelectedUser(userId);
+          store.loadRfidTagAssignments(userId);
+          patchState(store, { dirty: false });
+        }
+      });
     },
   }),
 );

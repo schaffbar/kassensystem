@@ -34,7 +34,7 @@ export class RfidReaderListComponent {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
-  protected displayedColumns = ['id', 'macAddress', 'actions'];
+  protected displayedColumns = ['id', 'macAddress', 'type', 'actions'];
   protected rfidReadersCount = computed(() => this.store.entities().length);
   protected dataSource = computed(() => {
     const result = new MatTableDataSource<RfidReader>(this.store.entities());

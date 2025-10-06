@@ -5,21 +5,27 @@
 - Summieren und durch Einheit teilen oder jeder slot durch Einheit teilen
 - 30s ist das schon eine Minute oder eine Einheit
 
-2. Löschen von Entitäten immer bestätigen
-3. Beim Löschen immer überprüfen ob Entity nicht irgendwo referenziert wird
-4. Unassignment von temporären RFID tags und history
-5. Editieren von Usern
-6. Abrechnung, Schliessen von open session und history
-7. Beim counter name anzegen, wenn dieser tag zugewiesen ist
-8. Assignment und Unassignment von fixen RFID tags
-9. Einweisung plus Zuweisung zu User
-10. Switch box implementieren
+2. Unassignment von temporären RFID tags und history
+3. Editieren von Usern
+4. Abrechnung, Schliessen von open session und history
+5. Beim counter name anzegen, wenn dieser tag zugewiesen ist
+6. Löschen von Entitäten immer bestätigen
+7. Beim Löschen immer überprüfen ob Entity nicht irgendwo referenziert wird
+8. Setzen von RFID reader type (plus Name/Beschreibung)
+9. Assignment und Unassignment von fixen RFID tags
+10. Einweisung plus Zuweisung zu User
+11. Switch box implementieren
 
-11. Nutzung von Maschinen in minuten oder stunden
-12. Beschreibung und Typ von RFID reader
-13. Zuweisung von RFID reader zu tool
-14. Dashboard für aktive user, aktive tools, ...
-15. Auschalten von Maschinen, wenn user Raum verlässt
+12. Nutzung von Maschinen in minuten oder stunden
+13. Beschreibung und Typ von RFID reader
+14. Zuweisung von RFID reader zu tool
+15. Dashboard für aktive user, aktive tools, ...
+16. Auschalten von Maschinen, wenn user Raum verlässt
+
+Technical debt:
+
+1. Pfad zu Daten in docker-compose file konfigurierbar machen
+2. TestController zerschlagen und responses fixen
 
 INFO:
 

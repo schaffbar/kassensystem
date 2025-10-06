@@ -13,6 +13,7 @@ import de.schaffbar.core_pos.rfid_tag.RfidTagService;
 import de.schaffbar.core_pos.rfid_tag.RfidTagViews.RfidTagView;
 import de.schaffbar.core_pos.rfid_tag_assignment.RfidTagAssignmentService;
 import de.schaffbar.core_pos.rfid_tag_assignment.RfidTagAssignmentViews;
+import de.schaffbar.core_pos.use_case.CustomerAssignRfidTag;
 import de.schaffbar.core_pos.use_case.EnterWorkshop;
 import de.schaffbar.core_pos.use_case.LeaveWorkshop;
 import jakarta.validation.Valid;
@@ -45,6 +46,8 @@ public class TestController {
     private final @NonNull EnterWorkshop enterWorkshop;
 
     private final @NonNull LeaveWorkshop leaveWorkshop;
+
+    private final @NonNull CustomerAssignRfidTag assignRfidTagUseCase;
 
     @PostMapping(value = "/init", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<InitResponse> init(@RequestBody @NotNull @Valid InitRequestBody requestBody) {
@@ -179,13 +182,10 @@ public class TestController {
         }
     }
 
-    private CounterResponse assignRfidTag(RfidTagId rfid) {
-        RfidTagView rfidTag = this.rfidTagService.getRfidTag(rfid) //
-                .orElseThrow(() -> ResourceNotFoundException.rfidTag(rfid));
+    private CounterResponse assignRfidTag(RfidTagId rfidTagId) {
+        this.assignRfidTagUseCase.process(rfidTagId);
 
-        this.rfidTagAssignmentService.assignRfidTag(rfidTag.id());
-
-        log.info("Assigned RFID tag with id: {}", rfidTag.id());
+        log.info("Assigned RFID tag with id: {}", rfidTagId);
 
         return CounterResponse.builder() //
                 .DEVUSECASE("C") //
@@ -194,6 +194,9 @@ public class TestController {
                 .ICON("OK") //
                 .build();
     }
+
+    // ------------------------------------------------------------------------
+    // Request and Response bodies
 
     @Builder
     public record InitRequestBody( //

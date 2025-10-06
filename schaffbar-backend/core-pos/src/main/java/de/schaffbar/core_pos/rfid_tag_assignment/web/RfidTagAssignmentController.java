@@ -3,7 +3,6 @@ package de.schaffbar.core_pos.rfid_tag_assignment.web;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 import de.schaffbar.core_pos.CustomerId;
@@ -11,11 +10,14 @@ import de.schaffbar.core_pos.ResourceNotFoundException;
 import de.schaffbar.core_pos.RfidTagId;
 import de.schaffbar.core_pos.customer.CustomerService;
 import de.schaffbar.core_pos.customer.CustomerViews.CustomerView;
-import de.schaffbar.core_pos.rfid_tag_assignment.RfidTagAssignmentCommands.RequestRfidTagAssignmentCommand;
 import de.schaffbar.core_pos.rfid_tag_assignment.RfidTagAssignmentService;
 import de.schaffbar.core_pos.rfid_tag_assignment.web.RfidTagAssignmentApiModel.AssignRfidTagRequestBody;
 import de.schaffbar.core_pos.rfid_tag_assignment.web.RfidTagAssignmentApiModel.RequestRfidTagAssignmentRequestBody;
 import de.schaffbar.core_pos.rfid_tag_assignment.web.RfidTagAssignmentApiModel.RfidTagAssignmentApiDto;
+import de.schaffbar.core_pos.rfid_tag_assignment.web.RfidTagAssignmentApiModel.UnassignRfidTagRequestBody;
+import de.schaffbar.core_pos.use_case.CustomerAssignRfidTag;
+import de.schaffbar.core_pos.use_case.CustomerRequestRfidTagAssignment;
+import de.schaffbar.core_pos.use_case.CustomerUnassignRfidTag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.NonNull;
@@ -40,6 +42,12 @@ public class RfidTagAssignmentController {
     private final @NonNull RfidTagAssignmentService rfidTagAssignmentService;
 
     private final @NonNull CustomerService customerService;
+
+    private final @NonNull CustomerRequestRfidTagAssignment requestRfidTagAssignmentUseCase;
+
+    private final @NonNull CustomerAssignRfidTag assignRfidTagUseCase;
+
+    private final @NonNull CustomerUnassignRfidTag unassignRfidTagUseCase;
 
     // ------------------------------------------------------------------------
     // query
@@ -78,13 +86,8 @@ public class RfidTagAssignmentController {
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> requestRfidTagAssignment(@RequestBody @Valid @NotNull RequestRfidTagAssignmentRequestBody requestBody) {
-        Optional<CustomerView> customer = this.customerService.getCustomer(CustomerId.of(requestBody.customerId()));
-        if (customer.isEmpty()) {
-            return ResponseEntity.notFound().build();
-        }
-
-        RequestRfidTagAssignmentCommand requestRfidTagAssignmentCommand = RfidTagAssignmentApiMapper.MAPPER.toRequestRfidTagAssignmentCommand(requestBody);
-        this.rfidTagAssignmentService.requestRfidTagAssignment(requestRfidTagAssignmentCommand);
+        CustomerId customerId = CustomerId.of(requestBody.customerId());
+        this.requestRfidTagAssignmentUseCase.process(customerId, requestBody.assignmentType());
 
         return ResponseEntity.ok().build();
     }
@@ -92,7 +95,15 @@ public class RfidTagAssignmentController {
     @PutMapping(value = "/assign", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> assignRfidTag(@RequestBody @Valid @NotNull AssignRfidTagRequestBody requestBody) {
         RfidTagId rfidTagId = RfidTagId.of(requestBody.rfidTagId());
-        this.rfidTagAssignmentService.assignRfidTag(rfidTagId);
+        this.assignRfidTagUseCase.process(rfidTagId);
+
+        return ResponseEntity.ok().build();
+    }
+
+    @PutMapping(value = "/unassign", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Void> assignRfidTag(@RequestBody @Valid @NotNull UnassignRfidTagRequestBody requestBody) {
+        CustomerId customerId = CustomerId.of(requestBody.customerId());
+        this.unassignRfidTagUseCase.process(customerId);
 
         return ResponseEntity.ok().build();
     }

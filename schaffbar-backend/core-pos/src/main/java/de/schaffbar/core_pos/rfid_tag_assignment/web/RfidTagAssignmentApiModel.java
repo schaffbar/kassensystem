@@ -35,4 +35,8 @@ public interface RfidTagAssignmentApiModel {
             @NotBlank String rfidTagId //
     ) {}
 
+    record UnassignRfidTagRequestBody( //
+            @NotNull UUID customerId //
+    ) {}
+
 }

@@ -1,9 +1,7 @@
 package de.schaffbar.core_pos.rfid_tag_assignment.web;
 
 import de.schaffbar.core_pos.ValueObjectMapper;
-import de.schaffbar.core_pos.rfid_tag_assignment.RfidTagAssignmentCommands.RequestRfidTagAssignmentCommand;
 import de.schaffbar.core_pos.rfid_tag_assignment.RfidTagAssignmentViews.RfidTagAssignmentView;
-import de.schaffbar.core_pos.rfid_tag_assignment.web.RfidTagAssignmentApiModel.RequestRfidTagAssignmentRequestBody;
 import de.schaffbar.core_pos.rfid_tag_assignment.web.RfidTagAssignmentApiModel.RfidTagAssignmentApiDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -25,7 +23,5 @@ public interface RfidTagAssignmentApiMapper extends ValueObjectMapper {
 
     // ------------------------------------------------------------------------
     // mapping request body to command
-
-    RequestRfidTagAssignmentCommand toRequestRfidTagAssignmentCommand(RequestRfidTagAssignmentRequestBody requestBody);
 
 }

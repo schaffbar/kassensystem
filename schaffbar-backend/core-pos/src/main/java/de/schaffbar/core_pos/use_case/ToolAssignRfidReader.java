@@ -17,7 +17,7 @@ import org.springframework.validation.annotation.Validated;
 @Service
 @Validated
 @RequiredArgsConstructor
-public class AssignRfidReaderToTool {
+public class ToolAssignRfidReader {
 
     private final @NonNull RfidReaderService rfidReaderService;
 

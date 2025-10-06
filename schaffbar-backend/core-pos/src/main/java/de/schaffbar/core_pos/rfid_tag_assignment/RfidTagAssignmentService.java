@@ -5,7 +5,6 @@ import java.util.Optional;
 
 import de.schaffbar.core_pos.CustomerId;
 import de.schaffbar.core_pos.RfidTagId;
-import de.schaffbar.core_pos.rfid_tag_assignment.RfidTagAssignmentCommands.RequestRfidTagAssignmentCommand;
 import de.schaffbar.core_pos.rfid_tag_assignment.RfidTagAssignmentViews.RfidTagAssignmentView;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
@@ -45,27 +44,23 @@ public class RfidTagAssignmentService {
     // command
 
     @Transactional
-    public void requestRfidTagAssignment(@NotNull @Valid RequestRfidTagAssignmentCommand command) {
-        // TODO: check if customer exists (move from controller to facade/use case)
-
-        if (getRfidTagAssignment(command.customerId()).isPresent()) {
-            throw new RuntimeException("Rfid tag assignment already exists for customer with id: " + command.customerId().getValue());
+    public void requestRfidTagAssignment(@NotNull @Valid CustomerId customerId, @NotNull RfidTagAssignmentType assignmentType) {
+        if (getRfidTagAssignment(customerId).isPresent()) {
+            throw new RuntimeException("RFID tag is already assigned to customer [id: " + customerId.getValue() + "]");
         }
 
         if (this.rfidTagAssignmentRepository.findWaitingForAssignment().isPresent()) {
-            throw new RuntimeException("There is already a rfid tag assignment pending");
+            throw new RuntimeException("There is already a RFID tag assignment pending");
         }
 
-        RfidTagAssignment rfidTagAssignment = RfidTagAssignment.of(command);
+        RfidTagAssignment rfidTagAssignment = RfidTagAssignment.of(customerId, assignmentType);
         this.rfidTagAssignmentRepository.save(rfidTagAssignment);
     }
 
     @Transactional
     public void assignRfidTag(@NotNull @Valid RfidTagId rfidTagId) {
-        // TODO: check if rfid tag exists
-
         if (getRfidTagAssignment(rfidTagId).isPresent()) {
-            throw new RuntimeException("Rfid tag assignment with rfid tag " + rfidTagId + " already exists");
+            throw new RuntimeException("RFID tag [id: " + rfidTagId.getValue() + "] already assigned");
         }
 
         this.rfidTagAssignmentRepository.findWaitingForAssignment() //
@@ -74,12 +69,26 @@ public class RfidTagAssignmentService {
                         throwNoWaitingAssignmentFound());
     }
 
+    @Transactional
+    public void unassignRfidTag(@NotNull @Valid CustomerId customerId) {
+        this.rfidTagAssignmentRepository.findByCustomer(customerId) //
+                .ifPresentOrElse( //
+                        RfidTagAssignment::unassignRfidTag, //
+                        throwNoRfidTagAssignedToCustomer(customerId));
+    }
+
     // ------------------------------------------------------------------------
     // helper
 
     private Runnable throwNoWaitingAssignmentFound() {
         return () -> {
-            throw new RuntimeException("No waiting for rfid tag assignment found");
+            throw new RuntimeException("No waiting for RFID tag assignment found");
+        };
+    }
+
+    private Runnable throwNoRfidTagAssignedToCustomer(CustomerId customerId) {
+        return () -> {
+            throw new RuntimeException("No RFID tag assigned to customer [id: " + customerId.getValue() + "]");
         };
     }
 

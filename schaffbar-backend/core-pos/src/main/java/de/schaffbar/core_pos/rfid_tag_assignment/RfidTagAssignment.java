@@ -8,7 +8,6 @@ import java.util.UUID;
 import de.schaffbar.core_pos.CustomerId;
 import de.schaffbar.core_pos.RfidTagAssignmentId;
 import de.schaffbar.core_pos.RfidTagId;
-import de.schaffbar.core_pos.rfid_tag_assignment.RfidTagAssignmentCommands.RequestRfidTagAssignmentCommand;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -59,11 +58,11 @@ class RfidTagAssignment {
     // ------------------------------------------------------------------------
     // static constructor
 
-    public static RfidTagAssignment of(RequestRfidTagAssignmentCommand command) {
+    public static RfidTagAssignment of(CustomerId customerId, RfidTagAssignmentType assignmentType) {
         RfidTagAssignment result = new RfidTagAssignment();
         result.setId(UUID.randomUUID());
-        result.setCustomerId(command.customerId().getValue());
-        result.setAssignmentType(command.assignmentType());
+        result.setCustomerId(customerId.getValue());
+        result.setAssignmentType(assignmentType);
         result.setStatus(RfidTagAssignmentStatus.WAITING_FOR_ASSIGNMENT);
 
         return result;
@@ -96,11 +95,6 @@ class RfidTagAssignment {
         this.rfidTagId = rfidTagId.getValue();
         this.status = RfidTagAssignmentStatus.ASSIGNED;
         this.assignmentDate = Instant.now();
-    }
-
-    public void requestUnassignment() {
-        // TODO: check if assignment is in the correct state
-        this.status = RfidTagAssignmentStatus.WAITING_FOR_UNASSIGNMENT;
     }
 
     public void unassignRfidTag() {

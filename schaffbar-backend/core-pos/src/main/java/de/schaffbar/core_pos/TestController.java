@@ -64,16 +64,18 @@ public class TestController {
                 .orElseThrow(() -> ResourceNotFoundException.rfidReader(id));
 
         String deviceNme = switch (rfidReader.type()) {
-            case A -> "RFID Tag Register";
-            case C -> "RFID Tag Assigner";
-            case G -> "Workshop Entry";
-            default -> "Unknown Device Type";
+            case RFID_TAG_REGISTER -> "RFID Tag Register";
+            case RFID_TAG_ASSIGNER -> "RFID Tag Assigner";
+            case GATE_KEEPER -> "Gate Keeper";
+            case GATE_KEEPER_IN -> "Gate Keeper In";
+            case GATE_KEEPER_OUT -> "Gate Keeper Out";
+            case SWITCH_BOX -> "Switch Box";
         };
 
         InitResponse response = InitResponse.builder() //
                 .STATE(isNull(rfidReader.type()) ? "ERROR" : "START") //
                 .DEVNAME(deviceNme) //
-                .DEVUSECASE(isNull(rfidReader.type()) ? "ERROR" : rfidReader.type().toString()) //
+                .DEVUSECASE(isNull(rfidReader.type()) ? "ERROR" : rfidReader.type().getKey()) //
                 .TERMINAL("") //
                 .ERROR(isNull(rfidReader.type()) ? "Nicht Gefunden" : "") //
                 .DATEY(2025) //
@@ -100,8 +102,8 @@ public class TestController {
         RfidTagId rfidTagId = RfidTagId.of(requestBody.RFID());
 
         CounterResponse response = switch (rfidReader.type()) {
-            case RfidReaderType.A -> registerRfidTag(rfidTagId);
-            case RfidReaderType.C -> assignRfidTag(rfidTagId);
+            case RfidReaderType.RFID_TAG_REGISTER -> registerRfidTag(rfidTagId);
+            case RfidReaderType.RFID_TAG_ASSIGNER -> assignRfidTag(rfidTagId);
             default -> throw new IllegalStateException("Unexpected value: " + rfidReader.type());
         };
 
@@ -118,7 +120,7 @@ public class TestController {
         RfidReaderView rfidReader = this.rfidReaderService.getRfidReader(macAddress) //
                 .orElseThrow(() -> ResourceNotFoundException.rfidReader(macAddress));
 
-        if (rfidReader.type() != RfidReaderType.G) {
+        if (rfidReader.type() != RfidReaderType.GATE_KEEPER) {
             throw new RuntimeException("TODO: Invalid type of RFID reader");
         }
 
@@ -142,7 +144,7 @@ public class TestController {
         //        }
 
         DeviceCardResponse response = DeviceCardResponse.builder() //
-                .DEVUSECASE("G") //
+                .DEVUSECASE(RfidReaderType.GATE_KEEPER.getKey()) //
                 .ERROR("") //
                 .STATE("END") //
                 .ICON("HI") //
@@ -161,7 +163,7 @@ public class TestController {
         Optional<RfidTagView> rfidTag = this.rfidTagService.getRfidTag(rfid);
         if (rfidTag.isPresent()) {
             return CounterResponse.builder() //
-                    .DEVUSECASE("A") //
+                    .DEVUSECASE(RfidReaderType.RFID_TAG_REGISTER.getKey()) //
                     .ERROR("RFID bereits vorhanden!") //
                     .STATE("END") //
                     .ICON("RFID") //
@@ -174,7 +176,7 @@ public class TestController {
             log.info("Created RFID tag with id: {}", rfidTagId);
 
             return CounterResponse.builder() //
-                    .DEVUSECASE("A") //
+                    .DEVUSECASE(RfidReaderType.RFID_TAG_REGISTER.getKey()) //
                     .ERROR("") //
                     .STATE("END") //
                     .ICON("OK") //
@@ -188,7 +190,7 @@ public class TestController {
         log.info("Assigned RFID tag with id: {}", rfidTagId);
 
         return CounterResponse.builder() //
-                .DEVUSECASE("C") //
+                .DEVUSECASE(RfidReaderType.RFID_TAG_ASSIGNER.getKey()) //
                 .ERROR("") //
                 .STATE("END") //
                 .ICON("OK") //
@@ -252,15 +254,5 @@ public class TestController {
             String CUSTOMERSTARTSTOP,  //
             String UNITS  //
     ) {}
-
-    //    class DeviceCardRequest(BaseModel):
-    //    MACADDR: str
-    //    STATE: str
-    //    DEVUSECASE: str
-    //    RFID: str
-    //    ICON: str
-    //    ERROR: str
-    //    CUSTOMERNAME: str
-    //    CUSTOMERSTARTSTOP: str
 
 }

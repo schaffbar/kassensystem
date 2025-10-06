@@ -27,7 +27,7 @@ public class ToolAssignRfidReader {
         RfidReaderView rfidReader = this.rfidReaderService.getRfidReader(rfidReaderId) //
                 .orElseThrow(() -> ResourceNotFoundException.rfidReader(rfidReaderId));
 
-        if (rfidReader.type() != RfidReaderType.S) {
+        if (rfidReader.type() != RfidReaderType.SWITCH_BOX) {
             throw new RuntimeException("TODO: Invalid type of RFID reader");
         }
 

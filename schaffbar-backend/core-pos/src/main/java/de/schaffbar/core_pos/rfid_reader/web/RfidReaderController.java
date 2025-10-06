@@ -7,7 +7,6 @@ import java.util.UUID;
 import de.schaffbar.core_pos.MacAddress;
 import de.schaffbar.core_pos.ResourceNotFoundException;
 import de.schaffbar.core_pos.RfidReaderId;
-import de.schaffbar.core_pos.rfid_reader.RfidReaderCommands.CreateRfidReaderCommand;
 import de.schaffbar.core_pos.rfid_reader.RfidReaderService;
 import de.schaffbar.core_pos.rfid_reader.RfidReaderViews.RfidReaderView;
 import de.schaffbar.core_pos.rfid_reader.web.RfidReaderApiModel.CreateRfidReaderRequestBody;
@@ -55,7 +54,7 @@ public class RfidReaderController {
 
         RfidReaderId id = this.rfidReaderService.getRfidReader(macAddress) //
                 .map(RfidReaderView::id) //
-                .orElseGet(() -> this.rfidReaderService.createRfidReader(new CreateRfidReaderCommand(macAddress)));
+                .orElseGet(() -> this.rfidReaderService.createRfidReader(macAddress));
 
         RfidReaderApiDto rfidReader = this.rfidReaderService.getRfidReader(id) //
                 .map(RfidReaderApiMapper.MAPPER::toRfidReaderApiDto) //
@@ -79,8 +78,8 @@ public class RfidReaderController {
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> createRfidReader(@RequestBody @NotNull @Valid CreateRfidReaderRequestBody requestBody) {
-        CreateRfidReaderCommand command = RfidReaderApiMapper.MAPPER.toCreateRfidReaderCommand(requestBody);
-        RfidReaderId rfidReaderId = this.rfidReaderService.createRfidReader(command);
+        MacAddress macAddress = MacAddress.of(requestBody.macAddress());
+        RfidReaderId rfidReaderId = this.rfidReaderService.createRfidReader(macAddress);
         URI location = URI.create("/api/v1/rfid-readers/" + rfidReaderId.getValue());
 
         return ResponseEntity.created(location).build();

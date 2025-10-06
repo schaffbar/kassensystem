@@ -4,7 +4,6 @@ import static java.util.Objects.isNull;
 
 import java.util.Optional;
 
-import de.schaffbar.core_pos.rfid_reader.RfidReaderCommands;
 import de.schaffbar.core_pos.rfid_reader.RfidReaderService;
 import de.schaffbar.core_pos.rfid_reader.RfidReaderType;
 import de.schaffbar.core_pos.rfid_reader.RfidReaderViews.RfidReaderView;
@@ -58,7 +57,7 @@ public class TestController {
 
         RfidReaderId id = this.rfidReaderService.getRfidReader(macAddress) //
                 .map(RfidReaderView::id) //
-                .orElseGet(() -> this.rfidReaderService.createRfidReader(new RfidReaderCommands.CreateRfidReaderCommand(macAddress)));
+                .orElseGet(() -> this.rfidReaderService.createRfidReader(macAddress));
 
         RfidReaderView rfidReader = this.rfidReaderService.getRfidReader(id) //
                 .orElseThrow(() -> ResourceNotFoundException.rfidReader(id));

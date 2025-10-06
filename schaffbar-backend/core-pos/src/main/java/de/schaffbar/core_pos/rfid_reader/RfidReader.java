@@ -3,8 +3,8 @@ package de.schaffbar.core_pos.rfid_reader;
 import java.time.Instant;
 import java.util.UUID;
 
+import de.schaffbar.core_pos.MacAddress;
 import de.schaffbar.core_pos.RfidReaderId;
-import de.schaffbar.core_pos.rfid_reader.RfidReaderCommands.CreateRfidReaderCommand;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -47,10 +47,10 @@ class RfidReader {
     // ------------------------------------------------------------------------
     // static constructor
 
-    public static RfidReader of(CreateRfidReaderCommand command) {
+    public static RfidReader of(MacAddress macAddress) {
         RfidReader rfidReader = new RfidReader();
         rfidReader.setId(UUID.randomUUID());
-        rfidReader.setMacAddress(command.macAddress().getValue());
+        rfidReader.setMacAddress(macAddress.getValue());
         // TODO: implement it
         rfidReader.setCreatedAt(Instant.now());
 

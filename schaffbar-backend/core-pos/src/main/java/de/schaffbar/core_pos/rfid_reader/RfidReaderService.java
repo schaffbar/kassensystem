@@ -6,7 +6,6 @@ import java.util.Optional;
 import de.schaffbar.core_pos.MacAddress;
 import de.schaffbar.core_pos.ResourceNotFoundException;
 import de.schaffbar.core_pos.RfidReaderId;
-import de.schaffbar.core_pos.rfid_reader.RfidReaderCommands.CreateRfidReaderCommand;
 import de.schaffbar.core_pos.rfid_reader.RfidReaderViews.RfidReaderView;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
@@ -44,8 +43,8 @@ public class RfidReaderService {
     // ------------------------------------------------------------------------
     // command
 
-    public RfidReaderId createRfidReader(@NotNull @Valid CreateRfidReaderCommand command) {
-        RfidReader rfidReader = RfidReader.of(command);
+    public RfidReaderId createRfidReader(@NotNull @Valid MacAddress macAddress) {
+        RfidReader rfidReader = RfidReader.of(macAddress);
         // TODO: check if rfidReader with same mac address already exists
         RfidReader savedRfidReader = this.rfidReaderRepository.save(rfidReader);
 

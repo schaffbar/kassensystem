@@ -5,6 +5,7 @@ import de.schaffbar.core_pos.ResourceNotFoundException;
 import de.schaffbar.core_pos.customer.CustomerService;
 import de.schaffbar.core_pos.customer.CustomerViews.CustomerView;
 import de.schaffbar.core_pos.rfid_tag_assignment.RfidTagAssignmentService;
+import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.NonNull;
@@ -21,6 +22,7 @@ public class CustomerUnassignRfidTag {
 
     private final @NonNull RfidTagAssignmentService rfidTagAssignmentService;
 
+    @Transactional
     public void process(@NotNull @Valid CustomerId customerId) {
         CustomerView customer = this.customerService.getCustomer(customerId) //
                 .orElseThrow(() -> ResourceNotFoundException.customer(customerId));

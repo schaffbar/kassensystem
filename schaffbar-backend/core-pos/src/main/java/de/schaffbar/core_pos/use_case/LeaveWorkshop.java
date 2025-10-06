@@ -5,6 +5,7 @@ import de.schaffbar.core_pos.WorkshopSessionId;
 import de.schaffbar.core_pos.workshop_session.WorkshopSessionService;
 import de.schaffbar.core_pos.workshop_session.WorkshopSessionViews;
 import de.schaffbar.core_pos.workshop_usage.WorkshopUsageService;
+import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.NonNull;
@@ -21,6 +22,7 @@ public class LeaveWorkshop {
 
     private final @NonNull WorkshopUsageService workshopUsageService;
 
+    @Transactional
     public void process(@NotNull @Valid CustomerId customerId) {
 
         // TODO: stop any active tool usage associated with the given RFID tag, if present

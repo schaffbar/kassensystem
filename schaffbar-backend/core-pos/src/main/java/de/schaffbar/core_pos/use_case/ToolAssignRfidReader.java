@@ -7,6 +7,7 @@ import de.schaffbar.core_pos.rfid_reader.RfidReaderService;
 import de.schaffbar.core_pos.rfid_reader.RfidReaderType;
 import de.schaffbar.core_pos.rfid_reader.RfidReaderViews.RfidReaderView;
 import de.schaffbar.core_pos.tool.ToolService;
+import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.NonNull;
@@ -23,6 +24,7 @@ public class ToolAssignRfidReader {
 
     private final @NonNull ToolService toolService;
 
+    @Transactional
     public void process(@NotNull @Valid ToolId toolId, @NotNull @Valid RfidReaderId rfidReaderId) {
         RfidReaderView rfidReader = this.rfidReaderService.getRfidReader(rfidReaderId) //
                 .orElseThrow(() -> ResourceNotFoundException.rfidReader(rfidReaderId));

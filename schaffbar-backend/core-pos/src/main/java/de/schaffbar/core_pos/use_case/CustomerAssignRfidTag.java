@@ -5,6 +5,7 @@ import de.schaffbar.core_pos.RfidTagId;
 import de.schaffbar.core_pos.rfid_tag.RfidTagService;
 import de.schaffbar.core_pos.rfid_tag.RfidTagViews.RfidTagView;
 import de.schaffbar.core_pos.rfid_tag_assignment.RfidTagAssignmentService;
+import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.NonNull;
@@ -21,6 +22,7 @@ public class CustomerAssignRfidTag {
 
     private final @NonNull RfidTagAssignmentService rfidTagAssignmentService;
 
+    @Transactional
     public void process(@NotNull @Valid RfidTagId rfidTagId) {
         RfidTagView rfidTag = this.rfidTagService.getRfidTag(rfidTagId) //
                 .orElseThrow(() -> ResourceNotFoundException.rfidTag(rfidTagId));

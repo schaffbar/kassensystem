@@ -10,17 +10,20 @@
 4. Abrechnung, Schliessen von open session und history
 5. Beim counter name anzegen, wenn dieser tag zugewiesen ist
 6. Löschen von Entitäten immer bestätigen
-7. Beim Löschen immer überprüfen ob Entity nicht irgendwo referenziert wird
-8. Setzen von RFID reader type (plus Name/Beschreibung)
-9. Assignment und Unassignment von fixen RFID tags
-10. Einweisung plus Zuweisung zu User
-11. Switch box implementieren
+7. Scheduler to clean up waiting for assignment
+8. Genauer definieren was erlaubt ist in WaitingForAssignment und was in Assigned status
+9. ========================================================
+10. Beim Löschen immer überprüfen ob Entity nicht irgendwo referenziert wird
+11. Setzen von RFID reader type (plus Name/Beschreibung)
+12. Assignment und Unassignment von fixen RFID tags
+13. Einweisung plus Zuweisung zu User
+14. Switch box implementieren
 
-12. Nutzung von Maschinen in minuten oder stunden
-13. Beschreibung und Typ von RFID reader
-14. Zuweisung von RFID reader zu tool
-15. Dashboard für aktive user, aktive tools, ...
-16. Auschalten von Maschinen, wenn user Raum verlässt
+15. Nutzung von Maschinen in minuten oder stunden
+16. Beschreibung und Typ von RFID reader
+17. Zuweisung von RFID reader zu tool
+18. Dashboard für aktive user, aktive tools, ...
+19. Auschalten von Maschinen, wenn user Raum verlässt
 
 Technical debt:
 

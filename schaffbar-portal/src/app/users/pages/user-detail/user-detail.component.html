@@ -28,6 +28,11 @@
         <button mat-flat-button color="primary" (click)="assignFixedRfidTag()">Assign Fixed RFID Tag</button>
       </div>
     }
+    @if (detailsStore.showUnassignAction()) {
+      <div class="user-detail-header__actions">
+        <button mat-flat-button color="warn" (click)="unassignRfidTag()">Unassign RFID Tag</button>
+      </div>
+    }
   </div>
 
   <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="center" dynamicHeight>

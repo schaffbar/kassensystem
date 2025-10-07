@@ -47,4 +47,8 @@ export class UserDetailComponent {
   protected assignTemporaryRfidTag(): void {
     this.detailsStore.assignTemporaryRfidTag(this.id);
   }
+
+  protected unassignRfidTag(): void {
+    this.detailsStore.unassignRfidTag(this.id);
+  }
 }

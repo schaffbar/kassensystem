@@ -47,6 +47,9 @@ export const UserDetailStore = signalStore(
     showAssignActions: computed(
       () => !rfidTagAssignment() || rfidTagAssignment()?.status == RfidTagAssignmentStatus.Unassigned,
     ),
+    showUnassignAction: computed(
+      () => !!rfidTagAssignment() && rfidTagAssignment()?.status == RfidTagAssignmentStatus.Assigned,
+    ),
   })),
   withRequestStatus(),
   withProps(() => ({
@@ -114,6 +117,21 @@ export const UserDetailStore = signalStore(
         tap(() => patchState(store, setPending())),
         exhaustMap((userId: string) => {
           return store._assignmentService.assignTemporaryRfidTag(userId).pipe(
+            tapResponse({
+              next: () => {
+                patchState(store, setFulfilled(), setDirty());
+              },
+              error: (error: { message: string }) => patchState(store, setError(error.message)),
+            }),
+          );
+        }),
+      ),
+    ),
+    unassignRfidTag: rxMethod<string>(
+      pipe(
+        tap(() => patchState(store, setPending())),
+        exhaustMap((userId: string) => {
+          return store._assignmentService.unassignRfidTag(userId).pipe(
             tapResponse({
               next: () => {
                 patchState(store, setFulfilled(), setDirty());

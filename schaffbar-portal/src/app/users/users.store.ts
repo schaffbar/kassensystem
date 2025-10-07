@@ -73,13 +73,7 @@ export const UsersStore = signalStore(
       store.loadAllUsers();
     },
     onDestroy() {
-      console.log('[Store - onDestroy] Store destroyed, resetting state');
-      // patchState(store, {
-      //   isLoading: false,
-      //   currentPage: 1,
-      //   pageCount: 1,
-      // });
-      // patchState(store, removeAllEntities({ collection: 'task' }));
+      console.log('[Store - onDestroy] Store destroyed');
     },
   })),
 );

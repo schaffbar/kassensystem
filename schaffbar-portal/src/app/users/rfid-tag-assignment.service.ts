@@ -42,4 +42,12 @@ export class RfidTagAssignmentService {
 
     return this.http.post<void>(RFID_TAG_ASSIGNMENT_API_URL, body, this.httpOptions);
   }
+
+  unassignRfidTag(userId: string): Observable<void> {
+    const body = {
+      customerId: userId,
+    };
+
+    return this.http.put<void>(`${RFID_TAG_ASSIGNMENT_API_URL}/unassign`, body, this.httpOptions);
+  }
 }

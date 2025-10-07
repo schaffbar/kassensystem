@@ -41,16 +41,14 @@ class RfidTagAssignment {
     @Enumerated(EnumType.STRING)
     private RfidTagAssignmentType assignmentType;
 
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    private RfidTagAssignmentStatus status;
+
     @Column(unique = true)
     private String rfidTagId;
 
     private Instant assignmentDate;
-
-    private Instant unassignmentDate;
-
-    @NotNull
-    @Enumerated(EnumType.STRING)
-    private RfidTagAssignmentStatus status;
 
     @Version
     private Instant updatedAt;

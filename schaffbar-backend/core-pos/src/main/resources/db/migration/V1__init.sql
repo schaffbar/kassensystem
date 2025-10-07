@@ -65,7 +65,6 @@ CREATE TABLE schaffbar.rfid_tag_assignment
     rfid_tag_id VARCHAR(255) UNIQUE,
     assignment_type VARCHAR(255) NOT NULL,
     assignment_date TIMESTAMP WITHOUT TIME ZONE,
-    unassignment_date TIMESTAMP WITHOUT TIME ZONE,
     status VARCHAR(255) NOT NULL,
     updated_at TIMESTAMP WITHOUT TIME ZONE,
     CONSTRAINT pk_rfid_tag_assignment PRIMARY KEY (id)

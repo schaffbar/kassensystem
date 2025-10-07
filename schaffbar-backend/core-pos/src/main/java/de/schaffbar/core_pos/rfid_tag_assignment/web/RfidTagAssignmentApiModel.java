@@ -17,10 +17,9 @@ public interface RfidTagAssignmentApiModel {
             @NotNull UUID id, //
             @NotNull UUID customerId, //
             @NotNull RfidTagAssignmentType assignmentType, //
+            @NotNull RfidTagAssignmentStatus status, //
             String rfidTagId, //
-            Instant assignmentDate, //
-            Instant unassignmentDate, //
-            @NotNull RfidTagAssignmentStatus status //
+            Instant assignmentDate //
     ) {}
 
     // ------------------------------------------------------------------------

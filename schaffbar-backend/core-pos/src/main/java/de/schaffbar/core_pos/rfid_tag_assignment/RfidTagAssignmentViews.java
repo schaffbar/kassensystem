@@ -13,10 +13,9 @@ public interface RfidTagAssignmentViews {
             @NotNull RfidTagAssignmentId id, //
             @NotNull CustomerId customerId, //
             @NotNull RfidTagAssignmentType assignmentType, //
+            @NotNull RfidTagAssignmentStatus status, //
             RfidTagId rfidTagId, //
-            Instant assignmentDate, //
-            Instant unassignmentDate, //
-            @NotNull RfidTagAssignmentStatus status //
+            Instant assignmentDate //
     ) {}
 
 }

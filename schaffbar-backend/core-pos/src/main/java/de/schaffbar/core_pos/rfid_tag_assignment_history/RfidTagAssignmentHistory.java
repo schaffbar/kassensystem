@@ -1,4 +1,4 @@
-package de.schaffbar.core_pos.rfid_tag_assignment;
+package de.schaffbar.core_pos.rfid_tag_assignment_history;
 
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
@@ -8,7 +8,8 @@ import java.util.UUID;
 import de.schaffbar.core_pos.CustomerId;
 import de.schaffbar.core_pos.RfidTagAssignmentId;
 import de.schaffbar.core_pos.RfidTagId;
-import jakarta.persistence.Column;
+import de.schaffbar.core_pos.rfid_tag_assignment.RfidTagAssignmentType;
+import de.schaffbar.core_pos.rfid_tag_assignment.RfidTagAssignmentViews.RfidTagAssignmentView;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -16,6 +17,8 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.persistence.Version;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Past;
+import jakarta.validation.constraints.PastOrPresent;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -27,30 +30,29 @@ import lombok.ToString;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @ToString
 @Entity
-@Table(name = "RFID_TAG_ASSIGNMENT", schema = "SCHAFFBAR")
-class RfidTagAssignment {
+@Table(name = "RFID_TAG_ASSIGNMENT_HISTORY", schema = "SCHAFFBAR")
+class RfidTagAssignmentHistory {
 
     @Id
     private UUID id;
 
     @NotNull
-    @Column(unique = true)
     private UUID customerId;
+
+    @NotNull
+    private String rfidTagId;
 
     @NotNull
     @Enumerated(EnumType.STRING)
     private RfidTagAssignmentType assignmentType;
 
-    @Column(unique = true)
-    private String rfidTagId;
-
+    @NotNull
+    @Past
     private Instant assignmentDate;
 
-    private Instant unassignmentDate;
-
     @NotNull
-    @Enumerated(EnumType.STRING)
-    private RfidTagAssignmentStatus status;
+    @PastOrPresent
+    private Instant unassignmentDate;
 
     @Version
     private Instant updatedAt;
@@ -58,12 +60,14 @@ class RfidTagAssignment {
     // ------------------------------------------------------------------------
     // static constructor
 
-    public static RfidTagAssignment of(CustomerId customerId, RfidTagAssignmentType assignmentType) {
-        RfidTagAssignment result = new RfidTagAssignment();
+    public static RfidTagAssignmentHistory of(RfidTagAssignmentView activeRfidTagAssignment) {
+        RfidTagAssignmentHistory result = new RfidTagAssignmentHistory();
         result.setId(UUID.randomUUID());
-        result.setCustomerId(customerId.getValue());
-        result.setAssignmentType(assignmentType);
-        result.setStatus(RfidTagAssignmentStatus.WAITING_FOR_ASSIGNMENT);
+        result.setCustomerId(activeRfidTagAssignment.customerId().getValue());
+        result.setRfidTagId(activeRfidTagAssignment.rfidTagId().getValue());
+        result.setAssignmentType(activeRfidTagAssignment.assignmentType());
+        result.setAssignmentDate(activeRfidTagAssignment.assignmentDate());
+        result.setUnassignmentDate(Instant.now());
 
         return result;
     }
@@ -87,18 +91,7 @@ class RfidTagAssignment {
         return RfidTagId.of(this.rfidTagId);
     }
 
-    public boolean isAssigned() {
-        return RfidTagAssignmentStatus.ASSIGNED == this.status;
-    }
-
     // ------------------------------------------------------------------------
     // command
-
-    public void assignRfidTag(RfidTagId rfidTagId) {
-        // TODO: check if assignment is in the correct state
-        this.rfidTagId = rfidTagId.getValue();
-        this.status = RfidTagAssignmentStatus.ASSIGNED;
-        this.assignmentDate = Instant.now();
-    }
 
 }

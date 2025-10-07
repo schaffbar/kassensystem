@@ -73,6 +73,20 @@ CREATE TABLE schaffbar.rfid_tag_assignment
 
 GRANT ALL ON TABLE schaffbar.rfid_tag_assignment TO schadmin;
 
+CREATE TABLE schaffbar.rfid_tag_assignment_history
+(
+    id UUID NOT NULL,
+    customer_id UUID NOT NULL,
+    rfid_tag_id VARCHAR(255) NOT NULL,
+    assignment_type VARCHAR(255) NOT NULL,
+    assignment_date TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+    unassignment_date TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+    updated_at TIMESTAMP WITHOUT TIME ZONE,
+    CONSTRAINT pk_rfid_tag_assignment_history PRIMARY KEY (id)
+);
+
+GRANT ALL ON TABLE schaffbar.rfid_tag_assignment_history TO schadmin;
+
 CREATE TABLE schaffbar.workshop_session
 (
     id UUID NOT NULL,

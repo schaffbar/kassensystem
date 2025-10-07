@@ -72,8 +72,9 @@ public class RfidTagAssignmentService {
     @Transactional
     public void unassignRfidTag(@NotNull @Valid CustomerId customerId) {
         this.rfidTagAssignmentRepository.findByCustomer(customerId) //
+                .filter(RfidTagAssignment::isAssigned) //
                 .ifPresentOrElse( //
-                        RfidTagAssignment::unassignRfidTag, //
+                        this.rfidTagAssignmentRepository::delete, //
                         throwNoRfidTagAssignedToCustomer(customerId));
     }
 

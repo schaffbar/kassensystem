@@ -1,16 +1,17 @@
-package de.schaffbar.core_pos;
+package de.schaffbar.core_pos.id;
 
 import java.util.UUID;
 
+import de.schaffbar.core_pos.ValueObjectAssert;
 import de.schaffbar.core_pos.ValueObjectAssert.ValueObject;
 import lombok.Value;
 
 @Value(staticConstructor = "of")
-public class WorkshopUsageId {
+public class CustomerId {
 
     UUID value;
 
-    private WorkshopUsageId(UUID id) {
+    private CustomerId(UUID id) {
         ValueObjectAssert.notNull(id, ValueObject.CUSTOMER_ID);
         this.value = id;
     }

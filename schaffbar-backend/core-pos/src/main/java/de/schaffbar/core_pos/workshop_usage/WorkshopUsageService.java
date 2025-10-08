@@ -5,8 +5,8 @@ import static java.util.Comparator.comparing;
 import java.util.List;
 import java.util.Optional;
 
-import de.schaffbar.core_pos.CustomerId;
-import de.schaffbar.core_pos.WorkshopSessionId;
+import de.schaffbar.core_pos.id.CustomerId;
+import de.schaffbar.core_pos.id.WorkshopSessionId;
 import de.schaffbar.core_pos.workshop_usage.WorkshopUsageViews.WorkshopUsageView;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;

@@ -2,7 +2,7 @@ package de.schaffbar.core_pos.util;
 
 import java.util.UUID;
 
-import de.schaffbar.core_pos.CustomerId;
+import de.schaffbar.core_pos.id.CustomerId;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 

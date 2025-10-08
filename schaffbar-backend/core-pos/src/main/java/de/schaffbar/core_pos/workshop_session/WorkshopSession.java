@@ -3,8 +3,8 @@ package de.schaffbar.core_pos.workshop_session;
 import java.time.Instant;
 import java.util.UUID;
 
-import de.schaffbar.core_pos.CustomerId;
-import de.schaffbar.core_pos.WorkshopSessionId;
+import de.schaffbar.core_pos.id.CustomerId;
+import de.schaffbar.core_pos.id.WorkshopSessionId;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;

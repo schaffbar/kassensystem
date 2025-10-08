@@ -3,9 +3,9 @@ package de.schaffbar.core_pos.workshop_usage;
 import java.time.Duration;
 import java.time.Instant;
 
-import de.schaffbar.core_pos.CustomerId;
-import de.schaffbar.core_pos.WorkshopSessionId;
-import de.schaffbar.core_pos.WorkshopUsageId;
+import de.schaffbar.core_pos.id.CustomerId;
+import de.schaffbar.core_pos.id.WorkshopSessionId;
+import de.schaffbar.core_pos.id.WorkshopUsageId;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PastOrPresent;
 

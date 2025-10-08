@@ -7,9 +7,9 @@ import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.UUID;
 
-import de.schaffbar.core_pos.CustomerId;
-import de.schaffbar.core_pos.WorkshopSessionId;
-import de.schaffbar.core_pos.WorkshopUsageId;
+import de.schaffbar.core_pos.id.CustomerId;
+import de.schaffbar.core_pos.id.WorkshopSessionId;
+import de.schaffbar.core_pos.id.WorkshopUsageId;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;

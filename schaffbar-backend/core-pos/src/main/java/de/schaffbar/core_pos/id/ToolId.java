@@ -1,7 +1,8 @@
-package de.schaffbar.core_pos;
+package de.schaffbar.core_pos.id;
 
 import java.util.UUID;
 
+import de.schaffbar.core_pos.ValueObjectAssert;
 import de.schaffbar.core_pos.ValueObjectAssert.ValueObject;
 import lombok.Value;
 

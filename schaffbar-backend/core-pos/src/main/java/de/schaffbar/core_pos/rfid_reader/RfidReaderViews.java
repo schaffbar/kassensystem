@@ -2,7 +2,7 @@ package de.schaffbar.core_pos.rfid_reader;
 
 import java.time.Instant;
 
-import de.schaffbar.core_pos.RfidReaderId;
+import de.schaffbar.core_pos.id.RfidReaderId;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 

@@ -5,9 +5,9 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
 import java.util.List;
 import java.util.UUID;
 
-import de.schaffbar.core_pos.CustomerId;
+import de.schaffbar.core_pos.id.CustomerId;
 import de.schaffbar.core_pos.ResourceNotFoundException;
-import de.schaffbar.core_pos.RfidTagId;
+import de.schaffbar.core_pos.id.RfidTagId;
 import de.schaffbar.core_pos.customer.CustomerService;
 import de.schaffbar.core_pos.customer.CustomerViews.CustomerView;
 import de.schaffbar.core_pos.rfid_tag_assignment.RfidTagAssignmentService;

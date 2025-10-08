@@ -5,9 +5,9 @@ import static org.apache.commons.lang3.StringUtils.isBlank;
 import java.time.Instant;
 import java.util.UUID;
 
-import de.schaffbar.core_pos.CustomerId;
-import de.schaffbar.core_pos.RfidTagAssignmentId;
-import de.schaffbar.core_pos.RfidTagId;
+import de.schaffbar.core_pos.id.CustomerId;
+import de.schaffbar.core_pos.id.RfidTagAssignmentId;
+import de.schaffbar.core_pos.id.RfidTagId;
 import de.schaffbar.core_pos.rfid_tag_assignment.RfidTagAssignmentType;
 import de.schaffbar.core_pos.rfid_tag_assignment.RfidTagAssignmentViews.RfidTagAssignmentView;
 import jakarta.persistence.Entity;

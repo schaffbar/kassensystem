@@ -4,8 +4,8 @@ import java.util.List;
 import java.util.Optional;
 
 import de.schaffbar.core_pos.ResourceNotFoundException;
-import de.schaffbar.core_pos.RfidReaderId;
-import de.schaffbar.core_pos.ToolId;
+import de.schaffbar.core_pos.id.RfidReaderId;
+import de.schaffbar.core_pos.id.ToolId;
 import de.schaffbar.core_pos.tool.ToolCommands.CreateToolCommand;
 import de.schaffbar.core_pos.tool.ToolViews.ToolView;
 import jakarta.validation.Valid;

@@ -1,8 +1,8 @@
 package de.schaffbar.core_pos.use_case;
 
 import de.schaffbar.core_pos.ResourceNotFoundException;
-import de.schaffbar.core_pos.RfidReaderId;
-import de.schaffbar.core_pos.ToolId;
+import de.schaffbar.core_pos.id.RfidReaderId;
+import de.schaffbar.core_pos.id.ToolId;
 import de.schaffbar.core_pos.rfid_reader.RfidReaderService;
 import de.schaffbar.core_pos.rfid_reader.RfidReaderType;
 import de.schaffbar.core_pos.rfid_reader.RfidReaderViews.RfidReaderView;

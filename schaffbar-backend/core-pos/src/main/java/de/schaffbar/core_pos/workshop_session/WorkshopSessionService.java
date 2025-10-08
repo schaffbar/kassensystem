@@ -2,7 +2,7 @@ package de.schaffbar.core_pos.workshop_session;
 
 import java.util.Optional;
 
-import de.schaffbar.core_pos.CustomerId;
+import de.schaffbar.core_pos.id.CustomerId;
 import de.schaffbar.core_pos.workshop_session.WorkshopSessionViews.WorkshopSessionView;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;

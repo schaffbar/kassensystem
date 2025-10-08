@@ -3,8 +3,8 @@ package de.schaffbar.core_pos.rfid_tag_assignment;
 import java.util.List;
 import java.util.Optional;
 
-import de.schaffbar.core_pos.CustomerId;
-import de.schaffbar.core_pos.RfidTagId;
+import de.schaffbar.core_pos.id.CustomerId;
+import de.schaffbar.core_pos.id.RfidTagId;
 import de.schaffbar.core_pos.rfid_tag_assignment.RfidTagAssignmentViews.RfidTagAssignmentView;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;

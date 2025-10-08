@@ -2,9 +2,9 @@ package de.schaffbar.core_pos.rfid_tag_assignment;
 
 import java.time.Instant;
 
-import de.schaffbar.core_pos.CustomerId;
-import de.schaffbar.core_pos.RfidTagAssignmentId;
-import de.schaffbar.core_pos.RfidTagId;
+import de.schaffbar.core_pos.id.CustomerId;
+import de.schaffbar.core_pos.id.RfidTagAssignmentId;
+import de.schaffbar.core_pos.id.RfidTagId;
 import jakarta.validation.constraints.NotNull;
 
 public interface RfidTagAssignmentViews {

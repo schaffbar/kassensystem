@@ -3,7 +3,7 @@ package de.schaffbar.core_pos.customer;
 import java.time.Instant;
 import java.util.UUID;
 
-import de.schaffbar.core_pos.CustomerId;
+import de.schaffbar.core_pos.id.CustomerId;
 import de.schaffbar.core_pos.customer.CustomerCommands.CreateCustomerCommand;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;

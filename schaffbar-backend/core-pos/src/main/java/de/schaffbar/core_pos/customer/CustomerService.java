@@ -3,7 +3,7 @@ package de.schaffbar.core_pos.customer;
 import java.util.List;
 import java.util.Optional;
 
-import de.schaffbar.core_pos.CustomerId;
+import de.schaffbar.core_pos.id.CustomerId;
 import de.schaffbar.core_pos.ResourceNotFoundException;
 import de.schaffbar.core_pos.customer.CustomerCommands.CreateCustomerCommand;
 import de.schaffbar.core_pos.customer.CustomerViews.CustomerView;

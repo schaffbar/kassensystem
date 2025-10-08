@@ -1,7 +1,6 @@
 package de.schaffbar.core_pos.id;
 
-import de.schaffbar.core_pos.ValueObjectAssert;
-import de.schaffbar.core_pos.ValueObjectAssert.ValueObject;
+import de.schaffbar.core_pos.id.ValueObjectAssert.ValueObject;
 import lombok.Value;
 
 @Value(staticConstructor = "of")

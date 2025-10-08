@@ -1,4 +1,4 @@
-package de.schaffbar.core_pos;
+package de.schaffbar.core_pos.id;
 
 import static java.util.Objects.isNull;
 import static org.apache.commons.lang3.StringUtils.isBlank;

@@ -4,6 +4,8 @@ import static java.util.Objects.isNull;
 
 import java.util.Optional;
 
+import de.schaffbar.core_pos.customer.CustomerService;
+import de.schaffbar.core_pos.customer.CustomerViews.CustomerView;
 import de.schaffbar.core_pos.rfid_reader.RfidReaderService;
 import de.schaffbar.core_pos.rfid_reader.RfidReaderType;
 import de.schaffbar.core_pos.rfid_reader.RfidReaderViews.RfidReaderView;
@@ -11,7 +13,7 @@ import de.schaffbar.core_pos.rfid_tag.RfidTagCommands.CreateRfidTagCommand;
 import de.schaffbar.core_pos.rfid_tag.RfidTagService;
 import de.schaffbar.core_pos.rfid_tag.RfidTagViews.RfidTagView;
 import de.schaffbar.core_pos.rfid_tag_assignment.RfidTagAssignmentService;
-import de.schaffbar.core_pos.rfid_tag_assignment.RfidTagAssignmentViews;
+import de.schaffbar.core_pos.rfid_tag_assignment.RfidTagAssignmentViews.RfidTagAssignmentView;
 import de.schaffbar.core_pos.use_case.CustomerAssignRfidTag;
 import de.schaffbar.core_pos.use_case.EnterWorkshop;
 import de.schaffbar.core_pos.use_case.LeaveWorkshop;
@@ -35,6 +37,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @RequestMapping(path = "/device")
 public class TestController {
+
+    private final @NonNull CustomerService customerService;
 
     private final @NonNull RfidTagService rfidTagService;
 
@@ -102,7 +106,7 @@ public class TestController {
 
         CounterResponse response = switch (rfidReader.type()) {
             case RfidReaderType.RFID_TAG_REGISTER -> registerRfidTag(rfidTagId);
-            case RfidReaderType.RFID_TAG_ASSIGNER -> assignRfidTag(rfidTagId);
+            case RfidReaderType.RFID_TAG_ASSIGNER -> assignRfidTagOrGetUser(rfidTagId);
             default -> throw new IllegalStateException("Unexpected value: " + rfidReader.type());
         };
 
@@ -128,19 +132,12 @@ public class TestController {
                 .orElseThrow(() -> ResourceNotFoundException.rfidTag(rfidTagId));
 
         CustomerId customerId = this.rfidTagAssignmentService.getRfidTagAssignment(rfidTag.id()) //
-                .map(RfidTagAssignmentViews.RfidTagAssignmentView::customerId) //
+                .map(RfidTagAssignmentView::customerId) //
                 .orElseThrow(() -> new RuntimeException("TODO: No customer assigned to RFID tag"));
 
         this.enterWorkshop.process(customerId);
 
         this.leaveWorkshop.process(customerId);
-
-        //        if (this.workshopUsageService.isCustomerInWorkshop(customerId)) {
-        //            this.workshopUsageService.leaveWorkshop(customerId);
-        //        }
-        //        else {
-        //            this.workshopUsageService.enterWorkshop(customerId);
-        //        }
 
         DeviceCardResponse response = DeviceCardResponse.builder() //
                 .DEVUSECASE(RfidReaderType.GATE_KEEPER.getKey()) //
@@ -183,14 +180,49 @@ public class TestController {
         }
     }
 
-    private CounterResponse assignRfidTag(RfidTagId rfidTagId) {
-        this.assignRfidTagUseCase.process(rfidTagId);
+    private CounterResponse assignRfidTagOrGetUser(RfidTagId rfidTagId) {
+        // TODO: switch to ifPresentOrElse
+        RfidTagAssignmentView assignment = this.rfidTagAssignmentService.getRfidTagAssignment(rfidTagId).orElse(null);
+        if (isNull(assignment)) {
+            return assignRfidTag(rfidTagId);
+        }
 
-        log.info("Assigned RFID tag with id: {}", rfidTagId);
+        return getUser(assignment.customerId());
+    }
+
+    private CounterResponse assignRfidTag(RfidTagId rfidTagId) {
+        try {
+            this.assignRfidTagUseCase.process(rfidTagId);
+
+            log.info("Assigned RFID tag with id: {}", rfidTagId);
+
+            return CounterResponse.builder() //
+                    .DEVUSECASE(RfidReaderType.RFID_TAG_ASSIGNER.getKey()) //
+                    .ERROR("") //
+                    .STATE("END") //
+                    .ICON("OK") //
+                    .build();
+        }
+        catch (Exception e) {
+            return CounterResponse.builder() //
+                    .DEVUSECASE(RfidReaderType.RFID_TAG_ASSIGNER.getKey()) //
+                    .ERROR(e.getMessage()) //
+                    .STATE("END") //
+                    .ICON("RFID") //
+                    .build();
+        }
+    }
+
+    private CounterResponse getUser(CustomerId customerId) {
+
+        log.info("Get customer name [{}]", customerId);
+
+        CustomerView customer = this.customerService.getCustomer(customerId) //
+                .orElseThrow(() -> ResourceNotFoundException.customer(customerId));
 
         return CounterResponse.builder() //
                 .DEVUSECASE(RfidReaderType.RFID_TAG_ASSIGNER.getKey()) //
-                .ERROR("") //
+                .ERROR(customer.firstName() + " " + customer.lastName()) //
                 .STATE("END") //
                 .ICON("OK") //
                 .build();

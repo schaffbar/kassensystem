@@ -3,6 +3,7 @@ import { Component, inject, input } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatIconModule } from '@angular/material/icon';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatTabsModule } from '@angular/material/tabs';
 
 import { UserAddressComponent } from '../../components/user-address/user-address.component';
@@ -24,6 +25,7 @@ import { UserDetailStore } from './user-detail.store';
     MatButtonModule,
     MatChipsModule,
     MatIconModule,
+    MatSlideToggleModule,
   ],
   providers: [UserDetailStore, RfidTagAssignmentService],
 })

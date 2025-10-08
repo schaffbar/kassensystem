@@ -1,11 +1,23 @@
-package de.schaffbar.core_pos;
+package de.schaffbar.core_pos.device;
 
 import static java.util.Objects.isNull;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 
+import de.schaffbar.core_pos.CustomerId;
+import de.schaffbar.core_pos.MacAddress;
+import de.schaffbar.core_pos.ResourceNotFoundException;
+import de.schaffbar.core_pos.RfidReaderId;
+import de.schaffbar.core_pos.RfidTagId;
 import de.schaffbar.core_pos.customer.CustomerService;
 import de.schaffbar.core_pos.customer.CustomerViews.CustomerView;
+import de.schaffbar.core_pos.device.DeviceApiModel.CounterResponse;
+import de.schaffbar.core_pos.device.DeviceApiModel.DeviceCardRequestBody;
+import de.schaffbar.core_pos.device.DeviceApiModel.DeviceCardResponse;
+import de.schaffbar.core_pos.device.DeviceApiModel.InitRequestBody;
+import de.schaffbar.core_pos.device.DeviceApiModel.InitResponse;
+import de.schaffbar.core_pos.device.DeviceApiModel.RfidTagRequestBody;
 import de.schaffbar.core_pos.rfid_reader.RfidReaderService;
 import de.schaffbar.core_pos.rfid_reader.RfidReaderType;
 import de.schaffbar.core_pos.rfid_reader.RfidReaderViews.RfidReaderView;
@@ -19,7 +31,6 @@ import de.schaffbar.core_pos.use_case.EnterWorkshop;
 import de.schaffbar.core_pos.use_case.LeaveWorkshop;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
-import lombok.Builder;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -36,7 +47,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(path = "/device")
-public class TestController {
+public class DeviceController {
 
     private final @NonNull CustomerService customerService;
 
@@ -54,11 +65,9 @@ public class TestController {
 
     @PostMapping(value = "/init", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<InitResponse> init(@RequestBody @NotNull @Valid InitRequestBody requestBody) {
-
         log.info("Init RFID reader. Received mac address: {}", requestBody.MACADDR());
 
         MacAddress macAddress = MacAddress.of(requestBody.MACADDR());
-
         RfidReaderId id = this.rfidReaderService.getRfidReader(macAddress) //
                 .map(RfidReaderView::id) //
                 .orElseGet(() -> this.rfidReaderService.createRfidReader(macAddress));
@@ -75,18 +84,19 @@ public class TestController {
             case SWITCH_BOX -> "Switch Box";
         };
 
+        LocalDateTime now = LocalDateTime.now();
         InitResponse response = InitResponse.builder() //
                 .STATE(isNull(rfidReader.type()) ? "ERROR" : "START") //
                 .DEVNAME(deviceNme) //
                 .DEVUSECASE(isNull(rfidReader.type()) ? "ERROR" : rfidReader.type().getKey()) //
                 .TERMINAL("") //
                 .ERROR(isNull(rfidReader.type()) ? "Nicht Gefunden" : "") //
-                .DATEY(2025) //
-                .DATEM(8) //
-                .DATED(8) //
-                .TIMEH(2) //
-                .TIMEM(2) //
-                .TIMES(2) //
+                .DATEY(now.getYear()) //
+                .DATEM(now.getMonthValue()) //
+                .DATED(now.getDayOfMonth()) //
+                .TIMEH(now.getHour()) //
+                .TIMEM(now.getMinute()) //
+                .TIMES(now.getSecond()) //
                 .build();
 
         return ResponseEntity.ok(response);
@@ -94,15 +104,13 @@ public class TestController {
 
     @PostMapping(value = "/counter", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<CounterResponse> counter(@RequestBody @NotNull @Valid RfidTagRequestBody requestBody) {
-
         log.info("Received mac address: {}", requestBody.MACADDR());
         log.info("Received RFID tag id: {}", requestBody.RFID());
 
+        RfidTagId rfidTagId = RfidTagId.of(requestBody.RFID());
         MacAddress macAddress = MacAddress.of(requestBody.MACADDR());
         RfidReaderView rfidReader = this.rfidReaderService.getRfidReader(macAddress) //
                 .orElseThrow(() -> ResourceNotFoundException.rfidReader(macAddress));
-
-        RfidTagId rfidTagId = RfidTagId.of(requestBody.RFID());
 
         CounterResponse response = switch (rfidReader.type()) {
             case RfidReaderType.RFID_TAG_REGISTER -> registerRfidTag(rfidTagId);
@@ -115,10 +123,10 @@ public class TestController {
 
     @PostMapping(value = "/card", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<DeviceCardResponse> card(@RequestBody @NotNull @Valid DeviceCardRequestBody requestBody) {
-
         log.info("Received mac address: {}", requestBody.MACADDR());
         log.info("Received RFID tag id: {}", requestBody.RFID());
 
+        RfidTagId rfidTagId = RfidTagId.of(requestBody.RFID());
         MacAddress macAddress = MacAddress.of(requestBody.MACADDR());
         RfidReaderView rfidReader = this.rfidReaderService.getRfidReader(macAddress) //
                 .orElseThrow(() -> ResourceNotFoundException.rfidReader(macAddress));
@@ -127,7 +135,6 @@ public class TestController {
             throw new RuntimeException("TODO: Invalid type of RFID reader");
         }
 
-        RfidTagId rfidTagId = RfidTagId.of(requestBody.RFID());
         RfidTagView rfidTag = this.rfidTagService.getRfidTag(rfidTagId) //
                 .orElseThrow(() -> ResourceNotFoundException.rfidTag(rfidTagId));
 
@@ -158,25 +165,13 @@ public class TestController {
     private CounterResponse registerRfidTag(RfidTagId rfid) {
         Optional<RfidTagView> rfidTag = this.rfidTagService.getRfidTag(rfid);
         if (rfidTag.isPresent()) {
-            return CounterResponse.builder() //
-                    .DEVUSECASE(RfidReaderType.RFID_TAG_REGISTER.getKey()) //
-                    .ERROR("RFID bereits vorhanden!") //
-                    .STATE("END") //
-                    .ICON("RFID") //
-                    .build();
+            return CounterResponse.registerError("RFID bereits vorhanden!");
         }
         else {
             CreateRfidTagCommand command = new CreateRfidTagCommand(rfid.getValue());
-            RfidTagId rfidTagId = this.rfidTagService.createRfidTag(command);
+            this.rfidTagService.createRfidTag(command);
 
-            log.info("Created RFID tag with id: {}", rfidTagId);
-
-            return CounterResponse.builder() //
-                    .DEVUSECASE(RfidReaderType.RFID_TAG_REGISTER.getKey()) //
-                    .ERROR("") //
-                    .STATE("END") //
-                    .ICON("OK") //
-                    .build();
+            return CounterResponse.registerOk();
         }
     }
 
@@ -194,96 +189,20 @@ public class TestController {
         try {
             this.assignRfidTagUseCase.process(rfidTagId);
 
-            log.info("Assigned RFID tag with id: {}", rfidTagId);
-
-            return CounterResponse.builder() //
-                    .DEVUSECASE(RfidReaderType.RFID_TAG_ASSIGNER.getKey()) //
-                    .ERROR("") //
-                    .STATE("END") //
-                    .ICON("OK") //
-                    .build();
+            return CounterResponse.assignerOk();
         }
         catch (Exception e) {
-            return CounterResponse.builder() //
-                    .DEVUSECASE(RfidReaderType.RFID_TAG_ASSIGNER.getKey()) //
-                    .ERROR(e.getMessage()) //
-                    .STATE("END") //
-                    .ICON("RFID") //
-                    .build();
+            return CounterResponse.assignerError(e.getMessage());
         }
     }
 
     private CounterResponse getUser(CustomerId customerId) {
-
-        log.info("Get customer name [{}]", customerId);
-
         CustomerView customer = this.customerService.getCustomer(customerId) //
                 .orElseThrow(() -> ResourceNotFoundException.customer(customerId));
 
-        return CounterResponse.builder() //
-                .DEVUSECASE(RfidReaderType.RFID_TAG_ASSIGNER.getKey()) //
-                .ERROR(customer.firstName() + " " + customer.lastName()) //
-                .STATE("END") //
-                .ICON("OK") //
-                .build();
+        String fullName = customer.firstName() + " " + customer.lastName();
+
+        return CounterResponse.assignerError(fullName);
     }
-
-    // ------------------------------------------------------------------------
-    // Request and Response bodies
-
-    @Builder
-    public record InitRequestBody( //
-            String MACADDR //
-    ) {}
-
-    @Builder
-    public record InitResponse( //
-            String STATE,  //
-            String DEVNAME,  //
-            String STARTHTTP,  //
-            String DEVIP,  //
-            String SWITCHON,  //
-            String SWITCHOFF,  //
-            String DEVUSECASE,  //
-            String TERMINAL,  //
-            String ERROR, //
-            int DATEY, //
-            int DATEM, //
-            int DATED, //
-            int TIMEH, //
-            int TIMEM, //
-            int TIMES //
-    ) {}
-
-    @Builder
-    public record RfidTagRequestBody( //
-            String MACADDR, //
-            String RFID //
-    ) {}
-
-    @Builder
-    public record CounterResponse( //
-            String DEVUSECASE,  //
-            String ERROR,  //
-            String STATE,  //
-            String ICON  //
-    ) {}
-
-    @Builder
-    public record DeviceCardRequestBody( //
-            String MACADDR, //
-            String RFID //
-    ) {}
-
-    @Builder
-    public record DeviceCardResponse( //
-            String DEVUSECASE,  //
-            String ERROR,  //
-            String STATE,  //
-            String ICON,  //
-            String CUSTOMERNAME,  //
-            String CUSTOMERSTARTSTOP,  //
-            String UNITS  //
-    ) {}
 
 }

@@ -11,6 +11,7 @@ import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 
 import { ROUTE } from '../../../app.routes';
+import { ConfirmDeleteUserComponent } from '../../../shared/components/confirm-delete-user.component';
 import { NewUserFormComponent } from '../../components/new-user-form/new-user-form.component';
 import { User } from '../../user.model';
 import { UsersStore } from '../../users.store';
@@ -69,13 +70,11 @@ export class UserListComponent {
       autoFocus: true,
     });
 
-    dialogRef
-      .afterClosed() //
-      .subscribe((user: User) => {
-        if (user) {
-          this.store.createUser(user);
-        }
-      });
+    dialogRef.afterClosed().subscribe((user: User) => {
+      if (user) {
+        this.store.createUser(user);
+      }
+    });
   }
 
   protected deleteUserDialog(event: Event, user: User): void {
@@ -86,6 +85,19 @@ export class UserListComponent {
       return;
     }
 
-    this.store.deleteUser(user.id);
+    const dialogRef = this.dialog.open(ConfirmDeleteUserComponent, {
+      data: {
+        username: user.firstName + ' ' + user.lastName,
+        message: 'Are you sure you want to delete this user?',
+      },
+      minWidth: '600px',
+      disableClose: true,
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.store.deleteUser(user.id);
+      }
+    });
   }
 }

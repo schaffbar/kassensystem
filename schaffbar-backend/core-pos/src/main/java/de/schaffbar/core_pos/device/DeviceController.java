@@ -5,11 +5,7 @@ import static java.util.Objects.isNull;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
-import de.schaffbar.core_pos.id.CustomerId;
-import de.schaffbar.core_pos.id.MacAddress;
 import de.schaffbar.core_pos.ResourceNotFoundException;
-import de.schaffbar.core_pos.id.RfidReaderId;
-import de.schaffbar.core_pos.id.RfidTagId;
 import de.schaffbar.core_pos.customer.CustomerService;
 import de.schaffbar.core_pos.customer.CustomerViews.CustomerView;
 import de.schaffbar.core_pos.device.DeviceApiModel.CounterResponse;
@@ -18,6 +14,10 @@ import de.schaffbar.core_pos.device.DeviceApiModel.DeviceCardResponse;
 import de.schaffbar.core_pos.device.DeviceApiModel.InitRequestBody;
 import de.schaffbar.core_pos.device.DeviceApiModel.InitResponse;
 import de.schaffbar.core_pos.device.DeviceApiModel.RfidTagRequestBody;
+import de.schaffbar.core_pos.id.CustomerId;
+import de.schaffbar.core_pos.id.MacAddress;
+import de.schaffbar.core_pos.id.RfidReaderId;
+import de.schaffbar.core_pos.id.RfidTagId;
 import de.schaffbar.core_pos.rfid_reader.RfidReaderService;
 import de.schaffbar.core_pos.rfid_reader.RfidReaderType;
 import de.schaffbar.core_pos.rfid_reader.RfidReaderViews.RfidReaderView;
@@ -75,14 +75,20 @@ public class DeviceController {
         RfidReaderView rfidReader = this.rfidReaderService.getRfidReader(id) //
                 .orElseThrow(() -> ResourceNotFoundException.rfidReader(id));
 
-        String deviceNme = switch (rfidReader.type()) {
-            case RFID_TAG_REGISTER -> "RFID Tag Register";
-            case RFID_TAG_ASSIGNER -> "RFID Tag Assigner";
-            case GATE_KEEPER -> "Gate Keeper";
-            case GATE_KEEPER_IN -> "Gate Keeper In";
-            case GATE_KEEPER_OUT -> "Gate Keeper Out";
-            case SWITCH_BOX -> "Switch Box";
-        };
+        String deviceNme;
+        if (isNull(rfidReader.type())) {
+            deviceNme = "ERROR";
+        }
+        else {
+            deviceNme = switch (rfidReader.type()) {
+                case RFID_TAG_REGISTER -> "RFID Tag Register";
+                case RFID_TAG_ASSIGNER -> "RFID Tag Assigner";
+                case GATE_KEEPER -> "Gate Keeper";
+                case GATE_KEEPER_IN -> "Gate Keeper In";
+                case GATE_KEEPER_OUT -> "Gate Keeper Out";
+                case SWITCH_BOX -> "Switch Box";
+            };
+        }
 
         LocalDateTime now = LocalDateTime.now();
         InitResponse response = InitResponse.builder() //
@@ -131,9 +137,9 @@ public class DeviceController {
         RfidReaderView rfidReader = this.rfidReaderService.getRfidReader(macAddress) //
                 .orElseThrow(() -> ResourceNotFoundException.rfidReader(macAddress));
 
-        if (rfidReader.type() != RfidReaderType.GATE_KEEPER) {
-            throw new RuntimeException("TODO: Invalid type of RFID reader");
-        }
+        //        if (rfidReader.type() != RfidReaderType.GATE_KEEPER) {
+        //            throw new RuntimeException("TODO: Invalid type of RFID reader");
+        //        }
 
         RfidTagView rfidTag = this.rfidTagService.getRfidTag(rfidTagId) //
                 .orElseThrow(() -> ResourceNotFoundException.rfidTag(rfidTagId));
@@ -142,19 +148,34 @@ public class DeviceController {
                 .map(RfidTagAssignmentView::customerId) //
                 .orElseThrow(() -> new RuntimeException("TODO: No customer assigned to RFID tag"));
 
-        this.enterWorkshop.process(customerId);
-
-        this.leaveWorkshop.process(customerId);
-
-        DeviceCardResponse response = DeviceCardResponse.builder() //
-                .DEVUSECASE(RfidReaderType.GATE_KEEPER.getKey()) //
-                .ERROR("") //
-                .STATE("END") //
-                .ICON("HI") //
-                .CUSTOMERNAME("Max Mustermann") //
-                .CUSTOMERSTARTSTOP("3:00") //
-                .UNITS("5:00") //
-                .build();
+        DeviceCardResponse response;
+        if (rfidReader.type() == RfidReaderType.GATE_KEEPER_IN) {
+            this.enterWorkshop.process(customerId);
+            response = DeviceCardResponse.builder() //
+                    .DEVUSECASE(RfidReaderType.GATE_KEEPER.getKey()) //
+                    .ERROR("") //
+                    .STATE("END") //
+                    .ICON("HI") //
+                    .CUSTOMERNAME("Max Musterman") //
+                    .CUSTOMERSTARTSTOP("3:00") //
+                    .UNITS("5:00") //
+                    .build();
+        }
+        else if (rfidReader.type() == RfidReaderType.GATE_KEEPER_OUT) {
+            this.leaveWorkshop.process(customerId);
+            response = DeviceCardResponse.builder() //
+                    .DEVUSECASE(RfidReaderType.GATE_KEEPER.getKey()) //
+                    .ERROR("") //
+                    .STATE("END") //
+                    .ICON("BYE") //
+                    .CUSTOMERNAME("Max Musterman") //
+                    .CUSTOMERSTARTSTOP("3:00") //
+                    .UNITS("5:00") //
+                    .build();
+        }
+        else {
+            throw new RuntimeException("TODO: Invalid type of RFID reader");
+        }
 
         return ResponseEntity.ok(response);
     }

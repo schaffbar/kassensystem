@@ -35,6 +35,8 @@ public interface DeviceApiModel {
             String DEVUSECASE,  //
             String ERROR,  //
             String STATE,  //
+            String CUSTOMERNAME,  //
+            String RFID,  //
             String ICON  //
     ) {
 
@@ -43,6 +45,8 @@ public interface DeviceApiModel {
                     .DEVUSECASE(RfidReaderType.RFID_TAG_ASSIGNER.getKey()) //
                     .ERROR("") //
                     .STATE("END") //
+                    .CUSTOMERNAME("Piotr") //
+                    .RFID("123456") //
                     .ICON("OK") //
                     .build();
         }

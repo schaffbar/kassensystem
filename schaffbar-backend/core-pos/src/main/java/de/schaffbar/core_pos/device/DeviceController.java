@@ -152,7 +152,7 @@ public class DeviceController {
         if (rfidReader.type() == RfidReaderType.GATE_KEEPER_IN) {
             this.enterWorkshop.process(customerId);
             response = DeviceCardResponse.builder() //
-                    .DEVUSECASE(RfidReaderType.GATE_KEEPER.getKey()) //
+                    .DEVUSECASE(RfidReaderType.GATE_KEEPER_IN.getKey()) //
                     .ERROR("") //
                     .STATE("END") //
                     .ICON("HI") //
@@ -164,7 +164,7 @@ public class DeviceController {
         else if (rfidReader.type() == RfidReaderType.GATE_KEEPER_OUT) {
             this.leaveWorkshop.process(customerId);
             response = DeviceCardResponse.builder() //
-                    .DEVUSECASE(RfidReaderType.GATE_KEEPER.getKey()) //
+                    .DEVUSECASE(RfidReaderType.GATE_KEEPER_OUT.getKey()) //
                     .ERROR("") //
                     .STATE("END") //
                     .ICON("BYE") //

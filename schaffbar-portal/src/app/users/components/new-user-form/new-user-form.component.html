@@ -40,10 +40,7 @@
     <div class="col">
       <mat-form-field class="full-width" appearance="outline">
         <mat-label>Phone</mat-label>
-        <input id="phone" matInput placeholder="Phone" formControlName="phone" />
-        @if (userForm.controls['phone'].hasError('required')) {
-          <mat-error>Phone is <strong>required</strong></mat-error>
-        }
+        <input id="phone" matInput formControlName="phone" />
       </mat-form-field>
     </div>
   </div>

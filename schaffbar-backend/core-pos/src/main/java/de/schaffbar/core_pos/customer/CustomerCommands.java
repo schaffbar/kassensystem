@@ -1,6 +1,8 @@
 package de.schaffbar.core_pos.customer;
 
+import de.schaffbar.core_pos.id.CustomerId;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 public interface CustomerCommands {
 
@@ -8,7 +10,24 @@ public interface CustomerCommands {
             @NotBlank String firstName, //
             @NotBlank String lastName, //
             @NotBlank String email, //
-            @NotBlank String phone, //
+            String phone, //
+            @NotBlank String addressLine1, //
+            String addressLine2, //
+            @NotBlank String postalCode, //
+            @NotBlank String city, //
+            @NotBlank String country //
+    ) {}
+
+    record UpdateCustomerContactCommand( //
+            @NotNull CustomerId id, //
+            @NotBlank String firstName, //
+            @NotBlank String lastName, //
+            @NotBlank String email, //
+            String phone //
+    ) {}
+
+    record UpdateCustomerAddressCommand( //
+            @NotNull CustomerId id, //
             @NotBlank String addressLine1, //
             String addressLine2, //
             @NotBlank String postalCode, //

@@ -3,10 +3,13 @@ package de.schaffbar.core_pos.customer;
 import java.util.List;
 import java.util.Optional;
 
-import de.schaffbar.core_pos.id.CustomerId;
 import de.schaffbar.core_pos.ResourceNotFoundException;
 import de.schaffbar.core_pos.customer.CustomerCommands.CreateCustomerCommand;
+import de.schaffbar.core_pos.customer.CustomerCommands.UpdateCustomerAddressCommand;
+import de.schaffbar.core_pos.customer.CustomerCommands.UpdateCustomerContactCommand;
 import de.schaffbar.core_pos.customer.CustomerViews.CustomerView;
+import de.schaffbar.core_pos.id.CustomerId;
+import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.NonNull;
@@ -38,6 +41,7 @@ public class CustomerService {
     // ------------------------------------------------------------------------
     // command
 
+    @Transactional
     public CustomerId createCustomer(@NotNull @Valid CreateCustomerCommand command) {
         Customer customer = Customer.of(command);
         Customer savedCustomer = this.customerRepository.save(customer);
@@ -45,6 +49,25 @@ public class CustomerService {
         return savedCustomer.getCustomerId();
     }
 
+    @Transactional
+    public void updateCustomerContact(@NotNull @Valid UpdateCustomerContactCommand command) {
+        this.customerRepository.findById(command.id().getValue()) //
+                .ifPresentOrElse( //
+                        customer -> customer.updateContact(command), //
+                        throwCustomerNotFoundException(command.id()) //
+                );
+    }
+
+    @Transactional
+    public void updateCustomerAddress(@NotNull @Valid UpdateCustomerAddressCommand command) {
+        this.customerRepository.findById(command.id().getValue()) //
+                .ifPresentOrElse( //
+                        customer -> customer.updateAddress(command), //
+                        throwCustomerNotFoundException(command.id()) //
+                );
+    }
+
+    @Transactional
     public void deleteCustomer(@NotNull @Valid CustomerId id) {
         CustomerView customerView = getCustomer(id) //
                 .orElseThrow(() -> ResourceNotFoundException.customer(id));
@@ -53,6 +76,15 @@ public class CustomerService {
         // TODO: check if customer is assigned to a RFID tag before deleting, ...
 
         this.customerRepository.deleteById(customerView.id().getValue());
+    }
+
+    // ------------------------------------------------------------------------
+    // helper
+
+    private Runnable throwCustomerNotFoundException(CustomerId id) {
+        return () -> {
+            throw ResourceNotFoundException.customer(id);
+        };
     }
 
 }

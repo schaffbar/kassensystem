@@ -13,7 +13,7 @@ public interface CustomerViews {
             @NotBlank String firstName, //
             @NotBlank String lastName, //
             @NotBlank String email, //
-            @NotBlank String phone, //
+            String phone, //
             @NotNull CustomerAddressView address, //
             @NotNull Instant createdAt, //
             @NotNull Instant updatedAt //

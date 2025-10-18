@@ -3,11 +3,14 @@ package de.schaffbar.core_pos.customer;
 import java.time.Instant;
 import java.util.UUID;
 
-import de.schaffbar.core_pos.id.CustomerId;
 import de.schaffbar.core_pos.customer.CustomerCommands.CreateCustomerCommand;
+import de.schaffbar.core_pos.customer.CustomerCommands.UpdateCustomerAddressCommand;
+import de.schaffbar.core_pos.customer.CustomerCommands.UpdateCustomerContactCommand;
+import de.schaffbar.core_pos.id.CustomerId;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.persistence.Version;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
@@ -36,7 +39,6 @@ class Customer {
     @NotBlank
     private String email;
 
-    @NotBlank
     private String phone;
 
     @NotNull
@@ -45,18 +47,11 @@ class Customer {
     @NotNull
     private Instant createdAt;
 
-    @NotNull
+    @Version
     private Instant updatedAt;
 
     // ------------------------------------------------------------------------
     // constructor
-
-    public CustomerId getCustomerId() {
-        return CustomerId.of(this.id);
-    }
-
-    // ------------------------------------------------------------------------
-    // query
 
     static Customer of(CreateCustomerCommand command) {
         Customer customer = new Customer();
@@ -67,12 +62,29 @@ class Customer {
         customer.lastName = command.lastName();
         customer.address = CustomerAddress.of(command);
         customer.createdAt = Instant.now();
-        customer.updatedAt = Instant.now();
 
         return customer;
     }
 
     // ------------------------------------------------------------------------
+    // query
+
+    public CustomerId getCustomerId() {
+        return CustomerId.of(this.id);
+    }
+
+    // ------------------------------------------------------------------------
     // command
+
+    public void updateAddress(UpdateCustomerAddressCommand command) {
+        this.address.update(command);
+    }
+
+    public void updateContact(UpdateCustomerContactCommand command) {
+        this.firstName = command.firstName();
+        this.lastName = command.lastName();
+        this.email = command.email();
+        this.phone = command.phone();
+    }
 
 }

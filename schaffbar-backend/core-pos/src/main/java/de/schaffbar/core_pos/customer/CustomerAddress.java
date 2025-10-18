@@ -1,6 +1,7 @@
 package de.schaffbar.core_pos.customer;
 
 import de.schaffbar.core_pos.customer.CustomerCommands.CreateCustomerCommand;
+import de.schaffbar.core_pos.customer.CustomerCommands.UpdateCustomerAddressCommand;
 import jakarta.persistence.Embeddable;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AccessLevel;
@@ -37,6 +38,14 @@ public class CustomerAddress {
         address.country = command.country();
 
         return address;
+    }
+
+    public void update(UpdateCustomerAddressCommand command) {
+        this.addressLine1 = command.addressLine1();
+        this.addressLine2 = command.addressLine2();
+        this.postalCode = command.postalCode();
+        this.city = command.city();
+        this.country = command.country();
     }
 
 }

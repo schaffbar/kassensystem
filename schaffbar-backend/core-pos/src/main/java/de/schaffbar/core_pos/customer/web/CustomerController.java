@@ -4,12 +4,16 @@ import java.net.URI;
 import java.util.List;
 import java.util.UUID;
 
-import de.schaffbar.core_pos.id.CustomerId;
 import de.schaffbar.core_pos.ResourceNotFoundException;
 import de.schaffbar.core_pos.customer.CustomerCommands.CreateCustomerCommand;
+import de.schaffbar.core_pos.customer.CustomerCommands.UpdateCustomerAddressCommand;
+import de.schaffbar.core_pos.customer.CustomerCommands.UpdateCustomerContactCommand;
 import de.schaffbar.core_pos.customer.CustomerService;
 import de.schaffbar.core_pos.customer.web.CustomerApiModel.CreateCustomerRequestBody;
 import de.schaffbar.core_pos.customer.web.CustomerApiModel.CustomerApiDto;
+import de.schaffbar.core_pos.customer.web.CustomerApiModel.UpdateCustomerAddressRequestBody;
+import de.schaffbar.core_pos.customer.web.CustomerApiModel.UpdateCustomerContactRequestBody;
+import de.schaffbar.core_pos.id.CustomerId;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.NonNull;
@@ -21,6 +25,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -67,10 +72,27 @@ public class CustomerController {
         return ResponseEntity.created(location).build();
     }
 
+    @PutMapping(value = "/{customerId}/contact", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<String> updateCustomerContact(@PathVariable @NotNull CustomerId customerId,
+            @RequestBody @NotNull @Valid UpdateCustomerContactRequestBody requestBody) {
+        UpdateCustomerContactCommand command = CustomerApiMapper.MAPPER.toUpdateCustomerContactCommand(customerId, requestBody);
+        this.customerService.updateCustomerContact(command);
+
+        return ResponseEntity.ok().build();
+    }
+
+    @PutMapping(value = "/{customerId}/address", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<String> updateCustomerAddress(@PathVariable @NotNull CustomerId customerId,
+            @RequestBody @NotNull @Valid UpdateCustomerAddressRequestBody requestBody) {
+        UpdateCustomerAddressCommand command = CustomerApiMapper.MAPPER.toUpdateCustomerAddressCommand(customerId, requestBody);
+        this.customerService.updateCustomerAddress(command);
+
+        return ResponseEntity.ok().build();
+    }
+
     @DeleteMapping(value = "/{customerId}")
-    public ResponseEntity<Void> deleteCustomer(@PathVariable @NotNull UUID customerId) {
-        CustomerId id = CustomerId.of(customerId);
-        this.customerService.deleteCustomer(id);
+    public ResponseEntity<Void> deleteCustomer(@PathVariable @NotNull CustomerId customerId) {
+        this.customerService.deleteCustomer(customerId);
 
         return ResponseEntity.noContent().build();
     }

@@ -17,7 +17,7 @@ public interface CustomerApiModel {
             @NotBlank String firstName, //
             @NotBlank String lastName, //
             @NotBlank String email, //
-            @NotBlank String phone, //
+            String phone, //
             @NotNull CustomerAddressApiDto address, //
             @NotNull Instant createdAt, //
             @NotNull Instant updatedAt //
@@ -38,12 +38,27 @@ public interface CustomerApiModel {
             @NotBlank String firstName, //
             @NotBlank String lastName, //
             @NotBlank String email, //
-            @NotBlank String phone, //
+            String phone, //
             @NotBlank String addressLine1, //
             String addressLine2, //
             @NotBlank String postalCode, //
             @NotBlank String city, //
             @NotBlank String country //
+    ) {}
+
+    record UpdateCustomerAddressRequestBody( //
+            @NotBlank String addressLine1, //
+            String addressLine2, //
+            @NotBlank String postalCode, //
+            @NotBlank String city, //
+            @NotBlank String country //
+    ) {}
+
+    record UpdateCustomerContactRequestBody( //
+            @NotBlank String firstName, //
+            @NotBlank String lastName, //
+            @NotBlank String email, //
+            String phone //
     ) {}
 
 }

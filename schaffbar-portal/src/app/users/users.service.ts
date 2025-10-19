@@ -4,7 +4,7 @@ import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
 import { environment } from '../../environments/environment';
-import { User } from './user.model';
+import { User, UserAddress } from './user.model';
 
 const USERS_API_URL = `${environment.apiBaseUrl}/api/v1/customers`;
 
@@ -19,6 +19,9 @@ export class UsersService {
     }),
   };
 
+  // --------------------------------------------------------------------------
+  // queries
+
   getUsers(): Observable<User[]> {
     return this.http.get<User[]>(USERS_API_URL);
   }
@@ -31,8 +34,15 @@ export class UsersService {
     return this.http.get<User>(`${USERS_API_URL}/${id}`);
   }
 
+  // --------------------------------------------------------------------------
+  // commands
+
   createUser(user: User): Observable<User> {
     return this.http.post<User>(USERS_API_URL, user, this.httpOptions);
+  }
+
+  updateUserAddress(id: string, address: UserAddress): Observable<void> {
+    return this.http.put<void>(`${USERS_API_URL}/${id}/address`, address, this.httpOptions);
   }
 
   deleteUser(id: string): Observable<void> {

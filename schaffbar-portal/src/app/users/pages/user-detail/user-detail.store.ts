@@ -17,7 +17,7 @@ import { exhaustMap, filter, pipe, tap } from 'rxjs';
 import { setError, setFulfilled, setPending, withRequestStatus } from '../../../shared/state/request-status.feature';
 import { RfidTagAssignment, RfidTagAssignmentStatus } from '../../rfid-tag-assignment.model';
 import { RfidTagAssignmentService } from '../../rfid-tag-assignment.service';
-import { User } from '../../user.model';
+import { User, UserAddress } from '../../user.model';
 import { UsersService } from '../../users.service';
 
 interface UserDetailState {
@@ -90,6 +90,21 @@ export const UserDetailStore = signalStore(
             tapResponse({
               next: (rfidTagAssignment) => {
                 patchState(store, { rfidTagAssignment }, setFulfilled());
+              },
+              error: (error: { message: string }) => patchState(store, setError(error.message)),
+            }),
+          );
+        }),
+      ),
+    ),
+    updateUserAddress: rxMethod<{ id: string; address: UserAddress }>(
+      pipe(
+        tap(() => patchState(store, setPending())),
+        exhaustMap(({ id, address }) => {
+          return store._usersService.updateUserAddress(id, address).pipe(
+            tapResponse({
+              next: () => {
+                patchState(store, setFulfilled(), setDirty());
               },
               error: (error: { message: string }) => patchState(store, setError(error.message)),
             }),

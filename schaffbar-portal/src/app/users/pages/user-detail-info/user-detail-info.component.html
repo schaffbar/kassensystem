@@ -4,13 +4,7 @@
 </div>
 
 <div class="user-address">
-  <h3 style="display: flex; align-items: center; gap: 0.5rem">
-    Address:
-    <button mat-icon-button type="button" aria-label="Edit address">
-      <mat-icon>edit</mat-icon>
-    </button>
-  </h3>
-  <schbar-user-address [userAddress]="user().address" />
+  <schbar-user-address [userAddress]="user().address" (addressChanged)="onAddressChanged($event)" />
 </div>
 
 <div class="user-other">

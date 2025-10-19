@@ -6,6 +6,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatTabsModule } from '@angular/material/tabs';
 
 import { RfidTagAssignmentService } from '../../rfid-tag-assignment.service';
+import { UserAddress } from '../../user.model';
 import { UserDetailInfoComponent } from '../user-detail-info/user-detail-info.component';
 import { UserOpenSessionComponent } from '../user-open-session/user-open-session.component';
 import { UserDetailStore } from './user-detail.store';
@@ -47,5 +48,10 @@ export class UserDetailComponent {
 
   protected unassignRfidTag(): void {
     this.detailsStore.unassignRfidTag(this.id);
+  }
+
+  protected onAddressChanged(address: UserAddress) {
+    console.log('Address changed:', address);
+    this.detailsStore.updateUserAddress({ id: this.id(), address });
   }
 }

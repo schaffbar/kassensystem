@@ -1,3 +1,10 @@
+<h3 class="address-header">
+  Address:
+  <button mat-icon-button type="button" aria-label="Edit address" (click)="updateAddress()" [disabled]="!readonly()">
+    <mat-icon>edit</mat-icon>
+  </button>
+</h3>
+
 <form [formGroup]="userAddressForm">
   <div class="row">
     <div class="col">
@@ -56,4 +63,11 @@
       </mat-form-field>
     </div>
   </div>
+
+  @if (!this.readonly()) {
+    <div class="actions">
+      <button mat-stroked-button mat-dialog-close (click)="onCancel()">Cancel</button>
+      <button mat-flat-button color="primary" type="submit" (click)="onSave()">Save</button>
+    </div>
+  }
 </form>

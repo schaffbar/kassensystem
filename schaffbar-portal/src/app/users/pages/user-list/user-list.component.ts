@@ -20,7 +20,6 @@ import { UsersStore } from '../../users.store';
   selector: 'schbar-user-list',
   templateUrl: './user-list.component.html',
   styleUrl: './user-list.component.scss',
-  standalone: true,
   imports: [
     MatButtonModule,
     MatTableModule,

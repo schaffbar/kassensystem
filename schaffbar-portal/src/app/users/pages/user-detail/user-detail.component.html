@@ -38,11 +38,7 @@
   <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="center" dynamicHeight>
     <mat-tab label="Details">
       <div class="tab-content">
-        <schbar-user-contact [user]="user" />
-        <schbar-user-address [userAddress]="user.address" />
-        <h3>Other:</h3>
-        <p><mat-slide-toggle labelPosition="before">Vereinsmitglied: </mat-slide-toggle></p>
-        <p><mat-slide-toggle labelPosition="before">Jahresabo: </mat-slide-toggle></p>
+        <schbar-user-detail-info [user]="user" />
       </div>
     </mat-tab>
     <mat-tab label="Open Session">

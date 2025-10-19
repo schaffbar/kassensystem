@@ -3,12 +3,10 @@ import { Component, inject, input } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatIconModule } from '@angular/material/icon';
-import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatTabsModule } from '@angular/material/tabs';
 
-import { UserAddressComponent } from '../../components/user-address/user-address.component';
-import { UserContactComponent } from '../../components/user-contact/user-contact.component';
 import { RfidTagAssignmentService } from '../../rfid-tag-assignment.service';
+import { UserDetailInfoComponent } from '../user-detail-info/user-detail-info.component';
 import { UserOpenSessionComponent } from '../user-open-session/user-open-session.component';
 import { UserDetailStore } from './user-detail.store';
 
@@ -16,16 +14,13 @@ import { UserDetailStore } from './user-detail.store';
   selector: 'schbar-user-detail',
   templateUrl: './user-detail.component.html',
   styleUrl: './user-detail.component.scss',
-  standalone: true,
   imports: [
-    UserAddressComponent,
-    UserContactComponent,
+    UserDetailInfoComponent,
     UserOpenSessionComponent,
     MatTabsModule,
     MatButtonModule,
     MatChipsModule,
     MatIconModule,
-    MatSlideToggleModule,
   ],
   providers: [UserDetailStore, RfidTagAssignmentService],
 })

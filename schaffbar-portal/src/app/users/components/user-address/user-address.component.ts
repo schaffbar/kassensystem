@@ -17,6 +17,7 @@ import { UserAddress } from '../../user.model';
 })
 export class UserAddressComponent {
   userAddress = input.required<UserAddress>();
+  readonly = input<boolean>(true);
 
   private fb = inject(NonNullableFormBuilder);
 

@@ -4,7 +4,6 @@ import { Component } from '@angular/core';
   selector: 'schbar-about',
   templateUrl: './about.component.html',
   styleUrl: './about.component.scss',
-  standalone: true,
   imports: [],
 })
 export class AboutComponent {}

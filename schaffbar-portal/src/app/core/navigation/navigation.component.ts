@@ -22,7 +22,6 @@ export interface MenuItem {
   selector: 'schbar-navigation',
   templateUrl: './navigation.component.html',
   styleUrl: './navigation.component.scss',
-  standalone: true,
   imports: [
     RouterOutlet,
     RouterLink,

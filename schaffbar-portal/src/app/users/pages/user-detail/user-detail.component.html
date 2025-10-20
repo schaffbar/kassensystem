@@ -38,7 +38,10 @@
   <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="center" dynamicHeight>
     <mat-tab label="Details">
       <div class="tab-content">
-        <schbar-user-detail-info [user]="user" (addressChanged)="onAddressChanged($event)" />
+        <schbar-user-detail-info
+          [user]="user"
+          (addressChanged)="onAddressChanged($event)"
+          (contactChanged)="onContactChanged($event)" />
       </div>
     </mat-tab>
     <mat-tab label="Open Session">

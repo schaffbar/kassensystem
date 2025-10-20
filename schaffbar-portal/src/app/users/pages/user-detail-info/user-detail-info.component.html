@@ -1,6 +1,5 @@
 <div class="user-contact">
-  <h3>Contact:</h3>
-  <schbar-user-contact [user]="user()" />
+  <schbar-user-contact [user]="user()" (contactChanged)="onContactChanged($event)" />
 </div>
 
 <div class="user-address">

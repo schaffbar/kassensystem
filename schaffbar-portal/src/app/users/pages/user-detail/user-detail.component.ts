@@ -54,4 +54,9 @@ export class UserDetailComponent {
     console.log('Address changed:', address);
     this.detailsStore.updateUserAddress({ id: this.id(), address });
   }
+
+  protected onContactChanged(contact: { email: string; phone: string }) {
+    console.log('Contact changed:', contact);
+    this.detailsStore.updateUserContact({ id: this.id(), ...contact });
+  }
 }

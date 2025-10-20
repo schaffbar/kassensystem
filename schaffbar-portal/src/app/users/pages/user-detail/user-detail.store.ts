@@ -97,6 +97,21 @@ export const UserDetailStore = signalStore(
         }),
       ),
     ),
+    updateUserContact: rxMethod<{ id: string; email: string; phone: string }>(
+      pipe(
+        tap(() => patchState(store, setPending())),
+        exhaustMap(({ id, email, phone }) => {
+          return store._usersService.updateUserContact(id, { email, phone }).pipe(
+            tapResponse({
+              next: () => {
+                patchState(store, setFulfilled(), setDirty());
+              },
+              error: (error: { message: string }) => patchState(store, setError(error.message)),
+            }),
+          );
+        }),
+      ),
+    ),
     updateUserAddress: rxMethod<{ id: string; address: UserAddress }>(
       pipe(
         tap(() => patchState(store, setPending())),

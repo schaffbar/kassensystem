@@ -16,8 +16,13 @@ export class UserDetailInfoComponent {
   user = input.required<User>();
 
   addressChanged = output<UserAddress>();
+  contactChanged = output<{ email: string; phone: string }>();
 
   onAddressChanged(address: UserAddress) {
     this.addressChanged.emit(address);
+  }
+
+  onContactChanged(contact: { email: string; phone: string }) {
+    this.contactChanged.emit(contact);
   }
 }

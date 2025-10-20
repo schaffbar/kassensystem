@@ -1,16 +1,32 @@
-<div class="row">
-  <div class="col">
-    <mat-form-field class="full-width" appearance="outline" [floatLabel]="'always'" [hideRequiredMarker]="true">
-      <mat-label>Email</mat-label>
-      <input matInput placeholder="Email" [value]="user().email" readonly />
-    </mat-form-field>
+<h3 class="contact-header">
+  Contact:
+  <button mat-icon-button type="button" aria-label="Edit contact" (click)="updateContact()" [disabled]="!readonly()">
+    <mat-icon>edit</mat-icon>
+  </button>
+</h3>
+
+<form [formGroup]="userContactForm">
+  <div class="row">
+    <div class="col">
+      <mat-form-field class="full-width" appearance="outline" [floatLabel]="'always'" [hideRequiredMarker]="true">
+        <mat-label>Email</mat-label>
+        <input matInput placeholder="Email" formControlName="email" [readonly]="readonly()" />
+      </mat-form-field>
+    </div>
   </div>
-</div>
-<div class="row">
-  <div class="col">
-    <mat-form-field class="full-width" appearance="outline" [floatLabel]="'always'" [hideRequiredMarker]="true">
-      <mat-label>Phone</mat-label>
-      <input matInput [value]="user().phone" readonly />
-    </mat-form-field>
+  <div class="row">
+    <div class="col">
+      <mat-form-field class="full-width" appearance="outline" [floatLabel]="'always'" [hideRequiredMarker]="true">
+        <mat-label>Phone</mat-label>
+        <input matInput formControlName="phone" [readonly]="readonly()" />
+      </mat-form-field>
+    </div>
   </div>
-</div>
+
+  @if (!this.readonly()) {
+    <div class="actions">
+      <button mat-stroked-button mat-dialog-close (click)="onCancel()">Cancel</button>
+      <button mat-flat-button color="primary" type="submit" (click)="onSave()">Save</button>
+    </div>
+  }
+</form>

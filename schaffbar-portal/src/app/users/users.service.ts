@@ -41,6 +41,10 @@ export class UsersService {
     return this.http.post<User>(USERS_API_URL, user, this.httpOptions);
   }
 
+  updateUserContact(id: string, contact: { email: string; phone: string }): Observable<void> {
+    return this.http.put<void>(`${USERS_API_URL}/${id}/contact`, contact, this.httpOptions);
+  }
+
   updateUserAddress(id: string, address: UserAddress): Observable<void> {
     return this.http.put<void>(`${USERS_API_URL}/${id}/address`, address, this.httpOptions);
   }

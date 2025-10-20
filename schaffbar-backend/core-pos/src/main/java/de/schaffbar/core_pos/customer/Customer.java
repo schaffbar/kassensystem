@@ -81,8 +81,6 @@ class Customer {
     }
 
     public void updateContact(UpdateCustomerContactCommand command) {
-        this.firstName = command.firstName();
-        this.lastName = command.lastName();
         this.email = command.email();
         this.phone = command.phone();
     }

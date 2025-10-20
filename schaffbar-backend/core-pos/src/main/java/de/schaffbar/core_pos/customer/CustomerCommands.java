@@ -20,8 +20,6 @@ public interface CustomerCommands {
 
     record UpdateCustomerContactCommand( //
             @NotNull CustomerId id, //
-            @NotBlank String firstName, //
-            @NotBlank String lastName, //
             @NotBlank String email, //
             String phone //
     ) {}

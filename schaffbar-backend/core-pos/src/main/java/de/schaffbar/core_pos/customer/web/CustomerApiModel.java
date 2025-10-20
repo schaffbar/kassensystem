@@ -55,8 +55,6 @@ public interface CustomerApiModel {
     ) {}
 
     record UpdateCustomerContactRequestBody( //
-            @NotBlank String firstName, //
-            @NotBlank String lastName, //
             @NotBlank String email, //
             String phone //
     ) {}

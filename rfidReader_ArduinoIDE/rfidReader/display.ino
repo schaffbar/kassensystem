@@ -43,12 +43,12 @@ const uint cDspSwitchNameValY       =  60;
 const uint cDspSwitchNameValLen     = 180;
 const uint cDspSwitchNameValHeight  =  20;
 
-      const uint cDspSwitchTimeX          = 200;
-      const uint cDspSwitchTimeY          =  50;
-      const uint cDspSwitchTimeValX       = 280;
-      const uint cDspSwitchTimeValY       =  40;
-      const uint cDspSwitchTimeValLen     = 180;
-      const uint cDspSwitchTimeValHeight  =  20;
+const uint cDspSwitchTimeX          = 200;
+const uint cDspSwitchTimeY          =  50;
+const uint cDspSwitchTimeValX       = 280;
+const uint cDspSwitchTimeValY       =  40;
+const uint cDspSwitchTimeValLen     = 180;
+const uint cDspSwitchTimeValHeight  =  20;
 
       const uint cDspSwitchUnitX          =  15;
       const uint cDspSwitchUnitY          =  60;

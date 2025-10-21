@@ -1,5 +1,5 @@
 
-void initTime()
+void initTime()  
 /****************************************************************************************************
  * void initTime() - Initialization of the Timer Object with a start date and time
  * and also calling the functions to init the associated time  and unit counter 

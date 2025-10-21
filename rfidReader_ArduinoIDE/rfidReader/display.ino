@@ -522,7 +522,7 @@ void dsplyIdle()
           dsplyIdleText(strDevName); 
         }
       }
-      else if( eUC == GateKeeper)
+      else if((eUC == GateKeeperIn) or (eUC == GateKeeperOut))
       {
         // <a href="https://www.flaticon.com/free-icons/gate" title="gate icons">Gate icons created by Freepik - Flaticon</a>
         if(uiSDCardFlag == 1)
@@ -559,22 +559,22 @@ void dsplyMask()
  * void dsplyMask() - in dependency of the use case the basic mask will be displayed
  ****************************************************************************************************/
   {
-  if (cDevUseCase == 'S')
+  if (strDevUseCase == String('S'))
   {
     dsplySwitchBox();
   }
-  else if(cDevUseCase == 'C')
+  else if(strDevUseCase == String('C'))
   {
     dsplyCounter();
   }
-  else if(cDevUseCase == 'G')
+  else if((strDevUseCase == "GI") or (strDevUseCase == "GO"))
   {  
     dsplyGateKeeper();
     updateGateKeeper();
   }
   else
   {
-    dsplyErrorInfo("Error","Unkown UseCase"+String(cDevUseCase),5,0,0);
+    dsplyErrorInfo("Error","Unkown UseCase "+strDevUseCase,5,0,0);
   }
   if(bWifiLostFlag)
   { // Wifi Connnection lost ->
@@ -796,6 +796,8 @@ void dsplySWVersion()
   tft.setTextSize(1);
   tft.print("SW Version: "); 
   tft.print(sw_version); 
+  tft.print(" Server: ");
+  tft.print(ip);
   tft.setTextSize(2);
 }
 

@@ -1,3 +1,4 @@
+
 void initTime()
 /****************************************************************************************************
  * void initTime() - Initialization of the Timer Object with a start date and time

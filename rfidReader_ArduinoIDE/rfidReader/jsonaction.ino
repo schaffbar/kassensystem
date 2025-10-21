@@ -121,7 +121,9 @@ int jsExtractSwitchBoxData(JsonDocument jDoc)
   } 
   if (jDoc.containsKey("DEVUSECASE")) 
   {
-    cDevUseCase = char(String(jDoc["DEVUSECASE"])[0]);
+    strDevUseCase =String(jDoc["DEVUSECASE"]);
+    setUseCase(strDevUseCase);
+    /*
     if (cDevUseCase == 'G')
     {  // GateKeeper
       eUC = GateKeeper;
@@ -140,6 +142,7 @@ int jsExtractSwitchBoxData(JsonDocument jDoc)
     }
     Serial.println("jDoc[DEVUSECASE] = "+cDevUseCase);
     uiFlagUseCase = 1;
+    */
   }
   if (jDoc.containsKey("STARTHTTP")) 
   {
@@ -356,7 +359,7 @@ JsonDocument getJSONUserData(String strRfidTag)
   /*
   if(eSolState == SolenoidOff)
   { // state is off -> request state on
-    // jDoc["REQUEST"] = "ON";                // wurde f�r eine einheitliche Struktur des JSON-Doks entfernt => die Entscheidung erfolgt jetzt �ber den State-Eintrag
+    // jDoc["REQUEST"] = "ON";                // wurde für eine einheitliche Struktur des JSON-Doks entfernt => die Entscheidung erfolgt jetzt über den State-Eintrag
     // jDoc["STATE"]   = "IDLE";
     jDoc["UNITS"]   = 0;                        
   }

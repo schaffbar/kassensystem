@@ -79,6 +79,7 @@
 // #include "pitches.h"  def of tones
 #include "pinoutdef.h"
 #include "ver.h"
+
 #include "netcred.h"              // WLan-Zugangs bzw. Server-Information
 
 #define RawComFlag  0          // 1 <= der rfidReaader sendet ein RawPaket, 0 <= der rfidReader sendet http-Anfragen an den Server
@@ -95,7 +96,7 @@ uint8_t uiUpdatedRFID = 1;
 
 // http://192.168.8.151/relay/0?turn=off
 String strDevName         = "SchaffBar-RFID-Controller";
-char cDevUseCase          = ' '; // SwitchBox Ein/Ausschalten von Geräten - TimeCtrl Betreten/Verlassen des Werkstatt-Bereichs - Counter
+String strDevUseCase      = String(" "); // SwitchBox Ein/Ausschalten von Geräten - TimeCtrl Betreten/Verlassen des Werkstatt-Bereichs - Counter
 String strHTTPstart       = "http://";
 String strIpAddrSolenoid  = "192.168.8.151";
 String strSolenoidOff     = "/relay/0?turn=off";
@@ -174,13 +175,14 @@ String strOldTxt = "";
 
 //----------------------------------------------------
 
-String strUseCaseName[6] = {"GetInit","Switchbox","GateKeeper","Counter","AddTag","Unknown"};
+String strUseCaseName[7] = {"GetInit","Switchbox","GateKeeperIn","GateKeeperOut","Counter","AddTag","Unknown"};
 // das Feld UseCase wird auf dem Server auf Type geändert werden
 typedef enum eDevUseCase_t      
 {
   GetInit,       // request for init data
   SwitchBox,     // is switching the different tools on and off
-  GateKeeper,    // start and stops the timer 
+  GateKeeperIn,  // starts the timer 
+  GateKeeperOut, // stops the timer 
   Counter,       // support the hero at the counter
   AddTag,        // add tag to the card table, to create a closed pool of tags
   UnKnown        // unkown use case
@@ -395,7 +397,7 @@ void loop()
           Serial.println("evalSwitchBoxAction("+String(chArCardID)+"))");
           evalSwitchBoxAction(String(chArCardID));
       }
-      else if (eUC == GateKeeper)
+      else if ((eUC == GateKeeperIn) or (eUC == GateKeeperOut))
       {
         Serial.println("evalGateKeeperAction("+String(chArCardID)+"))");
         evalGateKeeperAction(String(chArCardID));
@@ -495,7 +497,7 @@ void loop()
     }
     dsplyTime();
     dsplyWifiState();
-    if((eUC == GateKeeper) and ((iIconNo == 9)  or (iIconNo == 10)) or ((eUC == SwitchBox) and  (iIconNo == 10))) // and bGKMinUpdateFlag
+    if(((eUC == GateKeeperIn) or (eUC == GateKeeperOut))and ((iIconNo == 9)  or (iIconNo == 10)) or ((eUC == SwitchBox) and  (iIconNo == 10))) // and bGKMinUpdateFlag
     { // the value of the units shall be displayed when the customer is entering or leving the workshop are every time
       // or switch of the tool 
       Serial.println("Info: before dsplyUnitSecond() ");

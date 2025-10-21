@@ -42,7 +42,7 @@ int analyseResponse(String strAnswer)
         Serial.println("evalSwitchBoxResp(jDoc)");
         evalSwitchBoxResp(jDoc);
       }
-      else if ((eUC == GateKeeper) and (eState == end)) // String(jDoc["STATE"]) != "END"))
+      else if (((eUC == GateKeeperIn) or (eUC == GateKeeperOut)) and (eState == end)) // String(jDoc["STATE"]) != "END"))
       {
         Serial.println("evalGateKeeperResp(jDoc)");
         evalGateKeeperResp(jDoc);
@@ -68,14 +68,14 @@ int analyseResponse(String strAnswer)
 	  {
 	    dsplyErrorInfo("Error","Unknown Json received!",5,1,0);
       playError();
-      stop();
+      softReset(); // stop();
 	  }
 	}
   else
   {
     dsplyErrorInfo("Error","No Json received!",5,1,0);
     playError();
-    stop();
+    softReset(); // stop();
   }
   return 0;
 }
@@ -121,7 +121,7 @@ void evalSwitchBoxResp(JsonDocument jDoc)
 	  iIconNo = 6; // no access bmp	 
     strUnits = String(jDoc["UNITS"]);
     Serial.println("evalSwitchBoxResp - Customer has no access");
-    Serial.println("??? Ist stete End gesetzte f�r tempor�re Darstellung und �bergang in den Idle-State");
+    Serial.println("??? Ist stete End gesetzte für temporäre Darstellung und Übergang in den Idle-State");
   }  
   else if((String(jDoc["ICON"]) == "") and (String(jDoc["STATE"])=="WORKING") and (String(jDoc["ERROR"]) == ""))
   {  // Usere has access to the tool -> enable power -> measure the time
@@ -271,10 +271,12 @@ void evalCounterResp(JsonDocument jDoc)
     bIntChange = true;
     bIntRunning = false;
     eState = end;
-    strHeader = "RFID-Tag";
-    strMsg = strWorkID+" transferred";
+    // Geändert, aufgrund Anforderungsänderung 
+    // Neu: Darstellung von Namenn und rfid 
+    strHeader = String(jDoc["CUSTOMERNAME"]); //"RFID-Tag";
+    strMsg = String(jDoc["RFID"]);            //strWorkID+" transferred";
 	  iIconNo = 8;
-	  //dsplyErrorInfo(strHeader,strMsg,0,0,iIconNo);
+	  dsplyErrorInfo(strHeader,strMsg,0,0,iIconNo);                          // ???
 	  Serial.println("evalCounterResp(JsonDocument jDoc) Data transferred");
   }
   else
@@ -348,22 +350,27 @@ void setState(String strState)
 
 void setUseCase(String strUseCase)
 {
-  char cUseCase = char(strUseCase[0]);
-  if(strUseCase.length() == 1)
-  {
-    if(cUseCase == 'S')
+  //char cUseCase = char(strUseCase[0]);
+  //if(strUseCase.length() > 2)
+  //{
+    strUseCase.toUpperCase();
+    if(strUseCase == String('S'))
     {
       eUC = SwitchBox;
     }
-    else if (cUseCase == 'G')
+    else if (strUseCase == String("GI")) 
     {
-      eUC = GateKeeper;
+      eUC = GateKeeperIn;
     }
-    else if (cUseCase == 'C')
+    else if ((strUseCase == String("GO")))
+    {
+      eUC = GateKeeperOut;
+    }
+    else if (strUseCase == "C")
     {
       eUC = Counter;
     }
-    else if (cUseCase == 'A')
+    else if (strUseCase == "A")
     {
       eUC = AddTag;
     }
@@ -372,28 +379,28 @@ void setUseCase(String strUseCase)
       eUC = UnKnown;
       Serial.println("!!!Unknown Use Case = "+strUseCase);
     }
-  }
-  else
-  {
-      eUC = UnKnown;
-      Serial.println("!!!Unknown Use Case = "+strUseCase);
-  }
-  Serial.println("UseCase = "+String(cUseCase) + " " + strUseCase);
+  //}
+  //else
+  //{
+  //    eUC = UnKnown;
+  //    Serial.println("!!!Unknown Use Case = "+strUseCase);
+  //}
 }
 
 void setInitData(JsonDocument jDoc)
 {
   int iAnswer = 0;
   chngState2Idle();
-  cDevUseCase = char(String(jDoc["DEVUSECASE"])[0]);
-  Serial.println("Start of setInitData(JsonDocument jDoc) - UC" +String(jDoc["DEVUSECASE"])+" "+String(cDevUseCase)+" State "+getState());
+  strDevUseCase = String(jDoc["DEVUSECASE"]);
+  strDevUseCase .toUpperCase();
+  Serial.println("Start of setInitData(JsonDocument jDoc) - UC" +String(jDoc["DEVUSECASE"])+" "+strDevUseCase+" State "+getState());
   setUseCase(String(jDoc["DEVUSECASE"]));
   if (jDoc.containsKey("DEVNAME")) 
   {
     strDevName = String(jDoc["DEVNAME"]);
     Serial.println("jDoc[DEVNAME] = "+strDevName);
   }   
-  if(cDevUseCase == 'S') // SwitchBox
+  if(strDevUseCase == String('S')) // SwitchBox
   {
     Serial.println("SwitchBox");
     iAnswer = jsExtractSwitchBoxData(jDoc);
@@ -409,7 +416,7 @@ void setInitData(JsonDocument jDoc)
       }
     }
   }
-  else if(cDevUseCase == 'C') // Counter
+  else if(strDevUseCase == String('C')) // Counter
   {
       Serial.println("Counter: Check Code what is missing!!");
       strTerminal = String(jDoc["TERMINAL"]);
@@ -418,15 +425,15 @@ void setInitData(JsonDocument jDoc)
       serializeJson(jDoc,Serial);
       Serial.println();
   }
-  else if(cDevUseCase == 'G') // GateKeeper
+  else if((strDevUseCase == String("GI")) or ((strDevUseCase == String("GO")))) // GateKeeper
   {
-    Serial.println("GateKeeper");
+    Serial.println("GateKeeper I+O");
     setIdleStart(); // eState = idle;
     Serial.print("Received Data for UseCase GateKeeper : ");
     serializeJson(jDoc,Serial);
     Serial.println();
   }
-  else if (cDevUseCase == 'A')
+  else if (strDevUseCase == String('A'))
   {
     Serial.println("AddTag");
     setIdleStart(); //eState = idle;
@@ -437,8 +444,8 @@ void setInitData(JsonDocument jDoc)
   else
   {
     dsplyErrorInfo("Error","Unknown UseCase!",5,1,99);
-    Serial.println("Error: unbekannter UseCase "+cDevUseCase);
-    stop();
+    Serial.println("Error: unbekannter UseCase "+strDevUseCase);
+    softReset(); // stop();
   }
   sTimeRunning = jsExtractDate(jDoc);
 }
@@ -525,9 +532,13 @@ String getUseCase()
   {
     strReturn = "S";
   }
-  else if (eUC == GateKeeper)
+  else if (eUC == GateKeeperIn)
   {
-    strReturn = "G";
+    strReturn = "GI";
+  }
+  else if (eUC == GateKeeperOut)
+  {
+    strReturn = "GO";
   }
   else if (eUC == Counter)
   {

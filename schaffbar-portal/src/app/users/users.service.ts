@@ -1,3 +1,4 @@
+import { DatePipe } from '@angular/common';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 
@@ -10,7 +11,8 @@ const USERS_API_URL = `${environment.apiBaseUrl}/api/v1/customers`;
 
 @Injectable({ providedIn: 'root' })
 export class UsersService {
-  readonly http = inject(HttpClient);
+  private readonly http = inject(HttpClient);
+  private readonly datePipe = inject(DatePipe);
 
   private httpOptions = {
     headers: new HttpHeaders({
@@ -38,7 +40,12 @@ export class UsersService {
   // commands
 
   createUser(user: User): Observable<User> {
-    return this.http.post<User>(USERS_API_URL, user, this.httpOptions);
+    const requestBody = {
+      ...user,
+      dateOfBirth: this.datePipe.transform(user.dateOfBirth, 'yyyy-MM-dd') as string,
+    };
+
+    return this.http.post<User>(USERS_API_URL, requestBody, this.httpOptions);
   }
 
   updateUserContact(id: string, contact: { email: string; phone: string }): Observable<void> {

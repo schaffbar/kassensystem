@@ -3,8 +3,6 @@
 <mat-divider></mat-divider>
 
 <mat-dialog-content [formGroup]="userForm">
-  <h3>Contact Information</h3>
-
   <div class="row">
     <div class="col">
       <mat-form-field class="full-width" appearance="outline">
@@ -25,6 +23,30 @@
       </mat-form-field>
     </div>
   </div>
+  <div class="row">
+    <div class="col">
+      <mat-form-field class="half-width" appearance="outline">
+        <mat-label>Date of Birth</mat-label>
+        <input
+          id="dateOfBirth"
+          matInput
+          readonly
+          placeholder="Date of Birth"
+          formControlName="dateOfBirth"
+          [min]="minDate"
+          [max]="maxDate"
+          [matDatepicker]="picker" />
+        @if (userForm.controls['dateOfBirth'].hasError('required')) {
+          <mat-error>Date of birth is <strong>required</strong></mat-error>
+        }
+        <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker startView="multi-year" disabled="false"></mat-datepicker>
+      </mat-form-field>
+    </div>
+  </div>
+
+  <h3>Contact Information</h3>
+
   <div class="row">
     <div class="col">
       <mat-form-field class="full-width" appearance="outline">

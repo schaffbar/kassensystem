@@ -1,6 +1,7 @@
 package de.schaffbar.core_pos.customer;
 
 import java.time.Instant;
+import java.time.LocalDate;
 
 import de.schaffbar.core_pos.id.CustomerId;
 import jakarta.validation.constraints.NotBlank;
@@ -12,6 +13,7 @@ public interface CustomerViews {
             @NotNull CustomerId id, //
             @NotBlank String firstName, //
             @NotBlank String lastName, //
+            @NotNull LocalDate dateOfBirth, //
             @NotBlank String email, //
             String phone, //
             @NotNull CustomerAddressView address, //

@@ -2,15 +2,16 @@
 CREATE TABLE schaffbar.customer
 (
     id UUID NOT NULL,
-    first_name VARCHAR(255),
-    last_name VARCHAR(255),
-    email VARCHAR(255),
+    first_name VARCHAR(255) NOT NULL,
+    last_name VARCHAR(255) NOT NULL,
+    date_of_birth DATE NOT NULL,
+    email VARCHAR(255) NOT NULL,
     phone VARCHAR(255),
-    address_line1 VARCHAR(255),
+    address_line1 VARCHAR(255) NOT NULL,
     address_line2 VARCHAR(255),
-    postal_code VARCHAR(255),
-    city VARCHAR(255),
-    country VARCHAR(255),
+    postal_code VARCHAR(255) NOT NULL,
+    city VARCHAR(255) NOT NULL,
+    country VARCHAR(255) NOT NULL,
     created_at TIMESTAMP WITHOUT TIME ZONE NOT NULL,
     updated_at TIMESTAMP WITHOUT TIME ZONE NOT NULL,
     CONSTRAINT pk_customer PRIMARY KEY (id)

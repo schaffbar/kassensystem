@@ -1,6 +1,7 @@
 package de.schaffbar.core_pos.customer.web;
 
 import java.time.Instant;
+import java.time.LocalDate;
 import java.util.UUID;
 
 import jakarta.validation.constraints.NotBlank;
@@ -16,6 +17,7 @@ public interface CustomerApiModel {
             @NotNull UUID id, //
             @NotBlank String firstName, //
             @NotBlank String lastName, //
+            @NotBlank String dateOfBirth, //
             @NotBlank String email, //
             String phone, //
             @NotNull CustomerAddressApiDto address, //
@@ -37,6 +39,7 @@ public interface CustomerApiModel {
     record CreateCustomerRequestBody( //
             @NotBlank String firstName, //
             @NotBlank String lastName, //
+            @NotNull LocalDate dateOfBirth, //
             @NotBlank String email, //
             String phone, //
             @NotBlank String addressLine1, //

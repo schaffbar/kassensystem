@@ -1,5 +1,7 @@
 package de.schaffbar.core_pos.customer;
 
+import java.time.LocalDate;
+
 import de.schaffbar.core_pos.id.CustomerId;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -9,6 +11,7 @@ public interface CustomerCommands {
     record CreateCustomerCommand( //
             @NotBlank String firstName, //
             @NotBlank String lastName, //
+            @NotNull LocalDate dateOfBirth, //
             @NotBlank String email, //
             String phone, //
             @NotBlank String addressLine1, //

@@ -1,6 +1,7 @@
 package de.schaffbar.core_pos.customer;
 
 import java.time.Instant;
+import java.time.LocalDate;
 import java.util.UUID;
 
 import de.schaffbar.core_pos.customer.CustomerCommands.CreateCustomerCommand;
@@ -36,6 +37,9 @@ class Customer {
     @NotBlank
     private String lastName;
 
+    @NotNull
+    private LocalDate dateOfBirth;
+
     @NotBlank
     private String email;
 
@@ -57,9 +61,10 @@ class Customer {
         Customer customer = new Customer();
         customer.id = UUID.randomUUID();
         customer.firstName = command.firstName();
+        customer.lastName = command.lastName();
+        customer.dateOfBirth = command.dateOfBirth();
         customer.email = command.email();
         customer.phone = command.phone();
-        customer.lastName = command.lastName();
         customer.address = CustomerAddress.of(command);
         customer.createdAt = Instant.now();
 

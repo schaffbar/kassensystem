@@ -38,6 +38,10 @@ export class UserDetailComponent {
     this.detailsStore.reloadUser();
   }
 
+  protected updateUser(): void {
+    console.log('Update user clicked');
+  }
+
   protected assignFixedRfidTag(): void {
     this.detailsStore.assignFixedRfidTag(this.id);
   }

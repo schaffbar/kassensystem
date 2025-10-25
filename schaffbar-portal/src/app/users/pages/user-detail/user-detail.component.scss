@@ -1,24 +1,36 @@
 .user-detail-header {
   display: flex;
-  align-items: center;
+  align-items: baseline;
   justify-content: space-between;
-  margin-bottom: 16px;
+  margin-bottom: 1rem;
 }
 
-.user-detail-header__title {
+.user-detail-header-title {
+  display: flex;
+  flex-direction: column;
+}
+
+.user-detail-header-title-actions {
   display: flex;
   flex-direction: row;
   align-items: center;
-  gap: 20px;
+  gap: 1rem;
 }
 
-.user-detail-header__actions {
+.user-detail-header-title-chips {
   display: flex;
   flex-direction: row;
   align-items: center;
-  gap: 20px;
+  gap: 1rem;
+}
+
+.user-detail-header-actions {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 1rem;
 }
 
 .tab-content {
-  padding: 20px;
+  padding: 1rem;
 }

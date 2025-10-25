@@ -3,6 +3,7 @@ export interface User {
   firstName: string;
   lastName: string;
   dateOfBirth: Date;
+  ageGroup: AgeGroup;
   email: string;
   phone: string;
   address: UserAddress;
@@ -16,4 +17,10 @@ export interface UserAddress {
   postalCode: string;
   city: string;
   country: string;
+}
+
+export enum AgeGroup {
+  Under16 = 'UNDER_16',
+  Under18 = 'UNDER_18',
+  Adult = 'ADULT',
 }

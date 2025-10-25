@@ -12,12 +12,17 @@ public interface CustomerApiModel {
     // ------------------------------------------------------------------------
     // response
 
+    enum AgeGroup {
+        UNDER_16, UNDER_18, ADULT
+    }
+
     // TODO: decide to use String or UUID for id, in other places we use String
     record CustomerApiDto( //
             @NotNull UUID id, //
             @NotBlank String firstName, //
             @NotBlank String lastName, //
             @NotBlank String dateOfBirth, //
+            @NotNull AgeGroup ageGroup, //
             @NotBlank String email, //
             String phone, //
             @NotNull CustomerAddressApiDto address, //

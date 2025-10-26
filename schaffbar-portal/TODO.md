@@ -13,22 +13,20 @@ TODO:
 - Mitglied
 
 1. ========================================================
-2. Setzen von RFID reader type in UI
+2. Setzen von RFID reader type und Beschreibung in UI
 3. Abrechnung, Schliessen von open session und history
 4. Löschen von Entitäten immer bestätigen
 5. Scheduler to clean up waiting for assignment
 6. ========================================================
 7. Beim Löschen immer überprüfen ob Entity nicht irgendwo referenziert wird
-8. Setzen von RFID reader type (plus Name/Beschreibung)
-9. Assignment und Unassignment von fixen RFID tags
-10. Einweisung plus Zuweisung zu User
-11. Switch box implementieren
+8. Assignment und Unassignment von fixen RFID tags
+9. Einweisung plus Zuweisung zu User
+10. Switch box implementieren
 
-12. Nutzung von Maschinen in minuten oder stunden
-13. Beschreibung und Typ von RFID reader
-14. Zuweisung von RFID reader zu tool
-15. Dashboard für aktive user, aktive tools, ...
-16. Auschalten von Maschinen, wenn user Raum verlässt
+11. Nutzung von Maschinen in minuten oder stunden
+12. Zuweisung von RFID reader zu tool
+13. Dashboard für aktive user, aktive tools, ...
+14. Auschalten von Maschinen, wenn user Raum verlässt
 
 Technical debt:
 

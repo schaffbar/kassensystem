@@ -48,6 +48,15 @@ export class UsersService {
     return this.http.post<User>(USERS_API_URL, requestBody, this.httpOptions);
   }
 
+  updateUser(id: string, user: { firstName: string; lastName: string; dateOfBirth: Date }): Observable<void> {
+    const requestBody = {
+      ...user,
+      dateOfBirth: this.datePipe.transform(user.dateOfBirth, 'yyyy-MM-dd') as string,
+    };
+
+    return this.http.put<void>(`${USERS_API_URL}/${id}`, requestBody, this.httpOptions);
+  }
+
   updateUserContact(id: string, contact: { email: string; phone: string }): Observable<void> {
     return this.http.put<void>(`${USERS_API_URL}/${id}/contact`, contact, this.httpOptions);
   }

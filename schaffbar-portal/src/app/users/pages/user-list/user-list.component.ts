@@ -34,8 +34,8 @@ import { UsersStore } from '../../users.store';
 })
 export class UserListComponent {
   readonly store = inject(UsersStore);
-  readonly router = inject(Router);
-  readonly dialog = inject(MatDialog);
+  private readonly router = inject(Router);
+  private readonly dialog = inject(MatDialog);
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
@@ -64,7 +64,7 @@ export class UserListComponent {
 
   protected newUserDialog(): void {
     const dialogRef = this.dialog.open(NewUserFormComponent, {
-      minWidth: '1000px',
+      minWidth: '800px',
       disableClose: true,
       autoFocus: true,
     });

@@ -2,11 +2,13 @@ import { Component, inject, input } from '@angular/core';
 
 import { MatButtonModule } from '@angular/material/button';
 import { MatChipsModule } from '@angular/material/chips';
+import { MatDialog } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTabsModule } from '@angular/material/tabs';
 
+import { UpdateUserFormComponent } from '../../components/update-user-form/update-user-form.component';
 import { RfidTagAssignmentService } from '../../rfid-tag-assignment.service';
-import { UserAddress } from '../../user.model';
+import { User, UserAddress } from '../../user.model';
 import { UserDetailInfoComponent } from '../user-detail-info/user-detail-info.component';
 import { UserOpenSessionComponent } from '../user-open-session/user-open-session.component';
 import { UserDetailStore } from './user-detail.store';
@@ -26,6 +28,7 @@ import { UserDetailStore } from './user-detail.store';
   providers: [UserDetailStore, RfidTagAssignmentService],
 })
 export class UserDetailComponent {
+  private readonly dialog = inject(MatDialog);
   protected readonly detailsStore = inject(UserDetailStore);
 
   id = input.required<string>();
@@ -39,7 +42,25 @@ export class UserDetailComponent {
   }
 
   protected updateUser(): void {
-    console.log('Update user clicked');
+    const dialogRef = this.dialog.open(UpdateUserFormComponent, {
+      data: {
+        ...this.detailsStore.user(),
+      },
+      minWidth: '800px',
+      disableClose: true,
+      autoFocus: true,
+    });
+
+    dialogRef.afterClosed().subscribe((user: User) => {
+      if (user) {
+        this.detailsStore.updateUser({
+          id: this.id(),
+          firstName: user.firstName,
+          lastName: user.lastName,
+          dateOfBirth: user.dateOfBirth,
+        });
+      }
+    });
   }
 
   protected assignFixedRfidTag(): void {
@@ -55,12 +76,10 @@ export class UserDetailComponent {
   }
 
   protected onAddressChanged(address: UserAddress) {
-    console.log('Address changed:', address);
     this.detailsStore.updateUserAddress({ id: this.id(), address });
   }
 
   protected onContactChanged(contact: { email: string; phone: string }) {
-    console.log('Contact changed:', contact);
     this.detailsStore.updateUserContact({ id: this.id(), ...contact });
   }
 }

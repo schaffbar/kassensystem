@@ -54,6 +54,12 @@ public interface CustomerApiModel {
             @NotBlank String country //
     ) {}
 
+    record UpdateCustomerRequestBody( //
+            @NotBlank String firstName, //
+            @NotBlank String lastName, //
+            @NotNull LocalDate dateOfBirth //
+    ) {}
+
     record UpdateCustomerAddressRequestBody( //
             @NotBlank String addressLine1, //
             String addressLine2, //

@@ -6,6 +6,7 @@ import java.util.UUID;
 
 import de.schaffbar.core_pos.customer.CustomerCommands.CreateCustomerCommand;
 import de.schaffbar.core_pos.customer.CustomerCommands.UpdateCustomerAddressCommand;
+import de.schaffbar.core_pos.customer.CustomerCommands.UpdateCustomerCommand;
 import de.schaffbar.core_pos.customer.CustomerCommands.UpdateCustomerContactCommand;
 import de.schaffbar.core_pos.id.CustomerId;
 import jakarta.persistence.Entity;
@@ -80,6 +81,12 @@ class Customer {
 
     // ------------------------------------------------------------------------
     // command
+
+    public void update(UpdateCustomerCommand command) {
+        this.firstName = command.firstName();
+        this.lastName = command.lastName();
+        this.dateOfBirth = command.dateOfBirth();
+    }
 
     public void updateAddress(UpdateCustomerAddressCommand command) {
         this.address.update(command);

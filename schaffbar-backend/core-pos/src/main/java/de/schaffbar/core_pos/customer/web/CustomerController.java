@@ -7,12 +7,14 @@ import java.util.UUID;
 import de.schaffbar.core_pos.ResourceNotFoundException;
 import de.schaffbar.core_pos.customer.CustomerCommands.CreateCustomerCommand;
 import de.schaffbar.core_pos.customer.CustomerCommands.UpdateCustomerAddressCommand;
+import de.schaffbar.core_pos.customer.CustomerCommands.UpdateCustomerCommand;
 import de.schaffbar.core_pos.customer.CustomerCommands.UpdateCustomerContactCommand;
 import de.schaffbar.core_pos.customer.CustomerService;
 import de.schaffbar.core_pos.customer.web.CustomerApiModel.CreateCustomerRequestBody;
 import de.schaffbar.core_pos.customer.web.CustomerApiModel.CustomerApiDto;
 import de.schaffbar.core_pos.customer.web.CustomerApiModel.UpdateCustomerAddressRequestBody;
 import de.schaffbar.core_pos.customer.web.CustomerApiModel.UpdateCustomerContactRequestBody;
+import de.schaffbar.core_pos.customer.web.CustomerApiModel.UpdateCustomerRequestBody;
 import de.schaffbar.core_pos.id.CustomerId;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
@@ -70,6 +72,15 @@ public class CustomerController {
         URI location = URI.create("/api/v1/customers/" + customerId.getValue());
 
         return ResponseEntity.created(location).build();
+    }
+
+    @PutMapping(value = "/{customerId}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<String> updateCustomer(@PathVariable @NotNull CustomerId customerId,
+            @RequestBody @NotNull @Valid UpdateCustomerRequestBody requestBody) {
+        UpdateCustomerCommand command = CustomerApiMapper.MAPPER.toUpdateCustomerCommand(customerId, requestBody);
+        this.customerService.updateCustomer(command);
+
+        return ResponseEntity.ok().build();
     }
 
     @PutMapping(value = "/{customerId}/contact", consumes = MediaType.APPLICATION_JSON_VALUE)

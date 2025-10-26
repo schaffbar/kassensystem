@@ -21,6 +21,13 @@ public interface CustomerCommands {
             @NotBlank String country //
     ) {}
 
+    record UpdateCustomerCommand( //
+            @NotNull CustomerId id, //
+            @NotBlank String firstName, //
+            @NotBlank String lastName, //
+            @NotNull LocalDate dateOfBirth //
+    ) {}
+
     record UpdateCustomerContactCommand( //
             @NotNull CustomerId id, //
             @NotBlank String email, //

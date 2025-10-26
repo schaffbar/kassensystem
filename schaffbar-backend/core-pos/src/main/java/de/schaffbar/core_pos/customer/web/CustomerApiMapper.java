@@ -5,6 +5,7 @@ import java.time.Period;
 
 import de.schaffbar.core_pos.customer.CustomerCommands.CreateCustomerCommand;
 import de.schaffbar.core_pos.customer.CustomerCommands.UpdateCustomerAddressCommand;
+import de.schaffbar.core_pos.customer.CustomerCommands.UpdateCustomerCommand;
 import de.schaffbar.core_pos.customer.CustomerCommands.UpdateCustomerContactCommand;
 import de.schaffbar.core_pos.customer.CustomerViews.CustomerAddressView;
 import de.schaffbar.core_pos.customer.CustomerViews.CustomerView;
@@ -13,6 +14,7 @@ import de.schaffbar.core_pos.customer.web.CustomerApiModel.CustomerAddressApiDto
 import de.schaffbar.core_pos.customer.web.CustomerApiModel.CustomerApiDto;
 import de.schaffbar.core_pos.customer.web.CustomerApiModel.UpdateCustomerAddressRequestBody;
 import de.schaffbar.core_pos.customer.web.CustomerApiModel.UpdateCustomerContactRequestBody;
+import de.schaffbar.core_pos.customer.web.CustomerApiModel.UpdateCustomerRequestBody;
 import de.schaffbar.core_pos.id.CustomerId;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -38,6 +40,8 @@ public interface CustomerApiMapper {
     // mapping request body to command
 
     CreateCustomerCommand toCreateCustomerCommand(CreateCustomerRequestBody requestBody);
+
+    UpdateCustomerCommand toUpdateCustomerCommand(CustomerId id, UpdateCustomerRequestBody requestBody);
 
     UpdateCustomerContactCommand toUpdateCustomerContactCommand(CustomerId id, UpdateCustomerContactRequestBody requestBody);
 

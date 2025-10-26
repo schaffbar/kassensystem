@@ -6,6 +6,7 @@ import java.util.Optional;
 import de.schaffbar.core_pos.ResourceNotFoundException;
 import de.schaffbar.core_pos.customer.CustomerCommands.CreateCustomerCommand;
 import de.schaffbar.core_pos.customer.CustomerCommands.UpdateCustomerAddressCommand;
+import de.schaffbar.core_pos.customer.CustomerCommands.UpdateCustomerCommand;
 import de.schaffbar.core_pos.customer.CustomerCommands.UpdateCustomerContactCommand;
 import de.schaffbar.core_pos.customer.CustomerViews.CustomerView;
 import de.schaffbar.core_pos.id.CustomerId;
@@ -47,6 +48,15 @@ public class CustomerService {
         Customer savedCustomer = this.customerRepository.save(customer);
 
         return savedCustomer.getCustomerId();
+    }
+
+    @Transactional
+    public void updateCustomer(@NotNull @Valid UpdateCustomerCommand command) {
+        this.customerRepository.findById(command.id().getValue()) //
+                .ifPresentOrElse( //
+                        customer -> customer.update(command), //
+                        throwCustomerNotFoundException(command.id()) //
+                );
     }
 
     @Transactional

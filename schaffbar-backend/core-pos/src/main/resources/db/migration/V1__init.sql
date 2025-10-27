@@ -5,6 +5,7 @@ CREATE TABLE schaffbar.customer
     first_name VARCHAR(255) NOT NULL,
     last_name VARCHAR(255) NOT NULL,
     date_of_birth DATE NOT NULL,
+    club_member BOOLEAN NOT NULL,
     email VARCHAR(255) NOT NULL,
     phone VARCHAR(255),
     address_line1 VARCHAR(255) NOT NULL,

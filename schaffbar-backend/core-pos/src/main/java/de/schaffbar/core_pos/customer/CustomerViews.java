@@ -14,6 +14,7 @@ public interface CustomerViews {
             @NotBlank String firstName, //
             @NotBlank String lastName, //
             @NotNull LocalDate dateOfBirth, //
+            boolean clubMember, //
             @NotBlank String email, //
             String phone, //
             @NotNull CustomerAddressView address, //

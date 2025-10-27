@@ -12,6 +12,7 @@ public interface CustomerCommands {
             @NotBlank String firstName, //
             @NotBlank String lastName, //
             @NotNull LocalDate dateOfBirth, //
+            boolean clubMember, //
             @NotBlank String email, //
             String phone, //
             @NotBlank String addressLine1, //
@@ -25,7 +26,8 @@ public interface CustomerCommands {
             @NotNull CustomerId id, //
             @NotBlank String firstName, //
             @NotBlank String lastName, //
-            @NotNull LocalDate dateOfBirth //
+            @NotNull LocalDate dateOfBirth, //
+            boolean clubMember //
     ) {}
 
     record UpdateCustomerContactCommand( //

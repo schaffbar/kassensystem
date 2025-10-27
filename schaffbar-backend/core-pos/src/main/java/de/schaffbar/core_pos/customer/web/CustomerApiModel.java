@@ -23,6 +23,7 @@ public interface CustomerApiModel {
             @NotBlank String lastName, //
             @NotBlank String dateOfBirth, //
             @NotNull AgeGroup ageGroup, //
+            boolean clubMember, //
             @NotBlank String email, //
             String phone, //
             @NotNull CustomerAddressApiDto address, //
@@ -45,6 +46,7 @@ public interface CustomerApiModel {
             @NotBlank String firstName, //
             @NotBlank String lastName, //
             @NotNull LocalDate dateOfBirth, //
+            boolean clubMember, //
             @NotBlank String email, //
             String phone, //
             @NotBlank String addressLine1, //
@@ -57,7 +59,8 @@ public interface CustomerApiModel {
     record UpdateCustomerRequestBody( //
             @NotBlank String firstName, //
             @NotBlank String lastName, //
-            @NotNull LocalDate dateOfBirth //
+            @NotNull LocalDate dateOfBirth, //
+            boolean clubMember //
     ) {}
 
     record UpdateCustomerAddressRequestBody( //

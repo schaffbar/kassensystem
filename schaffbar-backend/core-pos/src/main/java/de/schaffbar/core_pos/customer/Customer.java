@@ -41,6 +41,8 @@ class Customer {
     @NotNull
     private LocalDate dateOfBirth;
 
+    private boolean clubMember;
+
     @NotBlank
     private String email;
 
@@ -64,6 +66,7 @@ class Customer {
         customer.firstName = command.firstName();
         customer.lastName = command.lastName();
         customer.dateOfBirth = command.dateOfBirth();
+        customer.clubMember = command.clubMember();
         customer.email = command.email();
         customer.phone = command.phone();
         customer.address = CustomerAddress.of(command);
@@ -86,6 +89,7 @@ class Customer {
         this.firstName = command.firstName();
         this.lastName = command.lastName();
         this.dateOfBirth = command.dateOfBirth();
+        this.clubMember = command.clubMember();
     }
 
     public void updateAddress(UpdateCustomerAddressCommand command) {

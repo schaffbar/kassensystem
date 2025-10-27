@@ -2,6 +2,7 @@ import { Component, inject } from '@angular/core';
 import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 
 import { MatButtonModule } from '@angular/material/button';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 import { provideNativeDateAdapter } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
@@ -15,6 +16,7 @@ import { MatInputModule } from '@angular/material/input';
   imports: [
     ReactiveFormsModule,
     MatInputModule,
+    MatCheckboxModule,
     MatButtonModule,
     MatDialogModule,
     MatDividerModule,
@@ -31,11 +33,12 @@ export class NewUserFormComponent {
     firstName: ['', Validators.required],
     lastName: ['', Validators.required],
     dateOfBirth: [null, Validators.required],
+    clubMember: [false],
     email: ['', [Validators.required, Validators.email]],
     phone: [null],
     addressLine1: ['', Validators.required],
     addressLine2: [null],
-    postalCode: ['710', [Validators.required, Validators.pattern('^[0-9]{5}$')]],
+    postalCode: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(5)]],
     city: ['Böblingen', Validators.required],
     country: ['Deutschland', Validators.required],
   });

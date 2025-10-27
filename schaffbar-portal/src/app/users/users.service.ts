@@ -48,7 +48,10 @@ export class UsersService {
     return this.http.post<User>(USERS_API_URL, requestBody, this.httpOptions);
   }
 
-  updateUser(id: string, user: { firstName: string; lastName: string; dateOfBirth: Date }): Observable<void> {
+  updateUser(
+    id: string,
+    user: { firstName: string; lastName: string; dateOfBirth: Date; clubMember: boolean },
+  ): Observable<void> {
     const requestBody = {
       ...user,
       dateOfBirth: this.datePipe.transform(user.dateOfBirth, 'yyyy-MM-dd') as string,

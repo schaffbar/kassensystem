@@ -3,7 +3,7 @@
   <button mat-flat-button color="primary" (click)="newUserDialog()">Add User</button>
 </div>
 
-<mat-form-field class="user-list-filter" appearance="outline">
+<mat-form-field class="user-list-filter">
   <mat-label>Search</mat-label>
   <input matInput (keyup)="applyFilter($event)" placeholder="Ex. Max" #input />
   <mat-icon matSuffix>search</mat-icon>
@@ -50,8 +50,8 @@
     #paginator
     [length]="usersCount()"
     [pageIndex]="0"
-    [pageSize]="10"
-    [pageSizeOptions]="[5, 10, 20]"
+    [pageSize]="15"
+    [pageSizeOptions]="[5, 10, 15, 20]"
     aria-label="Select page">
   </mat-paginator>
 </div>

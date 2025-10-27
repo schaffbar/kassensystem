@@ -5,7 +5,7 @@
 <mat-dialog-content [formGroup]="userForm">
   <div class="row">
     <div class="col">
-      <mat-form-field class="full-width" appearance="outline">
+      <mat-form-field class="full-width">
         <mat-label>First Name</mat-label>
         <input id="firstName" matInput placeholder="First Name" formControlName="firstName" />
         @if (userForm.controls['firstName'].hasError('required')) {
@@ -14,7 +14,7 @@
       </mat-form-field>
     </div>
     <div class="col">
-      <mat-form-field class="full-width" appearance="outline">
+      <mat-form-field class="full-width">
         <mat-label>Last Name</mat-label>
         <input id="lastName" matInput placeholder="Last Name" formControlName="lastName" />
         @if (userForm.controls['lastName'].hasError('required')) {
@@ -25,7 +25,7 @@
   </div>
   <div class="row">
     <div class="col">
-      <mat-form-field class="half-width" appearance="outline">
+      <mat-form-field class="full-width">
         <mat-label>Date of Birth</mat-label>
         <input
           id="dateOfBirth"
@@ -43,24 +43,30 @@
         <mat-datepicker #picker startView="multi-year" disabled="false"></mat-datepicker>
       </mat-form-field>
     </div>
+    <div class="col">
+      <mat-checkbox formControlName="clubMember">Club Member</mat-checkbox>
+    </div>
   </div>
 
   <h3>Contact Information</h3>
 
   <div class="row">
     <div class="col">
-      <mat-form-field class="full-width" appearance="outline">
+      <mat-form-field class="full-width">
         <mat-label>Email</mat-label>
         <input id="email" matInput placeholder="Email" formControlName="email" />
         @if (userForm.controls['email'].hasError('required')) {
           <mat-error>Email is <strong>required</strong></mat-error>
+        }
+        @if (userForm.controls['email'].hasError('email')) {
+          <mat-error>Please enter a <strong>valid</strong> email address</mat-error>
         }
       </mat-form-field>
     </div>
   </div>
   <div class="row">
     <div class="col">
-      <mat-form-field class="full-width" appearance="outline">
+      <mat-form-field class="full-width">
         <mat-label>Phone</mat-label>
         <input id="phone" matInput formControlName="phone" />
       </mat-form-field>
@@ -71,7 +77,7 @@
 
   <div class="row">
     <div class="col">
-      <mat-form-field class="full-width" appearance="outline">
+      <mat-form-field class="full-width">
         <mat-label>Address</mat-label>
         <input id="addressLine1" matInput placeholder="Address" formControlName="addressLine1" />
         @if (userForm.controls['addressLine1'].hasError('required')) {
@@ -82,7 +88,7 @@
   </div>
   <div class="row">
     <div class="col">
-      <mat-form-field class="full-width" appearance="outline">
+      <mat-form-field class="full-width">
         <mat-label>Address Line 2</mat-label>
         <input id="addressLine2" matInput formControlName="addressLine2" />
       </mat-form-field>
@@ -90,7 +96,7 @@
   </div>
   <div class="row">
     <div class="col">
-      <mat-form-field class="full-width" appearance="outline">
+      <mat-form-field class="full-width">
         <mat-label>Postal Code</mat-label>
         <input
           id="postalCode"
@@ -103,10 +109,15 @@
         @if (userForm.controls['postalCode'].hasError('required')) {
           <mat-error>Postal code is <strong>required</strong></mat-error>
         }
+        @if (
+          userForm.controls['postalCode'].hasError('minlength') || userForm.controls['postalCode'].hasError('maxlength')
+        ) {
+          <mat-error>Postal code must be exactly <strong>5 characters</strong></mat-error>
+        }
       </mat-form-field>
     </div>
     <div class="col">
-      <mat-form-field class="full-width" appearance="outline">
+      <mat-form-field class="full-width">
         <mat-label>City</mat-label>
         <input id="city" matInput placeholder="City" formControlName="city" />
         @if (userForm.controls['city'].hasError('required')) {
@@ -117,7 +128,7 @@
   </div>
   <div class="row">
     <div class="col">
-      <mat-form-field class="full-width" appearance="outline">
+      <mat-form-field class="full-width">
         <mat-label>Country</mat-label>
         <input id="country" matInput placeholder="Country" formControlName="country" />
         @if (userForm.controls['country'].hasError('required')) {

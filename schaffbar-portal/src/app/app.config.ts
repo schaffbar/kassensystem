@@ -4,6 +4,8 @@ import localeDe from '@angular/common/locales/de';
 import { ApplicationConfig, LOCALE_ID, provideZoneChangeDetection } from '@angular/core';
 import { provideRouter, withComponentInputBinding } from '@angular/router';
 
+import { MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/form-field';
+
 import { routes } from './app.routes';
 
 registerLocaleData(localeDe);
@@ -15,5 +17,6 @@ export const appConfig: ApplicationConfig = {
     provideHttpClient(),
     DatePipe,
     { provide: LOCALE_ID, useValue: 'de-DE' },
+    { provide: MAT_FORM_FIELD_DEFAULT_OPTIONS, useValue: { appearance: 'outline' } },
   ],
 };

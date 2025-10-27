@@ -2,6 +2,7 @@ import { Component, inject } from '@angular/core';
 import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 
 import { MatButtonModule } from '@angular/material/button';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 import { provideNativeDateAdapter } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
@@ -17,6 +18,7 @@ import { User } from '../../user.model';
   imports: [
     ReactiveFormsModule,
     MatInputModule,
+    MatCheckboxModule,
     MatButtonModule,
     MatDialogModule,
     MatDividerModule,
@@ -34,6 +36,7 @@ export class UpdateUserFormComponent {
     firstName: [this.user.firstName, Validators.required],
     lastName: [this.user.lastName, Validators.required],
     dateOfBirth: [this.user.dateOfBirth, Validators.required],
+    clubMember: [this.user.clubMember],
   });
 
   // TODO: replace with a moment.js implementation

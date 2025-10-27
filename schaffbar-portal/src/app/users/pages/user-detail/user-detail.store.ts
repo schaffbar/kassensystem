@@ -97,11 +97,11 @@ export const UserDetailStore = signalStore(
         }),
       ),
     ),
-    updateUser: rxMethod<{ id: string; firstName: string; lastName: string; dateOfBirth: Date }>(
+    updateUser: rxMethod<{ id: string; firstName: string; lastName: string; dateOfBirth: Date; clubMember: boolean }>(
       pipe(
         tap(() => patchState(store, setPending())),
-        exhaustMap(({ id, firstName, lastName, dateOfBirth }) => {
-          return store._usersService.updateUser(id, { firstName, lastName, dateOfBirth }).pipe(
+        exhaustMap(({ id, firstName, lastName, dateOfBirth, clubMember }) => {
+          return store._usersService.updateUser(id, { firstName, lastName, dateOfBirth, clubMember }).pipe(
             tapResponse({
               next: () => {
                 patchState(store, setFulfilled(), setDirty());

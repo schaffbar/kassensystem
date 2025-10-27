@@ -4,6 +4,7 @@ export interface User {
   lastName: string;
   dateOfBirth: Date;
   ageGroup: AgeGroup;
+  clubMember: boolean;
   email: string;
   phone: string;
   address: UserAddress;

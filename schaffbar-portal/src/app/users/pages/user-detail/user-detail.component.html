@@ -13,6 +13,9 @@
       <div class="user-detail-header-title-chips">
         <mat-chip-set aria-label="">
           <mat-chip selected color="warn"> {{ user.ageGroup }}</mat-chip>
+          @if (user.clubMember) {
+            <mat-chip selected color="primary"> Club Member </mat-chip>
+          }
           @if (detailsStore.isRfidTagAssigned() || detailsStore.waitingForAssignment()) {
             <mat-chip> {{ detailsStore.rfidTagAssignment()?.assignmentType }} </mat-chip>
             @if (detailsStore.isRfidTagAssigned()) {

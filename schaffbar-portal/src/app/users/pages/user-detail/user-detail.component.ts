@@ -58,6 +58,7 @@ export class UserDetailComponent {
           firstName: user.firstName,
           lastName: user.lastName,
           dateOfBirth: user.dateOfBirth,
+          clubMember: user.clubMember,
         });
       }
     });

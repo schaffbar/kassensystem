@@ -34,7 +34,7 @@ public class EnterWorkshop {
         this.workshopUsageService.enterWorkshop(customerId, sessionId);
     }
 
-    private WorkshopSessionId createWorkshopSession(@NotNull @Valid CustomerId customerId) {
+    private WorkshopSessionId createWorkshopSession(CustomerId customerId) {
         this.workshopSessionService.startSession(customerId);
 
         return this.workshopSessionService.getOpenWorkshopSession(customerId) //

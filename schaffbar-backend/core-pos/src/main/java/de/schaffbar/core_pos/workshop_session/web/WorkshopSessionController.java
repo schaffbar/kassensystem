@@ -5,6 +5,7 @@ import static java.util.Objects.isNull;
 import java.util.List;
 
 import de.schaffbar.core_pos.id.CustomerId;
+import de.schaffbar.core_pos.use_case.CloseSession;
 import de.schaffbar.core_pos.workshop_session.WorkshopSessionService;
 import de.schaffbar.core_pos.workshop_session.WorkshopSessionViews.WorkshopSessionView;
 import de.schaffbar.core_pos.workshop_session.web.WorkshopSessionApiModel.WorkshopSessionApiDto;
@@ -18,6 +19,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -30,6 +32,8 @@ public class WorkshopSessionController {
     private final @NonNull WorkshopSessionService workshopSessionService;
 
     private final @NonNull WorkshopUsageService workshopUsageService;
+
+    private final @NonNull CloseSession closeSessionUseCase;
 
     // ------------------------------------------------------------------------
     // query
@@ -52,5 +56,12 @@ public class WorkshopSessionController {
 
     // ------------------------------------------------------------------------
     // command
+
+    @PutMapping(value = "/{customerId}/close", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Void> closeSession(@PathVariable @NotNull CustomerId customerId) {
+        this.closeSessionUseCase.process(customerId);
+
+        return ResponseEntity.ok().build();
+    }
 
 }

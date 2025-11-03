@@ -62,7 +62,7 @@ class WorkshopSession {
     // query
 
     public WorkshopSessionId getId() {
-        return WorkshopSessionId.of(id);
+        return WorkshopSessionId.of(this.id);
     }
 
     public CustomerId getCustomerId() {
@@ -74,6 +74,7 @@ class WorkshopSession {
 
     public void close() {
         this.closeTime = Instant.now();
+        this.status = WorkshopSessionStatus.PAID;
     }
 
 }

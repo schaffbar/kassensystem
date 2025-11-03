@@ -4,8 +4,8 @@ import java.net.URI;
 import java.util.List;
 import java.util.UUID;
 
-import de.schaffbar.core_pos.id.MacAddress;
 import de.schaffbar.core_pos.ResourceNotFoundException;
+import de.schaffbar.core_pos.id.MacAddress;
 import de.schaffbar.core_pos.id.RfidReaderId;
 import de.schaffbar.core_pos.rfid_reader.RfidReaderService;
 import de.schaffbar.core_pos.rfid_reader.RfidReaderViews.RfidReaderView;

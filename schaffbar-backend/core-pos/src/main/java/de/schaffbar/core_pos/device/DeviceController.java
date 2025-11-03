@@ -75,25 +75,10 @@ public class DeviceController {
         RfidReaderView rfidReader = this.rfidReaderService.getRfidReader(id) //
                 .orElseThrow(() -> ResourceNotFoundException.rfidReader(id));
 
-        String deviceNme;
-        if (isNull(rfidReader.type())) {
-            deviceNme = "ERROR";
-        }
-        else {
-            deviceNme = switch (rfidReader.type()) {
-                case RFID_TAG_REGISTER -> "RFID Tag Register";
-                case RFID_TAG_ASSIGNER -> "RFID Tag Assigner";
-                case GATE_KEEPER -> "Gate Keeper";
-                case GATE_KEEPER_IN -> "Gate Keeper In";
-                case GATE_KEEPER_OUT -> "Gate Keeper Out";
-                case SWITCH_BOX -> "Switch Box";
-            };
-        }
-
         LocalDateTime now = LocalDateTime.now();
         InitResponse response = InitResponse.builder() //
                 .STATE(isNull(rfidReader.type()) ? "ERROR" : "START") //
-                .DEVNAME(deviceNme) //
+                .DEVNAME(getDeviceNme(rfidReader)) //
                 .DEVUSECASE(isNull(rfidReader.type()) ? "ERROR" : rfidReader.type().getKey()) //
                 .TERMINAL("") //
                 .ERROR(isNull(rfidReader.type()) ? "Nicht Gefunden" : "") //
@@ -137,10 +122,6 @@ public class DeviceController {
         RfidReaderView rfidReader = this.rfidReaderService.getRfidReader(macAddress) //
                 .orElseThrow(() -> ResourceNotFoundException.rfidReader(macAddress));
 
-        //        if (rfidReader.type() != RfidReaderType.GATE_KEEPER) {
-        //            throw new RuntimeException("TODO: Invalid type of RFID reader");
-        //        }
-
         RfidTagView rfidTag = this.rfidTagService.getRfidTag(rfidTagId) //
                 .orElseThrow(() -> ResourceNotFoundException.rfidTag(rfidTagId));
 
@@ -178,6 +159,21 @@ public class DeviceController {
         }
 
         return ResponseEntity.ok(response);
+    }
+
+    private static String getDeviceNme(RfidReaderView rfidReader) {
+        if (isNull(rfidReader.type())) {
+            return "ERROR";
+        }
+
+        return switch (rfidReader.type()) {
+            case RFID_TAG_REGISTER -> "RFID Tag Register";
+            case RFID_TAG_ASSIGNER -> "RFID Tag Assigner";
+            case GATE_KEEPER -> "Gate Keeper";
+            case GATE_KEEPER_IN -> "Gate Keeper In";
+            case GATE_KEEPER_OUT -> "Gate Keeper Out";
+            case SWITCH_BOX -> "Switch Box";
+        };
     }
 
     // ------------------------------------------------------------------------

@@ -35,9 +35,9 @@ public class SecurityConfiguration {
             public void addCorsMappings(@NonNull CorsRegistry registry) {
 
                 registry.addMapping("/api/v1/**") //
-                        .allowedOrigins(allowedOrigins.toArray(new String[0])) //
-                        .allowedMethods(allowedMethods.toArray(new String[0])) //
-                        .allowedHeaders(allowedHeaders.toArray(new String[0]));
+                        .allowedOrigins(SecurityConfiguration.this.allowedOrigins.toArray(new String[0])) //
+                        .allowedMethods(SecurityConfiguration.this.allowedMethods.toArray(new String[0])) //
+                        .allowedHeaders(SecurityConfiguration.this.allowedHeaders.toArray(new String[0]));
             }
         };
     }

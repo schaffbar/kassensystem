@@ -64,7 +64,7 @@ class WorkshopUsage { // TODO: Consider renaming to WorkshopSlot, or UsageSlot f
     // query
 
     public WorkshopUsageId getId() {
-        return WorkshopUsageId.of(id);
+        return WorkshopUsageId.of(this.id);
     }
 
     public CustomerId getCustomerId() {
@@ -80,7 +80,7 @@ class WorkshopUsage { // TODO: Consider renaming to WorkshopSlot, or UsageSlot f
             return null;
         }
 
-        return Duration.between(entryTime.truncatedTo(ChronoUnit.SECONDS), exitTime.truncatedTo(ChronoUnit.SECONDS));
+        return Duration.between(this.entryTime.truncatedTo(ChronoUnit.SECONDS), this.exitTime.truncatedTo(ChronoUnit.SECONDS));
     }
 
     // ------------------------------------------------------------------------

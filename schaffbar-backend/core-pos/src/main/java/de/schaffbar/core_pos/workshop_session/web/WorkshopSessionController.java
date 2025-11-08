@@ -38,22 +38,6 @@ public class WorkshopSessionController {
     // ------------------------------------------------------------------------
     // query
 
-    @GetMapping(value = "open/{customerId}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<WorkshopSessionApiDto> getOpenWorkshopSession(@PathVariable @NotNull CustomerId customerId) {
-        WorkshopSessionView openSession = this.workshopSessionService.getOpenWorkshopSession(customerId) //
-                .orElse(null);
-
-        if (isNull(openSession)) {
-            return ResponseEntity.ok(null);
-        }
-
-        List<WorkshopUsageView> usages = this.workshopUsageService.getWorkshopUsages(openSession.id());
-
-        WorkshopSessionApiDto result = WorkshopSessionApiMapper.MAPPER.toWorkshopSessionApiDto(openSession, usages);
-
-        return ResponseEntity.ok(result);
-    }
-
     @GetMapping(value = "{customerId}/active", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<WorkshopSessionApiDto> getActiveWorkshopSession(@PathVariable @NotNull CustomerId customerId) {
         WorkshopSessionView openSession = this.workshopSessionService.getOpenWorkshopSession(customerId) //

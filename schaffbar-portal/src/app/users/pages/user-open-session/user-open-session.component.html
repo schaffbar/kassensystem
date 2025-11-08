@@ -1,3 +1,10 @@
+@if (openSessionStore.openSession(); as openSession) {
+  <h1>
+    Open Workshop Session for {{ openSession.id }}
+    <button mat-raised-button color="warn" (click)="closeSession()">Close Session</button>
+  </h1>
+}
+
 <h2>Workshop Time</h2>
 
 @if (openSessionStore.openSession(); as openSession) {

@@ -67,6 +67,23 @@ export const UserOpenSessionStore = signalStore(
         }),
       ),
     ),
+    closeSession: rxMethod<string>(
+      pipe(
+        filter((userId: string) => !!userId),
+        tap(() => patchState(store, setPending())),
+        // delay(200), // TODO: Simulate network latency
+        exhaustMap((userId: string) => {
+          return store._workshopSessionService.closeWorkshopSession(userId).pipe(
+            tapResponse({
+              next: () => {
+                patchState(store, setDirty(), setFulfilled());
+              },
+              error: (error: { message: string }) => patchState(store, setError(error.message)),
+            }),
+          );
+        }),
+      ),
+    ),
   })),
   withHooks({
     onInit(store) {

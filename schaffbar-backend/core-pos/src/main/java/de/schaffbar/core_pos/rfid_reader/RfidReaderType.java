@@ -8,7 +8,6 @@ import lombok.Getter;
 public enum RfidReaderType {
     RFID_TAG_REGISTER("A"), //
     RFID_TAG_ASSIGNER("C"), //
-    GATE_KEEPER("G"), // TODO: remove it
     GATE_KEEPER_IN("GI"), //
     GATE_KEEPER_OUT("GO"), //
     SWITCH_BOX("S");

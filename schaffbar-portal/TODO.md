@@ -7,14 +7,13 @@ Done:
 - Geburtsdatum hinzufügen
 - Telefonnummer optional
 - Chip mit unter 16 und unter 18
+- Mitglied
 
 TODO:
 
-- Mitglied
-
 1. ========================================================
-2. Setzen von RFID reader type und Beschreibung in UI
-3. Abrechnung, Schliessen von open session und history
+2. Abrechnung, Schliessen von open session und history
+3. Setzen von RFID reader type und Beschreibung in UI
 4. Löschen von Entitäten immer bestätigen
 5. Scheduler to clean up waiting for assignment
 6. ========================================================

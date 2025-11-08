@@ -23,4 +23,8 @@ export class UserOpenSessionComponent {
   constructor() {
     this.openSessionStore.setUserId(this.userId);
   }
+
+  protected closeSession(): void {
+    this.openSessionStore.closeSession(this.userId);
+  }
 }

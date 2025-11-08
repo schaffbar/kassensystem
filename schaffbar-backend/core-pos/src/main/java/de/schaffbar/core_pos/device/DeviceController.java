@@ -95,14 +95,9 @@ public class DeviceController {
 
     @PostMapping(value = "/counter", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<CounterResponse> counter(@RequestBody @NotNull @Valid RfidTagRequestBody requestBody) {
-        log.info("Received mac address: {}", requestBody.MACADDR());
-        log.info("Received RFID tag id: {}", requestBody.RFID());
+        RfidReaderView rfidReader = getRfidReader(MacAddress.of(requestBody.MACADDR()));
 
         RfidTagId rfidTagId = RfidTagId.of(requestBody.RFID());
-        MacAddress macAddress = MacAddress.of(requestBody.MACADDR());
-        RfidReaderView rfidReader = this.rfidReaderService.getRfidReader(macAddress) //
-                .orElseThrow(() -> ResourceNotFoundException.rfidReader(macAddress));
-
         CounterResponse response = switch (rfidReader.type()) {
             case RfidReaderType.RFID_TAG_REGISTER -> registerRfidTag(rfidTagId);
             case RfidReaderType.RFID_TAG_ASSIGNER -> assignRfidTagOrGetUser(rfidTagId);
@@ -114,54 +109,22 @@ public class DeviceController {
 
     @PostMapping(value = "/card", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<DeviceCardResponse> card(@RequestBody @NotNull @Valid DeviceCardRequestBody requestBody) {
-        log.info("Received mac address: {}", requestBody.MACADDR());
-        log.info("Received RFID tag id: {}", requestBody.RFID());
+        RfidReaderView rfidReader = getRfidReader(MacAddress.of(requestBody.MACADDR()));
+        CustomerId customerId = getCustomerId(RfidTagId.of(requestBody.RFID()));
 
-        RfidTagId rfidTagId = RfidTagId.of(requestBody.RFID());
-        MacAddress macAddress = MacAddress.of(requestBody.MACADDR());
-        RfidReaderView rfidReader = this.rfidReaderService.getRfidReader(macAddress) //
-                .orElseThrow(() -> ResourceNotFoundException.rfidReader(macAddress));
-
-        RfidTagView rfidTag = this.rfidTagService.getRfidTag(rfidTagId) //
-                .orElseThrow(() -> ResourceNotFoundException.rfidTag(rfidTagId));
-
-        CustomerId customerId = this.rfidTagAssignmentService.getRfidTagAssignment(rfidTag.id()) //
-                .map(RfidTagAssignmentView::customerId) //
-                .orElseThrow(() -> new RuntimeException("TODO: No customer assigned to RFID tag"));
-
-        DeviceCardResponse response;
-        if (rfidReader.type() == RfidReaderType.GATE_KEEPER_IN) {
-            this.enterWorkshop.process(customerId);
-            response = DeviceCardResponse.builder() //
-                    .DEVUSECASE(RfidReaderType.GATE_KEEPER_IN.getKey()) //
-                    .ERROR("") //
-                    .STATE("END") //
-                    .ICON("HI") //
-                    .CUSTOMERNAME("Max Musterman") //
-                    .CUSTOMERSTARTSTOP("3:00") //
-                    .UNITS("5:00") //
-                    .build();
-        }
-        else if (rfidReader.type() == RfidReaderType.GATE_KEEPER_OUT) {
-            this.leaveWorkshop.process(customerId);
-            response = DeviceCardResponse.builder() //
-                    .DEVUSECASE(RfidReaderType.GATE_KEEPER_OUT.getKey()) //
-                    .ERROR("") //
-                    .STATE("END") //
-                    .ICON("BYE") //
-                    .CUSTOMERNAME("Max Musterman") //
-                    .CUSTOMERSTARTSTOP("3:00") //
-                    .UNITS("5:00") //
-                    .build();
-        }
-        else {
-            throw new RuntimeException("TODO: Invalid type of RFID reader");
-        }
+        DeviceCardResponse response = switch (rfidReader.type()) {
+            case GATE_KEEPER_IN -> enterWorkshop(customerId);
+            case GATE_KEEPER_OUT -> leaveWorkshop(customerId);
+            default -> throw new IllegalStateException("Unexpected value: " + rfidReader.type());
+        };
 
         return ResponseEntity.ok(response);
     }
 
-    private static String getDeviceNme(RfidReaderView rfidReader) {
+    // ------------------------------------------------------------------------
+    // helper
+
+    private String getDeviceNme(RfidReaderView rfidReader) {
         if (isNull(rfidReader.type())) {
             return "ERROR";
         }
@@ -169,15 +132,25 @@ public class DeviceController {
         return switch (rfidReader.type()) {
             case RFID_TAG_REGISTER -> "RFID Tag Register";
             case RFID_TAG_ASSIGNER -> "RFID Tag Assigner";
-            case GATE_KEEPER -> "Gate Keeper";
             case GATE_KEEPER_IN -> "Gate Keeper In";
             case GATE_KEEPER_OUT -> "Gate Keeper Out";
             case SWITCH_BOX -> "Switch Box";
         };
     }
 
-    // ------------------------------------------------------------------------
-    // helper
+    private RfidReaderView getRfidReader(MacAddress macAddress) {
+        return this.rfidReaderService.getRfidReader(macAddress) //
+                .orElseThrow(() -> ResourceNotFoundException.rfidReader(macAddress));
+    }
+
+    private CustomerId getCustomerId(RfidTagId rfidTagId) {
+        RfidTagView rfidTag = this.rfidTagService.getRfidTag(rfidTagId) //
+                .orElseThrow(() -> ResourceNotFoundException.rfidTag(rfidTagId));
+
+        return this.rfidTagAssignmentService.getRfidTagAssignment(rfidTag.id()) //
+                .map(RfidTagAssignmentView::customerId) //
+                .orElseThrow(() -> new RuntimeException("TODO: No customer assigned to RFID tag"));
+    }
 
     private CounterResponse registerRfidTag(RfidTagId rfid) {
         Optional<RfidTagView> rfidTag = this.rfidTagService.getRfidTag(rfid);
@@ -220,6 +193,34 @@ public class DeviceController {
         String fullName = customer.firstName() + " " + customer.lastName();
 
         return CounterResponse.assignerError(fullName);
+    }
+
+    private DeviceCardResponse enterWorkshop(CustomerId customerId) {
+        this.enterWorkshop.process(customerId);
+
+        return DeviceCardResponse.builder() //
+                .DEVUSECASE(RfidReaderType.GATE_KEEPER_IN.getKey()) //
+                .ERROR("") //
+                .STATE("END") //
+                .ICON("HI") //
+                .CUSTOMERNAME("Max Musterman") //
+                .CUSTOMERSTARTSTOP("3:00") //
+                .UNITS("5:00") //
+                .build();
+    }
+
+    private DeviceCardResponse leaveWorkshop(CustomerId customerId) {
+        this.leaveWorkshop.process(customerId);
+
+        return DeviceCardResponse.builder() //
+                .DEVUSECASE(RfidReaderType.GATE_KEEPER_OUT.getKey()) //
+                .ERROR("") //
+                .STATE("END") //
+                .ICON("BYE") //
+                .CUSTOMERNAME("Max Musterman") //
+                .CUSTOMERSTARTSTOP("3:00") //
+                .UNITS("5:00") //
+                .build();
     }
 
 }

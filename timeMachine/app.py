@@ -61,7 +61,6 @@ admin.add_view(ModelView(Customers, db.session))             # <- Kunden-Tabelle
 def index():
     return render_template("index.html")
 
-
 @app.route("/register", methods=("GET", "POST"))
 def register():
     form = RegisterForm(request.form)
@@ -74,7 +73,6 @@ def register():
     rfid = Clipboard.get_rfid("Counter")
     form.rfid.data = rfid
     return render_template("register.html", form=form)
-
 
 @app.route("/lookup", methods=("GET", "POST"))
 def lookup():
@@ -89,9 +87,7 @@ def lookup():
 
 #@app.route("/customer", methods=("GET", "POST"))
 #def customer():
-    
-    
-    
+
 @app.route("/checkout/<rfid>", methods=("GET", "POST"))
 def checkout(rfid: str):
     form = CheckoutForm()
@@ -112,7 +108,6 @@ def checkout(rfid: str):
         last_actions=last_actions,
         elapsed_min=min,
     )
-
 
 def handle_client(client_socket):
     with app.app_context():
@@ -155,7 +150,6 @@ def handle_client(client_socket):
                 else:
                     print("{}")
                     sock.sendall("{}")
-
 
 def handle_device_init(sock: Sock, request: DeviceInitRequest):
     device = (
@@ -317,6 +311,7 @@ def handle_device_card(sock: Sock, request: DeviceCardRequest):
         db.session.execute(db.select(Card).filter_by(rfid=request.RFID))
     ).scalar_one_or_none()
 
+    # Wenn RFID Tag nicht im Pool ist, dann error
     if card is None:
         response = DeviceCardResponse(
             CUSTOMERNAME="XXX",
@@ -332,20 +327,23 @@ def handle_device_card(sock: Sock, request: DeviceCardRequest):
         sock.sendall(response.model_dump_json().encode("utf-8"))
         return
 
+    # Wenn RFID Reader nicht im Pool ist, dann error
     elif device is not None:
         last_actions = CardAction.get_last_actions(card,device)
          
         customer_name = (                                                                          # <- Ermittlung des Kunden Vornamens
             db.session.execute(db.select(Customers).filter_by(id = card.customerid))
         ).scalar_one_or_none()
-        
+
+        # Wenn kein Customer zu der RFID-Tag zugewiesen ist, dann error
         if customer_name is None:
             # Für eine gefundene Karte sollte immer ein Name zu finden sein
             # wenn nicht ist zu analysieren was passiert ist
             print ("Error: Für eine gefundenen rfid-Tag muss immer ein Name zu finden sein, was ist hier passiert")
             print ("Email an den Admin-oder Eintrag in eine Log-Tabelle??")
             customer_name.vorname = "NoName!!"
-            
+
+        # Wenn Typ von RFID-Reader ist GateKeeper
         if device.usecase == "G":
             # GateKeeper bzw. TorWache zur Erfassung 
             # der Anwesenheitszeit des Kunden in der Werkstatt
@@ -406,6 +404,8 @@ def handle_device_card(sock: Sock, request: DeviceCardRequest):
 
             print(response.model_dump_json())
             sock.sendall(response.model_dump_json().encode("utf-8"))
+
+        # Wenn Typ von RFID-Reader ist SwitchBox
         elif (device.usecase == "S"):
             print ("UseCase SwitchBox")
             # customer use an unregistered card is handeled above
@@ -452,13 +452,11 @@ def handle_device_card(sock: Sock, request: DeviceCardRequest):
                 db.session.execute(db.select(Certificates).filter(Certificates.customerid == card.customerid and Certificates.toolid == device.toolid))
             ).scalar_one_or_none()
             
+            # Wenn kein Zertifikat/Einweisung für den Customer und das Tool gefunden wurde, dann error
             if certificate is not None:
                 # Schulungseintrag für Kundennummer und Werkzeug gefunden
                 now = datetime.datetime.now()
                 print ("Request-State:"+request.STATE+":")
-#                if len(last_actions) == 0 or last_actions[-1].type == "checkout":
-#                    # wenn kein Eintrag zufinden war bzw. der letzte Eintrag ein "checkout"-Event war
-#                    # dann ist dies ein "checkin"-Event
                 if request.STATE == "Idle":
                     # Durch irgendwelche Aktionen sind die Datenbank und der refidReader nicht im Takt
                     if(len(last_actions)>0):

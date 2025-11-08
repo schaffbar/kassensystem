@@ -27,6 +27,8 @@ public class CloseSession {
         CustomerView customer = this.customerService.getCustomer(customerId) //
                 .orElseThrow(() -> ResourceNotFoundException.customer(customerId));
 
+        // TODO: Check for pending workshop usages or other business rules before closing the session
+
         this.workshopSessionService.closeSession(customer.id());
     }
 

@@ -19,9 +19,15 @@ export class WorkshopSessionService {
     }),
   };
 
-  getWorkshopSessionByUser(userId: string): Observable<WorkshopSession> {
-    return this.http.get<WorkshopSession>(`${WORKSHOP_SESSION_API_URL}/open/${userId}`);
+  // --------------------------------------------------------------------------
+  // queries
+
+  getActiveWorkshopSession(userId: string): Observable<WorkshopSession> {
+    return this.http.get<WorkshopSession>(`${WORKSHOP_SESSION_API_URL}/${userId}/active`);
   }
+
+  // --------------------------------------------------------------------------
+  // commands
 
   closeWorkshopSession(userId: string): Observable<void> {
     return this.http.put<void>(`${WORKSHOP_SESSION_API_URL}/${userId}/close`, this.httpOptions);

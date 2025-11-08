@@ -56,7 +56,7 @@ export const UserOpenSessionStore = signalStore(
         tap(() => patchState(store, setPending())),
         // delay(200), // TODO: Simulate network latency
         exhaustMap((userId: string) => {
-          return store._workshopSessionService.getWorkshopSessionByUser(userId).pipe(
+          return store._workshopSessionService.getActiveWorkshopSession(userId).pipe(
             tapResponse({
               next: (openSession) => {
                 patchState(store, { openSession }, setFulfilled());

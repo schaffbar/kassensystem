@@ -1,14 +1,7 @@
 @if (openSessionStore.openSession(); as openSession) {
-  <h1>
-    Open Workshop Session for {{ openSession.id }}
-    <button mat-raised-button color="warn" (click)="closeSession()">Close Session</button>
-  </h1>
-}
-
-<h2>Workshop Time</h2>
-
-@if (openSessionStore.openSession(); as openSession) {
+  <button mat-flat-button color="primary" (click)="closeSession()">Close Session</button>
   @if (openSessionStore.slots().length > 0) {
+    <h2>Workshop Time</h2>
     <div class="table-container">
       <table mat-table [dataSource]="openSessionStore.slots()" class="mat-elevation-z8">
         <ng-container matColumnDef="entryTime">

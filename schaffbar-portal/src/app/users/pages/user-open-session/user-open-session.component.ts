@@ -1,6 +1,7 @@
 import { DatePipe } from '@angular/common';
 import { Component, inject, input } from '@angular/core';
 
+import { MatButtonModule } from '@angular/material/button';
 import { MatTableModule } from '@angular/material/table';
 
 import { WorkshopSessionService } from '../../workshop-session.service';
@@ -10,7 +11,7 @@ import { UserOpenSessionStore } from './user-open-session.store';
   selector: 'schbar-user-open-session',
   templateUrl: './user-open-session.component.html',
   styleUrl: './user-open-session.component.scss',
-  imports: [MatTableModule, DatePipe],
+  imports: [MatTableModule, MatButtonModule, DatePipe],
   providers: [UserOpenSessionStore, WorkshopSessionService],
 })
 export class UserOpenSessionComponent {

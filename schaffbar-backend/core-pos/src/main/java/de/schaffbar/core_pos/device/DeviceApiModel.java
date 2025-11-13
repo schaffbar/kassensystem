@@ -64,7 +64,10 @@ public interface DeviceApiModel {
             return CounterResponse.builder() //
                     .DEVUSECASE(RfidReaderType.RFID_TAG_ASSIGNER.getKey()) //
                     .ERROR("") //
+                    .ICON("OK") //
+                    .STATE("END") //
                     .CUSTOMERNAME(customerFullName) //
+                    .RFID("123456") // TODO: deliver this info
                     .build();
         }
 

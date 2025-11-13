@@ -43,18 +43,18 @@ public interface DeviceApiModel {
         public static CounterResponse registerOk() {
             return CounterResponse.builder() //
                     .DEVUSECASE(RfidReaderType.RFID_TAG_REGISTER.getKey()) //
+                    .STATE("END") //
                     .ERROR("") //
                     .ICON("OK") //
-                    .STATE("END") //
                     .build();
         }
 
         public static CounterResponse assignerOk() {
             return CounterResponse.builder() //
                     .DEVUSECASE(RfidReaderType.RFID_TAG_ASSIGNER.getKey()) //
+                    .STATE("END") //
                     .ERROR("") //
                     .ICON("OK") //
-                    .STATE("END") //
                     .CUSTOMERNAME("Piotr") // TODO: deliver this info
                     .RFID("123456") // TODO: deliver this info
                     .build();
@@ -63,9 +63,9 @@ public interface DeviceApiModel {
         public static CounterResponse userQueryOk(String customerFullName) {
             return CounterResponse.builder() //
                     .DEVUSECASE(RfidReaderType.RFID_TAG_ASSIGNER.getKey()) //
+                    .STATE("END") //
                     .ERROR("") //
                     .ICON("OK") //
-                    .STATE("END") //
                     .CUSTOMERNAME(customerFullName) //
                     .RFID("123456") // TODO: deliver this info
                     .build();
@@ -74,6 +74,7 @@ public interface DeviceApiModel {
         public static CounterResponse registerError(String message) {
             return CounterResponse.builder() //
                     .DEVUSECASE(RfidReaderType.RFID_TAG_REGISTER.getKey()) //
+                    .STATE("END") //
                     .ERROR(message) //
                     .CUSTOMERNAME("") // TODO: why do we need this field in error case?
                     .build();
@@ -82,6 +83,7 @@ public interface DeviceApiModel {
         public static CounterResponse assignerError(String message) {
             return CounterResponse.builder() //
                     .DEVUSECASE(RfidReaderType.RFID_TAG_ASSIGNER.getKey()) //
+                    .STATE("END") //
                     .ERROR(message) //
                     .CUSTOMERNAME("Test Customer") // TODO: why do we need this field in error case?
                     .build();
@@ -126,6 +128,8 @@ public interface DeviceApiModel {
 
         public static DeviceCardResponse errorNoUserRecognized(String message) {
             return DeviceCardResponse.builder() //
+                    .DEVUSECASE(RfidReaderType.GATE_KEEPER_IN.getKey()) // TODO: or OUT?
+                    .STATE("END") //
                     .ICON("NOREG") //
                     .ERROR(message) //
                     .UNITS("0") //
@@ -134,6 +138,8 @@ public interface DeviceApiModel {
 
         public static DeviceCardResponse errorNoAccess(String message, String customerName) {
             return DeviceCardResponse.builder() //
+                    .DEVUSECASE(RfidReaderType.GATE_KEEPER_IN.getKey()) // TODO: or OUT?
+                    .STATE("END") //
                     .ICON("STOP") //
                     .ERROR(message) //
                     .CUSTOMERNAME(customerName) //
@@ -143,6 +149,8 @@ public interface DeviceApiModel {
 
         public static DeviceCardResponse errorUnexpected(String message) {
             return DeviceCardResponse.builder() //
+                    .DEVUSECASE(RfidReaderType.GATE_KEEPER_IN.getKey()) // TODO: or OUT?
+                    .STATE("END") //
                     .ICON("NOREG") //
                     .ERROR(message) //
                     .UNITS("0") //

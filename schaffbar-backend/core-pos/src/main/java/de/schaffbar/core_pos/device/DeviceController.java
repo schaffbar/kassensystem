@@ -136,11 +136,14 @@ public class DeviceController {
 
             return ResponseEntity.ok(response);
         }
-        catch (UserAlreadyInWorkshopException | NoActiveWorkshopUsageFoundException e) {
-            return ResponseEntity.ok(DeviceCardResponse.errorNoAccess("Kein Zugang", customer.getFullName()));
+        catch (UserAlreadyInWorkshopException e) {
+            return ResponseEntity.ok(DeviceCardResponse.errorNoAccess("Du schaffst schon", customer.getFullName()));
+        }
+        catch (NoActiveWorkshopUsageFoundException e) {
+            return ResponseEntity.ok(DeviceCardResponse.errorNoAccess("Zwei mal Pause geht nicht", customer.getFullName()));
         }
         catch (NoActiveWorkshopSessionFoundException e) {
-            return ResponseEntity.ok(DeviceCardResponse.errorUnexpected("Kein Zugang"));
+            return ResponseEntity.ok(DeviceCardResponse.errorNoAccess("Du warst nie im Werkstatt", customer.getFullName()));
         }
         catch (Exception e) {
             return ResponseEntity.ok(DeviceCardResponse.errorUnexpected("Unerwarteter Fehler"));

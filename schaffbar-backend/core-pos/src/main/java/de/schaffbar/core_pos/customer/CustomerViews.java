@@ -20,7 +20,13 @@ public interface CustomerViews {
             @NotNull CustomerAddressView address, //
             @NotNull Instant createdAt, //
             @NotNull Instant updatedAt //
-    ) {}
+    ) {
+
+        public String getFullName() {
+            return this.firstName + " " + this.lastName;
+        }
+
+    }
 
     record CustomerAddressView( //
             @NotBlank String addressLine1, //

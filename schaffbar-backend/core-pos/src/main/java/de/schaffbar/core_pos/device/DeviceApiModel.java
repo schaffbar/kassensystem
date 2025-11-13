@@ -40,32 +40,31 @@ public interface DeviceApiModel {
             String ICON  //
     ) {
 
-        public static CounterResponse assignerOk() {
-            return CounterResponse.builder() //
-                    .DEVUSECASE(RfidReaderType.RFID_TAG_ASSIGNER.getKey()) //
-                    .ERROR("") //
-                    .STATE("END") //
-                    .CUSTOMERNAME("Piotr") //
-                    .RFID("123456") //
-                    .ICON("OK") //
-                    .build();
-        }
-
         public static CounterResponse registerOk() {
             return CounterResponse.builder() //
                     .DEVUSECASE(RfidReaderType.RFID_TAG_REGISTER.getKey()) //
                     .ERROR("") //
-                    .STATE("END") //
                     .ICON("OK") //
+                    .STATE("END") //
                     .build();
         }
 
-        public static CounterResponse assignerError(String message) {
+        public static CounterResponse assignerOk() {
             return CounterResponse.builder() //
                     .DEVUSECASE(RfidReaderType.RFID_TAG_ASSIGNER.getKey()) //
-                    .ERROR(message) //
+                    .ERROR("") //
+                    .ICON("OK") //
                     .STATE("END") //
-                    .ICON("RFID") //
+                    .CUSTOMERNAME("Piotr") // TODO: deliver this info
+                    .RFID("123456") // TODO: deliver this info
+                    .build();
+        }
+
+        public static CounterResponse userQueryOk(String customerFullName) {
+            return CounterResponse.builder() //
+                    .DEVUSECASE(RfidReaderType.RFID_TAG_ASSIGNER.getKey()) //
+                    .ERROR("") //
+                    .CUSTOMERNAME(customerFullName) //
                     .build();
         }
 
@@ -73,16 +72,21 @@ public interface DeviceApiModel {
             return CounterResponse.builder() //
                     .DEVUSECASE(RfidReaderType.RFID_TAG_REGISTER.getKey()) //
                     .ERROR(message) //
-                    .STATE("END") //
-                    .ICON("RFID") //
+                    .CUSTOMERNAME("") // TODO: why do we need this field in error case?
+                    .build();
+        }
+
+        public static CounterResponse assignerError(String message) {
+            return CounterResponse.builder() //
+                    .DEVUSECASE(RfidReaderType.RFID_TAG_ASSIGNER.getKey()) //
+                    .ERROR(message) //
+                    .CUSTOMERNAME("Test Customer") // TODO: why do we need this field in error case?
                     .build();
         }
 
     }
 
-    // TODO: change access level to PRIVATE
-    // @Builder(access = AccessLevel.PRIVATE)
-    @Builder
+    @Builder(access = AccessLevel.PRIVATE)
     record DeviceCardResponse( //
             String DEVUSECASE,  //
             String ERROR,  //
@@ -91,7 +95,58 @@ public interface DeviceApiModel {
             String CUSTOMERNAME,  //
             String CUSTOMERSTARTSTOP,  //
             String UNITS  //
-    ) {}
+    ) {
+
+        public static DeviceCardResponse enterOk(String customerName) {
+            return DeviceCardResponse.builder() //
+                    .DEVUSECASE(RfidReaderType.GATE_KEEPER_IN.getKey()) //
+                    .ICON("HI") //
+                    .ERROR("") //
+                    .STATE("END") //
+                    .CUSTOMERNAME(customerName) //
+                    .CUSTOMERSTARTSTOP("0:00") // TODO: deliver this info
+                    .UNITS("0") // TODO: deliver this info
+                    .build();
+        }
+
+        public static DeviceCardResponse leaveOk(String customerName) {
+            return DeviceCardResponse.builder() //
+                    .DEVUSECASE(RfidReaderType.GATE_KEEPER_OUT.getKey()) //
+                    .ICON("BYE") //
+                    .ERROR("") //
+                    .STATE("END") //
+                    .CUSTOMERNAME(customerName) //
+                    .CUSTOMERSTARTSTOP("0:00") // TODO: deliver this info
+                    .UNITS("0") // TODO: deliver this info
+                    .build();
+        }
+
+        public static DeviceCardResponse errorNoUserRecognized(String message) {
+            return DeviceCardResponse.builder() //
+                    .ICON("NOREG") //
+                    .ERROR(message) //
+                    .UNITS("0") //
+                    .build();
+        }
+
+        public static DeviceCardResponse errorNoAccess(String message, String customerName) {
+            return DeviceCardResponse.builder() //
+                    .ICON("STOP") //
+                    .ERROR(message) //
+                    .CUSTOMERNAME(customerName) //
+                    .UNITS("0") //
+                    .build();
+        }
+
+        public static DeviceCardResponse errorUnexpected(String message) {
+            return DeviceCardResponse.builder() //
+                    .ICON("NOREG") //
+                    .ERROR(message) //
+                    .UNITS("0") //
+                    .build();
+        }
+
+    }
 
     // ------------------------------------------------------------------------
     // request body

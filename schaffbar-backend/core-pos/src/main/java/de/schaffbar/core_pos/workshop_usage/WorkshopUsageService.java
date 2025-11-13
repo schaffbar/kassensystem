@@ -5,6 +5,8 @@ import static java.util.Comparator.comparing;
 import java.util.List;
 import java.util.Optional;
 
+import de.schaffbar.core_pos.exception.NoActiveWorkshopUsageFoundException;
+import de.schaffbar.core_pos.exception.UserAlreadyInWorkshopException;
 import de.schaffbar.core_pos.id.CustomerId;
 import de.schaffbar.core_pos.id.WorkshopSessionId;
 import de.schaffbar.core_pos.workshop_usage.WorkshopUsageViews.WorkshopUsageView;
@@ -62,12 +64,12 @@ public class WorkshopUsageService {
     }
 
     private void throwCustomerIsAlreadyInWorkshop(WorkshopUsage workshopUsage) {
-        throw new RuntimeException("Customer [id: " + workshopUsage.getCustomerId() + "] is already in workshop");
+        throw new UserAlreadyInWorkshopException(workshopUsage.getCustomerId());
     }
 
     private Runnable throwNoActiveWorkshopUsageFound(CustomerId customerId) {
         return () -> {
-            throw new RuntimeException("No active workshop usage found for customer [id: " + customerId + "]");
+            throw new NoActiveWorkshopUsageFoundException(customerId);
         };
     }
 

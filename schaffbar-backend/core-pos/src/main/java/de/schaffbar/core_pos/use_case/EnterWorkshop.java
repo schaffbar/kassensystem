@@ -34,12 +34,15 @@ public class EnterWorkshop {
         this.workshopUsageService.enterWorkshop(customerId, sessionId);
     }
 
+    // ------------------------------------------------------------------------
+    // helper
+
     private WorkshopSessionId createWorkshopSession(CustomerId customerId) {
         this.workshopSessionService.startSession(customerId);
 
         return this.workshopSessionService.getOpenWorkshopSession(customerId) //
                 .map(WorkshopSessionView::id) //
-                .orElseThrow(() -> new RuntimeException("TODO: Error during creation of workshop session")); // TODO: fix it
+                .orElseThrow(() -> new RuntimeException("TODO: Error during creation of workshop session")); // TODO: error
     }
 
 }

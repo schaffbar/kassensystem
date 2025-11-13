@@ -14,6 +14,10 @@ import de.schaffbar.core_pos.device.DeviceApiModel.DeviceCardResponse;
 import de.schaffbar.core_pos.device.DeviceApiModel.InitRequestBody;
 import de.schaffbar.core_pos.device.DeviceApiModel.InitResponse;
 import de.schaffbar.core_pos.device.DeviceApiModel.RfidTagRequestBody;
+import de.schaffbar.core_pos.exception.NoActiveWorkshopSessionFoundException;
+import de.schaffbar.core_pos.exception.NoActiveWorkshopUsageFoundException;
+import de.schaffbar.core_pos.exception.NoCustomerAssignedException;
+import de.schaffbar.core_pos.exception.UserAlreadyInWorkshopException;
 import de.schaffbar.core_pos.id.CustomerId;
 import de.schaffbar.core_pos.id.MacAddress;
 import de.schaffbar.core_pos.id.RfidReaderId;
@@ -109,16 +113,38 @@ public class DeviceController {
 
     @PostMapping(value = "/card", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<DeviceCardResponse> card(@RequestBody @NotNull @Valid DeviceCardRequestBody requestBody) {
-        RfidReaderView rfidReader = getRfidReader(MacAddress.of(requestBody.MACADDR()));
-        CustomerId customerId = getCustomerId(RfidTagId.of(requestBody.RFID()));
+        RfidReaderView rfidReader;
+        CustomerView customer;
 
-        DeviceCardResponse response = switch (rfidReader.type()) {
-            case GATE_KEEPER_IN -> enterWorkshop(customerId);
-            case GATE_KEEPER_OUT -> leaveWorkshop(customerId);
-            default -> throw new IllegalStateException("Unexpected value: " + rfidReader.type());
-        };
+        try {
+            rfidReader = getRfidReader(MacAddress.of(requestBody.MACADDR()));
+            customer = getCustomer(RfidTagId.of(requestBody.RFID()));
+        }
+        catch (ResourceNotFoundException | NoCustomerAssignedException e) {
+            return ResponseEntity.ok(DeviceCardResponse.errorNoUserRecognized("Kunde nicht erkannt"));
+        }
+        catch (Exception e) {
+            return ResponseEntity.ok(DeviceCardResponse.errorUnexpected("Unerwarteter Fehler"));
+        }
 
-        return ResponseEntity.ok(response);
+        try {
+            DeviceCardResponse response = switch (rfidReader.type()) {
+                case GATE_KEEPER_IN -> enterWorkshop(customer);
+                case GATE_KEEPER_OUT -> leaveWorkshop(customer);
+                default -> throw new IllegalStateException("Unexpected value for RFID reader type: " + rfidReader.type());
+            };
+
+            return ResponseEntity.ok(response);
+        }
+        catch (UserAlreadyInWorkshopException | NoActiveWorkshopUsageFoundException e) {
+            return ResponseEntity.ok(DeviceCardResponse.errorNoAccess("Kein Zugang", customer.getFullName()));
+        }
+        catch (NoActiveWorkshopSessionFoundException e) {
+            return ResponseEntity.ok(DeviceCardResponse.errorUnexpected("Kein Zugang"));
+        }
+        catch (Exception e) {
+            return ResponseEntity.ok(DeviceCardResponse.errorUnexpected("Unerwarteter Fehler"));
+        }
     }
 
     // ------------------------------------------------------------------------
@@ -143,13 +169,16 @@ public class DeviceController {
                 .orElseThrow(() -> ResourceNotFoundException.rfidReader(macAddress));
     }
 
-    private CustomerId getCustomerId(RfidTagId rfidTagId) {
+    private CustomerView getCustomer(RfidTagId rfidTagId) {
         RfidTagView rfidTag = this.rfidTagService.getRfidTag(rfidTagId) //
                 .orElseThrow(() -> ResourceNotFoundException.rfidTag(rfidTagId));
 
-        return this.rfidTagAssignmentService.getRfidTagAssignment(rfidTag.id()) //
+        CustomerId customerId = this.rfidTagAssignmentService.getRfidTagAssignment(rfidTag.id()) //
                 .map(RfidTagAssignmentView::customerId) //
-                .orElseThrow(() -> new RuntimeException("TODO: No customer assigned to RFID tag"));
+                .orElseThrow(() -> new NoCustomerAssignedException(rfidTagId));
+
+        return this.customerService.getCustomer(customerId) //
+                .orElseThrow(() -> ResourceNotFoundException.customer(customerId));
     }
 
     private CounterResponse registerRfidTag(RfidTagId rfid) {
@@ -190,37 +219,19 @@ public class DeviceController {
         CustomerView customer = this.customerService.getCustomer(customerId) //
                 .orElseThrow(() -> ResourceNotFoundException.customer(customerId));
 
-        String fullName = customer.firstName() + " " + customer.lastName();
-
-        return CounterResponse.assignerError(fullName);
+        return CounterResponse.userQueryOk(customer.getFullName());
     }
 
-    private DeviceCardResponse enterWorkshop(CustomerId customerId) {
-        this.enterWorkshop.process(customerId);
+    private DeviceCardResponse enterWorkshop(CustomerView customer) {
+        this.enterWorkshop.process(customer.id());
 
-        return DeviceCardResponse.builder() //
-                .DEVUSECASE(RfidReaderType.GATE_KEEPER_IN.getKey()) //
-                .ERROR("") //
-                .STATE("END") //
-                .ICON("HI") //
-                .CUSTOMERNAME("Max Musterman") //
-                .CUSTOMERSTARTSTOP("3:00") //
-                .UNITS("5:00") //
-                .build();
+        return DeviceCardResponse.enterOk(customer.getFullName());
     }
 
-    private DeviceCardResponse leaveWorkshop(CustomerId customerId) {
-        this.leaveWorkshop.process(customerId);
+    private DeviceCardResponse leaveWorkshop(CustomerView customer) {
+        this.leaveWorkshop.process(customer.id());
 
-        return DeviceCardResponse.builder() //
-                .DEVUSECASE(RfidReaderType.GATE_KEEPER_OUT.getKey()) //
-                .ERROR("") //
-                .STATE("END") //
-                .ICON("BYE") //
-                .CUSTOMERNAME("Max Musterman") //
-                .CUSTOMERSTARTSTOP("3:00") //
-                .UNITS("5:00") //
-                .build();
+        return DeviceCardResponse.leaveOk(customer.getFullName());
     }
 
 }

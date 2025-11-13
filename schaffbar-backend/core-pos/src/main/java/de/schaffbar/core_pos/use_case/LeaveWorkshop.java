@@ -1,5 +1,6 @@
 package de.schaffbar.core_pos.use_case;
 
+import de.schaffbar.core_pos.exception.NoActiveWorkshopSessionFoundException;
 import de.schaffbar.core_pos.id.CustomerId;
 import de.schaffbar.core_pos.id.WorkshopSessionId;
 import de.schaffbar.core_pos.workshop_session.WorkshopSessionService;
@@ -29,7 +30,7 @@ public class LeaveWorkshop {
 
         WorkshopSessionId sessionId = this.workshopSessionService.getOpenWorkshopSession(customerId) //
                 .map(WorkshopSessionViews.WorkshopSessionView::id) //
-                .orElseThrow(() -> new RuntimeException("TODO: Error during creation of workshop session")); // TODO: fix it
+                .orElseThrow(() -> new NoActiveWorkshopSessionFoundException(customerId));
 
         this.workshopUsageService.leaveWorkshop(customerId, sessionId);
     }

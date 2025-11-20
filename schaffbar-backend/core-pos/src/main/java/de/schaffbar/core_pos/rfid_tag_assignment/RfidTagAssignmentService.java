@@ -3,6 +3,7 @@ package de.schaffbar.core_pos.rfid_tag_assignment;
 import java.util.List;
 import java.util.Optional;
 
+import de.schaffbar.core_pos.exception.NoWaitingAssingmentException;
 import de.schaffbar.core_pos.id.CustomerId;
 import de.schaffbar.core_pos.id.RfidTagId;
 import de.schaffbar.core_pos.rfid_tag_assignment.RfidTagAssignmentViews.RfidTagAssignmentView;
@@ -66,7 +67,7 @@ public class RfidTagAssignmentService {
         this.rfidTagAssignmentRepository.findWaitingForAssignment() //
                 .ifPresentOrElse( //
                         assignment -> assignment.assignRfidTag(rfidTagId), //
-                        throwNoWaitingAssignmentFound());
+                        throwNoWaitingAssignmentFound(rfidTagId));
     }
 
     @Transactional
@@ -81,9 +82,9 @@ public class RfidTagAssignmentService {
     // ------------------------------------------------------------------------
     // helper
 
-    private Runnable throwNoWaitingAssignmentFound() {
+    private Runnable throwNoWaitingAssignmentFound(RfidTagId rfidTagId) {
         return () -> {
-            throw new RuntimeException("No waiting for RFID tag assignment found");
+            throw new NoWaitingAssingmentException(rfidTagId);
         };
     }
 

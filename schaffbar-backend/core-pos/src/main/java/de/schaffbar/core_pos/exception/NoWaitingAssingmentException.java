@@ -1,0 +1,18 @@
+package de.schaffbar.core_pos.exception;
+
+import java.io.Serial;
+
+import de.schaffbar.core_pos.id.RfidTagId;
+
+public class NoWaitingAssingmentException extends RuntimeException {
+
+    @Serial
+    private static final long serialVersionUID = 1L;
+
+    private static final String MESSAGE = "RFID [id: %s] nicht zugewiesen";
+
+    public NoWaitingAssingmentException(RfidTagId id) {
+        super(String.format(MESSAGE, id.getValue()), null);
+    }
+
+}

@@ -224,6 +224,16 @@ public class DeviceController {
 
             return CounterResponse.assignerOk(customer.getFullName(), rfidTagId);
         }
+        catch (ResourceNotFoundException e) {
+            String message = switch (e.getResource()) {
+                case RFID_READER -> "RFID Reader nicht erkannt";
+                case RFID_TAG -> "RFID Tag nicht erkannt";
+                case CUSTOMER -> "Kunde nicht erkannt";
+                default -> "Unerwarteter Fehler";
+            };
+
+            return CounterResponse.assignerError(message);
+        }
         catch (Exception e) {
             return CounterResponse.assignerError(e.getMessage());
         }

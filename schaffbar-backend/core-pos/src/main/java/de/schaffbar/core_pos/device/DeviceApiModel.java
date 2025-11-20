@@ -1,5 +1,6 @@
 package de.schaffbar.core_pos.device;
 
+import de.schaffbar.core_pos.id.RfidTagId;
 import de.schaffbar.core_pos.rfid_reader.RfidReaderType;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -49,25 +50,25 @@ public interface DeviceApiModel {
                     .build();
         }
 
-        public static CounterResponse assignerOk() {
-            return CounterResponse.builder() //
-                    .DEVUSECASE(RfidReaderType.RFID_TAG_ASSIGNER.getKey()) //
-                    .STATE("END") //
-                    .ERROR("") //
-                    .ICON("OK") //
-                    .CUSTOMERNAME("Piotr") // TODO: deliver this info
-                    .RFID("123456") // TODO: deliver this info
-                    .build();
-        }
-
-        public static CounterResponse userQueryOk(String customerFullName) {
+        public static CounterResponse assignerOk(String customerFullName, RfidTagId rfidTagId) {
             return CounterResponse.builder() //
                     .DEVUSECASE(RfidReaderType.RFID_TAG_ASSIGNER.getKey()) //
                     .STATE("END") //
                     .ERROR("") //
                     .ICON("OK") //
                     .CUSTOMERNAME(customerFullName) //
-                    .RFID("123456") // TODO: deliver this info
+                    .RFID(rfidTagId.getValue()) //
+                    .build();
+        }
+
+        public static CounterResponse userQueryOk(String customerFullName, RfidTagId rfidTagId) {
+            return CounterResponse.builder() //
+                    .DEVUSECASE(RfidReaderType.RFID_TAG_ASSIGNER.getKey()) //
+                    .STATE("END") //
+                    .ERROR("") //
+                    .ICON("OK") //
+                    .CUSTOMERNAME(customerFullName) //
+                    .RFID(rfidTagId.getValue()) //
                     .build();
         }
 
@@ -76,7 +77,7 @@ public interface DeviceApiModel {
                     .DEVUSECASE(RfidReaderType.RFID_TAG_REGISTER.getKey()) //
                     .STATE("END") //
                     .ERROR(message) //
-                    .CUSTOMERNAME("") // TODO: why do we need this field in error case?
+                    .CUSTOMERNAME("Error") //
                     .build();
         }
 
@@ -85,7 +86,7 @@ public interface DeviceApiModel {
                     .DEVUSECASE(RfidReaderType.RFID_TAG_ASSIGNER.getKey()) //
                     .STATE("END") //
                     .ERROR(message) //
-                    .CUSTOMERNAME("Test Customer") // TODO: why do we need this field in error case?
+                    .CUSTOMERNAME("Error") //
                     .build();
         }
 

@@ -120,8 +120,18 @@ public class DeviceController {
             rfidReader = getRfidReader(MacAddress.of(requestBody.MACADDR()));
             customer = getCustomer(RfidTagId.of(requestBody.RFID()));
         }
-        catch (ResourceNotFoundException | NoCustomerAssignedException e) {
-            return ResponseEntity.ok(DeviceCardResponse.errorNoUserRecognized("Kunde nicht erkannt"));
+        catch (ResourceNotFoundException e) {
+            String message = switch (e.getResource()) {
+                case RFID_READER -> "RFID Reader nicht erkannt";
+                case RFID_TAG -> "RFID Tag nicht erkannt";
+                case CUSTOMER -> "Kunde nicht erkannt";
+                default -> "Unerwarteter Fehler";
+            };
+
+            return ResponseEntity.ok(DeviceCardResponse.errorNoUserRecognized(message));
+        }
+        catch (NoCustomerAssignedException e) {
+            return ResponseEntity.ok(DeviceCardResponse.errorNoUserRecognized("Kein Kunde für RFID Tag"));
         }
         catch (Exception e) {
             return ResponseEntity.ok(DeviceCardResponse.errorUnexpected("Unerwarteter Fehler"));
@@ -204,25 +214,26 @@ public class DeviceController {
             return assignRfidTag(rfidTagId);
         }
 
-        return getUser(assignment.customerId());
+        return getUser(assignment.customerId(), rfidTagId);
     }
 
     private CounterResponse assignRfidTag(RfidTagId rfidTagId) {
         try {
             this.assignRfidTagUseCase.process(rfidTagId);
+            CustomerView customer = getCustomer(rfidTagId);
 
-            return CounterResponse.assignerOk();
+            return CounterResponse.assignerOk(customer.getFullName(), rfidTagId);
         }
         catch (Exception e) {
             return CounterResponse.assignerError(e.getMessage());
         }
     }
 
-    private CounterResponse getUser(CustomerId customerId) {
+    private CounterResponse getUser(CustomerId customerId, RfidTagId rfidTagId) {
         CustomerView customer = this.customerService.getCustomer(customerId) //
                 .orElseThrow(() -> ResourceNotFoundException.customer(customerId));
 
-        return CounterResponse.userQueryOk(customer.getFullName());
+        return CounterResponse.userQueryOk(customer.getFullName(), rfidTagId);
     }
 
     private DeviceCardResponse enterWorkshop(CustomerView customer) {

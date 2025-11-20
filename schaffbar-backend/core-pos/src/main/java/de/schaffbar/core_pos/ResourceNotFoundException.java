@@ -18,8 +18,12 @@ public class ResourceNotFoundException extends RuntimeException {
 
     private static final String MESSAGE = "Resource %s [id: %s] does not exist!";
 
+    @Getter
+    private final Resource resource;
+
     private ResourceNotFoundException(Resource resource, String id) {
         super(buildExceptionMessage(resource, id), null);
+        this.resource = resource;
     }
 
     // ------------------------------------------------------------------------

@@ -226,9 +226,9 @@ public class DeviceController {
         }
         catch (ResourceNotFoundException e) {
             String message = switch (e.getResource()) {
-                case RFID_READER -> "RFID Reader nicht erkannt";
-                case RFID_TAG -> "RFID Tag nicht erkannt";
-                case CUSTOMER -> "Kunde nicht erkannt";
+                case RFID_READER -> "RFID Reader unbekannt";
+                case RFID_TAG -> "RFID Tag unbekannt";
+                case CUSTOMER -> "Kunde unbekannt";
                 default -> "Unerwarteter Fehler";
             };
 

@@ -2,7 +2,47 @@
 
 ## Schaffbar
 
-Deployment instructions for the Schaffbar server will be provided in a future update.
+1. Join `Schaffbar` WLAN
+
+2. Connect with server
+
+```bash
+ssh <odoo_server>
+(enter password)
+```
+
+3. Pull updates
+
+```bash
+cd kassensystem/
+git pull
+```
+
+4. Create `.env` file
+
+```
+# Database configuration
+POSTGRES_USER=<>
+POSTGRES_PASSWORD=<>
+POSTGRES_DB=<>
+
+# Backend configuration
+# BACKEND_ENV=dev
+# BACKEND_ENV=prod
+
+# Frontend configuration
+# FRONTEND_ENV=development
+# FRONTEND_ENV=production
+```
+
+5. Run docker compose
+
+```bash
+sudo su -
+(enter password)
+cd /home/schaffbar/kassensystem/schaffbar-backend
+docker compose up -d --build
+```
 
 ## Local (only Docker required)
 

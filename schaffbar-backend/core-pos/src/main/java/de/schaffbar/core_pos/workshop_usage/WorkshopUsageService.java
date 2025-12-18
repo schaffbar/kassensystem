@@ -39,20 +39,25 @@ public class WorkshopUsageService {
     // command
 
     @Transactional
-    public void enterWorkshop(@NotNull @Valid CustomerId customerId, @NotNull @Valid WorkshopSessionId workshopSessionId) {
+    public WorkshopUsage enterWorkshop(@NotNull @Valid CustomerId customerId, @NotNull @Valid WorkshopSessionId workshopSessionId) {
         getOpenWorkshopUsage(customerId, workshopSessionId) //
                 .ifPresent(this::throwCustomerIsAlreadyInWorkshop);
 
         WorkshopUsage workshopUsage = WorkshopUsage.of(customerId, workshopSessionId);
         this.workshopUsageRepository.save(workshopUsage);
+        
+        return workshopUsage;
     }
 
     @Transactional
-    public void leaveWorkshop(@NotNull @Valid CustomerId customerId, @NotNull @Valid WorkshopSessionId workshopSessionId) {
+    public WorkshopUsage leaveWorkshop(@NotNull @Valid CustomerId customerId, @NotNull @Valid WorkshopSessionId workshopSessionId) {
         getOpenWorkshopUsage(customerId, workshopSessionId) //
                 .ifPresentOrElse( //
                         WorkshopUsage::exit, //
                         throwNoActiveWorkshopUsageFound(customerId));
+        
+        WorkshopUsage workshopUsage = WorkshopUsage.of(customerId, workshopSessionId);
+        return workshopUsage;
     }
 
     // ------------------------------------------------------------------------

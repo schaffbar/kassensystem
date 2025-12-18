@@ -27,6 +27,7 @@ import lombok.ToString;
 @ToString
 @Entity
 @Table(name = "WORKSHOP_USAGE", schema = "SCHAFFBAR")
+public
 class WorkshopUsage { // TODO: Consider renaming to WorkshopSlot, or UsageSlot for clarity.
 
     @Id

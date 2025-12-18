@@ -5,6 +5,7 @@ import de.schaffbar.core_pos.id.CustomerId;
 import de.schaffbar.core_pos.id.WorkshopSessionId;
 import de.schaffbar.core_pos.workshop_session.WorkshopSessionService;
 import de.schaffbar.core_pos.workshop_session.WorkshopSessionViews;
+import de.schaffbar.core_pos.workshop_usage.WorkshopUsage;
 import de.schaffbar.core_pos.workshop_usage.WorkshopUsageService;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
@@ -18,21 +19,19 @@ import org.springframework.validation.annotation.Validated;
 @Validated
 @RequiredArgsConstructor
 public class LeaveWorkshop {
+	private final @NonNull WorkshopSessionService workshopSessionService;
+	private final @NonNull WorkshopUsageService workshopUsageService;
 
-    private final @NonNull WorkshopSessionService workshopSessionService;
+	@Transactional
+	public void process(@NotNull @Valid CustomerId customerId) {
 
-    private final @NonNull WorkshopUsageService workshopUsageService;
+		// TODO: stop any active tool usage associated with the given RFID tag, if present
 
-    @Transactional
-    public void process(@NotNull @Valid CustomerId customerId) {
+		WorkshopSessionId sessionId = this.workshopSessionService.getOpenWorkshopSession(customerId) 
+				.map(WorkshopSessionViews.WorkshopSessionView::id) 
+				.orElseThrow(() -> new NoActiveWorkshopSessionFoundException(customerId));
 
-        // TODO: stop any active tool usage associated with the given RFID tag, if present
-
-        WorkshopSessionId sessionId = this.workshopSessionService.getOpenWorkshopSession(customerId) //
-                .map(WorkshopSessionViews.WorkshopSessionView::id) //
-                .orElseThrow(() -> new NoActiveWorkshopSessionFoundException(customerId));
-
-        this.workshopUsageService.leaveWorkshop(customerId, sessionId);
-    }
-
+		WorkshopUsage workshopUsage = this.workshopUsageService.leaveWorkshop(customerId, sessionId);
+		workshopUsage.getExitTime();
+	}
 }

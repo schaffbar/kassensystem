@@ -1,9 +1,9 @@
-@if (openSessionStore.openSession(); as openSession) {
+@if (detailsStore.openSession(); as openSession) {
   <button mat-flat-button color="primary" (click)="closeSession()">Close Session</button>
-  @if (openSessionStore.slots().length > 0) {
+  @if (detailsStore.slots().length > 0) {
     <h2>Workshop Time</h2>
     <div class="table-container">
-      <table mat-table [dataSource]="openSessionStore.slots()" class="mat-elevation-z8">
+      <table mat-table [dataSource]="detailsStore.slots()" class="mat-elevation-z8">
         <ng-container matColumnDef="entryTime">
           <th mat-header-cell *matHeaderCellDef>Entry Time</th>
           <td mat-cell *matCellDef="let slot">
@@ -30,7 +30,7 @@
       </table>
     </div>
 
-    <h3>Total Duration: {{ openSessionStore.totalTimeInMinutes() }} minutes</h3>
+    <h3>Total Duration: {{ detailsStore.totalTimeInMinutes() }} minutes</h3>
   } @else {
     <p>No slots available for this session.</p>
   }

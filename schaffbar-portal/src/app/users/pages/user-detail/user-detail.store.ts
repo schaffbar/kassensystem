@@ -19,11 +19,14 @@ import { RfidTagAssignment, RfidTagAssignmentStatus } from '../../rfid-tag-assig
 import { RfidTagAssignmentService } from '../../rfid-tag-assignment.service';
 import { User, UserAddress } from '../../user.model';
 import { UsersService } from '../../users.service';
+import { WorkshopSession } from '../../workshop-session.model';
+import { WorkshopSessionService } from '../../workshop-session.service';
 
 interface UserDetailState {
   userId: string | null;
   user: User | null;
   rfidTagAssignment: RfidTagAssignment | null;
+  openSession: WorkshopSession | null;
   dirty: boolean;
 }
 
@@ -31,6 +34,7 @@ const initialState: UserDetailState = {
   userId: null,
   user: null,
   rfidTagAssignment: null,
+  openSession: null,
   dirty: false,
 };
 
@@ -51,10 +55,18 @@ export const UserDetailStore = signalStore(
       () => !!rfidTagAssignment() && rfidTagAssignment()?.status == RfidTagAssignmentStatus.Assigned,
     ),
   })),
+  withComputed(({ openSession }) => ({
+    slots: computed(() => openSession()?.workshopUsages ?? []),
+  })),
+  withComputed(({ slots }) => ({
+    slotsCount: computed(() => slots().length),
+    totalTimeInMinutes: computed(() => slots().reduce((sum, usage) => sum + usage.durationInMinutes, 0)),
+  })),
   withRequestStatus(),
   withProps(() => ({
     _usersService: inject(UsersService),
     _assignmentService: inject(RfidTagAssignmentService),
+    _workshopSessionService: inject(WorkshopSessionService),
   })),
   withMethods((store) => ({
     setUserId: signalMethod<string>((userId) => {
@@ -73,23 +85,6 @@ export const UserDetailStore = signalStore(
             tapResponse({
               next: (user) => {
                 patchState(store, { user }, setFulfilled());
-              },
-              error: (error: { message: string }) => patchState(store, setError(error.message)),
-            }),
-          );
-        }),
-      ),
-    ),
-    loadRfidTagAssignments: rxMethod<string>(
-      pipe(
-        filter((userId: string) => !!userId),
-        tap(() => patchState(store, setPending())),
-        // delay(100), // TODO: Simulate network latency
-        exhaustMap((userId: string) => {
-          return store._assignmentService.getRfidTagAssignmetByUser(userId).pipe(
-            tapResponse({
-              next: (rfidTagAssignment) => {
-                patchState(store, { rfidTagAssignment }, setFulfilled());
               },
               error: (error: { message: string }) => patchState(store, setError(error.message)),
             }),
@@ -135,6 +130,24 @@ export const UserDetailStore = signalStore(
             tapResponse({
               next: () => {
                 patchState(store, setFulfilled(), setDirty());
+              },
+              error: (error: { message: string }) => patchState(store, setError(error.message)),
+            }),
+          );
+        }),
+      ),
+    ),
+  })),
+  withMethods((store) => ({
+    loadRfidTagAssignments: rxMethod<string>(
+      pipe(
+        filter((userId: string) => !!userId),
+        tap(() => patchState(store, setPending())),
+        exhaustMap((userId: string) => {
+          return store._assignmentService.getRfidTagAssignmetByUser(userId).pipe(
+            tapResponse({
+              next: (rfidTagAssignment) => {
+                patchState(store, { rfidTagAssignment }, setFulfilled());
               },
               error: (error: { message: string }) => patchState(store, setError(error.message)),
             }),
@@ -188,15 +201,50 @@ export const UserDetailStore = signalStore(
       ),
     ),
   })),
+  withMethods((store) => ({
+    loadOpenSession: rxMethod<string>(
+      pipe(
+        filter((userId: string) => !!userId),
+        tap(() => patchState(store, setPending())),
+        exhaustMap((userId: string) => {
+          return store._workshopSessionService.getActiveWorkshopSession(userId).pipe(
+            tapResponse({
+              next: (openSession) => {
+                patchState(store, { openSession }, setFulfilled());
+              },
+              error: (error: { message: string }) => patchState(store, setError(error.message)),
+            }),
+          );
+        }),
+      ),
+    ),
+    closeSession: rxMethod<string>(
+      pipe(
+        filter((userId: string) => !!userId),
+        tap(() => patchState(store, setPending())),
+        exhaustMap((userId: string) => {
+          return store._workshopSessionService.closeWorkshopSession(userId).pipe(
+            tapResponse({
+              next: () => {
+                patchState(store, setDirty(), setFulfilled());
+              },
+              error: (error: { message: string }) => patchState(store, setError(error.message)),
+            }),
+          );
+        }),
+      ),
+    ),
+  })),
   withHooks({
     onInit(store) {
       effect(() => {
         const userId = store.userId();
         const dirty = store.dirty();
         if (dirty && userId) {
-          console.log('[Store - onInit] Loading user details for userId:', userId, 'Dirty:', dirty);
+          console.log('[Store - onInit] Loading user details for userId:', userId, ', dirty:', dirty);
           store.loadSelectedUser(userId);
           store.loadRfidTagAssignments(userId);
+          store.loadOpenSession(userId);
           patchState(store, { dirty: false });
         }
       });

@@ -1,0 +1,85 @@
+{
+  "shared": {
+    "welcome": "Welcome",
+    "table": {
+      "actionsColumn": "Actions"
+    },
+    "dialogs": {
+      "delete": {
+        "confirm": "Delete",
+        "cancel": "Cancel"
+      }
+    }
+  },
+  "sidebar": {
+    "dashboard": "Dashboard",
+    "users": "Users",
+    "tools": "Tools",
+    "rfidTags": "RFID Tags",
+    "rfidReaders": "RFID Readers",
+    "about": "About"
+  },
+  "dashboard": {
+    "title": "Dashboard"
+  },
+  "users": {
+    "title": "Users",
+    "actions": {
+      "addUser": "Add User",
+      "search": "Search"
+    },
+    "dialogs": {
+      "addNewUser": {
+        "title": "Add New User",
+        "sections": {
+          "contactInformation": "Contact Information",
+          "billingInformation": "Billing Information"
+        },
+        "actions": {
+          "confirm": "Add User",
+          "cancel": "Cancel"
+        },
+        "errors": {
+          "required": "is required",
+          "validEmail": "Please enter a valid email address",
+          "exactLength": "must be exactly {{length}} characters long"
+        }
+      },
+      "deleteUser": {
+        "title": "Delete User",
+        "message": "Are you sure you want to delete this user?",
+        "actions": {
+          "confirm": "Delete",
+          "cancel": "Cancel"
+        }
+      }
+    },
+    "shared": {
+      "userProperties": {
+        "firstName": "First Name",
+        "lastName": "Last Name",
+        "dateOfBirth": "Date of Birth",
+        "clubMember": "Club Member",
+        "email": "Email",
+        "phone": "Phone",
+        "addressLine1": "Address",
+        "addressLine2": "Address Line 2",
+        "postalCode": "Postal Code",
+        "city": "City",
+        "country": "Country"
+      }
+    }
+  },
+  "tools": {
+    "title": "Tools"
+  },
+  "rfidTags": {
+    "title": "RFID Tags"
+  },
+  "rfidReaders": {
+    "title": "RFID Readers"
+  },
+  "about": {
+    "title": "About Schaffbar Portal"
+  }
+}

@@ -9,6 +9,7 @@ import { MatListModule } from '@angular/material/list';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatToolbarModule } from '@angular/material/toolbar';
 
+import { TranslatePipe } from '@ngx-translate/core';
 import { Observable } from 'rxjs';
 import { map, shareReplay } from 'rxjs/operators';
 
@@ -31,19 +32,20 @@ export interface MenuItem {
     MatListModule,
     MatIconModule,
     AsyncPipe,
+    TranslatePipe,
   ],
 })
 export class NavigationComponent {
-  menuItems = signal<MenuItem[]>([
-    { icon: 'home', name: 'Home', route: 'home' },
-    { icon: 'people', name: 'Users', route: 'users' },
-    { icon: 'construction', name: 'Tools', route: 'tools' },
-    { icon: 'memory', name: 'RFID Tags', route: 'rfid-tags' },
-    { icon: 'developer_board', name: 'RFID Readers', route: 'rfid-readers' },
-    { icon: 'info', name: 'About', route: 'about' },
-  ]);
-
   private breakpointObserver = inject(BreakpointObserver);
+
+  menuItems = signal<MenuItem[]>([
+    { icon: 'home', name: 'sidebar.dashboard', route: 'home' },
+    { icon: 'people', name: 'sidebar.users', route: 'users' },
+    { icon: 'construction', name: 'sidebar.tools', route: 'tools' },
+    { icon: 'memory', name: 'sidebar.rfidTags', route: 'rfid-tags' },
+    { icon: 'developer_board', name: 'sidebar.rfidReaders', route: 'rfid-readers' },
+    { icon: 'info', name: 'sidebar.about', route: 'about' },
+  ]);
 
   isHandset$: Observable<boolean> = this.breakpointObserver.observe(Breakpoints.Handset).pipe(
     map((result) => result.matches),

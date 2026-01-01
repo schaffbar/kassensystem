@@ -1,4 +1,4 @@
-<h2 mat-dialog-title>Create New User</h2>
+<h2 mat-dialog-title>{{ 'users.dialogs.addNewUser.title' | translate }}</h2>
 
 <mat-divider></mat-divider>
 
@@ -6,19 +6,33 @@
   <div class="row">
     <div class="col">
       <mat-form-field class="full-width">
-        <mat-label>First Name</mat-label>
-        <input id="firstName" matInput placeholder="First Name" formControlName="firstName" />
+        <mat-label>{{ 'users.shared.userProperties.firstName' | translate }}</mat-label>
+        <input
+          id="firstName"
+          matInput
+          [placeholder]="'users.shared.userProperties.firstName' | translate"
+          formControlName="firstName" />
         @if (userForm.controls['firstName'].hasError('required')) {
-          <mat-error>First name is <strong>required</strong></mat-error>
+          <mat-error>
+            {{ 'users.shared.userProperties.firstName' | translate }}
+            {{ 'users.dialogs.addNewUser.errors.required' | translate }}
+          </mat-error>
         }
       </mat-form-field>
     </div>
     <div class="col">
       <mat-form-field class="full-width">
-        <mat-label>Last Name</mat-label>
-        <input id="lastName" matInput placeholder="Last Name" formControlName="lastName" />
+        <mat-label>{{ 'users.shared.userProperties.lastName' | translate }}</mat-label>
+        <input
+          id="lastName"
+          matInput
+          [placeholder]="'users.shared.userProperties.lastName' | translate"
+          formControlName="lastName" />
         @if (userForm.controls['lastName'].hasError('required')) {
-          <mat-error>Last name is <strong>required</strong></mat-error>
+          <mat-error>
+            {{ 'users.shared.userProperties.lastName' | translate }}
+            {{ 'users.dialogs.addNewUser.errors.required' | translate }}
+          </mat-error>
         }
       </mat-form-field>
     </div>
@@ -26,40 +40,52 @@
   <div class="row">
     <div class="col">
       <mat-form-field class="full-width">
-        <mat-label>Date of Birth</mat-label>
+        <mat-label>{{ 'users.shared.userProperties.dateOfBirth' | translate }}</mat-label>
         <input
           id="dateOfBirth"
           matInput
           readonly
-          placeholder="Date of Birth"
+          [placeholder]="'users.shared.userProperties.dateOfBirth' | translate"
           formControlName="dateOfBirth"
           [min]="minDate"
           [max]="maxDate"
           [matDatepicker]="picker" />
         @if (userForm.controls['dateOfBirth'].hasError('required')) {
-          <mat-error>Date of birth is <strong>required</strong></mat-error>
+          <mat-error>
+            {{ 'users.shared.userProperties.dateOfBirth' | translate }}
+            {{ 'users.dialogs.addNewUser.errors.required' | translate }}
+          </mat-error>
         }
         <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
         <mat-datepicker #picker startView="multi-year" disabled="false"></mat-datepicker>
       </mat-form-field>
     </div>
     <div class="col">
-      <mat-checkbox formControlName="clubMember">Club Member</mat-checkbox>
+      <mat-checkbox formControlName="clubMember">
+        {{ 'users.shared.userProperties.clubMember' | translate }}
+      </mat-checkbox>
     </div>
   </div>
 
-  <h3>Contact Information</h3>
+  <h3>{{ 'users.dialogs.addNewUser.sections.contactInformation' | translate }}</h3>
 
   <div class="row">
     <div class="col">
       <mat-form-field class="full-width">
-        <mat-label>Email</mat-label>
-        <input id="email" matInput placeholder="Email" formControlName="email" />
+        <mat-label>{{ 'users.shared.userProperties.email' | translate }}</mat-label>
+        <input
+          id="email"
+          matInput
+          [placeholder]="'users.shared.userProperties.email' | translate"
+          formControlName="email" />
         @if (userForm.controls['email'].hasError('required')) {
-          <mat-error>Email is <strong>required</strong></mat-error>
+          <mat-error>
+            {{ 'users.shared.userProperties.email' | translate }}
+            {{ 'users.dialogs.addNewUser.errors.required' | translate }}
+          </mat-error>
         }
         @if (userForm.controls['email'].hasError('email')) {
-          <mat-error>Please enter a <strong>valid</strong> email address</mat-error>
+          <mat-error>{{ 'users.dialogs.addNewUser.errors.validEmail' | translate }}</mat-error>
         }
       </mat-form-field>
     </div>
@@ -67,21 +93,28 @@
   <div class="row">
     <div class="col">
       <mat-form-field class="full-width">
-        <mat-label>Phone</mat-label>
+        <mat-label>{{ 'users.shared.userProperties.phone' | translate }}</mat-label>
         <input id="phone" matInput formControlName="phone" />
       </mat-form-field>
     </div>
   </div>
 
-  <h3>Billing Information</h3>
+  <h3>{{ 'users.dialogs.addNewUser.sections.billingInformation' | translate }}</h3>
 
   <div class="row">
     <div class="col">
       <mat-form-field class="full-width">
-        <mat-label>Address</mat-label>
-        <input id="addressLine1" matInput placeholder="Address" formControlName="addressLine1" />
+        <mat-label>{{ 'users.shared.userProperties.addressLine1' | translate }}</mat-label>
+        <input
+          id="addressLine1"
+          matInput
+          [placeholder]="'users.shared.userProperties.addressLine1' | translate"
+          formControlName="addressLine1" />
         @if (userForm.controls['addressLine1'].hasError('required')) {
-          <mat-error>Address is <strong>required</strong></mat-error>
+          <mat-error>
+            {{ 'users.shared.userProperties.addressLine1' | translate }}
+            {{ 'users.dialogs.addNewUser.errors.required' | translate }}
+          </mat-error>
         }
       </mat-form-field>
     </div>
@@ -89,7 +122,7 @@
   <div class="row">
     <div class="col">
       <mat-form-field class="full-width">
-        <mat-label>Address Line 2</mat-label>
+        <mat-label>{{ 'users.shared.userProperties.addressLine2' | translate }}</mat-label>
         <input id="addressLine2" matInput formControlName="addressLine2" />
       </mat-form-field>
     </div>
@@ -97,31 +130,44 @@
   <div class="row">
     <div class="col">
       <mat-form-field class="full-width">
-        <mat-label>Postal Code</mat-label>
+        <mat-label>{{ 'users.shared.userProperties.postalCode' | translate }}</mat-label>
         <input
           id="postalCode"
           matInput
           #postalCode
           maxlength="5"
-          placeholder="Postal Code"
+          [placeholder]="'users.shared.userProperties.postalCode' | translate"
           formControlName="postalCode" />
         <mat-hint [align]="'end'">{{ postalCode.value.length }} / 5</mat-hint>
         @if (userForm.controls['postalCode'].hasError('required')) {
-          <mat-error>Postal code is <strong>required</strong></mat-error>
+          <mat-error>
+            {{ 'users.shared.userProperties.postalCode' | translate }}
+            {{ 'users.dialogs.addNewUser.errors.required' | translate }}
+          </mat-error>
         }
         @if (
           userForm.controls['postalCode'].hasError('minlength') || userForm.controls['postalCode'].hasError('maxlength')
         ) {
-          <mat-error>Postal code must be exactly <strong>5 characters</strong></mat-error>
+          <mat-error>
+            {{ 'users.shared.userProperties.postalCode' | translate }}
+            {{ 'users.dialogs.addNewUser.errors.exactLength' | translate: { length: 5 } }}
+          </mat-error>
         }
       </mat-form-field>
     </div>
     <div class="col">
       <mat-form-field class="full-width">
-        <mat-label>City</mat-label>
-        <input id="city" matInput placeholder="City" formControlName="city" />
+        <mat-label>{{ 'users.shared.userProperties.city' | translate }}</mat-label>
+        <input
+          id="city"
+          matInput
+          [placeholder]="'users.shared.userProperties.city' | translate"
+          formControlName="city" />
         @if (userForm.controls['city'].hasError('required')) {
-          <mat-error>City is <strong>required</strong></mat-error>
+          <mat-error>
+            {{ 'users.shared.userProperties.city' | translate }}
+            {{ 'users.dialogs.addNewUser.errors.required' | translate }}
+          </mat-error>
         }
       </mat-form-field>
     </div>
@@ -129,10 +175,17 @@
   <div class="row">
     <div class="col">
       <mat-form-field class="full-width">
-        <mat-label>Country</mat-label>
-        <input id="country" matInput placeholder="Country" formControlName="country" />
+        <mat-label>{{ 'users.shared.userProperties.country' | translate }}</mat-label>
+        <input
+          id="country"
+          matInput
+          [placeholder]="'users.shared.userProperties.country' | translate"
+          formControlName="country" />
         @if (userForm.controls['country'].hasError('required')) {
-          <mat-error>Country is <strong>required</strong></mat-error>
+          <mat-error>
+            {{ 'users.shared.userProperties.country' | translate }}
+            {{ 'users.dialogs.addNewUser.errors.required' | translate }}
+          </mat-error>
         }
       </mat-form-field>
     </div>
@@ -140,6 +193,10 @@
 </mat-dialog-content>
 
 <mat-dialog-actions>
-  <button mat-stroked-button mat-dialog-close>Close</button>
-  <button mat-flat-button color="primary" type="submit" (click)="save()">Save</button>
+  <button mat-stroked-button mat-dialog-close>
+    {{ 'users.dialogs.addNewUser.actions.cancel' | translate }}
+  </button>
+  <button mat-flat-button color="primary" type="submit" (click)="save()">
+    {{ 'users.dialogs.addNewUser.actions.confirm' | translate }}
+  </button>
 </mat-dialog-actions>

@@ -9,6 +9,8 @@ import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatInputModule } from '@angular/material/input';
 
+import { TranslatePipe } from '@ngx-translate/core';
+
 @Component({
   selector: 'schbar-new-user-form',
   templateUrl: './new-user-form.component.html',
@@ -21,6 +23,7 @@ import { MatInputModule } from '@angular/material/input';
     MatDialogModule,
     MatDividerModule,
     MatDatepickerModule,
+    TranslatePipe,
   ],
   providers: [provideNativeDateAdapter()],
 })
@@ -39,7 +42,7 @@ export class NewUserFormComponent {
     addressLine1: ['', Validators.required],
     addressLine2: [null],
     postalCode: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(5)]],
-    city: ['Böblingen', Validators.required],
+    city: ['', Validators.required],
     country: ['Deutschland', Validators.required],
   });
 

@@ -1,0 +1,85 @@
+{
+  "shared": {
+    "welcome": "Willkommen",
+    "table": {
+      "actionsColumn": "Aktionen"
+    },
+    "dialogs": {
+      "delete": {
+        "confirm": "Löschen",
+        "cancel": "Abbrechen"
+      }
+    }
+  },
+  "sidebar": {
+    "dashboard": "Übersicht",
+    "users": "Benutzer",
+    "tools": "Werkzeuge",
+    "rfidTags": "RFID-Tags",
+    "rfidReaders": "RFID-Lesegeräte",
+    "about": "Über uns"
+  },
+  "dashboard": {
+    "title": "Übersicht"
+  },
+  "users": {
+    "title": "Benutzer",
+    "actions": {
+      "addUser": "Benutzer hinzufügen",
+      "search": "Suchen"
+    },
+    "dialogs": {
+      "addNewUser": {
+        "title": "Neuen Benutzer hinzufügen",
+        "sections": {
+          "contactInformation": "Kontaktinformationen",
+          "billingInformation": "Rechnungsinformationen"
+        },
+        "actions": {
+          "confirm": "Benutzer hinzufügen",
+          "cancel": "Abbrechen"
+        },
+        "errors": {
+          "required": "ist erforderlich",
+          "validEmail": "Bitte geben Sie eine gültige E-Mail-Adresse ein",
+          "exactLength": "muss genau {{length}} Zeichen lang sein"
+        }
+      },
+      "deleteUser": {
+        "title": "Benutzer löschen",
+        "message": "Sind Sie sicher, dass Sie diesen Benutzer löschen möchten?",
+        "actions": {
+          "confirm": "Löschen",
+          "cancel": "Abbrechen"
+        }
+      }
+    },
+    "shared": {
+      "userProperties": {
+        "firstName": "Vorname",
+        "lastName": "Nachname",
+        "dateOfBirth": "Geburtsdatum",
+        "clubMember": "Vereinsmitglied",
+        "email": "E-Mail",
+        "phone": "Telefon",
+        "addressLine1": "Adresse",
+        "addressLine2": "Adresszusatz",
+        "postalCode": "Postleitzahl",
+        "city": "Stadt",
+        "country": "Land"
+      }
+    }
+  },
+  "tools": {
+    "title": "Werkzeuge"
+  },
+  "rfidTags": {
+    "title": "RFID-Tags"
+  },
+  "rfidReaders": {
+    "title": "RFID-Lesegeräte"
+  },
+  "about": {
+    "title": "Über Schaffbar Portal"
+  }
+}

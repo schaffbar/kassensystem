@@ -10,6 +10,8 @@ import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 
+import { TranslatePipe, TranslateService } from '@ngx-translate/core';
+
 import { ROUTE } from '../../../app.routes';
 import { ConfirmDeleteUserComponent } from '../../../shared/components/confirm-delete-user.component';
 import { NewUserFormComponent } from '../../components/new-user-form/new-user-form.component';
@@ -29,13 +31,15 @@ import { UsersStore } from '../../users.store';
     MatIconModule,
     MatInputModule,
     ReactiveFormsModule,
+    TranslatePipe,
   ],
-  providers: [UsersStore],
+  providers: [UsersStore, TranslateService],
 })
 export class UserListComponent {
   readonly store = inject(UsersStore);
   private readonly router = inject(Router);
   private readonly dialog = inject(MatDialog);
+  private readonly translate = inject(TranslateService);
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
@@ -86,8 +90,9 @@ export class UserListComponent {
 
     const dialogRef = this.dialog.open(ConfirmDeleteUserComponent, {
       data: {
-        username: user.firstName + ' ' + user.lastName,
-        message: 'Are you sure you want to delete this user?',
+        title: this.translate.instant('users.dialogs.deleteUser.title'),
+        entity: user.firstName + ' ' + user.lastName,
+        message: this.translate.instant('users.dialogs.deleteUser.message'),
       },
       minWidth: '600px',
       disableClose: true,

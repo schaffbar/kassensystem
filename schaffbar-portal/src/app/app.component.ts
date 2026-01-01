@@ -1,4 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
+
+import { TranslateService } from '@ngx-translate/core';
 
 import { NavigationComponent } from './core/navigation/navigation.component';
 
@@ -9,5 +11,13 @@ import { NavigationComponent } from './core/navigation/navigation.component';
   imports: [NavigationComponent],
 })
 export class AppComponent {
-  title = 'schaffbar-portal';
+  private translate = inject(TranslateService);
+
+  protected title = 'schaffbar-portal';
+
+  constructor() {
+    this.translate.addLangs(['de', 'en']);
+    this.translate.setFallbackLang('de');
+    this.translate.use('de');
+  }
 }

@@ -8,6 +8,8 @@ import { MatInputModule } from '@angular/material/input';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatSelectModule } from '@angular/material/select';
 
+import { TranslatePipe } from '@ngx-translate/core';
+
 import { UserAddress } from '../../user.model';
 
 @Component({
@@ -22,6 +24,7 @@ import { UserAddress } from '../../user.model';
     MatCardModule,
     MatIconModule,
     ReactiveFormsModule,
+    TranslatePipe,
   ],
 })
 export class UserAddressComponent {

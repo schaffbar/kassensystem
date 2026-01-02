@@ -9,6 +9,8 @@ import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/materia
 import { MatDividerModule } from '@angular/material/divider';
 import { MatInputModule } from '@angular/material/input';
 
+import { TranslatePipe } from '@ngx-translate/core';
+
 import { User } from '../../user.model';
 
 @Component({
@@ -23,6 +25,7 @@ import { User } from '../../user.model';
     MatDialogModule,
     MatDividerModule,
     MatDatepickerModule,
+    TranslatePipe,
   ],
   providers: [provideNativeDateAdapter()],
 })

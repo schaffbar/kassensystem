@@ -9,24 +9,42 @@
   <div class="row">
     <div class="col">
       <mat-form-field class="full-width" [floatLabel]="'always'" [hideRequiredMarker]="true">
-        <mat-label>Email</mat-label>
-        <input matInput placeholder="Email" formControlName="email" [readonly]="readonly()" />
+        <mat-label>{{ 'users.shared.userProperties.email' | translate }}</mat-label>
+        <input
+          id="email"
+          matInput
+          [placeholder]="'users.shared.userProperties.email' | translate"
+          formControlName="email"
+          [readonly]="readonly()" />
+        @if (userContactForm.controls['email'].hasError('required')) {
+          <mat-error>
+            {{ 'users.shared.userProperties.email' | translate }}
+            {{ 'users.dialogs.addNewUser.errors.required' | translate }}
+          </mat-error>
+        }
+        @if (userContactForm.controls['email'].hasError('email')) {
+          <mat-error>{{ 'users.dialogs.addNewUser.errors.validEmail' | translate }}</mat-error>
+        }
       </mat-form-field>
     </div>
   </div>
   <div class="row">
     <div class="col">
       <mat-form-field class="full-width" [floatLabel]="'always'" [hideRequiredMarker]="true">
-        <mat-label>Phone</mat-label>
-        <input matInput formControlName="phone" [readonly]="readonly()" />
+        <mat-label>{{ 'users.shared.userProperties.phone' | translate }}</mat-label>
+        <input id="phone" matInput formControlName="phone" [readonly]="readonly()" />
       </mat-form-field>
     </div>
   </div>
 
   @if (!this.readonly()) {
     <div class="actions">
-      <button mat-stroked-button mat-dialog-close (click)="onCancel()">Cancel</button>
-      <button mat-flat-button color="primary" type="submit" (click)="onSave()">Save</button>
+      <button mat-stroked-button mat-dialog-close (click)="onCancel()">
+        {{ 'users.dialogs.editUser.actions.cancel' | translate }}
+      </button>
+      <button mat-flat-button color="primary" type="submit" (click)="onSave()">
+        {{ 'users.dialogs.editUser.actions.confirm' | translate }}
+      </button>
     </div>
   }
 </form>

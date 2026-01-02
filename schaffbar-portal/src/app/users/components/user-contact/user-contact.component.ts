@@ -5,13 +5,15 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 
+import { TranslatePipe } from '@ngx-translate/core';
+
 import { User } from '../../user.model';
 
 @Component({
   selector: 'schbar-user-contact',
   templateUrl: './user-contact.component.html',
   styleUrl: './user-contact.component.scss',
-  imports: [MatInputModule, MatButtonModule, MatIconModule, ReactiveFormsModule],
+  imports: [MatInputModule, MatButtonModule, MatIconModule, ReactiveFormsModule, TranslatePipe],
 })
 export class UserContactComponent {
   user = input.required<User>();

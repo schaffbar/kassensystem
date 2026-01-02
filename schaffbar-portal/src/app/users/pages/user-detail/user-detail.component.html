@@ -3,47 +3,63 @@
     <div class="user-detail-header-title">
       <div class="user-detail-header-title-actions">
         <h1>{{ detailsStore.userName() }}</h1>
-        <button mat-icon-button aria-label="Edit user" (click)="updateUser()">
+        <button mat-icon-button (click)="updateUser()">
           <mat-icon>edit</mat-icon>
         </button>
-        <button mat-icon-button aria-label="Reload user" (click)="reloadUser()">
+        <button mat-icon-button (click)="reloadUser()">
           <mat-icon>refresh</mat-icon>
         </button>
       </div>
       <div class="user-detail-header-title-chips">
-        <mat-chip-set aria-label="">
-          <mat-chip selected color="warn"> {{ user.ageGroup }}</mat-chip>
+        <!-- TODO: move to .ts file to create list of chips -->
+        <mat-chip-set>
+          <mat-chip>
+            {{ 'users.chips.userDetails.ageGroup.' + (user.ageGroup | lowercase) | translate }}
+          </mat-chip>
           @if (user.clubMember) {
-            <mat-chip selected color="primary"> Club Member </mat-chip>
+            <mat-chip>
+              {{ 'users.chips.userDetails.clubMember' | translate }}
+            </mat-chip>
           }
           @if (detailsStore.isRfidTagAssigned() || detailsStore.waitingForAssignment()) {
-            <mat-chip> {{ detailsStore.rfidTagAssignment()?.assignmentType }} </mat-chip>
+            <mat-chip>
+              {{
+                'users.chips.userDetails.rfidTags.' + (detailsStore.rfidTagAssignment()?.assignmentType | lowercase)
+                  | translate
+              }}
+            </mat-chip>
             @if (detailsStore.isRfidTagAssigned()) {
               <mat-chip>{{ detailsStore.rfidTagAssignment()?.rfidTagId }}</mat-chip>
             } @else if (detailsStore.waitingForAssignment()) {
-              <mat-chip> WAITING </mat-chip>
+              <mat-chip> {{ 'users.chips.userDetails.rfidTags.waiting' | translate }} </mat-chip>
             }
           } @else {
-            <mat-chip> No RFID Tag </mat-chip>
+            <mat-chip> {{ 'users.chips.userDetails.rfidTags.noRfidTag' | translate }} </mat-chip>
           }
         </mat-chip-set>
       </div>
     </div>
     @if (detailsStore.showAssignActions()) {
       <div class="user-detail-header-actions">
-        <button mat-flat-button color="primary" (click)="assignTemporaryRfidTag()">Assign Temp RFID Tag</button>
-        <button mat-flat-button color="primary" (click)="assignFixedRfidTag()">Assign Fixed RFID Tag</button>
+        <button mat-flat-button color="primary" (click)="assignTemporaryRfidTag()">
+          {{ 'users.actions.assignTempRfidTag' | translate }}
+        </button>
+        <button mat-flat-button color="primary" (click)="assignFixedRfidTag()">
+          {{ 'users.actions.assignFixedRfidTag' | translate }}
+        </button>
       </div>
     }
     @if (detailsStore.showUnassignAction()) {
       <div class="user-detail-header-actions">
-        <button mat-flat-button color="warn" (click)="unassignRfidTag()">Unassign RFID Tag</button>
+        <button mat-flat-button color="warn" (click)="unassignRfidTag()">
+          {{ 'users.actions.unassignRfidTag' | translate }}
+        </button>
       </div>
     }
   </div>
 
   <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="center" dynamicHeight>
-    <mat-tab label="Details">
+    <mat-tab [label]="'users.tabGroup.userDetails.detailsTab' | translate">
       <div class="tab-content">
         <schbar-user-detail-info
           [user]="user"
@@ -51,7 +67,7 @@
           (contactChanged)="onContactChanged($event)" />
       </div>
     </mat-tab>
-    <mat-tab label="Open Session">
+    <mat-tab [label]="'users.tabGroup.userDetails.openSessionTab' | translate">
       <div class="tab-content">
         <schbar-user-open-session [userId]="user.id" />
       </div>

@@ -26,7 +26,10 @@
     "title": "Users",
     "actions": {
       "addUser": "Add User",
-      "search": "Search"
+      "search": "Search",
+      "assignTempRfidTag": "Assign Temporary RFID Tag",
+      "assignFixedRfidTag": "Assign Fixed RFID Tag",
+      "unassignRfidTag": "Unassign RFID Tag"
     },
     "dialogs": {
       "addNewUser": {
@@ -59,6 +62,34 @@
           "confirm": "Delete",
           "cancel": "Cancel"
         }
+      }
+    },
+    "tabGroup": {
+      "userDetails": {
+        "detailsTab": "Details",
+        "openSessionTab": "Open Session"
+      }
+    },
+    "chips": {
+      "userDetails": {
+        "clubMember": "Club Member",
+        "rfidTags": {
+          "fixed": "Fixed",
+          "temporary": "Temporary",
+          "waiting": "Waiting",
+          "noRfidTag": "No RFID Tag"
+        },
+        "ageGroup": {
+          "under16": "Under 16",
+          "under18": "Under 18",
+          "adult": "Adult"
+        }
+      }
+    },
+    "pages": {
+      "userDetails": {
+        "contactSection": "Contact Information",
+        "addressSection": "Address"
       }
     },
     "shared": {

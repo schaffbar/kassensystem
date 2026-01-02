@@ -1,3 +1,4 @@
+import { LowerCasePipe } from '@angular/common';
 import { Component, inject, input } from '@angular/core';
 
 import { MatButtonModule } from '@angular/material/button';
@@ -5,6 +6,8 @@ import { MatChipsModule } from '@angular/material/chips';
 import { MatDialog } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTabsModule } from '@angular/material/tabs';
+
+import { TranslatePipe } from '@ngx-translate/core';
 
 import { UpdateUserFormComponent } from '../../components/update-user-form/update-user-form.component';
 import { RfidTagAssignmentService } from '../../rfid-tag-assignment.service';
@@ -24,6 +27,8 @@ import { UserDetailStore } from './user-detail.store';
     MatButtonModule,
     MatChipsModule,
     MatIconModule,
+    TranslatePipe,
+    LowerCasePipe,
   ],
   providers: [UserDetailStore, RfidTagAssignmentService],
 })

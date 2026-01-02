@@ -1,5 +1,5 @@
 <h3 class="address-header">
-  Address:
+  {{ 'users.pages.userDetails.addressSection' | translate }}
   <button mat-icon-button type="button" aria-label="Edit address" (click)="updateAddress()" [disabled]="!readonly()">
     <mat-icon>edit</mat-icon>
   </button>

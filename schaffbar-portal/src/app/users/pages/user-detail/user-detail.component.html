@@ -59,7 +59,7 @@
   </div>
 
   <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="center" dynamicHeight>
-    <mat-tab [label]="'users.tabGroup.userDetails.detailsTab' | translate">
+    <mat-tab [label]="'users.tabGroups.userDetails.detailsTab' | translate">
       <div class="tab-content">
         <schbar-user-detail-info
           [user]="user"
@@ -67,7 +67,7 @@
           (contactChanged)="onContactChanged($event)" />
       </div>
     </mat-tab>
-    <mat-tab [label]="'users.tabGroup.userDetails.openSessionTab' | translate">
+    <mat-tab [label]="'users.tabGroups.userDetails.openSessionTab' | translate">
       <div class="tab-content">
         <schbar-user-open-session [userId]="user.id" />
       </div>

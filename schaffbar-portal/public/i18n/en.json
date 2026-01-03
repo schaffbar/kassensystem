@@ -72,7 +72,7 @@
         "durationColumn": "Duration (min)"
       }
     },
-    "tabGroup": {
+    "tabGroups": {
       "userDetails": {
         "detailsTab": "Details",
         "openSessionTab": "Open Session"
@@ -134,13 +134,13 @@
     "actions": {
       "addTool": "Add Tool"
     },
-    "table": {
+    "tables": {
       "list": {
         "nameColumn": "Name",
         "descriptionColumn": "Description"
       }
     },
-    "tabGroup": {
+    "tabGroups": {
       "toolDetails": {
         "detailsTab": "Details",
         "wlanRelayTab": "WLAN Relay"

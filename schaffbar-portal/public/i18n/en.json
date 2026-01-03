@@ -128,7 +128,29 @@
     }
   },
   "tools": {
-    "title": "Tools"
+    "title": "Tools",
+    "actions": {
+      "addTool": "Add Tool"
+    },
+    "table": {
+      "list": {
+        "nameColumn": "Name",
+        "descriptionColumn": "Description"
+      }
+    },
+    "tabGroup": {
+      "toolDetails": {
+        "detailsTab": "Details",
+        "wlanRelayTab": "WLAN Relay"
+      }
+    },
+    "pages": {
+      "toolDetails": {
+        "fields": {
+          "description": "Description"
+        }
+      }
+    }
   },
   "rfidTags": {
     "title": "RFID Tags"

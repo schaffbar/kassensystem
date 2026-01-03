@@ -6,13 +6,15 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatTabsModule } from '@angular/material/tabs';
 
+import { TranslatePipe } from '@ngx-translate/core';
+
 import { ToolDetailStore } from './tool-detail.store';
 
 @Component({
   selector: 'schbar-tool-detail',
   templateUrl: './tool-detail.component.html',
   styleUrl: './tool-detail.component.scss',
-  imports: [MatTabsModule, MatButtonModule, MatIconModule, MatInputModule, ReactiveFormsModule],
+  imports: [MatTabsModule, MatButtonModule, MatIconModule, MatInputModule, ReactiveFormsModule, TranslatePipe],
   providers: [ToolDetailStore],
 })
 export class ToolDetailComponent {

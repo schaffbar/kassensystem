@@ -65,6 +65,13 @@
         }
       }
     },
+    "tables": {
+      "openSession": {
+        "entryTimeColumn": "Entry Time",
+        "exitTimeColumn": "Exit Time",
+        "durationColumn": "Duration (min)"
+      }
+    },
     "tabGroup": {
       "userDetails": {
         "detailsTab": "Details",
@@ -99,11 +106,6 @@
           "workshopTime": "Workshop Time",
           "totalDuration": "Total Duration",
           "totalDurationUnits": "Minutes"
-        },
-        "table": {
-          "entryTime": "Entry Time",
-          "exitTime": "Exit Time",
-          "duration": "Duration (min)"
         },
         "messages": {
           "noSlots": "No slots available for this session.",

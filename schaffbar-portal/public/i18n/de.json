@@ -65,6 +65,13 @@
         }
       }
     },
+    "tables": {
+      "openSession": {
+        "entryTimeColumn": "Eingangszeit",
+        "exitTimeColumn": "Ausgangszeit",
+        "durationColumn": "Dauer (min)"
+      }
+    },
     "tabGroup": {
       "userDetails": {
         "detailsTab": "Details",
@@ -99,11 +106,6 @@
           "workshopTime": "Werkstattzeit",
           "totalDuration": "Gesamtdauer",
           "totalDurationUnits": "Minuten"
-        },
-        "table": {
-          "entryTime": "Eingangszeit",
-          "exitTime": "Ausgangszeit",
-          "duration": "Dauer (min)"
         },
         "messages": {
           "noSlots": "Keine Zeitslots für diese Sitzung verfügbar.",

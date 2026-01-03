@@ -29,12 +29,13 @@
       "search": "Suchen",
       "assignTempRfidTag": "Temporäres RFID-Tag zuweisen",
       "assignFixedRfidTag": "Festes RFID-Tag zuweisen",
-      "unassignRfidTag": "RFID-Tag entfernen"
+      "unassignRfidTag": "RFID-Tag entfernen",
+      "closeSession": "Sitzung beenden"
     },
     "dialogs": {
       "addNewUser": {
         "title": "Neuen Benutzer hinzufügen",
-        "sections": {
+        "headers": {
           "contactInformation": "Kontaktinformationen",
           "billingInformation": "Rechnungsinformationen"
         },
@@ -88,8 +89,26 @@
     },
     "pages": {
       "userDetails": {
-        "contactSection": "Kontaktinformationen",
-        "addressSection": "Adresse"
+        "headers": {
+          "contactInformation": "Kontaktinformationen",
+          "address": "Adresse"
+        }
+      },
+      "openSession": {
+        "headers": {
+          "workshopTime": "Werkstattzeit",
+          "totalDuration": "Gesamtdauer",
+          "totalDurationUnits": "Minuten"
+        },
+        "table": {
+          "entryTime": "Eingangszeit",
+          "exitTime": "Ausgangszeit",
+          "duration": "Dauer (min)"
+        },
+        "messages": {
+          "noSlots": "Keine Zeitslots für diese Sitzung verfügbar.",
+          "noOpenSession": "Keine offene Sitzung für diesen Benutzer."
+        }
       }
     },
     "shared": {

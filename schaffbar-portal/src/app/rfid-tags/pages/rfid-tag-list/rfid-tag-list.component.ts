@@ -9,6 +9,8 @@ import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 
+import { TranslatePipe } from '@ngx-translate/core';
+
 import { RfidTag } from '../../rfid-tag.model';
 import { RfidTagStore } from '../../rfid-tags.store';
 
@@ -24,6 +26,7 @@ import { RfidTagStore } from '../../rfid-tags.store';
     MatDialogModule,
     MatIconModule,
     MatInputModule,
+    TranslatePipe,
   ],
   providers: [RfidTagStore],
 })

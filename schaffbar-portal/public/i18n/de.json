@@ -155,7 +155,13 @@
     }
   },
   "rfidTags": {
-    "title": "RFID-Tags"
+    "title": "RFID-Tags",
+    "table": {
+      "list": {
+        "idColumn": "ID",
+        "activeColumn": "Aktiv"
+      }
+    }
   },
   "rfidReaders": {
     "title": "RFID-Lesegeräte"

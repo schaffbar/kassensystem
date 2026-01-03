@@ -1,5 +1,5 @@
 <div class="rfid-tag-list-header">
-  <h1>RFID Tags ({{ rfidTagsCount() }})</h1>
+  <h1>{{ 'rfidTags.title' | translate }} ({{ rfidTagsCount() }})</h1>
   <button matIconButton color="primary" (click)="reloadRfidTags()">
     <mat-icon>refresh</mat-icon>
   </button>
@@ -9,17 +9,17 @@
   <table mat-table class="full-width-table" [dataSource]="dataSource()" matSort>
     <!-- Columns -->
     <ng-container matColumnDef="id">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>ID</th>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'rfidTags.table.list.idColumn' | translate }}</th>
       <td mat-cell *matCellDef="let row">{{ row.id }}</td>
     </ng-container>
 
     <ng-container matColumnDef="active">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>Active</th>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'rfidTags.table.list.activeColumn' | translate }}</th>
       <td mat-cell *matCellDef="let row">{{ row.active }}</td>
     </ng-container>
 
     <ng-container matColumnDef="actions">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>Actions</th>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'shared.table.actionsColumn' | translate }}</th>
       <td mat-cell *matCellDef="let row">
         <button mat-icon-button type="button" color="warn" (click)="deleteRfidTagDialog($event, row)">
           <mat-icon>delete</mat-icon>

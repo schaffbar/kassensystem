@@ -1,6 +1,5 @@
 import { Routes } from '@angular/router';
 
-import { AboutComponent } from './core/about/about.component';
 import { HomeComponent } from './core/home/home.component';
 import { NotFoundComponent } from './core/not-found/not-found.component';
 import { RfidReaderListComponent } from './rfid-readers/pages/rfid-reader-list/rfid-reader-list.component';
@@ -47,10 +46,6 @@ export const routes: Routes = [
   {
     path: ROUTE.RFID_TAGS,
     component: RfidTagListComponent,
-  },
-  {
-    path: ROUTE.ABOUT,
-    component: AboutComponent,
   },
   {
     path: '',

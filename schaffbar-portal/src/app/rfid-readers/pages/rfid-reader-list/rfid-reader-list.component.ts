@@ -9,6 +9,8 @@ import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 
+import { TranslatePipe } from '@ngx-translate/core';
+
 import { RfidReader } from '../../rfid-reader.model';
 import { RfidReaderStore } from '../../rfid-readers.store';
 
@@ -24,6 +26,7 @@ import { RfidReaderStore } from '../../rfid-readers.store';
     MatDialogModule,
     MatIconModule,
     MatInputModule,
+    TranslatePipe,
   ],
   providers: [RfidReaderStore],
 })
@@ -34,7 +37,7 @@ export class RfidReaderListComponent {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
-  protected displayedColumns = ['id', 'macAddress', 'type', 'actions'];
+  protected displayedColumns = ['macAddress', 'type', 'actions'];
   protected rfidReadersCount = computed(() => this.store.entities().length);
   protected dataSource = computed(() => {
     const result = new MatTableDataSource<RfidReader>(this.store.entities());

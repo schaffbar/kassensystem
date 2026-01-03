@@ -88,8 +88,8 @@
           "noRfidTag": "No RFID Tag"
         },
         "ageGroup": {
-          "under16": "Under 16",
-          "under18": "Under 18",
+          "under_16": "Under 16",
+          "under_18": "Under 18",
           "adult": "Adult"
         }
       }
@@ -156,7 +156,7 @@
   },
   "rfidTags": {
     "title": "RFID Tags",
-    "table": {
+    "tables": {
       "list": {
         "idColumn": "ID",
         "activeColumn": "Active"
@@ -164,9 +164,12 @@
     }
   },
   "rfidReaders": {
-    "title": "RFID Readers"
-  },
-  "about": {
-    "title": "About Schaffbar Portal"
+    "title": "RFID Readers",
+    "tables": {
+      "list": {
+        "macAddressColumn": "MAC Address",
+        "typeColumn": "Type"
+      }
+    }
   }
 }

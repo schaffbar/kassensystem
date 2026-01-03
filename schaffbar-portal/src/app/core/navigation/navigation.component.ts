@@ -44,7 +44,6 @@ export class NavigationComponent {
     { icon: 'construction', name: 'sidebar.tools', route: 'tools' },
     { icon: 'memory', name: 'sidebar.rfidTags', route: 'rfid-tags' },
     { icon: 'developer_board', name: 'sidebar.rfidReaders', route: 'rfid-readers' },
-    { icon: 'info', name: 'sidebar.about', route: 'about' },
   ]);
 
   isHandset$: Observable<boolean> = this.breakpointObserver.observe(Breakpoints.Handset).pipe(

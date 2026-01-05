@@ -12,6 +12,7 @@ export interface WorkshopUsage {
   entryTime: string;
   exitTime: string;
   durationInMinutes: number;
+  unitsUsed: number;
 }
 
 export enum WorkshopSessionStatus {

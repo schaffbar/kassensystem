@@ -69,7 +69,8 @@
       "openSession": {
         "entryTimeColumn": "Eingangszeit",
         "exitTimeColumn": "Ausgangszeit",
-        "durationColumn": "Dauer (min)"
+        "durationColumn": "Dauer (min)",
+        "unitsUsedColumn": "Verwendete Einheiten"
       }
     },
     "tabGroups": {
@@ -104,8 +105,9 @@
       "openSession": {
         "headers": {
           "workshopTime": "Werkstattzeit",
-          "totalDuration": "Gesamtdauer",
-          "totalDurationUnits": "Minuten"
+          "total": "Gesamt",
+          "totalDurationSuffix": "Minuten",
+          "totalUnitsSuffix": "Einheiten"
         },
         "messages": {
           "noSlots": "Keine Zeitslots für diese Sitzung verfügbar.",

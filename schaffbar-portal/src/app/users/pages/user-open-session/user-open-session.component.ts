@@ -19,7 +19,7 @@ export class UserOpenSessionComponent {
 
   userId = input.required<string>();
 
-  displayedColumns: string[] = ['entryTime', 'exitTime', 'durationInMinutes'];
+  displayedColumns: string[] = ['entryTime', 'exitTime', 'durationInMinutes', 'unitsUsed'];
 
   protected closeSession(): void {
     this.detailsStore.closeSession(this.userId);

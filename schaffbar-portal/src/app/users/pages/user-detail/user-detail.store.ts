@@ -61,6 +61,7 @@ export const UserDetailStore = signalStore(
   withComputed(({ slots }) => ({
     slotsCount: computed(() => slots().length),
     totalTimeInMinutes: computed(() => slots().reduce((sum, usage) => sum + usage.durationInMinutes, 0)),
+    totalUnitsUsed: computed(() => slots().reduce((sum, usage) => sum + usage.unitsUsed, 0)),
   })),
   withRequestStatus(),
   withProps(() => ({

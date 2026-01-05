@@ -69,7 +69,8 @@
       "openSession": {
         "entryTimeColumn": "Entry Time",
         "exitTimeColumn": "Exit Time",
-        "durationColumn": "Duration (min)"
+        "durationColumn": "Duration (min)",
+        "unitsUsedColumn": "Units Used"
       }
     },
     "tabGroups": {
@@ -104,8 +105,9 @@
       "openSession": {
         "headers": {
           "workshopTime": "Workshop Time",
-          "totalDuration": "Total Duration",
-          "totalDurationUnits": "Minutes"
+          "total": "Total",
+          "totalDurationSuffix": "Minutes",
+          "totalUnitsSuffix": "Units"
         },
         "messages": {
           "noSlots": "No slots available for this session.",

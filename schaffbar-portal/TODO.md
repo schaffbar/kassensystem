@@ -8,6 +8,7 @@ Done:
 - Telefonnummer optional
 - Chip mit unter 16 und unter 18
 - Mitglied
+- When user refreshing, fetch session information
 
 TODO:
 
@@ -15,22 +16,21 @@ TODO:
 
 1. ========================================================
 2. Calculate and show units for open session (do it in backend)
-3. Check if workshop usage is completed before closing session
-4. When user refreshing, fetch session information
-5. Validate Session before closing it
-6. Scheduler to clean up waiting for assignment
-7. Setzen von RFID reader type und Beschreibung in UI
-8. Löschen von Entitäten immer bestätigen
-9. ========================================================
-10. Beim Löschen immer überprüfen ob Entity nicht irgendwo referenziert wird
-11. Assignment und Unassignment von fixen RFID tags
-12. Einweisung plus Zuweisung zu User
-13. Switch box implementieren
+3. Scheduler to clean up waiting for assignment
+4. Setzen von RFID reader type in UI
+5. Check if workshop usage is completed before closing session
+6. Validate Session before closing it
+7. Löschen von Entitäten immer bestätigen
+8. ========================================================
+9. Beim Löschen immer überprüfen ob Entity nicht irgendwo referenziert wird
+10. Assignment und Unassignment von fixen RFID tags
+11. Einweisung plus Zuweisung zu User
+12. Switch box implementieren
 
-14. Nutzung von Maschinen in minuten oder stunden
-15. Zuweisung von RFID reader zu tool
-16. Dashboard für aktive user, aktive tools, ...
-17. Auschalten von Maschinen, wenn user Raum verlässt
+13. Nutzung von Maschinen in minuten oder stunden
+14. Zuweisung von RFID reader zu tool
+15. Dashboard für aktive user, aktive tools, ...
+16. Auschalten von Maschinen, wenn user Raum verlässt
 
 Technical debt:
 

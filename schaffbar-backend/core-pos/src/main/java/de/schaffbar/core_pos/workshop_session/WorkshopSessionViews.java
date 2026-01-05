@@ -28,7 +28,6 @@ public interface WorkshopSessionViews {
             @NotNull CustomerId customerId, //
             @NotNull @PastOrPresent Instant startTime, //
             @PastOrPresent Instant closeTime, //
-            //            @Positive int
             @NotNull WorkshopSessionStatus status //
     ) {}
 

@@ -30,7 +30,7 @@ public class WorkshopUsageService {
 
     public List<WorkshopUsageView> getWorkshopUsages(@NotNull @Valid WorkshopSessionId workshopSessionId) {
         return this.workshopUsageRepository.findWorkshopUsages(workshopSessionId).stream() //
-                .map(WorkshopUsageViewMapper.MAPPER::toWorkshopUsageView) //
+                .map(WorkshopUsageViews.MAPPER::toWorkshopUsageView) //
                 .sorted(comparing(WorkshopUsageView::entryTime)) //
                 .toList();
     }

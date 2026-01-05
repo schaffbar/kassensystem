@@ -22,6 +22,7 @@ public class WorkshopSessionService {
     // ------------------------------------------------------------------------
     // query
 
+    // TODO: naming - use either active or open session consistently
     public Optional<WorkshopSessionView> getOpenWorkshopSession(@NotNull @Valid CustomerId customerId) {
         return fetchOpenWorkshopSession(customerId) //
                 .map(WorkshopSessionViews.MAPPER::toWorkshopSessionView);

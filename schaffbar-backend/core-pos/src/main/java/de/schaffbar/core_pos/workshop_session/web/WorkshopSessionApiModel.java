@@ -49,7 +49,9 @@ public interface WorkshopSessionApiModel {
             return null;
         }
 
-        return duration.toMinutes();
+        // Each started second is one minute
+        long totalSeconds = duration.getSeconds();
+        return (long) Math.ceil(totalSeconds / 60.0);
     }
 
     @Named("toUnitsUsed")
@@ -59,7 +61,8 @@ public interface WorkshopSessionApiModel {
         }
 
         // Each started 6 minutes is one unit
-        long totalMinutes = duration.toMinutes();
+        long totalSeconds = duration.getSeconds();
+        long totalMinutes = (long) Math.ceil(totalSeconds / 60.0);
         return (long) Math.ceil(totalMinutes / 6.0);
     }
 

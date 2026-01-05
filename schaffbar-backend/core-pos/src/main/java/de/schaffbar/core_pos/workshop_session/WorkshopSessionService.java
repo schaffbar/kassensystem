@@ -24,7 +24,7 @@ public class WorkshopSessionService {
 
     public Optional<WorkshopSessionView> getOpenWorkshopSession(@NotNull @Valid CustomerId customerId) {
         return fetchOpenWorkshopSession(customerId) //
-                .map(WorkshopSessionViewMapper.MAPPER::toWorkshopSessionView);
+                .map(WorkshopSessionViews.MAPPER::toWorkshopSessionView);
     }
 
     // ------------------------------------------------------------------------

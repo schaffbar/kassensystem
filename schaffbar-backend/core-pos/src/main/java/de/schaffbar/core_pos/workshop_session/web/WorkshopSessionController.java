@@ -50,7 +50,7 @@ public class WorkshopSessionController {
 
         List<WorkshopUsageView> usages = this.workshopUsageService.getWorkshopUsages(openSession.id());
 
-        WorkshopSessionApiDto result = WorkshopSessionApiMapper.MAPPER.toWorkshopSessionApiDto(openSession, usages);
+        WorkshopSessionApiDto result = WorkshopSessionApiModel.MAPPER.toWorkshopSessionApiDto(openSession, usages);
 
         return ResponseEntity.ok(result);
     }

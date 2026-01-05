@@ -48,6 +48,7 @@ public class RfidReaderController {
         return ResponseEntity.ok(rfidReaders);
     }
 
+    // TODO: REST - remove configuration from path, use just /api/v1/rfid-readers?macAddress=...
     @GetMapping(value = "/configuration", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<RfidReaderApiDto> getRfidReaderConfiguration(@RequestParam(name = "macAddress") @NotBlank String address) {
         MacAddress macAddress = MacAddress.of(address);

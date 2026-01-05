@@ -38,6 +38,7 @@ public class WorkshopSessionController {
     // ------------------------------------------------------------------------
     // query
 
+    // TODO: REST - remove customerId and active from path, use query parameter instead
     @GetMapping(value = "{customerId}/active", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<WorkshopSessionApiDto> getActiveWorkshopSession(@PathVariable @NotNull CustomerId customerId) {
         WorkshopSessionView openSession = this.workshopSessionService.getOpenWorkshopSession(customerId) //
@@ -57,7 +58,8 @@ public class WorkshopSessionController {
     // ------------------------------------------------------------------------
     // command
 
-    @PutMapping(value = "/{customerId}/close", consumes = MediaType.APPLICATION_JSON_VALUE)
+    // TODO: REST - customerId does not fit in RESTful design here, change to sessionId?
+    @PutMapping(value = "/{customerId}/close")
     public ResponseEntity<Void> closeSession(@PathVariable @NotNull CustomerId customerId) {
         this.closeSessionUseCase.process(customerId);
 

@@ -35,11 +35,6 @@ public class WorkshopUsageService {
                 .toList();
     }
 
-    //    public Optional<WorkshopUsageView> getLatestWorkshopUsage(@NotNull @Valid CustomerId customerId) {
-    //        return this.workshopUsageRepository.findLatestByCustomerId(customerId) //
-    //                .map(WorkshopUsageViews.MAPPER::toWorkshopUsageView);
-    //    }
-
     // ------------------------------------------------------------------------
     // command
 

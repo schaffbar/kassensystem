@@ -1,8 +1,11 @@
 package de.schaffbar.core_pos.device;
 
+import static java.util.Comparator.comparing;
 import static java.util.Objects.isNull;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 import de.schaffbar.core_pos.ResourceNotFoundException;
@@ -33,6 +36,10 @@ import de.schaffbar.core_pos.rfid_tag_assignment.RfidTagAssignmentViews.RfidTagA
 import de.schaffbar.core_pos.use_case.CustomerAssignRfidTag;
 import de.schaffbar.core_pos.use_case.EnterWorkshop;
 import de.schaffbar.core_pos.use_case.LeaveWorkshop;
+import de.schaffbar.core_pos.workshop_session.WorkshopSessionService;
+import de.schaffbar.core_pos.workshop_session.WorkshopSessionViews.WorkshopSessionView;
+import de.schaffbar.core_pos.workshop_usage.WorkshopUsageService;
+import de.schaffbar.core_pos.workshop_usage.WorkshopUsageViews.WorkshopUsageView;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.NonNull;
@@ -66,6 +73,10 @@ public class DeviceController {
     private final @NonNull LeaveWorkshop leaveWorkshop;
 
     private final @NonNull CustomerAssignRfidTag assignRfidTagUseCase;
+
+    private final @NonNull WorkshopSessionService workshopSessionService;
+
+    private final @NonNull WorkshopUsageService workshopUsageService;
 
     @PostMapping(value = "/init", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<InitResponse> init(@RequestBody @NotNull @Valid InitRequestBody requestBody) {
@@ -105,7 +116,7 @@ public class DeviceController {
         CounterResponse response = switch (rfidReader.type()) {
             case RfidReaderType.RFID_TAG_REGISTER -> registerRfidTag(rfidTagId);
             case RfidReaderType.RFID_TAG_ASSIGNER -> assignRfidTagOrGetUser(rfidTagId);
-            default -> throw new IllegalStateException("Unexpected value: " + rfidReader.type());
+            default -> CounterResponse.unexpectedRfidReaderType("Unexpected RFID reader type: " + rfidReader.type());
         };
 
         return ResponseEntity.ok(response);
@@ -139,8 +150,8 @@ public class DeviceController {
 
         try {
             DeviceCardResponse response = switch (rfidReader.type()) {
-                case GATE_KEEPER_IN -> enterWorkshop(customer);
-                case GATE_KEEPER_OUT -> leaveWorkshop(customer);
+                case GATE_KEEPER_IN -> enterWorkshop(customer, rfidReader.type());
+                case GATE_KEEPER_OUT -> leaveWorkshop(customer, rfidReader.type());
                 default -> throw new IllegalStateException("Unexpected value for RFID reader type: " + rfidReader.type());
             };
 
@@ -246,16 +257,44 @@ public class DeviceController {
         return CounterResponse.userQueryOk(customer.getFullName(), rfidTagId);
     }
 
-    private DeviceCardResponse enterWorkshop(CustomerView customer) {
+    private DeviceCardResponse enterWorkshop(CustomerView customer, RfidReaderType type) {
         this.enterWorkshop.process(customer.id());
 
-        return DeviceCardResponse.enterOk(customer.getFullName());
+        List<WorkshopUsageView> workshopUsages = getWorkshopUsages(customer.id());
+        long totalUnits = workshopUsages.stream() //
+                .map(WorkshopUsageView::getUnitsUsed) //
+                .filter(Objects::nonNull) //
+                .reduce(0L, Long::sum);
+
+        WorkshopUsageView lastWorkshopUsage = workshopUsages.stream() //
+                .filter(usage -> isNull(usage.exitTime())) //
+                .sorted(comparing(WorkshopUsageView::entryTime).reversed()) //
+                .toList().getFirst();
+
+        return DeviceCardResponse.enterOk(type, customer.getFullName(), totalUnits, lastWorkshopUsage.entryTime());
     }
 
-    private DeviceCardResponse leaveWorkshop(CustomerView customer) {
+    private DeviceCardResponse leaveWorkshop(CustomerView customer, RfidReaderType type) {
         this.leaveWorkshop.process(customer.id());
 
-        return DeviceCardResponse.leaveOk(customer.getFullName());
+        List<WorkshopUsageView> workshopUsages = getWorkshopUsages(customer.id());
+        long totalUnits = workshopUsages.stream() //
+                .map(WorkshopUsageView::getUnitsUsed) //
+                .filter(Objects::nonNull) //
+                .reduce(0L, Long::sum);
+
+        WorkshopUsageView lastWorkshopUsage = workshopUsages.stream() //
+                .sorted(comparing(WorkshopUsageView::exitTime).reversed()) //
+                .toList().getFirst();
+
+        return DeviceCardResponse.leaveOk(type, customer.getFullName(), totalUnits, lastWorkshopUsage.entryTime(), lastWorkshopUsage.exitTime());
+    }
+
+    private List<WorkshopUsageView> getWorkshopUsages(CustomerId customerId) {
+        WorkshopSessionView workshopSessionView = this.workshopSessionService.getOpenWorkshopSession(customerId) //
+                .orElseThrow(() -> new RuntimeException("No open workshop session found after entering workshop")); // TODO: error handling
+
+        return this.workshopUsageService.getWorkshopUsages(workshopSessionView.id());
     }
 
 }

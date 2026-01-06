@@ -1,5 +1,7 @@
 package de.schaffbar.core_pos.workshop_usage;
 
+import static java.util.Objects.isNull;
+
 import java.time.Duration;
 import java.time.Instant;
 
@@ -32,6 +34,29 @@ public interface WorkshopUsageViews {
             @NotNull @PastOrPresent Instant entryTime, //
             @PastOrPresent Instant exitTime, //
             Duration duration //
-    ) {}
+    ) {
+
+        public Long getDurationInMinutes() {
+            if (isNull(this.duration)) {
+                return null;
+            }
+
+            // Each started second is one minute
+            long totalSeconds = this.duration.getSeconds();
+            return (long) Math.ceil(totalSeconds / 60.0);
+        }
+
+        public Long getUnitsUsed() {
+            if (isNull(this.duration)) {
+                return null;
+            }
+
+            // Each started 6 minutes is one unit
+            long totalSeconds = this.duration.getSeconds();
+            long totalMinutes = (long) Math.ceil(totalSeconds / 60.0);
+            return (long) Math.ceil(totalMinutes / 6.0);
+        }
+
+    }
 
 }

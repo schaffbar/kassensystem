@@ -1,8 +1,5 @@
 package de.schaffbar.core_pos.workshop_session.web;
 
-import static java.util.Objects.isNull;
-
-import java.time.Duration;
 import java.time.Instant;
 import java.util.List;
 
@@ -15,7 +12,6 @@ import jakarta.validation.constraints.PastOrPresent;
 import jakarta.validation.constraints.Positive;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import org.mapstruct.Named;
 import org.mapstruct.ReportingPolicy;
 import org.mapstruct.factory.Mappers;
 
@@ -33,38 +29,12 @@ public interface WorkshopSessionApiModel {
     WorkshopSessionApiDto toWorkshopSessionApiDto(WorkshopSessionView session, List<WorkshopUsageView> workshopUsages);
 
     @Mapping(target = "id", source = "id.value")
-    @Mapping(target = "durationInMinutes", source = "duration", qualifiedByName = "toDurationInMinutes")
-    @Mapping(target = "unitsUsed", source = "duration", qualifiedByName = "toUnitsUsed")
+    @Mapping(target = "durationInMinutes", source = "durationInMinutes")
+    @Mapping(target = "unitsUsed", source = "unitsUsed")
     WorkshopUsageApiDto toWorkshopUsageApiDto(WorkshopUsageView workshopUsage);
 
     // ------------------------------------------------------------------------
     // mapping request body to command
-
-    // ------------------------------------------------------------------------
-    // helper
-
-    @Named("toDurationInMinutes")
-    default Long toDurationInMinutes(Duration duration) {
-        if (isNull(duration)) {
-            return null;
-        }
-
-        // Each started second is one minute
-        long totalSeconds = duration.getSeconds();
-        return (long) Math.ceil(totalSeconds / 60.0);
-    }
-
-    @Named("toUnitsUsed")
-    default Long toUnitsUsed(Duration duration) {
-        if (isNull(duration)) {
-            return null;
-        }
-
-        // Each started 6 minutes is one unit
-        long totalSeconds = duration.getSeconds();
-        long totalMinutes = (long) Math.ceil(totalSeconds / 60.0);
-        return (long) Math.ceil(totalMinutes / 6.0);
-    }
 
     // ------------------------------------------------------------------------
     // response

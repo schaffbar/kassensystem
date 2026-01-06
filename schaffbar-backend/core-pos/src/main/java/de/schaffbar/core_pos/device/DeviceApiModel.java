@@ -1,5 +1,10 @@
 package de.schaffbar.core_pos.device;
 
+import java.time.Instant;
+import java.time.LocalTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+
 import de.schaffbar.core_pos.id.RfidTagId;
 import de.schaffbar.core_pos.rfid_reader.RfidReaderType;
 import lombok.AccessLevel;
@@ -90,6 +95,15 @@ public interface DeviceApiModel {
                     .build();
         }
 
+        public static CounterResponse unexpectedRfidReaderType(String message) {
+            return CounterResponse.builder() //
+                    .DEVUSECASE("") //
+                    .STATE("END") //
+                    .ERROR(message) //
+                    .CUSTOMERNAME("Error") //
+                    .build();
+        }
+
     }
 
     @Builder(access = AccessLevel.PRIVATE)
@@ -103,33 +117,42 @@ public interface DeviceApiModel {
             String UNITS  //
     ) {
 
-        public static DeviceCardResponse enterOk(String customerName) {
+        public static DeviceCardResponse enterOk(RfidReaderType type, String customerName, long totalUnits, Instant lastEntryTime) {
+            LocalTime time = lastEntryTime.atZone(ZoneId.systemDefault()).toLocalTime();
+            String entryTime = time.format(DateTimeFormatter.ofPattern("HH:mm"));
+
             return DeviceCardResponse.builder() //
-                    .DEVUSECASE(RfidReaderType.GATE_KEEPER_IN.getKey()) //
+                    .DEVUSECASE(type.getKey()) //
                     .ICON("HI") //
                     .ERROR("") //
                     .STATE("END") //
                     .CUSTOMERNAME(customerName) //
-                    .CUSTOMERSTARTSTOP("0:00") // TODO: deliver this info
-                    .UNITS("0") // TODO: deliver this info
+                    .CUSTOMERSTARTSTOP(entryTime) //
+                    .UNITS(String.valueOf(totalUnits)) //
                     .build();
         }
 
-        public static DeviceCardResponse leaveOk(String customerName) {
+        public static DeviceCardResponse leaveOk(RfidReaderType type, String customerName, long totalUnits, Instant lastEntryTime, Instant lastExitTime) {
+            LocalTime entryTime = lastEntryTime.atZone(ZoneId.systemDefault()).toLocalTime();
+            String entryTimeString = entryTime.format(DateTimeFormatter.ofPattern("HH:mm"));
+
+            LocalTime exitTime = lastExitTime.atZone(ZoneId.systemDefault()).toLocalTime();
+            String exitTimeString = exitTime.format(DateTimeFormatter.ofPattern("HH:mm"));
+
             return DeviceCardResponse.builder() //
-                    .DEVUSECASE(RfidReaderType.GATE_KEEPER_OUT.getKey()) //
+                    .DEVUSECASE(type.getKey()) //
                     .ICON("BYE") //
                     .ERROR("") //
                     .STATE("END") //
                     .CUSTOMERNAME(customerName) //
-                    .CUSTOMERSTARTSTOP("0:00") // TODO: deliver this info
-                    .UNITS("0") // TODO: deliver this info
+                    .CUSTOMERSTARTSTOP(entryTimeString + " - " + exitTimeString) //
+                    .UNITS(String.valueOf(totalUnits)) //
                     .build();
         }
 
         public static DeviceCardResponse errorNoUserRecognized(String message) {
             return DeviceCardResponse.builder() //
-                    .DEVUSECASE(RfidReaderType.GATE_KEEPER_IN.getKey()) // TODO: or OUT?
+                    .DEVUSECASE("") // TODO:
                     .STATE("END") //
                     .ICON("NOREG") //
                     .ERROR(message) //
@@ -139,7 +162,7 @@ public interface DeviceApiModel {
 
         public static DeviceCardResponse errorNoAccess(String message, String customerName) {
             return DeviceCardResponse.builder() //
-                    .DEVUSECASE(RfidReaderType.GATE_KEEPER_IN.getKey()) // TODO: or OUT?
+                    .DEVUSECASE("") // TODO:
                     .STATE("END") //
                     .ICON("STOP") //
                     .ERROR(message) //
@@ -150,7 +173,7 @@ public interface DeviceApiModel {
 
         public static DeviceCardResponse errorUnexpected(String message) {
             return DeviceCardResponse.builder() //
-                    .DEVUSECASE(RfidReaderType.GATE_KEEPER_IN.getKey()) // TODO: or OUT?
+                    .DEVUSECASE("") // TODO:
                     .STATE("END") //
                     .ICON("NOREG") //
                     .ERROR(message) //

@@ -1,5 +1,6 @@
 *
 !src/
+!public/
 !angular.json
 !package.json
 !package-lock.json

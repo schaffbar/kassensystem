@@ -150,9 +150,9 @@ public interface DeviceApiModel {
                     .build();
         }
 
-        public static DeviceCardResponse errorNoUserRecognized(String message) {
+        public static DeviceCardResponse errorNoUserRecognized(String message, String devUseCase) {
             return DeviceCardResponse.builder() //
-                    .DEVUSECASE("") // TODO:
+                    .DEVUSECASE(devUseCase) //
                     .STATE("END") //
                     .ICON("NOREG") //
                     .ERROR(message) //
@@ -160,9 +160,9 @@ public interface DeviceApiModel {
                     .build();
         }
 
-        public static DeviceCardResponse errorNoAccess(String message, String customerName) {
+        public static DeviceCardResponse errorNoAccess(String message, String customerName, String devUseCase) {
             return DeviceCardResponse.builder() //
-                    .DEVUSECASE("") // TODO:
+                    .DEVUSECASE(devUseCase) //
                     .STATE("END") //
                     .ICON("STOP") //
                     .ERROR(message) //
@@ -171,9 +171,9 @@ public interface DeviceApiModel {
                     .build();
         }
 
-        public static DeviceCardResponse errorUnexpected(String message) {
+        public static DeviceCardResponse errorUnexpected(String message, String devUseCase) {
             return DeviceCardResponse.builder() //
-                    .DEVUSECASE("") // TODO:
+                    .DEVUSECASE(devUseCase) //
                     .STATE("END") //
                     .ICON("NOREG") //
                     .ERROR(message) //
@@ -199,6 +199,7 @@ public interface DeviceApiModel {
 
     @Builder(access = AccessLevel.PRIVATE)
     record DeviceCardRequestBody( //
+            String DEVUSECASE, //
             String MACADDR, //
             String RFID //
     ) {}

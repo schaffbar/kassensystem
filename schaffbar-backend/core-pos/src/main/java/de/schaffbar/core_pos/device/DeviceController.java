@@ -124,6 +124,7 @@ public class DeviceController {
 
     @PostMapping(value = "/card", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<DeviceCardResponse> card(@RequestBody @NotNull @Valid DeviceCardRequestBody requestBody) {
+        String devUseCase = requestBody.DEVUSECASE();
         RfidReaderView rfidReader;
         CustomerView customer;
 
@@ -139,13 +140,13 @@ public class DeviceController {
                 default -> "Unerwarteter Fehler";
             };
 
-            return ResponseEntity.ok(DeviceCardResponse.errorNoUserRecognized(message));
+            return ResponseEntity.ok(DeviceCardResponse.errorNoUserRecognized(message, devUseCase));
         }
         catch (NoCustomerAssignedException e) {
-            return ResponseEntity.ok(DeviceCardResponse.errorNoUserRecognized("Kein Kunde für RFID Tag"));
+            return ResponseEntity.ok(DeviceCardResponse.errorNoUserRecognized("Kein Kunde für RFID Tag", devUseCase));
         }
         catch (Exception e) {
-            return ResponseEntity.ok(DeviceCardResponse.errorUnexpected("Unerwarteter Fehler"));
+            return ResponseEntity.ok(DeviceCardResponse.errorUnexpected("Unerwarteter Fehler", devUseCase));
         }
 
         try {
@@ -158,16 +159,16 @@ public class DeviceController {
             return ResponseEntity.ok(response);
         }
         catch (UserAlreadyInWorkshopException e) {
-            return ResponseEntity.ok(DeviceCardResponse.errorNoAccess("Du schaffst schon", customer.getFullName()));
+            return ResponseEntity.ok(DeviceCardResponse.errorNoAccess("Du schaffst schon", customer.getFullName(), devUseCase));
         }
         catch (NoActiveWorkshopUsageFoundException e) {
-            return ResponseEntity.ok(DeviceCardResponse.errorNoAccess("Zwei mal Pause geht nicht", customer.getFullName()));
+            return ResponseEntity.ok(DeviceCardResponse.errorNoAccess("Zwei mal Pause geht nicht", customer.getFullName(), devUseCase));
         }
         catch (NoActiveWorkshopSessionFoundException e) {
-            return ResponseEntity.ok(DeviceCardResponse.errorNoAccess("Du warst nie im Werkstatt", customer.getFullName()));
+            return ResponseEntity.ok(DeviceCardResponse.errorNoAccess("Du warst nie im Werkstatt", customer.getFullName(), devUseCase));
         }
         catch (Exception e) {
-            return ResponseEntity.ok(DeviceCardResponse.errorUnexpected("Unerwarteter Fehler"));
+            return ResponseEntity.ok(DeviceCardResponse.errorUnexpected("Unerwarteter Fehler", devUseCase));
         }
     }
 

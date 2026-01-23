@@ -6,8 +6,24 @@ import java.time.LocalDate;
 import de.schaffbar.core_pos.id.CustomerId;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.ReportingPolicy;
+import org.mapstruct.factory.Mappers;
 
+@Mapper(unmappedTargetPolicy = ReportingPolicy.ERROR)
 public interface CustomerViews {
+
+    CustomerViews MAPPER = Mappers.getMapper(CustomerViews.class);
+
+    // ------------------------------------------------------------------------
+    // mapper
+
+    @Mapping(target = "id", source = "customerId")
+    CustomerView toCustomerView(Customer customer);
+
+    // ------------------------------------------------------------------------
+    // views
 
     record CustomerView( //
             @NotNull CustomerId id, //

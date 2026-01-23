@@ -42,7 +42,7 @@ public class RfidReaderController {
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<RfidReaderApiDto>> getAllRfidReaders() {
         List<RfidReaderApiDto> rfidReaders = this.rfidReaderService.getRfidReaders().stream() //
-                .map(RfidReaderApiMapper.MAPPER::toRfidReaderApiDto) //
+                .map(RfidReaderApiModel.MAPPER::toRfidReaderApiDto) //
                 .toList();
 
         return ResponseEntity.ok(rfidReaders);
@@ -58,7 +58,7 @@ public class RfidReaderController {
                 .orElseGet(() -> this.rfidReaderService.createRfidReader(macAddress));
 
         RfidReaderApiDto rfidReader = this.rfidReaderService.getRfidReader(id) //
-                .map(RfidReaderApiMapper.MAPPER::toRfidReaderApiDto) //
+                .map(RfidReaderApiModel.MAPPER::toRfidReaderApiDto) //
                 .orElseThrow(() -> ResourceNotFoundException.rfidReader(id));
 
         return ResponseEntity.ok(rfidReader);
@@ -68,7 +68,7 @@ public class RfidReaderController {
     public ResponseEntity<RfidReaderApiDto> getRfidReader(@PathVariable @NotNull UUID rfidReaderId) {
         RfidReaderId id = RfidReaderId.of(rfidReaderId);
         RfidReaderApiDto rfidReader = this.rfidReaderService.getRfidReader(id) //
-                .map(RfidReaderApiMapper.MAPPER::toRfidReaderApiDto) //
+                .map(RfidReaderApiModel.MAPPER::toRfidReaderApiDto) //
                 .orElseThrow(() -> ResourceNotFoundException.rfidReader(id));
 
         return ResponseEntity.ok(rfidReader);

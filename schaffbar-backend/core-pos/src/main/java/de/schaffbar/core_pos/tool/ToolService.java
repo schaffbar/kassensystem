@@ -28,18 +28,18 @@ public class ToolService {
 
     public List<ToolView> getTools() {
         return this.toolRepository.findAll().stream() //
-                .map(ToolViewMapper.MAPPER::toToolView) //
+                .map(ToolViews.MAPPER::toToolView) //
                 .toList();
     }
 
     public Optional<ToolView> getTool(@NotNull @Valid ToolId id) {
         return this.toolRepository.findById(id.getValue()) //
-                .map(ToolViewMapper.MAPPER::toToolView);
+                .map(ToolViews.MAPPER::toToolView);
     }
 
     public Optional<ToolView> getTool(@NotNull @Valid RfidReaderId id) {
         return this.toolRepository.findByRfidReaderId(id) //
-                .map(ToolViewMapper.MAPPER::toToolView);
+                .map(ToolViews.MAPPER::toToolView);
     }
 
     // ------------------------------------------------------------------------

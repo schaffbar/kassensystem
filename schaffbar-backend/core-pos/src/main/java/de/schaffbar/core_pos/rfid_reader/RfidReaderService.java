@@ -26,18 +26,18 @@ public class RfidReaderService {
 
     public List<RfidReaderView> getRfidReaders() {
         return this.rfidReaderRepository.findAll().stream() //
-                .map(RfidReaderViewMapper.MAPPER::toRfidReaderView) //
+                .map(RfidReaderViews.MAPPER::toRfidReaderView) //
                 .toList();
     }
 
     public Optional<RfidReaderView> getRfidReader(@NotNull @Valid RfidReaderId id) {
         return this.rfidReaderRepository.findById(id.getValue()) //
-                .map(RfidReaderViewMapper.MAPPER::toRfidReaderView);
+                .map(RfidReaderViews.MAPPER::toRfidReaderView);
     }
 
     public Optional<RfidReaderView> getRfidReader(@NotNull @Valid MacAddress macAddress) {
         return this.rfidReaderRepository.findByMacAddress(macAddress.getValue()) //
-                .map(RfidReaderViewMapper.MAPPER::toRfidReaderView);
+                .map(RfidReaderViews.MAPPER::toRfidReaderView);
     }
 
     // ------------------------------------------------------------------------

@@ -46,7 +46,7 @@ public class CustomerController {
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<CustomerApiDto>> getAllCustomers() {
         List<CustomerApiDto> customers = this.customerService.getCustomers().stream() //
-                .map(CustomerApiMapper.MAPPER::toCustomerApiDto) //
+                .map(CustomerApiModel.MAPPER::toCustomerApiDto) //
                 .toList();
 
         return ResponseEntity.ok(customers);
@@ -56,7 +56,7 @@ public class CustomerController {
     public ResponseEntity<CustomerApiDto> getCustomer(@PathVariable @NotNull UUID customerId) {
         CustomerId id = CustomerId.of(customerId);
         CustomerApiDto customer = this.customerService.getCustomer(id) //
-                .map(CustomerApiMapper.MAPPER::toCustomerApiDto) //
+                .map(CustomerApiModel.MAPPER::toCustomerApiDto) //
                 .orElseThrow(() -> ResourceNotFoundException.customer(id));
 
         return ResponseEntity.ok(customer);
@@ -67,7 +67,7 @@ public class CustomerController {
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> createCustomer(@RequestBody @NotNull @Valid CreateCustomerRequestBody requestBody) {
-        CreateCustomerCommand command = CustomerApiMapper.MAPPER.toCreateCustomerCommand(requestBody);
+        CreateCustomerCommand command = CustomerApiModel.MAPPER.toCreateCustomerCommand(requestBody);
         CustomerId customerId = this.customerService.createCustomer(command);
         URI location = URI.create("/api/v1/customers/" + customerId.getValue());
 
@@ -77,7 +77,7 @@ public class CustomerController {
     @PutMapping(value = "/{customerId}", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> updateCustomer(@PathVariable @NotNull CustomerId customerId,
             @RequestBody @NotNull @Valid UpdateCustomerRequestBody requestBody) {
-        UpdateCustomerCommand command = CustomerApiMapper.MAPPER.toUpdateCustomerCommand(customerId, requestBody);
+        UpdateCustomerCommand command = CustomerApiModel.MAPPER.toUpdateCustomerCommand(customerId, requestBody);
         this.customerService.updateCustomer(command);
 
         return ResponseEntity.ok().build();
@@ -86,7 +86,7 @@ public class CustomerController {
     @PutMapping(value = "/{customerId}/contact", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> updateCustomerContact(@PathVariable @NotNull CustomerId customerId,
             @RequestBody @NotNull @Valid UpdateCustomerContactRequestBody requestBody) {
-        UpdateCustomerContactCommand command = CustomerApiMapper.MAPPER.toUpdateCustomerContactCommand(customerId, requestBody);
+        UpdateCustomerContactCommand command = CustomerApiModel.MAPPER.toUpdateCustomerContactCommand(customerId, requestBody);
         this.customerService.updateCustomerContact(command);
 
         return ResponseEntity.ok().build();
@@ -95,7 +95,7 @@ public class CustomerController {
     @PutMapping(value = "/{customerId}/address", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> updateCustomerAddress(@PathVariable @NotNull CustomerId customerId,
             @RequestBody @NotNull @Valid UpdateCustomerAddressRequestBody requestBody) {
-        UpdateCustomerAddressCommand command = CustomerApiMapper.MAPPER.toUpdateCustomerAddressCommand(customerId, requestBody);
+        UpdateCustomerAddressCommand command = CustomerApiModel.MAPPER.toUpdateCustomerAddressCommand(customerId, requestBody);
         this.customerService.updateCustomerAddress(command);
 
         return ResponseEntity.ok().build();

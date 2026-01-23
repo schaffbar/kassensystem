@@ -30,13 +30,13 @@ public class CustomerService {
 
     public List<CustomerView> getCustomers() {
         return this.customerRepository.findAll().stream() //
-                .map(CustomerViewMapper.MAPPER::toCustomerView) //
+                .map(CustomerViews.MAPPER::toCustomerView) //
                 .toList();
     }
 
     public Optional<CustomerView> getCustomer(@NotNull @Valid CustomerId id) {
         return this.customerRepository.findById(id.getValue()) //
-                .map(CustomerViewMapper.MAPPER::toCustomerView);
+                .map(CustomerViews.MAPPER::toCustomerView);
     }
 
     // ------------------------------------------------------------------------

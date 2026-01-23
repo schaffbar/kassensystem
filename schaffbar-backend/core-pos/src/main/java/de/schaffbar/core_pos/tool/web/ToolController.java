@@ -39,7 +39,7 @@ public class ToolController {
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<ToolApiDto>> getAllTools() {
         List<ToolApiDto> tools = this.toolService.getTools().stream() //
-                .map(ToolApiMapper.MAPPER::toToolApiDto) //
+                .map(ToolApiModel.MAPPER::toToolApiDto) //
                 .toList();
 
         return ResponseEntity.ok(tools);
@@ -49,7 +49,7 @@ public class ToolController {
     public ResponseEntity<ToolApiDto> getTool(@PathVariable @NotNull UUID toolId) {
         ToolId id = ToolId.of(toolId);
         ToolApiDto tool = this.toolService.getTool(id) //
-                .map(ToolApiMapper.MAPPER::toToolApiDto) //
+                .map(ToolApiModel.MAPPER::toToolApiDto) //
                 .orElseThrow(() -> ResourceNotFoundException.tool(id));
 
         return ResponseEntity.ok(tool);
@@ -60,7 +60,7 @@ public class ToolController {
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> createTool(@RequestBody @NotNull @Valid CreateToolRequestBody requestBody) {
-        CreateToolCommand command = ToolApiMapper.MAPPER.toCreateToolCommand(requestBody);
+        CreateToolCommand command = ToolApiModel.MAPPER.toCreateToolCommand(requestBody);
         ToolId toolId = this.toolService.createTool(command);
         URI location = URI.create("/api/v1/tools/" + toolId.getValue());
 

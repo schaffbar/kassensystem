@@ -5,8 +5,12 @@ import java.time.LocalDate;
 import java.time.Period;
 import java.util.UUID;
 
-import de.schaffbar.core_pos.customer.CustomerCommands;
-import de.schaffbar.core_pos.customer.CustomerViews;
+import de.schaffbar.core_pos.customer.CustomerCommands.CreateCustomerCommand;
+import de.schaffbar.core_pos.customer.CustomerCommands.UpdateCustomerAddressCommand;
+import de.schaffbar.core_pos.customer.CustomerCommands.UpdateCustomerCommand;
+import de.schaffbar.core_pos.customer.CustomerCommands.UpdateCustomerContactCommand;
+import de.schaffbar.core_pos.customer.CustomerViews.CustomerAddressView;
+import de.schaffbar.core_pos.customer.CustomerViews.CustomerView;
 import de.schaffbar.core_pos.shared.id.CustomerId;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -26,36 +30,36 @@ public interface CustomerApiModel {
 
     @Mapping(target = "id", source = "id.value")
     @Mapping(target = "ageGroup", source = "dateOfBirth", qualifiedByName = "toAgeGroup")
-    CustomerApiDto toCustomerApiDto(CustomerViews.CustomerView customer);
+    CustomerApiDto toCustomerApiDto(CustomerView customer);
 
-    CustomerAddressApiDto toCustomerAddressApiDto(CustomerViews.CustomerAddressView address);
+    CustomerAddressApiDto toCustomerAddressApiDto(CustomerAddressView address);
 
     // ------------------------------------------------------------------------
     // mapping request body to command
 
-    CustomerCommands.CreateCustomerCommand toCreateCustomerCommand(CreateCustomerRequestBody requestBody);
+    CreateCustomerCommand toCreateCustomerCommand(CreateCustomerRequestBody requestBody);
 
-    CustomerCommands.UpdateCustomerCommand toUpdateCustomerCommand(CustomerId id, UpdateCustomerRequestBody requestBody);
+    UpdateCustomerCommand toUpdateCustomerCommand(CustomerId id, UpdateCustomerRequestBody requestBody);
 
-    CustomerCommands.UpdateCustomerContactCommand toUpdateCustomerContactCommand(CustomerId id, UpdateCustomerContactRequestBody requestBody);
+    UpdateCustomerContactCommand toUpdateCustomerContactCommand(CustomerId id, UpdateCustomerContactRequestBody requestBody);
 
-    CustomerCommands.UpdateCustomerAddressCommand toUpdateCustomerAddressCommand(CustomerId id, UpdateCustomerAddressRequestBody requestBody);
+    UpdateCustomerAddressCommand toUpdateCustomerAddressCommand(CustomerId id, UpdateCustomerAddressRequestBody requestBody);
 
     @Named("toAgeGroup")
-    default CustomerApiModel.AgeGroup toAgeGroup(LocalDate dateOfBirth) {
+    default AgeGroup toAgeGroup(LocalDate dateOfBirth) {
         int ageInYears = Period.between(dateOfBirth, LocalDate.now()).getYears();
         if (ageInYears < 0) {
             throw new IllegalArgumentException("Date of birth is in the future: " + dateOfBirth);
         }
 
         if (ageInYears < 16) {
-            return CustomerApiModel.AgeGroup.UNDER_16;
+            return AgeGroup.UNDER_16;
         }
         else if (ageInYears < 18) {
-            return CustomerApiModel.AgeGroup.UNDER_18;
+            return AgeGroup.UNDER_18;
         }
         else {
-            return CustomerApiModel.AgeGroup.ADULT;
+            return AgeGroup.ADULT;
         }
 
     }

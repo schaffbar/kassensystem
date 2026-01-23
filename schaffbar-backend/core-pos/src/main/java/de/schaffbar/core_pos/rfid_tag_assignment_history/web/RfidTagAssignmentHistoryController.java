@@ -27,7 +27,7 @@ public class RfidTagAssignmentHistoryController {
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<RfidTagAssignmentHistoryApiDto>> getRfidTagAssignmentHistory() {
         List<RfidTagAssignmentHistoryApiDto> result = this.rfidTagAssignmentHistoryService.getRfidTagAssignmentHistory().stream() //
-                .map(RfidTagAssignmentHistoryApiMapper.MAPPER::toRfidTagAssignmentHistoryApiDto) //
+                .map(RfidTagAssignmentHistoryApiModel.MAPPER::toRfidTagAssignmentHistoryApiDto) //
                 .toList();
 
         return ResponseEntity.ok(result);

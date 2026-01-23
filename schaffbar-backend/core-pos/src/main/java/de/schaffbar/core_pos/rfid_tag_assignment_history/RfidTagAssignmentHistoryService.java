@@ -24,7 +24,7 @@ public class RfidTagAssignmentHistoryService {
 
     public List<RfidTagAssignmentHistoryView> getRfidTagAssignmentHistory() {
         return this.rfidTagAssignmentHistoryRepository.findAll().stream() //
-                .map(RfidTagAssignmentHistoryViewMapper.MAPPER::toRfidTagAssignmentView) //
+                .map(RfidTagAssignmentHistoryViews.MAPPER::toRfidTagAssignmentView) //
                 .toList();
     }
 

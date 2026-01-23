@@ -2,7 +2,7 @@ package de.schaffbar.core_pos.rfid_reader.web;
 
 import java.time.Instant;
 
-import de.schaffbar.core_pos.rfid_reader.RfidReaderViews;
+import de.schaffbar.core_pos.rfid_reader.RfidReaderViews.RfidReaderView;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import org.mapstruct.Mapper;
@@ -19,7 +19,7 @@ public interface RfidReaderApiModel {
     // mapping view to response
 
     @Mapping(target = "id", source = "id.value")
-    RfidReaderApiDto toRfidReaderApiDto(RfidReaderViews.RfidReaderView rfidReader);
+    RfidReaderApiDto toRfidReaderApiDto(RfidReaderView rfidReader);
 
     // ------------------------------------------------------------------------
     // mapping request body to command

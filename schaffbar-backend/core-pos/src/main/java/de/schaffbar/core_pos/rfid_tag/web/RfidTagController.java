@@ -38,7 +38,7 @@ public class RfidTagController {
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<RfidTagApiDto>> getAllRfidTags() {
         List<RfidTagApiDto> rfidTags = this.rfidTagService.getRfidTags().stream() //
-                .map(RfidTagApiMapper.MAPPER::toRfidTagApiDto) //
+                .map(RfidTagApiModel.MAPPER::toRfidTagApiDto) //
                 .toList();
 
         return ResponseEntity.ok(rfidTags);
@@ -48,7 +48,7 @@ public class RfidTagController {
     public ResponseEntity<RfidTagApiDto> getRfidTag(@PathVariable @NotNull String rfidTagId) {
         RfidTagId id = RfidTagId.of(rfidTagId);
         RfidTagApiDto rfidTag = this.rfidTagService.getRfidTag(id) //
-                .map(RfidTagApiMapper.MAPPER::toRfidTagApiDto) //
+                .map(RfidTagApiModel.MAPPER::toRfidTagApiDto) //
                 .orElseThrow(() -> ResourceNotFoundException.rfidTag(id));
 
         return ResponseEntity.ok(rfidTag);
@@ -59,7 +59,7 @@ public class RfidTagController {
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> createRfidTag(@RequestBody @NotNull @Valid CreateRfidTagRequestBody requestBody) {
-        CreateRfidTagCommand command = RfidTagApiMapper.MAPPER.toCreateRfidTagCommand(requestBody);
+        CreateRfidTagCommand command = RfidTagApiModel.MAPPER.toCreateRfidTagCommand(requestBody);
         RfidTagId rfidTagId = this.rfidTagService.createRfidTag(command);
         URI location = URI.create("/api/v1/rfid-tags/" + rfidTagId.getValue());
 

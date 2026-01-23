@@ -1,7 +1,7 @@
 package de.schaffbar.core_pos.tool.web;
 
-import de.schaffbar.core_pos.tool.ToolCommands;
-import de.schaffbar.core_pos.tool.ToolViews;
+import de.schaffbar.core_pos.tool.ToolCommands.CreateToolCommand;
+import de.schaffbar.core_pos.tool.ToolViews.ToolView;
 import jakarta.validation.constraints.NotBlank;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -18,12 +18,12 @@ public interface ToolApiModel {
 
     @Mapping(target = "id", source = "id.value")
     @Mapping(target = "rfidReaderId", source = "rfidReaderId.value")
-    ToolApiDto toToolApiDto(ToolViews.ToolView tool);
+    ToolApiDto toToolApiDto(ToolView tool);
 
     // ------------------------------------------------------------------------
     // mapping request body to command
 
-    ToolCommands.CreateToolCommand toCreateToolCommand(CreateToolRequestBody requestBody);
+    CreateToolCommand toCreateToolCommand(CreateToolRequestBody requestBody);
 
     // ------------------------------------------------------------------------
     // response

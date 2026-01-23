@@ -60,7 +60,7 @@ public class RfidTagAssignmentController {
         List<RfidTagAssignmentApiDto> result;
         if (isNotBlank(rfidTagId)) {
             result = this.rfidTagAssignmentService.getRfidTagAssignment(RfidTagId.of(rfidTagId)).stream() //
-                    .map(RfidTagAssignmentApiMapper.MAPPER::toRfidTagAssignmentApiDto) //
+                    .map(RfidTagAssignmentApiModel.MAPPER::toRfidTagAssignmentApiDto) //
                     .toList();
         }
         else if (isNotBlank(customerId)) {
@@ -69,12 +69,12 @@ public class RfidTagAssignmentController {
                     .orElseThrow(() -> ResourceNotFoundException.customer(customerIdObj));
 
             result = this.rfidTagAssignmentService.getRfidTagAssignment(customer.id()).stream() //
-                    .map(RfidTagAssignmentApiMapper.MAPPER::toRfidTagAssignmentApiDto) //
+                    .map(RfidTagAssignmentApiModel.MAPPER::toRfidTagAssignmentApiDto) //
                     .toList();
         }
         else {
             result = this.rfidTagAssignmentService.getRfidTagAssignments().stream() //
-                    .map(RfidTagAssignmentApiMapper.MAPPER::toRfidTagAssignmentApiDto) //
+                    .map(RfidTagAssignmentApiModel.MAPPER::toRfidTagAssignmentApiDto) //
                     .toList();
         }
 

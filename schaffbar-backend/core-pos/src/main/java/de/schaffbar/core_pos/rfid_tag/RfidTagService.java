@@ -26,13 +26,13 @@ public class RfidTagService {
 
     public List<RfidTagView> getRfidTags() {
         return this.rfidTagRepository.findAll().stream() //
-                .map(RfidTagViewMapper.MAPPER::toRfidTagView) //
+                .map(RfidTagViews.MAPPER::toRfidTagView) //
                 .toList();
     }
 
     public Optional<RfidTagView> getRfidTag(@NotNull @Valid RfidTagId id) {
         return this.rfidTagRepository.findById(id.getValue()) //
-                .map(RfidTagViewMapper.MAPPER::toRfidTagView);
+                .map(RfidTagViews.MAPPER::toRfidTagView);
     }
 
     // ------------------------------------------------------------------------

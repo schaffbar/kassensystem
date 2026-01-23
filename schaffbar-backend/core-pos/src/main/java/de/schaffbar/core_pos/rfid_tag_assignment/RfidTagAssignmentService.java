@@ -27,18 +27,18 @@ public class RfidTagAssignmentService {
 
     public List<RfidTagAssignmentView> getRfidTagAssignments() {
         return this.rfidTagAssignmentRepository.findAll().stream() //
-                .map(RfidTagAssignmentViewMapper.MAPPER::toRfidTagAssignmentView) //
+                .map(RfidTagAssignmentViews.MAPPER::toRfidTagAssignmentView) //
                 .toList();
     }
 
     public Optional<RfidTagAssignmentView> getRfidTagAssignment(@NotNull @Valid CustomerId customerId) {
         return this.rfidTagAssignmentRepository.findByCustomer(customerId) //
-                .map(RfidTagAssignmentViewMapper.MAPPER::toRfidTagAssignmentView);
+                .map(RfidTagAssignmentViews.MAPPER::toRfidTagAssignmentView);
     }
 
     public Optional<RfidTagAssignmentView> getRfidTagAssignment(@NotNull @Valid RfidTagId rfidTagId) {
         return this.rfidTagAssignmentRepository.findByRfidTag(rfidTagId) //
-                .map(RfidTagAssignmentViewMapper.MAPPER::toRfidTagAssignmentView);
+                .map(RfidTagAssignmentViews.MAPPER::toRfidTagAssignmentView);
     }
 
     // ------------------------------------------------------------------------

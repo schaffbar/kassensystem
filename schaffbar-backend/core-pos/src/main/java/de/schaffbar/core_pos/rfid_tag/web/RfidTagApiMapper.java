@@ -1,10 +1,10 @@
 package de.schaffbar.core_pos.rfid_tag.web;
 
-import de.schaffbar.core_pos.ValueObjectMapper;
 import de.schaffbar.core_pos.rfid_tag.RfidTagCommands.CreateRfidTagCommand;
 import de.schaffbar.core_pos.rfid_tag.RfidTagViews.RfidTagView;
 import de.schaffbar.core_pos.rfid_tag.web.RfidTagApiModel.CreateRfidTagRequestBody;
 import de.schaffbar.core_pos.rfid_tag.web.RfidTagApiModel.RfidTagApiDto;
+import de.schaffbar.core_pos.shared.id.ValueObjectMapper;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.ReportingPolicy;

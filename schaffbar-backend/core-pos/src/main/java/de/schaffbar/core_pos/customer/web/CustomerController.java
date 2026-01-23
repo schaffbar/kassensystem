@@ -4,7 +4,6 @@ import java.net.URI;
 import java.util.List;
 import java.util.UUID;
 
-import de.schaffbar.core_pos.ResourceNotFoundException;
 import de.schaffbar.core_pos.customer.CustomerCommands.CreateCustomerCommand;
 import de.schaffbar.core_pos.customer.CustomerCommands.UpdateCustomerAddressCommand;
 import de.schaffbar.core_pos.customer.CustomerCommands.UpdateCustomerCommand;
@@ -15,6 +14,7 @@ import de.schaffbar.core_pos.customer.web.CustomerApiModel.CustomerApiDto;
 import de.schaffbar.core_pos.customer.web.CustomerApiModel.UpdateCustomerAddressRequestBody;
 import de.schaffbar.core_pos.customer.web.CustomerApiModel.UpdateCustomerContactRequestBody;
 import de.schaffbar.core_pos.customer.web.CustomerApiModel.UpdateCustomerRequestBody;
+import de.schaffbar.core_pos.shared.exception.ResourceNotFoundException;
 import de.schaffbar.core_pos.shared.id.CustomerId;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;

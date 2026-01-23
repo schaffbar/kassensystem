@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
-import de.schaffbar.core_pos.ResourceNotFoundException;
 import de.schaffbar.core_pos.customer.CustomerService;
 import de.schaffbar.core_pos.customer.CustomerViews.CustomerView;
 import de.schaffbar.core_pos.device.DeviceApiModel.CounterResponse;
@@ -28,6 +27,7 @@ import de.schaffbar.core_pos.rfid_tag_assignment.RfidTagAssignmentViews.RfidTagA
 import de.schaffbar.core_pos.shared.exception.NoActiveWorkshopSessionFoundException;
 import de.schaffbar.core_pos.shared.exception.NoActiveWorkshopUsageFoundException;
 import de.schaffbar.core_pos.shared.exception.NoCustomerAssignedException;
+import de.schaffbar.core_pos.shared.exception.ResourceNotFoundException;
 import de.schaffbar.core_pos.shared.exception.UserAlreadyInWorkshopException;
 import de.schaffbar.core_pos.shared.id.CustomerId;
 import de.schaffbar.core_pos.shared.id.MacAddress;

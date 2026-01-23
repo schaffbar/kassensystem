@@ -1,4 +1,4 @@
-package de.schaffbar.core_pos;
+package de.schaffbar.core_pos.shared.exception;
 
 import java.io.Serial;
 

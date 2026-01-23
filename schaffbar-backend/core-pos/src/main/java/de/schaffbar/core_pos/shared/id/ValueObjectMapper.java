@@ -1,14 +1,8 @@
-package de.schaffbar.core_pos;
+package de.schaffbar.core_pos.shared.id;
 
 import static java.util.Objects.isNull;
 
 import java.util.UUID;
-
-import de.schaffbar.core_pos.shared.id.CustomerId;
-import de.schaffbar.core_pos.shared.id.MacAddress;
-import de.schaffbar.core_pos.shared.id.RfidReaderId;
-import de.schaffbar.core_pos.shared.id.RfidTagId;
-import de.schaffbar.core_pos.shared.id.ToolId;
 
 public interface ValueObjectMapper {
 

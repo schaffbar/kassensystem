@@ -1,9 +1,9 @@
 package de.schaffbar.core_pos.use_case;
 
-import de.schaffbar.core_pos.ResourceNotFoundException;
 import de.schaffbar.core_pos.rfid_tag.RfidTagService;
 import de.schaffbar.core_pos.rfid_tag.RfidTagViews.RfidTagView;
 import de.schaffbar.core_pos.rfid_tag_assignment.RfidTagAssignmentService;
+import de.schaffbar.core_pos.shared.exception.ResourceNotFoundException;
 import de.schaffbar.core_pos.shared.id.RfidTagId;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;

@@ -5,7 +5,6 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
 import java.util.List;
 import java.util.UUID;
 
-import de.schaffbar.core_pos.ResourceNotFoundException;
 import de.schaffbar.core_pos.customer.CustomerService;
 import de.schaffbar.core_pos.customer.CustomerViews.CustomerView;
 import de.schaffbar.core_pos.rfid_tag_assignment.RfidTagAssignmentService;
@@ -13,6 +12,7 @@ import de.schaffbar.core_pos.rfid_tag_assignment.web.RfidTagAssignmentApiModel.A
 import de.schaffbar.core_pos.rfid_tag_assignment.web.RfidTagAssignmentApiModel.RequestRfidTagAssignmentRequestBody;
 import de.schaffbar.core_pos.rfid_tag_assignment.web.RfidTagAssignmentApiModel.RfidTagAssignmentApiDto;
 import de.schaffbar.core_pos.rfid_tag_assignment.web.RfidTagAssignmentApiModel.UnassignRfidTagRequestBody;
+import de.schaffbar.core_pos.shared.exception.ResourceNotFoundException;
 import de.schaffbar.core_pos.shared.id.CustomerId;
 import de.schaffbar.core_pos.shared.id.RfidTagId;
 import de.schaffbar.core_pos.use_case.CustomerAssignRfidTag;

@@ -3,7 +3,7 @@ package de.schaffbar.core_pos.tool;
 import java.util.List;
 import java.util.Optional;
 
-import de.schaffbar.core_pos.ResourceNotFoundException;
+import de.schaffbar.core_pos.shared.exception.ResourceNotFoundException;
 import de.schaffbar.core_pos.shared.id.RfidReaderId;
 import de.schaffbar.core_pos.shared.id.ToolId;
 import de.schaffbar.core_pos.tool.ToolCommands.CreateToolCommand;

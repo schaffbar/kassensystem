@@ -1,8 +1,8 @@
 package de.schaffbar.core_pos.rfid_tag_assignment.web;
 
-import de.schaffbar.core_pos.ValueObjectMapper;
 import de.schaffbar.core_pos.rfid_tag_assignment.RfidTagAssignmentViews.RfidTagAssignmentView;
 import de.schaffbar.core_pos.rfid_tag_assignment.web.RfidTagAssignmentApiModel.RfidTagAssignmentApiDto;
+import de.schaffbar.core_pos.shared.id.ValueObjectMapper;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.ReportingPolicy;

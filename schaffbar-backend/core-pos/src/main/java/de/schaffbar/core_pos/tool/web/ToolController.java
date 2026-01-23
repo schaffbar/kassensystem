@@ -4,7 +4,7 @@ import java.net.URI;
 import java.util.List;
 import java.util.UUID;
 
-import de.schaffbar.core_pos.ResourceNotFoundException;
+import de.schaffbar.core_pos.shared.exception.ResourceNotFoundException;
 import de.schaffbar.core_pos.shared.id.ToolId;
 import de.schaffbar.core_pos.tool.ToolCommands.CreateToolCommand;
 import de.schaffbar.core_pos.tool.ToolService;

@@ -4,7 +4,7 @@
 # ---------------------------------------------------------
 
 # Use Maven with Eclipse Temurin JDK for Java 21 apps
-FROM maven:3.9.11-eclipse-temurin-21-alpine AS builder
+FROM maven:3.9.12-eclipse-temurin-25-alpine AS builder
 
 # Set working directory
 WORKDIR /build
@@ -27,7 +27,7 @@ RUN mvn clean package -DskipTests
 # ---------------------------------------------------------
 
 # Use Eclipse Temurin JDK for Java 21 apps
-FROM eclipse-temurin:21-jre-alpine AS runner
+FROM eclipse-temurin:25-jre-alpine AS runner
 
 # Set working directory
 WORKDIR /app

@@ -1,8 +1,8 @@
-package de.schaffbar.core_pos.exception;
+package de.schaffbar.core_pos.shared.exception;
 
 import java.io.Serial;
 
-import de.schaffbar.core_pos.id.RfidTagId;
+import de.schaffbar.core_pos.shared.id.RfidTagId;
 
 public class NoCustomerAssignedException extends RuntimeException {
 

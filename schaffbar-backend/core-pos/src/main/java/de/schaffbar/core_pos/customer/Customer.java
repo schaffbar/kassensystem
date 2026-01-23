@@ -8,7 +8,7 @@ import de.schaffbar.core_pos.customer.CustomerCommands.CreateCustomerCommand;
 import de.schaffbar.core_pos.customer.CustomerCommands.UpdateCustomerAddressCommand;
 import de.schaffbar.core_pos.customer.CustomerCommands.UpdateCustomerCommand;
 import de.schaffbar.core_pos.customer.CustomerCommands.UpdateCustomerContactCommand;
-import de.schaffbar.core_pos.id.CustomerId;
+import de.schaffbar.core_pos.shared.id.CustomerId;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;

@@ -4,7 +4,7 @@ import static java.util.Objects.isNull;
 
 import java.util.List;
 
-import de.schaffbar.core_pos.id.CustomerId;
+import de.schaffbar.core_pos.shared.id.CustomerId;
 import de.schaffbar.core_pos.use_case.CloseSession;
 import de.schaffbar.core_pos.workshop_session.WorkshopSessionService;
 import de.schaffbar.core_pos.workshop_session.WorkshopSessionViews.WorkshopSessionView;

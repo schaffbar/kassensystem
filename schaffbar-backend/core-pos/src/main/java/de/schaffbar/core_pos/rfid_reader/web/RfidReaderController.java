@@ -5,12 +5,12 @@ import java.util.List;
 import java.util.UUID;
 
 import de.schaffbar.core_pos.ResourceNotFoundException;
-import de.schaffbar.core_pos.id.MacAddress;
-import de.schaffbar.core_pos.id.RfidReaderId;
 import de.schaffbar.core_pos.rfid_reader.RfidReaderService;
 import de.schaffbar.core_pos.rfid_reader.RfidReaderViews.RfidReaderView;
 import de.schaffbar.core_pos.rfid_reader.web.RfidReaderApiModel.CreateRfidReaderRequestBody;
 import de.schaffbar.core_pos.rfid_reader.web.RfidReaderApiModel.RfidReaderApiDto;
+import de.schaffbar.core_pos.shared.id.MacAddress;
+import de.schaffbar.core_pos.shared.id.RfidReaderId;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

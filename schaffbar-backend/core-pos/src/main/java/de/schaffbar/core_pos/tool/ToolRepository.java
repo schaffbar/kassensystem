@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-import de.schaffbar.core_pos.id.RfidReaderId;
+import de.schaffbar.core_pos.shared.id.RfidReaderId;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

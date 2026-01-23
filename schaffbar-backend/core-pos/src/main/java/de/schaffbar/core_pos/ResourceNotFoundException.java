@@ -2,11 +2,11 @@ package de.schaffbar.core_pos;
 
 import java.io.Serial;
 
-import de.schaffbar.core_pos.id.CustomerId;
-import de.schaffbar.core_pos.id.MacAddress;
-import de.schaffbar.core_pos.id.RfidReaderId;
-import de.schaffbar.core_pos.id.RfidTagId;
-import de.schaffbar.core_pos.id.ToolId;
+import de.schaffbar.core_pos.shared.id.CustomerId;
+import de.schaffbar.core_pos.shared.id.MacAddress;
+import de.schaffbar.core_pos.shared.id.RfidReaderId;
+import de.schaffbar.core_pos.shared.id.RfidTagId;
+import de.schaffbar.core_pos.shared.id.ToolId;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

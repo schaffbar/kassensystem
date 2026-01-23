@@ -5,8 +5,8 @@ import static java.util.Objects.isNull;
 import java.time.Instant;
 import java.util.UUID;
 
-import de.schaffbar.core_pos.id.RfidReaderId;
-import de.schaffbar.core_pos.id.ToolId;
+import de.schaffbar.core_pos.shared.id.RfidReaderId;
+import de.schaffbar.core_pos.shared.id.ToolId;
 import de.schaffbar.core_pos.tool.ToolCommands.CreateToolCommand;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;

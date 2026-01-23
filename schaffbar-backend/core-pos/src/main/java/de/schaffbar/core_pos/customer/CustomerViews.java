@@ -3,7 +3,7 @@ package de.schaffbar.core_pos.customer;
 import java.time.Instant;
 import java.time.LocalDate;
 
-import de.schaffbar.core_pos.id.CustomerId;
+import de.schaffbar.core_pos.shared.id.CustomerId;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import org.mapstruct.Mapper;

@@ -1,7 +1,7 @@
 package de.schaffbar.core_pos.tool;
 
-import de.schaffbar.core_pos.id.RfidReaderId;
-import de.schaffbar.core_pos.id.ToolId;
+import de.schaffbar.core_pos.shared.id.RfidReaderId;
+import de.schaffbar.core_pos.shared.id.ToolId;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import org.mapstruct.Mapper;

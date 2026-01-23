@@ -4,9 +4,9 @@ import java.util.List;
 import java.util.Optional;
 
 import de.schaffbar.core_pos.ResourceNotFoundException;
-import de.schaffbar.core_pos.id.MacAddress;
-import de.schaffbar.core_pos.id.RfidReaderId;
 import de.schaffbar.core_pos.rfid_reader.RfidReaderViews.RfidReaderView;
+import de.schaffbar.core_pos.shared.id.MacAddress;
+import de.schaffbar.core_pos.shared.id.RfidReaderId;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.NonNull;

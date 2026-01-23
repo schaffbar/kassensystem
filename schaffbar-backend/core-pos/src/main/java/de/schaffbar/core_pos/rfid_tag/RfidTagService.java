@@ -4,9 +4,9 @@ import java.util.List;
 import java.util.Optional;
 
 import de.schaffbar.core_pos.ResourceNotFoundException;
-import de.schaffbar.core_pos.id.RfidTagId;
 import de.schaffbar.core_pos.rfid_tag.RfidTagCommands.CreateRfidTagCommand;
 import de.schaffbar.core_pos.rfid_tag.RfidTagViews.RfidTagView;
+import de.schaffbar.core_pos.shared.id.RfidTagId;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.NonNull;

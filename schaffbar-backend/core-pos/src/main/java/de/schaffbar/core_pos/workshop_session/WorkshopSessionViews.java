@@ -2,8 +2,8 @@ package de.schaffbar.core_pos.workshop_session;
 
 import java.time.Instant;
 
-import de.schaffbar.core_pos.id.CustomerId;
-import de.schaffbar.core_pos.id.WorkshopSessionId;
+import de.schaffbar.core_pos.shared.id.CustomerId;
+import de.schaffbar.core_pos.shared.id.WorkshopSessionId;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PastOrPresent;
 import org.mapstruct.Mapper;

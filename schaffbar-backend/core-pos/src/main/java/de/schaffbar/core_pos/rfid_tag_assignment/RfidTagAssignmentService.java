@@ -3,10 +3,10 @@ package de.schaffbar.core_pos.rfid_tag_assignment;
 import java.util.List;
 import java.util.Optional;
 
-import de.schaffbar.core_pos.exception.NoWaitingAssingmentException;
-import de.schaffbar.core_pos.id.CustomerId;
-import de.schaffbar.core_pos.id.RfidTagId;
 import de.schaffbar.core_pos.rfid_tag_assignment.RfidTagAssignmentViews.RfidTagAssignmentView;
+import de.schaffbar.core_pos.shared.exception.NoWaitingAssingmentException;
+import de.schaffbar.core_pos.shared.id.CustomerId;
+import de.schaffbar.core_pos.shared.id.RfidTagId;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;

@@ -1,8 +1,8 @@
 package de.schaffbar.core_pos.use_case;
 
-import de.schaffbar.core_pos.exception.NoActiveWorkshopSessionFoundException;
-import de.schaffbar.core_pos.id.CustomerId;
-import de.schaffbar.core_pos.id.WorkshopSessionId;
+import de.schaffbar.core_pos.shared.exception.NoActiveWorkshopSessionFoundException;
+import de.schaffbar.core_pos.shared.id.CustomerId;
+import de.schaffbar.core_pos.shared.id.WorkshopSessionId;
 import de.schaffbar.core_pos.workshop_session.WorkshopSessionService;
 import de.schaffbar.core_pos.workshop_session.WorkshopSessionViews;
 import de.schaffbar.core_pos.workshop_usage.WorkshopUsageService;

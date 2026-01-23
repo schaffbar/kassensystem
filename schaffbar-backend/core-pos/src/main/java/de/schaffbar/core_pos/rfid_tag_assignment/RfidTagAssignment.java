@@ -5,9 +5,9 @@ import static org.apache.commons.lang3.StringUtils.isBlank;
 import java.time.Instant;
 import java.util.UUID;
 
-import de.schaffbar.core_pos.id.CustomerId;
-import de.schaffbar.core_pos.id.RfidTagAssignmentId;
-import de.schaffbar.core_pos.id.RfidTagId;
+import de.schaffbar.core_pos.shared.id.CustomerId;
+import de.schaffbar.core_pos.shared.id.RfidTagAssignmentId;
+import de.schaffbar.core_pos.shared.id.RfidTagId;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;

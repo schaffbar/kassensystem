@@ -15,7 +15,7 @@ import de.schaffbar.core_pos.customer.web.CustomerApiModel.CustomerApiDto;
 import de.schaffbar.core_pos.customer.web.CustomerApiModel.UpdateCustomerAddressRequestBody;
 import de.schaffbar.core_pos.customer.web.CustomerApiModel.UpdateCustomerContactRequestBody;
 import de.schaffbar.core_pos.customer.web.CustomerApiModel.UpdateCustomerRequestBody;
-import de.schaffbar.core_pos.id.CustomerId;
+import de.schaffbar.core_pos.shared.id.CustomerId;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.NonNull;

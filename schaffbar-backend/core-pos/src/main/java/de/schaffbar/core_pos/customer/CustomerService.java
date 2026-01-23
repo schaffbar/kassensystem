@@ -9,7 +9,7 @@ import de.schaffbar.core_pos.customer.CustomerCommands.UpdateCustomerAddressComm
 import de.schaffbar.core_pos.customer.CustomerCommands.UpdateCustomerCommand;
 import de.schaffbar.core_pos.customer.CustomerCommands.UpdateCustomerContactCommand;
 import de.schaffbar.core_pos.customer.CustomerViews.CustomerView;
-import de.schaffbar.core_pos.id.CustomerId;
+import de.schaffbar.core_pos.shared.id.CustomerId;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;

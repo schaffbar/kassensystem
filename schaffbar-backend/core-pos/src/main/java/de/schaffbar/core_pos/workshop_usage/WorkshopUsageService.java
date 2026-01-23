@@ -5,10 +5,10 @@ import static java.util.Comparator.comparing;
 import java.util.List;
 import java.util.Optional;
 
-import de.schaffbar.core_pos.exception.NoActiveWorkshopUsageFoundException;
-import de.schaffbar.core_pos.exception.UserAlreadyInWorkshopException;
-import de.schaffbar.core_pos.id.CustomerId;
-import de.schaffbar.core_pos.id.WorkshopSessionId;
+import de.schaffbar.core_pos.shared.exception.NoActiveWorkshopUsageFoundException;
+import de.schaffbar.core_pos.shared.exception.UserAlreadyInWorkshopException;
+import de.schaffbar.core_pos.shared.id.CustomerId;
+import de.schaffbar.core_pos.shared.id.WorkshopSessionId;
 import de.schaffbar.core_pos.workshop_usage.WorkshopUsageViews.WorkshopUsageView;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;

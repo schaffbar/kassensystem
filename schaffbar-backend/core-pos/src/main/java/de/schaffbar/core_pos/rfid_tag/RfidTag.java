@@ -2,8 +2,8 @@ package de.schaffbar.core_pos.rfid_tag;
 
 import java.time.Instant;
 
-import de.schaffbar.core_pos.id.RfidTagId;
 import de.schaffbar.core_pos.rfid_tag.RfidTagCommands.CreateRfidTagCommand;
+import de.schaffbar.core_pos.shared.id.RfidTagId;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;

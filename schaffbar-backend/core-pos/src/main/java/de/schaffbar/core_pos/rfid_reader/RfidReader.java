@@ -3,8 +3,8 @@ package de.schaffbar.core_pos.rfid_reader;
 import java.time.Instant;
 import java.util.UUID;
 
-import de.schaffbar.core_pos.id.MacAddress;
-import de.schaffbar.core_pos.id.RfidReaderId;
+import de.schaffbar.core_pos.shared.id.MacAddress;
+import de.schaffbar.core_pos.shared.id.RfidReaderId;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;

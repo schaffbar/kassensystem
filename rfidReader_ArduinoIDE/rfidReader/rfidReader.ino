@@ -19,7 +19,7 @@
  * -) The code is splitted to several files to have shorter files which provide 
  *    a better overview
  *
- * https://github.com/OSSLibraries/Arduino_MFRC522v2#pin-layout           -- RDIF-Modul
+ * https://github.com/OSSLibraries/Arduino_MFRC522v2#pin-layout           -- RFID-Modul
  *
  * https://github.com/espressif/arduino-esp32/tree/master                 -- HTTPClient Library
  * https://arduinojson.org/?utm_source=meta&utm_medium=library.properties -- JSON Library  
@@ -498,6 +498,8 @@ void loop()
     dsplyTime();
     dsplyWifiState();
     if(((eUC == GateKeeperIn) or (eUC == GateKeeperOut))and ((iIconNo == 9)  or (iIconNo == 10)) or ((eUC == SwitchBox) and  (iIconNo == 10))) // and bGKMinUpdateFlag
+
+    if((eUC == SwitchBox) and  (iIconNo == 10))
     { // the value of the units shall be displayed when the customer is entering or leving the workshop are every time
       // or switch of the tool 
       Serial.println("Info: before dsplyUnitSecond() ");

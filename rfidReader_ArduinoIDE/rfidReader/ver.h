@@ -1,9 +1,17 @@
-// version history
+// version history  
 
-const char* sw_version = "0.5.0 beta";
+const char* sw_version = "0.5.2 beta";
 
 /* 
  * Reihenfolge major.minor.bugfix
+ *
+ * 0.5.2
+ * -) für die UseCases GateKeeper In/Out die Darstellung der Units und Sekunden entfernt
+ * -) für die zuvor genannten UseCases den Tag aus der JSon-Struktur entfernt,
+ *    die Unit werden jetzt nicht mehr vom Server erwartet und ausgewertet.
+ *
+ * 0.5.1
+ * -) in der evalCounterResp() im else-Pfad das darzustellende Icon gesetzt
  *
  * neuste Änderungen sollen an den Beginn der Liste geschrieben werden
  * 0.5.0

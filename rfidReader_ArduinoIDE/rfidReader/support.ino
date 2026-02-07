@@ -121,7 +121,7 @@ void evalSwitchBoxResp(JsonDocument jDoc)
 	  iIconNo = 6; // no access bmp	 
     strUnits = String(jDoc["UNITS"]);
     Serial.println("evalSwitchBoxResp - Customer has no access");
-    Serial.println("??? Ist stete End gesetzte für temporäre Darstellung und Übergang in den Idle-State");
+    Serial.println("??? Ist state End gesetzte für temporäre Darstellung und Übergang in den Idle-State");
   }  
   else if((String(jDoc["ICON"]) == "") and (String(jDoc["STATE"])=="WORKING") and (String(jDoc["ERROR"]) == ""))
   {  // Usere has access to the tool -> enable power -> measure the time
@@ -172,7 +172,7 @@ void evalGateKeeperResp(JsonDocument jDoc)
    Serial.println("Icon  - "+String(jDoc["ICON"]));
    Serial.println("Name  - "+String(jDoc["CUSTOMERNAME"]));
    Serial.println("StartStop - "+String(jDoc["CUSTOMERSTARTSTOP"]));
-   Serial.println("Units - "+ String(jDoc["UNITS"]));
+   // Serial.println("Units - "+ String(jDoc["UNITS"]));
    if(String(jDoc["ICON"]) == "NOREG")
    { // RFID-Tag not found -> error message -> end -> idle
      bIntChange = true;
@@ -182,7 +182,7 @@ void evalGateKeeperResp(JsonDocument jDoc)
 	   strHeader = "Error";
 	   strMsg = String(jDoc["ERROR"]);
 	   iIconNo = 7; // noreg.bmp
-     strUnits = String(jDoc["UNITS"]);
+     //strUnits = String(jDoc["UNITS"]);
      Serial.println("evalGateKeeperResp - Customer uses unregistered RFID-TAG");
      playError();
    }
@@ -195,7 +195,7 @@ void evalGateKeeperResp(JsonDocument jDoc)
      strHeader = String(jDoc["CUSTOMERNAME"]);
 	   strMsg = String(jDoc["ERROR"]); 
 	   iIconNo = 6; // no access bmp	 
-     strUnits = String(jDoc["UNITS"]);
+     // strUnits = String(jDoc["UNITS"]);
      Serial.println("evalGateKeeperResp - Customer has no access");
      playError();
    }
@@ -210,7 +210,7 @@ void evalGateKeeperResp(JsonDocument jDoc)
      strHeader = String(jDoc["CUSTOMERNAME"]);
 	   strMsg = String(jDoc["CUSTOMERSTARTSTOP"]);
 	   iIconNo = 9; // hello.bmp	 
-     strUnits = String(jDoc["UNITS"]);
+     // strUnits = String(jDoc["UNITS"]);
      initUnitCounter();
      Serial.println("evalGateKeeperResp - Customer is starting");
      //playOK();
@@ -224,7 +224,7 @@ void evalGateKeeperResp(JsonDocument jDoc)
 	   eState = end;
      strHeader = String(jDoc["CUSTOMERNAME"]);
 	   strMsg = String(jDoc["CUSTOMERSTARTSTOP"]);
-     strUnits = String(jDoc["UNITS"]);
+     // strUnits = String(jDoc["UNITS"]);
 	   iIconNo = 10; // bye.bmp	    
      initUnitCounter();
      Serial.println("evalGateKeeperResp - Customer leaving");
@@ -276,13 +276,14 @@ void evalCounterResp(JsonDocument jDoc)
     strHeader = String(jDoc["CUSTOMERNAME"]); //"RFID-Tag";
     strMsg = String(jDoc["RFID"]);            //strWorkID+" transferred";
 	  iIconNo = 8;
-	  dsplyErrorInfo(strHeader,strMsg,0,0,iIconNo);                          // ???
+	  //dsplyErrorInfo(strHeader,strMsg,0,0,iIconNo);                          // ???
 	  Serial.println("evalCounterResp(JsonDocument jDoc) Data transferred");
   }
   else
   { // unexpected answer received -> display error message
     bIntChange = true;
 	  eState = end;
+    iIconNo == 7; // IconNr fehlt noreg zuweisen
 	  Serial.println("Is missing missing??? : evalCounterResp(JsonDocument jDoc) Data extraction");
 	  strHeader = String(jDoc["CUSTOMERNAME"]);
     strMsg    = String(jDoc["ERROR"]);
@@ -739,6 +740,7 @@ int getIconNo(String strIcon)
   }
   return iRetVal; 
 }
+
 
 void initUnitCounter()
 {

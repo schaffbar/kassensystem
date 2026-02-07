@@ -693,9 +693,9 @@ void updateGateKeeper()
   tft.setCursor(iTmpXPos,cDspGateTimeY); 
   tft.println(strCustomerTime);  
 
-  iTmpXPos = iCenterTxt(0,cDspGateUnitsY,strUnits);
-  tft.setCursor(iTmpXPos,cDspGateUnitsY); 
-  tft.println(strUnits);    
+  //iTmpXPos = iCenterTxt(0,cDspGateUnitsY,strUnits);
+  //tft.setCursor(iTmpXPos,cDspGateUnitsY); 
+  //tft.println(strUnits);    
 
   tft.setTextColor(ILI9341_WHITE);
   waitForTouch();

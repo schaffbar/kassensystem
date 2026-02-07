@@ -1,23 +1,25 @@
-/*
+/*     
  * -----------------------------------------------------------------------------------------
- * This program shall be used to handle the following three use cases
+ * This program shall be used to handle the following use cases
  * 1.) Counter                                                                           Implemented
  *     The assistant at the counter read the rfid number of the tag and place 
  *     it to a database table in combination with the customer number field
  *     which is also used for union members of the open workshop
- * 2.) SwitchBox
+ * 2.) SwitchBox                                                                         Implemented
  *     The customer can switch the power of the requested machine on,
  *     when he has joined the introduction course of this machine.
  *     in a database this is mentioned, and part of the answer of the server.
  * 3.) GateKeeper                                                                        Implemented
  *     Set the start and end signal in the database table, when the customer or
  *     union member of the open workshop enter or leave the workshop area.
- * 
+ * 4.) AddTag                                                                            Implemented
+ *     All rfid numbers shall be registered in advance, 
+ *     that the edge SW on the server can handle this situation, this use case was introduced
  * Hint:
  * -) The code is splitted to several files to have shorter files which provide 
  *    a better overview
  *
- * https://github.com/OSSLibraries/Arduino_MFRC522v2#pin-layout           -- RDIF-Modul
+ * https://github.com/OSSLibraries/Arduino_MFRC522v2#pin-layout           -- RFID-Modul
  *
  * https://github.com/espressif/arduino-esp32/tree/master                 -- HTTPClient Library
  * https://arduinojson.org/?utm_source=meta&utm_medium=library.properties -- JSON Library  
@@ -43,11 +45,13 @@
 // breadboard is using the setting ESP32 Dev Module
 // also the serial interface is to set 
 
+#include <esp_sleep.h>
 #include <Arduino.h>
 
 #include <WiFi.h>
 #include <esp_wifi.h> // get the mac address
 #include <HTTPClient.h>
+
 #define wifiNoTries 50      // number of tries to get WLan connection
 
 //-----------------------------
@@ -78,8 +82,11 @@
 
 #include "netcred.h"              // WLan-Zugangs bzw. Server-Information
 
-bool  bWifiInitFlag = false;
-bool  bWifiLostFlag = false;
+#define RawComFlag  0          // 1 <= der rfidReaader sendet ein RawPaket, 0 <= der rfidReader sendet http-Anfragen an den Server
+bool bSleepMode  = false;
+
+bool bWifiInitFlag = false;
+bool bWifiLostFlag = false;
 
 HTTPClient httpClient;  // to send the control command to the shelly or similar device
 WiFiClient wifiClient;  // for discussion with the server and database
@@ -89,7 +96,7 @@ uint8_t uiUpdatedRFID = 1;
 
 // http://192.168.8.151/relay/0?turn=off
 String strDevName         = "SchaffBar-RFID-Controller";
-char cDevUseCase          = ' '; // SwitchBox Ein/Ausschalten von Geräten - TimeCtrl Betreten/Verlassen des Werkstatt-Bereichs - Counter
+String strDevUseCase      = String(" "); // SwitchBox Ein/Ausschalten von Geräten - TimeCtrl Betreten/Verlassen des Werkstatt-Bereichs - Counter
 String strHTTPstart       = "http://";
 String strIpAddrSolenoid  = "192.168.8.151";
 String strSolenoidOff     = "/relay/0?turn=off";
@@ -168,16 +175,22 @@ String strOldTxt = "";
 
 //----------------------------------------------------
 
-String StringUseCaseName[5] = {"GetInit","Switchbox","GateKeeper","Counter","Unknown"};
-typedef enum eDevUseCase_t 
+String strUseCaseName[7] = {"GetInit","Switchbox","GateKeeperIn","GateKeeperOut","Counter","AddTag","Unknown"};
+// das Feld UseCase wird auf dem Server auf Type geändert werden
+typedef enum eDevUseCase_t      
 {
   GetInit,       // request for init data
   SwitchBox,     // is switching the different tools on and off
-  GateKeeper,    // start and stops the timer 
+  GateKeeperIn,  // starts the timer 
+  GateKeeperOut, // stops the timer 
   Counter,       // support the hero at the counter
   AddTag,        // add tag to the card table, to create a closed pool of tags
   UnKnown        // unkown use case
 } eDevUseCase_t;
+
+String strRouteInit    = "/device/init";       // Für die Anmeldung des rfidReaders am Server, wird verwendet für den UseCase GetInit
+String strRouteCounter = "/device/counter";    // Für Aktionen am Counter, wird verwendet für die UseCase AddTag und Counter
+String strRouteCard    = "/device/card";       // Für Kundenaktionen am rfidReader für die UseCases GateKeeper und SwitchBox
 
 eDevUseCase_t eUC= GetInit;
 
@@ -249,9 +262,11 @@ const int cWaitforSoftReset      = 15000;  // represent an error message then st
 JsonDocument jsonSendDoc;   // String jsonSendData = "";
 JsonDocument jsonRecDoc;    // String jsonReceiveData = "";
 
-unsigned long ulTimeStart;  // Time stamp when the machine was enabled
+unsigned long ulTimeStart       = 0;  // Time stamp when the machine was enabled
 unsigned long ulLocalEpochStart = 0;
 
+unsigned long ulIdleStart       = 0;      // Start des Idle-Mode
+unsigned long ulIdleMaxDuration = 360;    // Länge des Idle-Mode ohne Aktivität in sec
 
 bool bIntChange  = false;  // flag to start display 
 bool bIntRunning = false;  // intervall is running
@@ -267,53 +282,63 @@ void setup()
  *  Wifi Functions
  ****************************************************************************************************/
 {
+  bool bWakeUpFlag = false;
   Serial.begin(115200); // Initialize serial communications with the PC for debugging.
   //while (!Serial);      // Do nothing if no serial port is opened (added for Arduinos based on ATMEGA32U4).
   Serial.println("Setup start ...");
+  //bWakeUpFlag = checkWakeUp();
+  //if (!bWakeUpFlag)
+  //{
+    initDisplay();
+    initTouch();  // ToDo: add return value
 
-  initDisplay();
-  initTouch();  // ToDo: add return value
+    Serial.println(F("Scan PICC to see UID, SAK, type, and data blocks..."));
+    mfrc522.PCD_Init();   // Init MFRC522 board.
+    delay(10); // for is requested for slow ICs 
+    MFRC522Debug::PCD_DumpVersionToSerial(mfrc522, Serial);	// Show details of PCD - MFRC522 Card Reader details.
+    
+    eState = start;
 
-  Serial.println(F("Scan PICC to see UID, SAK, type, and data blocks..."));
-  mfrc522.PCD_Init();   // Init MFRC522 board.
-  delay(10); // for is requested for slow ICs 
-  MFRC522Debug::PCD_DumpVersionToSerial(mfrc522, Serial);	// Show details of PCD - MFRC522 Card Reader details.
-	
-  eState = start;
-
-  //////////////////////////////////////////////  SD-Card
-  if(!SD.begin(SD_CS, SD_SCK_MHZ(25))) 
-  { // ESP32 requires 25 MHz limit
-    Serial.println(F("SD begin() failed"));
-    uiSDCardFlag = 0;
-    //for(;;); // Fatal error, do not continue
-  }
-  else
-  {
-    Serial.println(F("SD begin() ok :-)"));
-    uiSDCardFlag = 1;
-  }
-  ImageReturnCode stat;
-  stat = reader.drawBMP("/logo.bmp", tft, 0, 0);
-  dsplySWVersion();
-  delay(4000);
-  tft.fillScreen(ILI9341_BLACK);
-  //stat = reader.drawBMP("/schwein.bmp", tft, 0, 0); //  
-  //delay(4000);
-  //tft.fillScreen(ILI9341_BLACK);
-  //////////////////////////////////////////////
-  eUC = GetInit;
-  initTime();
-  initWifi();
-  jsonSendDoc = getJSONInitData();
-  //ulLocalEpochStart = rtc.getLocalEpoch();
-  //unsigned long xxx = millis();
-  //playOK();
-  //Serial.println("timediff = "+String(rtc.getLocalEpoch()-ulLocalEpochStart));
-  //Serial.println("timediff = "+String(millis()-xxx));
-  //Serial.println("+++++++++++++++++++++++++++++++");
-  dsplyErrorInfo("Info","Lade Config Data", 1, 0, 4);
-  sendRequest(jsonSendDoc);
+    //////////////////////////////////////////////  SD-Card
+    if(!SD.begin(SD_CS, SD_SCK_MHZ(25))) 
+    { // ESP32 requires 25 MHz limit
+      Serial.println(F("SD begin() failed"));
+      uiSDCardFlag = 0;
+      //for(;;); // Fatal error, do not continue
+    }
+    else
+    {
+      Serial.println(F("SD begin() ok :-)"));
+      uiSDCardFlag = 1;
+    }
+    ImageReturnCode stat;
+    stat = reader.drawBMP("/logo.bmp", tft, 0, 0);
+    dsplySWVersion();
+    delay(4000);
+    tft.fillScreen(ILI9341_BLACK);
+    //stat = reader.drawBMP("/schwein.bmp", tft, 0, 0); //  
+    //delay(4000);
+    //tft.fillScreen(ILI9341_BLACK);
+    Serial.flush();
+    //////////////////////////////////////////////
+    eUC = GetInit;
+    initTime();
+    initWifi();
+    Serial.flush();
+    jsonSendDoc = getJSONInitData();
+    //ulLocalEpochStart = rtc.getLocalEpoch();
+    //unsigned long xxx = millis();
+    //playOK();
+    //Serial.println("timediff = "+String(rtc.getLocalEpoch()-ulLocalEpochStart));
+    //Serial.println("timediff = "+String(millis()-xxx));
+    //Serial.println("+++++++++++++++++++++++++++++++");
+    dsplyErrorInfo("Info","Lade Config Data", 1, 0, 4);
+    #if RawComFlag == 1
+          sendRequest(jsonSendDoc);
+    #else
+          sendHTTPRequest(strRouteInit,jsonSendDoc);
+    #endif    
+  //}
   if(eUC == SwitchBox)
   {
     // UseCase = SwitchBox -> Schalte das Relais aus
@@ -326,9 +351,9 @@ void setup()
   dspClear();
   if((eUC != GetInit) and (eUC != UnKnown))
   {
-    eState = idle;
+    setIdleStart(); // eState = idle;
   }
-  
+  playOK();
   Serial.println("End of SetUp()");
   Serial.flush();
 }
@@ -372,7 +397,7 @@ void loop()
           Serial.println("evalSwitchBoxAction("+String(chArCardID)+"))");
           evalSwitchBoxAction(String(chArCardID));
       }
-      else if (eUC == GateKeeper)
+      else if ((eUC == GateKeeperIn) or (eUC == GateKeeperOut))
       {
         Serial.println("evalGateKeeperAction("+String(chArCardID)+"))");
         evalGateKeeperAction(String(chArCardID));
@@ -433,6 +458,12 @@ void loop()
   {
     Serial.println("dsplyIdle()");
     dsplyIdle();
+    if (bSleepMode)
+    {
+      //checkIdleDuration();
+      // Ist nicht getestet und herunter priorisiert,
+      // daher auskommentiert
+    }
   }
   if(eState == working)
   {
@@ -466,7 +497,9 @@ void loop()
     }
     dsplyTime();
     dsplyWifiState();
-    if((eUC == GateKeeper) and ((iIconNo == 9)  or (iIconNo == 10)) or ((eUC == SwitchBox) and  (iIconNo == 10))) // and bGKMinUpdateFlag
+    if(((eUC == GateKeeperIn) or (eUC == GateKeeperOut))and ((iIconNo == 9)  or (iIconNo == 10)) or ((eUC == SwitchBox) and  (iIconNo == 10))) // and bGKMinUpdateFlag
+
+    if((eUC == SwitchBox) and  (iIconNo == 10))
     { // the value of the units shall be displayed when the customer is entering or leving the workshop are every time
       // or switch of the tool 
       Serial.println("Info: before dsplyUnitSecond() ");
@@ -482,4 +515,5 @@ void loop()
       }
     }
   }
+  Serial.flush(); 
 }

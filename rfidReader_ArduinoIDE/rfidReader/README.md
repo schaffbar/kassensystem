@@ -4,6 +4,7 @@
 - Installiere die fehlenden Bibliotheken.
 - Board: ESP32C3
 - USB CDC On Boot: Enabled
+  (ansonsten funktioniert die Ausgabe der seriellen Schnittstelle nicht.)
 
 
 ## Visial Studio Code

@@ -34,7 +34,7 @@
   #define Touch_RST_Duration_ms 100
 #endif
 
-#ifdef PCB
+#ifdef PCB  
   #define BUZZZER_PIN  1 // ESP32 pin GPIO1 connected to piezo buzzer
 
   #define TFT_CS  7

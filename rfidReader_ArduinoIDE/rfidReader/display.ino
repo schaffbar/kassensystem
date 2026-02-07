@@ -43,12 +43,12 @@ const uint cDspSwitchNameValY       =  60;
 const uint cDspSwitchNameValLen     = 180;
 const uint cDspSwitchNameValHeight  =  20;
 
-      const uint cDspSwitchTimeX          = 200;
-      const uint cDspSwitchTimeY          =  50;
-      const uint cDspSwitchTimeValX       = 280;
-      const uint cDspSwitchTimeValY       =  40;
-      const uint cDspSwitchTimeValLen     = 180;
-      const uint cDspSwitchTimeValHeight  =  20;
+const uint cDspSwitchTimeX          = 200;
+const uint cDspSwitchTimeY          =  50;
+const uint cDspSwitchTimeValX       = 280;
+const uint cDspSwitchTimeValY       =  40;
+const uint cDspSwitchTimeValLen     = 180;
+const uint cDspSwitchTimeValHeight  =  20;
 
       const uint cDspSwitchUnitX          =  15;
       const uint cDspSwitchUnitY          =  60;
@@ -456,7 +456,7 @@ void dsplyIdleText(String strParam)
 {
   int iXPosStart = 0;
   uint8_t uiTxtFlag=0;
-  String StringTxt = StringUseCaseName[uint8_t(eUC)];
+  String StringTxt = strUseCaseName[uint8_t(eUC)];
   tft.fillRect(0,100,320,60,ILI9341_BLACK);
   if(strParam == "")
   {
@@ -522,7 +522,7 @@ void dsplyIdle()
           dsplyIdleText(strDevName); 
         }
       }
-      else if( eUC == GateKeeper)
+      else if((eUC == GateKeeperIn) or (eUC == GateKeeperOut))
       {
         // <a href="https://www.flaticon.com/free-icons/gate" title="gate icons">Gate icons created by Freepik - Flaticon</a>
         if(uiSDCardFlag == 1)
@@ -559,22 +559,22 @@ void dsplyMask()
  * void dsplyMask() - in dependency of the use case the basic mask will be displayed
  ****************************************************************************************************/
   {
-  if (cDevUseCase == 'S')
+  if (strDevUseCase == String('S'))
   {
     dsplySwitchBox();
   }
-  else if(cDevUseCase == 'C')
+  else if(strDevUseCase == String('C'))
   {
     dsplyCounter();
   }
-  else if(cDevUseCase == 'G')
+  else if((strDevUseCase == "GI") or (strDevUseCase == "GO"))
   {  
     dsplyGateKeeper();
     updateGateKeeper();
   }
   else
   {
-    dsplyErrorInfo("Error","Unkown UseCase"+String(cDevUseCase),5,0,0);
+    dsplyErrorInfo("Error","Unkown UseCase "+strDevUseCase,5,0,0);
   }
   if(bWifiLostFlag)
   { // Wifi Connnection lost ->
@@ -693,9 +693,9 @@ void updateGateKeeper()
   tft.setCursor(iTmpXPos,cDspGateTimeY); 
   tft.println(strCustomerTime);  
 
-  iTmpXPos = iCenterTxt(0,cDspGateUnitsY,strUnits);
-  tft.setCursor(iTmpXPos,cDspGateUnitsY); 
-  tft.println(strUnits);    
+  //iTmpXPos = iCenterTxt(0,cDspGateUnitsY,strUnits);
+  //tft.setCursor(iTmpXPos,cDspGateUnitsY); 
+  //tft.println(strUnits);    
 
   tft.setTextColor(ILI9341_WHITE);
   waitForTouch();
@@ -796,6 +796,8 @@ void dsplySWVersion()
   tft.setTextSize(1);
   tft.print("SW Version: "); 
   tft.print(sw_version); 
+  tft.print(" Server: ");
+  tft.print(ip);
   tft.setTextSize(2);
 }
 

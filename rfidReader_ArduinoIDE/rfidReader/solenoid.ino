@@ -1,6 +1,6 @@
 
 
-void SolenoidOFF(void)
+void SolenoidOFF(void)  
 /****************************************************************************************************
  * void SolenoidOFF(void) - Switch the wifi solenoid off via a webhook 
  ****************************************************************************************************/
@@ -29,7 +29,7 @@ void SolenoidON(void)
   Serial.println("SolenoidON()");
 }
 
-void SolenoidTOGGLE(void)
+void SolenoidTOGGLE(void)  
 {
   int iHttpCode = 0;
   httpClient.begin(strHTTPstart+strIpAddrSolenoid+strSolenoidToggle);

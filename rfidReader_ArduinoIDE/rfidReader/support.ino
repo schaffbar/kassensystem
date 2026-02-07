@@ -1,4 +1,4 @@
-int analyseResponse(String strAnswer)
+int analyseResponse(String strAnswer)   
 /****************************************************************************************************
  * void analyseResponse(String strAnswer) - the answer from the server will be converted to a json
  * document to extract the parameter and values
@@ -42,7 +42,7 @@ int analyseResponse(String strAnswer)
         Serial.println("evalSwitchBoxResp(jDoc)");
         evalSwitchBoxResp(jDoc);
       }
-      else if ((eUC == GateKeeper) and (eState == end)) // String(jDoc["STATE"]) != "END"))
+      else if (((eUC == GateKeeperIn) or (eUC == GateKeeperOut)) and (eState == end)) // String(jDoc["STATE"]) != "END"))
       {
         Serial.println("evalGateKeeperResp(jDoc)");
         evalGateKeeperResp(jDoc);
@@ -68,14 +68,14 @@ int analyseResponse(String strAnswer)
 	  {
 	    dsplyErrorInfo("Error","Unknown Json received!",5,1,0);
       playError();
-      stop();
+      softReset(); // stop();
 	  }
 	}
   else
   {
     dsplyErrorInfo("Error","No Json received!",5,1,0);
     playError();
-    stop();
+    softReset(); // stop();
   }
   return 0;
 }
@@ -121,7 +121,7 @@ void evalSwitchBoxResp(JsonDocument jDoc)
 	  iIconNo = 6; // no access bmp	 
     strUnits = String(jDoc["UNITS"]);
     Serial.println("evalSwitchBoxResp - Customer has no access");
-    Serial.println("??? Ist stete End gesetzte für temporäre Darstellung und Übergang in den Idle-State");
+    Serial.println("??? Ist state End gesetzte für temporäre Darstellung und Übergang in den Idle-State");
   }  
   else if((String(jDoc["ICON"]) == "") and (String(jDoc["STATE"])=="WORKING") and (String(jDoc["ERROR"]) == ""))
   {  // Usere has access to the tool -> enable power -> measure the time
@@ -172,7 +172,7 @@ void evalGateKeeperResp(JsonDocument jDoc)
    Serial.println("Icon  - "+String(jDoc["ICON"]));
    Serial.println("Name  - "+String(jDoc["CUSTOMERNAME"]));
    Serial.println("StartStop - "+String(jDoc["CUSTOMERSTARTSTOP"]));
-   Serial.println("Units - "+ String(jDoc["UNITS"]));
+   // Serial.println("Units - "+ String(jDoc["UNITS"]));
    if(String(jDoc["ICON"]) == "NOREG")
    { // RFID-Tag not found -> error message -> end -> idle
      bIntChange = true;
@@ -182,7 +182,7 @@ void evalGateKeeperResp(JsonDocument jDoc)
 	   strHeader = "Error";
 	   strMsg = String(jDoc["ERROR"]);
 	   iIconNo = 7; // noreg.bmp
-     strUnits = String(jDoc["UNITS"]);
+     //strUnits = String(jDoc["UNITS"]);
      Serial.println("evalGateKeeperResp - Customer uses unregistered RFID-TAG");
      playError();
    }
@@ -195,7 +195,7 @@ void evalGateKeeperResp(JsonDocument jDoc)
      strHeader = String(jDoc["CUSTOMERNAME"]);
 	   strMsg = String(jDoc["ERROR"]); 
 	   iIconNo = 6; // no access bmp	 
-     strUnits = String(jDoc["UNITS"]);
+     // strUnits = String(jDoc["UNITS"]);
      Serial.println("evalGateKeeperResp - Customer has no access");
      playError();
    }
@@ -210,10 +210,10 @@ void evalGateKeeperResp(JsonDocument jDoc)
      strHeader = String(jDoc["CUSTOMERNAME"]);
 	   strMsg = String(jDoc["CUSTOMERSTARTSTOP"]);
 	   iIconNo = 9; // hello.bmp	 
-     strUnits = String(jDoc["UNITS"]);
+     // strUnits = String(jDoc["UNITS"]);
      initUnitCounter();
      Serial.println("evalGateKeeperResp - Customer is starting");
-     playOK();
+     //playOK();
    }
    //else if((String(jDoc["ERROR"]) == "") and (String(jDoc["CUSTOMERSTARTSTOP"]) != "") and (String(jDoc["ICON"]) == "BYE")) 
    else if(String(jDoc["ICON"]) == "BYE") 
@@ -224,11 +224,11 @@ void evalGateKeeperResp(JsonDocument jDoc)
 	   eState = end;
      strHeader = String(jDoc["CUSTOMERNAME"]);
 	   strMsg = String(jDoc["CUSTOMERSTARTSTOP"]);
-     strUnits = String(jDoc["UNITS"]);
+     // strUnits = String(jDoc["UNITS"]);
 	   iIconNo = 10; // bye.bmp	    
      initUnitCounter();
      Serial.println("evalGateKeeperResp - Customer leaving");
-     playOK();
+     //playOK();
    }
    else
    {
@@ -271,16 +271,19 @@ void evalCounterResp(JsonDocument jDoc)
     bIntChange = true;
     bIntRunning = false;
     eState = end;
-    strHeader = "RFID-Tag";
-    strMsg = strWorkID+" transferred";
+    // Geändert, aufgrund Anforderungsänderung 
+    // Neu: Darstellung von Namenn und rfid 
+    strHeader = String(jDoc["CUSTOMERNAME"]); //"RFID-Tag";
+    strMsg = String(jDoc["RFID"]);            //strWorkID+" transferred";
 	  iIconNo = 8;
-	  //dsplyErrorInfo(strHeader,strMsg,0,0,iIconNo);
+	  //dsplyErrorInfo(strHeader,strMsg,0,0,iIconNo);                          // ???
 	  Serial.println("evalCounterResp(JsonDocument jDoc) Data transferred");
   }
   else
   { // unexpected answer received -> display error message
     bIntChange = true;
 	  eState = end;
+    iIconNo == 7; // IconNr fehlt noreg zuweisen
 	  Serial.println("Is missing missing??? : evalCounterResp(JsonDocument jDoc) Data extraction");
 	  strHeader = String(jDoc["CUSTOMERNAME"]);
     strMsg    = String(jDoc["ERROR"]);
@@ -330,7 +333,6 @@ void setState(String strState)
   }
   else if (strState == "IDLE") 
   {
-    eState = idle;
     chngState2Idle(); 
   }
   else if (strState == "WORKING")
@@ -349,22 +351,27 @@ void setState(String strState)
 
 void setUseCase(String strUseCase)
 {
-  char cUseCase = char(strUseCase[0]);
-  if(strUseCase.length() == 1)
-  {
-    if(cUseCase == 'S')
+  //char cUseCase = char(strUseCase[0]);
+  //if(strUseCase.length() > 2)
+  //{
+    strUseCase.toUpperCase();
+    if(strUseCase == String('S'))
     {
       eUC = SwitchBox;
     }
-    else if (cUseCase == 'G')
+    else if (strUseCase == String("GI")) 
     {
-      eUC = GateKeeper;
+      eUC = GateKeeperIn;
     }
-    else if (cUseCase == 'C')
+    else if ((strUseCase == String("GO")))
+    {
+      eUC = GateKeeperOut;
+    }
+    else if (strUseCase == "C")
     {
       eUC = Counter;
     }
-    else if (cUseCase == 'A')
+    else if (strUseCase == "A")
     {
       eUC = AddTag;
     }
@@ -373,29 +380,28 @@ void setUseCase(String strUseCase)
       eUC = UnKnown;
       Serial.println("!!!Unknown Use Case = "+strUseCase);
     }
-  }
-  else
-  {
-      eUC = UnKnown;
-      Serial.println("!!!Unknown Use Case = "+strUseCase);
-  }
-  Serial.println("UseCase = "+String(cUseCase) + " " + strUseCase);
+  //}
+  //else
+  //{
+  //    eUC = UnKnown;
+  //    Serial.println("!!!Unknown Use Case = "+strUseCase);
+  //}
 }
 
 void setInitData(JsonDocument jDoc)
 {
   int iAnswer = 0;
-  eState = idle;
   chngState2Idle();
-  cDevUseCase = char(String(jDoc["DEVUSECASE"])[0]);
-  Serial.println("Start of setInitData(JsonDocument jDoc) - UC" +String(jDoc["DEVUSECASE"])+" "+String(cDevUseCase)+" State "+getState());
+  strDevUseCase = String(jDoc["DEVUSECASE"]);
+  strDevUseCase .toUpperCase();
+  Serial.println("Start of setInitData(JsonDocument jDoc) - UC" +String(jDoc["DEVUSECASE"])+" "+strDevUseCase+" State "+getState());
   setUseCase(String(jDoc["DEVUSECASE"]));
   if (jDoc.containsKey("DEVNAME")) 
   {
     strDevName = String(jDoc["DEVNAME"]);
     Serial.println("jDoc[DEVNAME] = "+strDevName);
   }   
-  if(cDevUseCase == 'S') // SwitchBox
+  if(strDevUseCase == String('S')) // SwitchBox
   {
     Serial.println("SwitchBox");
     iAnswer = jsExtractSwitchBoxData(jDoc);
@@ -405,33 +411,33 @@ void setInitData(JsonDocument jDoc)
       if(sTimeRunning.uiFlagValid == 1)
       {
         //dsplyMask();
-        eState = idle;
+        setIdleStart(); // eState = idle;
         Serial.println("End of analyseResponse -  SwitchBox");
         //return 0;
       }
     }
   }
-  else if(cDevUseCase == 'C') // Counter
+  else if(strDevUseCase == String('C')) // Counter
   {
       Serial.println("Counter: Check Code what is missing!!");
       strTerminal = String(jDoc["TERMINAL"]);
       Serial.print("Received Data for UseCase Counter : ");
-      eState = idle;
+      setIdleStart(); // eState = idle;
       serializeJson(jDoc,Serial);
       Serial.println();
   }
-  else if(cDevUseCase == 'G') // GateKeeper
+  else if((strDevUseCase == String("GI")) or ((strDevUseCase == String("GO")))) // GateKeeper
   {
-    Serial.println("GateKeeper");
-    eState = idle;
+    Serial.println("GateKeeper I+O");
+    setIdleStart(); // eState = idle;
     Serial.print("Received Data for UseCase GateKeeper : ");
     serializeJson(jDoc,Serial);
     Serial.println();
   }
-  else if (cDevUseCase == 'A')
+  else if (strDevUseCase == String('A'))
   {
     Serial.println("AddTag");
-    eState = idle;
+    setIdleStart(); //eState = idle;
     Serial.print("Received Data for UseCase AddTag : ");
     serializeJson(jDoc,Serial);
     Serial.println();    
@@ -439,8 +445,8 @@ void setInitData(JsonDocument jDoc)
   else
   {
     dsplyErrorInfo("Error","Unknown UseCase!",5,1,99);
-    Serial.println("Error: unbekannter UseCase "+cDevUseCase);
-    stop();
+    Serial.println("Error: unbekannter UseCase "+strDevUseCase);
+    softReset(); // stop();
   }
   sTimeRunning = jsExtractDate(jDoc);
 }
@@ -527,9 +533,13 @@ String getUseCase()
   {
     strReturn = "S";
   }
-  else if (eUC == GateKeeper)
+  else if (eUC == GateKeeperIn)
   {
-    strReturn = "G";
+    strReturn = "GI";
+  }
+  else if (eUC == GateKeeperOut)
+  {
+    strReturn = "GO";
   }
   else if (eUC == Counter)
   {
@@ -573,7 +583,11 @@ void evalSwitchBoxAction(String strRfidTag)
     jsonSendDoc = getJSONUserData(strRfidTag);
     strWorkID = strRfidTag;   // sichere die ID, damit Dich niemand anders abmelden kann :-)
     dsplyErrorInfo("Info","Lade Daten", 1, 0, 5);
-    sendRequest(jsonSendDoc);
+    #if RawComFlag == 1
+          sendRequest(jsonSendDoc);
+    #else
+          sendHTTPRequest(strRouteCard,jsonSendDoc);
+    #endif    
     if( uiFlagRunTimer == 1)
     {
       fSolUnitsMin  = 0;
@@ -589,7 +603,11 @@ void evalSwitchBoxAction(String strRfidTag)
       uiFlagRunTimer = 0;
       dsplyErrorInfo("Info","Schreibe Daten", 1, 0, 5);
       jsonSendDoc = getJSONUserData(strRfidTag);
-      sendRequest(jsonSendDoc);
+      #if RawComFlag == 1
+        sendRequest(jsonSendDoc);
+      #else
+        sendHTTPRequest(strRouteCard,jsonSendDoc);
+      #endif
       fSolUnitsMin  = 0;
     }
     else
@@ -605,7 +623,11 @@ void evalGateKeeperAction(String strRfidTag)
 {
   jsonSendDoc = getJDocGKData(strRfidTag);
   playOK();
-  sendRequest(jsonSendDoc);
+  #if RawComFlag == 1
+    sendRequest(jsonSendDoc);
+  #else
+    sendHTTPRequest(strRouteCard,jsonSendDoc);
+  #endif
 }
 
 void evalCounterAction(String strRfidTag)
@@ -613,12 +635,17 @@ void evalCounterAction(String strRfidTag)
   // to add the rfidTag to the Card table on the server 
   jsonSendDoc = getJDocCounter(strRfidTag);
   playOK();
-  sendRequest(jsonSendDoc);
+  #if RawComFlag == 1
+    sendRequest(jsonSendDoc);
+  #else
+    sendHTTPRequest(strRouteCounter,jsonSendDoc);
+  #endif  
 }
 
 void evalTouchAction()
 {
   // auskommentiert da auch für den UseCse SwitchBox bei unbekannter Karte diese Funktion erfordert
+  // und nicht nur im UseCase GAteKeeper benötigt wird
   //if((eUC == GateKeeper) or (eUC == Counter))
   //{ 
     if(eState == end)
@@ -628,13 +655,52 @@ void evalTouchAction()
   //}
 }
 
+void setIdleStart()
+{
+  ulIdleStart = rtc.getLocalEpoch();
+  eState = idle; 
+}
+
+void checkIdleDuration()
+{
+  unsigned long ulTimeTemp = rtc.getLocalEpoch();
+  if (ulIdleStart + ulIdleMaxDuration < ulTimeTemp)
+  {
+    enterSleepMode();
+  }
+}
+
+void enterSleepMode()
+{
+  esp_err_t tErrMsg;
+  Serial.println("Enter SleepMode ...");
+  Serial.flush(); 
+  dspClear();
+  // Deep-Sleep-Info für ESP32-C3
+  // https://docs.espressif.com/projects/esp-idf/en/stable/esp32c3/api-reference/system/sleep_modes.html
+  tErrMsg = esp_sleep_enable_gpio_wakeup(); // Touch_INT_PIN, 0);          // In Ruhe ist der Pin high => neg Logik
+  //tErrMsg = esp_deep_sleep_enable_gpio_wakeup((1<<Touch_INT_PIN),ESP_GPIO_WAKEUP_GPIO_HIGH); // Pin_MFRC522_IRQ, 1); // In Ruhe ist der Pin low  => pos Logik
+  esp_deep_sleep_start();
+}
+
+bool checkWakeUp()
+{
+  bool bWakeUpEvent = false;
+  if (esp_sleep_is_valid_wakeup_gpio((gpio_num_t)Touch_INT_PIN))
+  {
+    Serial.println("WakeUp regarding touch event");
+    bWakeUpEvent = true;
+  }
+  return bWakeUpEvent;
+}
+
 void chngState2Idle()
 { // reset intervall settings 
   bIntChange  = false;
   bIntRunning = false;
   lIntStartAt = 0;
   // Switching back to idle mode
-  eState      = idle;
+  setIdleStart(); // eState = idle;
   Serial.println("Switching state to idle (UC="+String(eUC)+")");
   dspClear();
   strHeader = "";
@@ -674,6 +740,7 @@ int getIconNo(String strIcon)
   }
   return iRetVal; 
 }
+
 
 void initUnitCounter()
 {

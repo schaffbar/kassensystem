@@ -1,4 +1,6 @@
-
+/*
+ *   Preparation of the json sequence for the different use cases 
+ */
 
 timeproj_t jsExtractDate(JsonDocument jDoc)
 /****************************************************************************************************
@@ -121,7 +123,9 @@ int jsExtractSwitchBoxData(JsonDocument jDoc)
   } 
   if (jDoc.containsKey("DEVUSECASE")) 
   {
-    cDevUseCase = char(String(jDoc["DEVUSECASE"])[0]);
+    strDevUseCase =String(jDoc["DEVUSECASE"]);
+    setUseCase(strDevUseCase);
+    /*
     if (cDevUseCase == 'G')
     {  // GateKeeper
       eUC = GateKeeper;
@@ -140,6 +144,7 @@ int jsExtractSwitchBoxData(JsonDocument jDoc)
     }
     Serial.println("jDoc[DEVUSECASE] = "+cDevUseCase);
     uiFlagUseCase = 1;
+    */
   }
   if (jDoc.containsKey("STARTHTTP")) 
   {
@@ -337,7 +342,7 @@ JsonDocument getJSONUserData(String strRfidTag)
   jDoc["CUSTOMERNAME"] = "";
   strTime = rtc.getTime();
   jDoc["CUSTOMERSTARTSTOP"] = strTime;  // Startzeit, wenn State = IDLE und Endzeit, wenn State = Working beim Senden der Botschaft an den Server
-                                        // Beim Empfang der zugeh�rigen Botschaft vom Server steht in diesem Eintrag die Summe der bisher aufgelaufenen Einheiten
+                                        // Beim Empfang der zugeh rigen Botschaft vom Server steht in diesem Eintrag die Summe der bisher aufgelaufenen Einheiten
   jDoc["STATE"]   = getState();
   if (eState == working)
   {

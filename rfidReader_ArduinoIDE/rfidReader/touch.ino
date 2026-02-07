@@ -1,5 +1,5 @@
 
-int initTouch()
+int initTouch()  
 /****************************************************************************************************
  * int initTouch() - Initialization of the Touch Unit
  * if an error occures, it will be displayd on the tft display and the serial interface

@@ -1,0 +1,29 @@
+.rfid-reader-detail-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+.rfid-reader-detail-header-title {
+  display: flex;
+  flex-direction: column;
+}
+
+.rfid-reader-detail-header-title-actions {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 1rem;
+}
+
+// .rfid-reader-detail-header-title-chips {
+//   display: flex;
+//   flex-direction: row;
+//   align-items: center;
+//   gap: 1rem;
+// }
+
+// .tab-content {
+//   padding: 1rem;
+// }

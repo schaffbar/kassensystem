@@ -2,6 +2,7 @@ import { Routes } from '@angular/router';
 
 import { HomeComponent } from './core/home/home.component';
 import { NotFoundComponent } from './core/not-found/not-found.component';
+import { RfidReaderDetailComponent } from './rfid-readers/pages/rfid-reader-detail/rfid-reader-detail.component';
 import { RfidReaderListComponent } from './rfid-readers/pages/rfid-reader-list/rfid-reader-list.component';
 import { RfidTagListComponent } from './rfid-tags/pages/rfid-tag-list/rfid-tag-list.component';
 import { ToolDetailComponent } from './tools/pages/tool-detail/tool-detail.component';
@@ -42,6 +43,10 @@ export const routes: Routes = [
   {
     path: ROUTE.RFID_READERS,
     component: RfidReaderListComponent,
+  },
+  {
+    path: `${ROUTE.RFID_READERS}/:id`,
+    component: RfidReaderDetailComponent,
   },
   {
     path: ROUTE.RFID_TAGS,

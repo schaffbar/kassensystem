@@ -167,6 +167,50 @@
   },
   "rfidReaders": {
     "title": "RFID Readers",
+    "fields": {
+      "macAddress": "MAC Address",
+      "type": "Type",
+      "name": "Name",
+      "socketName": "Socket Name"
+    },
+    "types": {
+      "rfid_tag_register": "RFID Tag Register",
+      "rfid_tag_assigner": "RFID Tag Assigner",
+      "gate_keeper_in": "Gate Keeper In",
+      "gate_keeper_out": "Gate Keeper Out",
+      "switch_box": "Switch Box"
+    },
+    "sections": {
+      "readerInformation": "Reader Information"
+    },
+    "chips": {
+      "readerDetails": {
+        "type": {
+          "rfid_tag_register": "Tag Register",
+          "rfid_tag_assigner": "Tag Assigner",
+          "gate_keeper_in": "Gate In",
+          "gate_keeper_out": "Gate Out",
+          "switch_box": "Switch Box"
+        }
+      }
+    },
+    "tabGroups": {
+      "readerDetails": {
+        "detailsTab": "Details"
+      }
+    },
+    "dialogs": {
+      "editRfidReader": {
+        "title": "Edit RFID Reader",
+        "actions": {
+          "confirm": "Save",
+          "cancel": "Cancel"
+        },
+        "errors": {
+          "required": "is required"
+        }
+      }
+    },
     "tables": {
       "list": {
         "macAddressColumn": "MAC Address",

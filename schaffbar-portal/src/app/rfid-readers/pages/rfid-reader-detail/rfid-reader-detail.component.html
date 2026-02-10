@@ -1,0 +1,38 @@
+@if (detailsStore.rfidReader(); as rfidReader) {
+  <div class="rfid-reader-detail-header">
+    <div class="rfid-reader-detail-header-title">
+      <div class="rfid-reader-detail-header-title-actions">
+        <h1>{{ rfidReader.name || rfidReader.macAddress }}</h1>
+        <button mat-icon-button (click)="reloadRfidReader()">
+          <mat-icon>refresh</mat-icon>
+        </button>
+      </div>
+      <!--
+        <div class="rfid-reader-detail-header-title-chips">
+          <mat-chip-set>
+            <mat-chip>
+              {{ 'rfidReaders.chips.readerDetails.type.' + (rfidReader.type | lowercase) | translate }}
+            </mat-chip>
+            @if (rfidReader.socketName) {
+              <mat-chip>
+                {{ rfidReader.socketName }}
+              </mat-chip>
+            }
+          </mat-chip-set>
+        </div>
+        -->
+    </div>
+  </div>
+
+  <schbar-rfid-reader-detail-info [rfidReader]="rfidReader" (readerChanged)="onReaderChanged($event)" />
+
+  <!--
+  <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="center" dynamicHeight>
+    <mat-tab [label]="'rfidReaders.tabGroups.readerDetails.detailsTab' | translate">
+      <div class="tab-content">
+        <schbar-rfid-reader-detail-info [rfidReader]="rfidReader" (readerChanged)="onReaderChanged($event)" />
+      </div>
+    </mat-tab>
+  </mat-tab-group>
+  -->
+}

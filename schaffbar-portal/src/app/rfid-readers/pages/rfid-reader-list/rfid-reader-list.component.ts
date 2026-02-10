@@ -50,6 +50,10 @@ export class RfidReaderListComponent {
     this.store.loadAllRfidReaders();
   }
 
+  protected navigateToDetail(rfidReader: RfidReader): void {
+    this.router.navigate(['/rfid-readers', rfidReader.id]);
+  }
+
   protected deleteRfidReaderDialog(event: Event, rfidReader: RfidReader): void {
     event.stopPropagation();
 

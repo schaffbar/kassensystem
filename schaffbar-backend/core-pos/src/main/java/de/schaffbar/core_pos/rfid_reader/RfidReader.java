@@ -3,8 +3,10 @@ package de.schaffbar.core_pos.rfid_reader;
 import java.time.Instant;
 import java.util.UUID;
 
+import de.schaffbar.core_pos.rfid_reader.RfidReaderCommands.UpdateRfidReaderCommand;
 import de.schaffbar.core_pos.shared.id.MacAddress;
 import de.schaffbar.core_pos.shared.id.RfidReaderId;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -30,12 +32,16 @@ class RfidReader {
     @Id
     private UUID id;
 
-    // TODO: check unique constraint for mac address
     @NotBlank
+    @Column(unique = true)
     private String macAddress;
 
     @Enumerated(EnumType.STRING)
     private RfidReaderType type;
+
+    private String name;
+
+    private String socketName;
 
     @NotNull
     private Instant createdAt;
@@ -51,7 +57,6 @@ class RfidReader {
         RfidReader rfidReader = new RfidReader();
         rfidReader.setId(UUID.randomUUID());
         rfidReader.setMacAddress(macAddress.getValue());
-        // TODO: implement it
         rfidReader.setCreatedAt(Instant.now());
 
         return rfidReader;
@@ -66,5 +71,11 @@ class RfidReader {
 
     // ------------------------------------------------------------------------
     // command
+
+    public void update(UpdateRfidReaderCommand command) {
+        setType(command.type());
+        setName(command.name());
+        setSocketName(command.socketName());
+    }
 
 }

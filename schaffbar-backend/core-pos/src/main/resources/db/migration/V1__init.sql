@@ -41,6 +41,8 @@ CREATE TABLE schaffbar.rfid_reader
 (
     id UUID NOT NULL,
     mac_address VARCHAR(255) NOT NULL UNIQUE,
+    name VARCHAR(255),
+    socket_name VARCHAR(255),
     type VARCHAR(255),
     created_at TIMESTAMP WITHOUT TIME ZONE NOT NULL,
     updated_at TIMESTAMP WITHOUT TIME ZONE NOT NULL,

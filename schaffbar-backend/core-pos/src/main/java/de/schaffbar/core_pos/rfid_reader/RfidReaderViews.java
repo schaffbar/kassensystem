@@ -26,6 +26,8 @@ public interface RfidReaderViews {
             @NotNull RfidReaderId id, //
             @NotBlank String macAddress, //
             RfidReaderType type, //
+            String name, //
+            String socketName, //
             @NotNull Instant createdAt //
     ) {}
 

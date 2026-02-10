@@ -4,10 +4,12 @@ import java.net.URI;
 import java.util.List;
 import java.util.UUID;
 
+import de.schaffbar.core_pos.rfid_reader.RfidReaderCommands.UpdateRfidReaderCommand;
 import de.schaffbar.core_pos.rfid_reader.RfidReaderService;
 import de.schaffbar.core_pos.rfid_reader.RfidReaderViews.RfidReaderView;
 import de.schaffbar.core_pos.rfid_reader.web.RfidReaderApiModel.CreateRfidReaderRequestBody;
 import de.schaffbar.core_pos.rfid_reader.web.RfidReaderApiModel.RfidReaderApiDto;
+import de.schaffbar.core_pos.rfid_reader.web.RfidReaderApiModel.UpdateRfidReaderRequestBody;
 import de.schaffbar.core_pos.shared.exception.ResourceNotFoundException;
 import de.schaffbar.core_pos.shared.id.MacAddress;
 import de.schaffbar.core_pos.shared.id.RfidReaderId;
@@ -23,6 +25,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -84,6 +87,15 @@ public class RfidReaderController {
         URI location = URI.create("/api/v1/rfid-readers/" + rfidReaderId.getValue());
 
         return ResponseEntity.created(location).build();
+    }
+
+    @PutMapping(value = "/{rfidReaderId}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<String> updateRfidReader(@PathVariable @NotNull RfidReaderId rfidReaderId,
+            @RequestBody @NotNull @Valid UpdateRfidReaderRequestBody requestBody) {
+        UpdateRfidReaderCommand command = RfidReaderApiModel.MAPPER.toRfidReaderCommand(rfidReaderId, requestBody);
+        this.rfidReaderService.updateRfidReader(command);
+
+        return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping(value = "/{rfidReaderId}")

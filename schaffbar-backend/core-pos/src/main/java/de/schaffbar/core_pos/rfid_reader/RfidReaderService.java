@@ -3,6 +3,7 @@ package de.schaffbar.core_pos.rfid_reader;
 import java.util.List;
 import java.util.Optional;
 
+import de.schaffbar.core_pos.rfid_reader.RfidReaderCommands.UpdateRfidReaderCommand;
 import de.schaffbar.core_pos.rfid_reader.RfidReaderViews.RfidReaderView;
 import de.schaffbar.core_pos.shared.exception.ResourceNotFoundException;
 import de.schaffbar.core_pos.shared.id.MacAddress;
@@ -12,6 +13,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 
 @Service
@@ -43,19 +45,39 @@ public class RfidReaderService {
     // ------------------------------------------------------------------------
     // command
 
+    @Transactional
     public RfidReaderId createRfidReader(@NotNull @Valid MacAddress macAddress) {
+        // TODO: check if rfidReader with same m<ac address already exists
+
         RfidReader rfidReader = RfidReader.of(macAddress);
-        // TODO: check if rfidReader with same mac address already exists
         RfidReader savedRfidReader = this.rfidReaderRepository.save(rfidReader);
 
         return savedRfidReader.getId();
     }
 
+    @Transactional
+    public void updateRfidReader(@NotNull @Valid UpdateRfidReaderCommand command) {
+        this.rfidReaderRepository.findById(command.id().getValue()) //
+                .ifPresentOrElse( //
+                        rfidReader -> rfidReader.update(command), //
+                        throwRfidReaderNotFoundException(command.id()));
+    }
+
+    @Transactional
     public void deleteRfidReader(@NotNull @Valid RfidReaderId id) {
         RfidReaderView rfidReader = getRfidReader(id) //
                 .orElseThrow(() -> ResourceNotFoundException.rfidReader(id));
 
         this.rfidReaderRepository.deleteById(rfidReader.id().getValue());
+    }
+
+    // ------------------------------------------------------------------------
+    // helper
+
+    private Runnable throwRfidReaderNotFoundException(RfidReaderId id) {
+        return () -> {
+            throw ResourceNotFoundException.rfidReader(id);
+        };
     }
 
 }

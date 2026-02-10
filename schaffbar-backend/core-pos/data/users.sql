@@ -34,9 +34,12 @@ VALUES --
     (gen_random_uuid(), 'Fräse', 'Elektrische Fräse', '192.168.33.5', 'http://fraese/start', 'fraese_on', 'fraese_off', NOW(), NOW());
 
 -- Insert RFID readers
-INSERT INTO schaffbar.rfid_reader --
-    (id, mac_address, type, created_at, updated_at) --
-VALUES --
-    (gen_random_uuid(), '00:1A:2B:3C:4D:5E', 'SWITCH_BOX', NOW(), NOW()), --
-    (gen_random_uuid(), '00:1A:2B:3C:4D:5F', 'GATE_KEEPER', NOW(), NOW()), --
-    (gen_random_uuid(), '00:1A:2B:3C:4D:61', 'COUNTER', NOW(), NOW());
+INSERT INTO schaffbar.rfid_reader (id,mac_address,"type",created_at,updated_at) VALUES
+	 ('b66d5643-d60d-432c-bdb6-bb3403c2fc6e'::uuid,'34:CD:B0:D3:A9:30','RFID_TAG_ASSIGNER','2025-11-08 15:16:34.195646','2025-11-08 15:16:34.19634'),
+	 ('35cd4f38-8100-4331-bb31-f53d5e2e0f08'::uuid,'34:CD:B0:D3:95:C0','GATE_KEEPER_OUT','2025-11-08 15:22:52.748111','2025-11-08 15:22:52.748775'),
+	 ('81721917-21ae-4552-8784-1da8ae9a7578'::uuid,'34:CD:B0:D3:8F:0C','GATE_KEEPER_IN','2025-11-08 15:16:28.069472','2025-11-08 15:16:28.073802');
+
+-- Insert RFID tags
+INSERT INTO schaffbar.rfid_tag (id,active,created_at,updated_at) VALUES
+	 ('2373C001',true,'2025-11-08 15:24:48.497148','2025-11-08 15:24:48.497704'),
+	 ('C385A62C',true,'2025-11-08 15:25:02.783311','2025-11-08 15:25:02.783622');

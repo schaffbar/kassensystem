@@ -198,6 +198,7 @@
     "tables": {
       "list": {
         "macAddressColumn": "MAC Address",
+        "nameColumn": "Name",
         "typeColumn": "Type"
       }
     }

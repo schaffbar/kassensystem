@@ -56,7 +56,6 @@ export class RfidReaderDetailInfoComponent {
   }
 
   onSave() {
-    console.log('type:', this.rfidReaderForm.value.type);
     if (this.rfidReaderForm.valid) {
       const formValues = this.rfidReaderForm.value;
       const command: UpdateRfidReaderCommand = {

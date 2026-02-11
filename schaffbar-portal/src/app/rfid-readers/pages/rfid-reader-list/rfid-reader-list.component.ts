@@ -1,3 +1,4 @@
+import { LowerCasePipe } from '@angular/common';
 import { Component, computed, inject, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 
@@ -27,6 +28,7 @@ import { RfidReaderStore } from '../../rfid-readers.store';
     MatIconModule,
     MatInputModule,
     TranslatePipe,
+    LowerCasePipe,
   ],
   providers: [RfidReaderStore],
 })
@@ -37,7 +39,7 @@ export class RfidReaderListComponent {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
-  protected displayedColumns = ['macAddress', 'type', 'actions'];
+  protected displayedColumns = ['macAddress', 'name', 'type', 'actions'];
   protected rfidReadersCount = computed(() => this.store.entities().length);
   protected dataSource = computed(() => {
     const result = new MatTableDataSource<RfidReader>(this.store.entities());

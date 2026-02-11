@@ -38,12 +38,7 @@
     <div class="col">
       <mat-form-field class="full-width" [floatLabel]="'always'" [hideRequiredMarker]="true">
         <mat-label>{{ 'rfidReaders.fields.name' | translate }}</mat-label>
-        <input
-          id="name"
-          matInput
-          [placeholder]="'rfidReaders.fields.name' | translate"
-          formControlName="name"
-          [readonly]="readonly()" />
+        <input id="name" matInput formControlName="name" [readonly]="readonly()" />
       </mat-form-field>
     </div>
   </div>

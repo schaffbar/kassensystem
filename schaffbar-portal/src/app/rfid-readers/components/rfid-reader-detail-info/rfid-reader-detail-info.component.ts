@@ -32,8 +32,7 @@ export class RfidReaderDetailInfoComponent {
 
   private fb = inject(NonNullableFormBuilder);
 
-  readonly = signal(true);
-
+  protected readonly = signal(true);
   protected rfidReaderTypes = Object.values(RfidReaderType);
 
   // TODO: make type read only initially

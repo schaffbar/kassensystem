@@ -5,8 +5,8 @@ import { MatChipsModule } from '@angular/material/chips';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTabsModule } from '@angular/material/tabs';
 
+import { RfidReaderDetailInfoComponent } from '../../components/rfid-reader-detail-info/rfid-reader-detail-info.component';
 import { UpdateRfidReaderCommand } from '../../rfid-reader.model';
-import { RfidReaderDetailInfoComponent } from '../rfid-reader-detail-info/rfid-reader-detail-info.component';
 import { RfidReaderDetailStore } from './rfid-reader-detail.store';
 
 @Component({

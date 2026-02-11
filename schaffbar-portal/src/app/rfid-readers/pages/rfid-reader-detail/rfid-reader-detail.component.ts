@@ -29,6 +29,7 @@ export class RfidReaderDetailComponent {
     this.detailsStore.reloadRfidReader();
   }
 
+  // TODO: rename to onRfidReaderChanged
   protected onReaderChanged(command: UpdateRfidReaderCommand): void {
     this.detailsStore.updateRfidReader(command);
   }

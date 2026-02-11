@@ -36,8 +36,9 @@ export class RfidReaderDetailInfoComponent {
 
   protected rfidReaderTypes = Object.values(RfidReaderType);
 
+  // TODO: make type read only initially
   rfidReaderForm = this.fb.group({
-    macAddress: [{ value: '', disabled: true }],
+    macAddress: ['', Validators.required],
     type: ['', Validators.required],
     name: [''],
     socketName: [''],
@@ -55,6 +56,7 @@ export class RfidReaderDetailInfoComponent {
   }
 
   onSave() {
+    console.log('type:', this.rfidReaderForm.value.type);
     if (this.rfidReaderForm.valid) {
       const formValues = this.rfidReaderForm.value;
       const command: UpdateRfidReaderCommand = {

@@ -5,7 +5,7 @@
   </button>
 </h3>
 
-<form [formGroup]="rfidReaderForm">
+<form [formGroup]="rfidReaderForm" class="reader-content">
   <div class="row">
     <div class="col">
       <mat-form-field class="full-width" [floatLabel]="'always'" [hideRequiredMarker]="true">
@@ -18,7 +18,7 @@
     <div class="col">
       <mat-form-field class="full-width" [floatLabel]="'always'" [hideRequiredMarker]="true">
         <mat-label>{{ 'rfidReaders.fields.type' | translate }}</mat-label>
-        <mat-select id="type" formControlName="type" [disabled]="readonly()">
+        <mat-select id="type" formControlName="type">
           @for (type of rfidReaderTypes; track type) {
             <mat-option [value]="type">
               {{ 'rfidReaders.types.' + (type | lowercase) | translate }}

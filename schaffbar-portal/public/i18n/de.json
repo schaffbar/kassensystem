@@ -183,22 +183,6 @@
     "sections": {
       "readerInformation": "Lesegerät-Informationen"
     },
-    "chips": {
-      "readerDetails": {
-        "type": {
-          "rfid_tag_register": "Tag-Register",
-          "rfid_tag_assigner": "Tag-Zuweiser",
-          "gate_keeper_in": "Eingang",
-          "gate_keeper_out": "Ausgang",
-          "switch_box": "Schaltbox"
-        }
-      }
-    },
-    "tabGroups": {
-      "readerDetails": {
-        "detailsTab": "Details"
-      }
-    },
     "dialogs": {
       "editRfidReader": {
         "title": "RFID-Lesegerät bearbeiten",

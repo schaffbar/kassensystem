@@ -4,6 +4,12 @@
   gap: 1rem;
 }
 
+.reader-content {
+  min-width: 300px;
+  max-width: 600px;
+  width: 100%;
+}
+
 .actions {
   display: flex;
   gap: 1rem;

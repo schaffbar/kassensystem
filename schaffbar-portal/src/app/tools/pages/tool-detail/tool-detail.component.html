@@ -23,6 +23,18 @@
             </mat-form-field>
           </div>
         </div>
+        <div class="row">
+          <div class="col">
+            <mat-form-field class="full-width" appearance="outline" [floatLabel]="'always'" [hideRequiredMarker]="true">
+              <mat-label>{{ 'tools.pages.toolDetails.fields.rfidReader' | translate }}</mat-label>
+              <mat-select [value]="tool.rfidReaderId">
+                @for (rfidReader of rfidReaderStore.entities(); track rfidReader.id) {
+                  <mat-option [value]="rfidReader.id">{{ rfidReader.name }}</mat-option>
+                }
+              </mat-select>
+            </mat-form-field>
+          </div>
+        </div>
       </div>
     </mat-tab>
     <mat-tab [label]="'tools.tabGroups.toolDetails.wlanRelayTab' | translate">

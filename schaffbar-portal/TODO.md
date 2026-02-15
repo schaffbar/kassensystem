@@ -1,20 +1,24 @@
+- add refres button in user list and tool list
+- check all refresh buttons
+- always confirm before deleting entity
+- tool detail page: sort out rfid readers which are not switchbox
+- implement add tool button
+
 TODO:
 
-1. Setzen von RFID reader type in UI
 2. Scheduler to clean up waiting for assignment
 3. Check if workshop usage is completed before closing session
 4. Validate Session before closing it
-5. Löschen von Entitäten immer bestätigen
-6. ========================================================
-7. Beim Löschen immer überprüfen ob Entity nicht irgendwo referenziert wird
-8. Assignment und Unassignment von fixen RFID tags
-9. Einweisung plus Zuweisung zu User
-10. Switch box implementieren
+5. ========================================================
+6. Beim Löschen immer überprüfen ob Entity nicht irgendwo referenziert wird
+7. Assignment und Unassignment von fixen RFID tags
+8. Einweisung plus Zuweisung zu User
+9. Switch box implementieren
 
-11. Nutzung von Maschinen in minuten oder stunden
-12. Zuweisung von RFID reader zu tool
-13. Dashboard für aktive user, aktive tools, ...
-14. Auschalten von Maschinen, wenn user Raum verlässt
+10. Nutzung von Maschinen in minuten oder stunden
+11. Zuweisung von RFID reader zu tool
+12. Dashboard für aktive user, aktive tools, ...
+13. Auschalten von Maschinen, wenn user Raum verlässt
 
 Technical debt:
 

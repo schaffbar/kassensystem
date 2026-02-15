@@ -13,9 +13,8 @@ import { Tool } from '../../tool.model';
 
 export interface UpdateToolCommand {
   id: string;
-  name?: string;
+  name: string;
   description?: string;
-  rfidReaderId?: string;
 }
 
 @Component({
@@ -35,6 +34,7 @@ export class ToolDetailInfoComponent {
   protected readonly = signal(true);
 
   toolForm = this.fb.group({
+    name: [''],
     description: [''],
     rfidReaderId: [''],
   });
@@ -55,8 +55,8 @@ export class ToolDetailInfoComponent {
       const formValues = this.toolForm.value;
       const command: UpdateToolCommand = {
         id: this.tool().id,
+        name: formValues.name!,
         description: formValues.description || undefined,
-        rfidReaderId: formValues.rfidReaderId || undefined,
       };
 
       this.toolChanged.emit(command);
@@ -70,6 +70,7 @@ export class ToolDetailInfoComponent {
   private setInitialFormValues() {
     const tool = this.tool();
     this.toolForm.setValue({
+      name: tool.name,
       description: tool.description || '',
       rfidReaderId: tool.rfidReaderId || '',
     });

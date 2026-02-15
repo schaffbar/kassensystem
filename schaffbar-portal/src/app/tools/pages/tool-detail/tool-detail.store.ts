@@ -58,8 +58,8 @@ export const ToolDetailStore = signalStore(
         exhaustMap((command: UpdateToolCommand) => {
           return store._toolsService.updateTool(command).pipe(
             tapResponse({
-              next: (tool) => {
-                patchState(store, { tool }, setFulfilled());
+              next: () => {
+                patchState(store, setFulfilled(), setDirty());
               },
               error: (error: { message: string }) => patchState(store, setError(error.message)),
             }),

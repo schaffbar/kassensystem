@@ -1,8 +1,7 @@
 .tool-header {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  margin-bottom: 1rem;
+  gap: 1rem;
 }
 
 .tool-content {
@@ -18,6 +17,11 @@
 
 .col {
   flex: 1;
+  margin-right: 20px;
+}
+
+.col:last-child {
+  margin-right: 0;
 }
 
 .full-width {
@@ -26,7 +30,7 @@
 
 .actions {
   display: flex;
-  justify-content: flex-end;
   gap: 1rem;
+  justify-content: flex-end;
   margin-top: 1rem;
 }

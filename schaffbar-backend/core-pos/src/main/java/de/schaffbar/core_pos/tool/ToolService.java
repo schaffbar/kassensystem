@@ -67,7 +67,10 @@ public class ToolService {
         Tool tool = this.toolRepository.findById(toolId.getValue()) //
                 .orElseThrow(() -> ResourceNotFoundException.tool(toolId));
 
-        // check that the RFID reader is not already assigned to another tool
+        if (tool.getRfidReaderId().getValue().equals(rfidReaderId.getValue())) {
+            return;
+        }
+
         this.toolRepository.findByRfidReaderId(rfidReaderId) //
                 .ifPresent(existingTool -> throwRfidReaderAlreadyAssignedException(rfidReaderId, existingTool));
 

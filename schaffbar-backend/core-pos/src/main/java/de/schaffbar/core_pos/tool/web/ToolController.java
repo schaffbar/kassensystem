@@ -4,6 +4,7 @@ import java.net.URI;
 import java.util.List;
 
 import de.schaffbar.core_pos.shared.exception.ResourceNotFoundException;
+import de.schaffbar.core_pos.shared.id.RfidReaderId;
 import de.schaffbar.core_pos.shared.id.ToolId;
 import de.schaffbar.core_pos.tool.ToolCommands.CreateToolCommand;
 import de.schaffbar.core_pos.tool.ToolCommands.UpdateToolCommand;
@@ -11,6 +12,7 @@ import de.schaffbar.core_pos.tool.ToolService;
 import de.schaffbar.core_pos.tool.web.ToolApiModel.CreateToolRequestBody;
 import de.schaffbar.core_pos.tool.web.ToolApiModel.ToolApiDto;
 import de.schaffbar.core_pos.tool.web.ToolApiModel.UpdateToolRequestBody;
+import de.schaffbar.core_pos.use_case.ToolAssignRfidReader;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.NonNull;
@@ -34,6 +36,8 @@ import org.springframework.web.bind.annotation.RestController;
 public class ToolController {
 
     private final @NonNull ToolService toolService;
+
+    private final @NonNull ToolAssignRfidReader toolAssignRfidReader;
 
     // ------------------------------------------------------------------------
     // query
@@ -72,6 +76,13 @@ public class ToolController {
     public ResponseEntity<Void> updateTool(@PathVariable @NotNull @Valid ToolId toolId, @RequestBody @NotNull @Valid UpdateToolRequestBody requestBody) {
         UpdateToolCommand command = ToolApiModel.MAPPER.toUpdateToolCommand(requestBody);
         this.toolService.updateTool(toolId, command);
+
+        return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping(value = "/{toolId}/rfid-reader/{rfidReaderId}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Void> updateTool(@PathVariable @NotNull @Valid ToolId toolId, @PathVariable @NotNull @Valid RfidReaderId rfidReaderId) {
+        this.toolAssignRfidReader.process(toolId, rfidReaderId);
 
         return ResponseEntity.noContent().build();
     }

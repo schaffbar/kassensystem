@@ -10,21 +10,21 @@
     <!-- Columns -->
     <ng-container matColumnDef="macAddress">
       <th mat-header-cell *matHeaderCellDef mat-sort-header>
-        {{ 'rfidReaders.tables.list.macAddressColumn' | translate }}
+        {{ 'rfidReaders.shared.rfidReaderProperties.macAddress' | translate }}
       </th>
       <td mat-cell *matCellDef="let row">{{ row.macAddress }}</td>
     </ng-container>
 
     <ng-container matColumnDef="name">
       <th mat-header-cell *matHeaderCellDef mat-sort-header>
-        {{ 'rfidReaders.tables.list.nameColumn' | translate }}
+        {{ 'rfidReaders.shared.rfidReaderProperties.name' | translate }}
       </th>
       <td mat-cell *matCellDef="let row">{{ row.name }}</td>
     </ng-container>
 
     <ng-container matColumnDef="type">
       <th mat-header-cell *matHeaderCellDef mat-sort-header>
-        {{ 'rfidReaders.tables.list.typeColumn' | translate }}
+        {{ 'rfidReaders.shared.rfidReaderProperties.type' | translate }}
       </th>
       <td mat-cell *matCellDef="let row">{{ 'rfidReaders.types.' + (row.type | lowercase) | translate }}</td>
     </ng-container>

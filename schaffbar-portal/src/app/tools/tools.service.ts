@@ -4,6 +4,7 @@ import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
 import { environment } from '../../environments/environment';
+import { UpdateToolCommand } from './components/tool-detail-info/tool-detail-info.component';
 import { Tool } from './tool.model';
 
 const TOOLS_API_URL = `${environment.apiBaseUrl}/api/v1/tools`;
@@ -29,6 +30,10 @@ export class ToolsService {
 
   createTool(tool: Tool): Observable<Tool> {
     return this.http.post<Tool>(TOOLS_API_URL, tool, this.httpOptions);
+  }
+
+  updateTool(command: UpdateToolCommand): Observable<Tool> {
+    return this.http.put<Tool>(`${TOOLS_API_URL}/${command.id}`, command, this.httpOptions);
   }
 
   deleteTool(id: string): Observable<void> {

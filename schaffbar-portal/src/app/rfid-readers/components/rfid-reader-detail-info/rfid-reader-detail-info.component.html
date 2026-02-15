@@ -1,5 +1,5 @@
 <h3 class="reader-header">
-  {{ 'rfidReaders.sections.readerInformation' | translate }}
+  {{ 'rfidReaders.pages.rfidReaderDetails.headers.rfidReaderInformation' | translate }}
   <button mat-icon-button type="button" aria-label="Edit reader" (click)="updateReader()" [disabled]="!readonly()">
     <mat-icon>edit</mat-icon>
   </button>
@@ -9,7 +9,7 @@
   <div class="row">
     <div class="col">
       <mat-form-field class="full-width" [floatLabel]="'always'" [hideRequiredMarker]="true">
-        <mat-label>{{ 'rfidReaders.fields.macAddress' | translate }}</mat-label>
+        <mat-label>{{ 'rfidReaders.shared.rfidReaderProperties.macAddress' | translate }}</mat-label>
         <input id="macAddress" matInput formControlName="macAddress" readonly />
       </mat-form-field>
     </div>
@@ -17,7 +17,7 @@
   <div class="row">
     <div class="col">
       <mat-form-field class="full-width" [floatLabel]="'always'" [hideRequiredMarker]="true">
-        <mat-label>{{ 'rfidReaders.fields.type' | translate }}</mat-label>
+        <mat-label>{{ 'rfidReaders.shared.rfidReaderProperties.type' | translate }}</mat-label>
         <mat-select id="type" formControlName="type">
           @for (type of rfidReaderTypes; track type) {
             <mat-option [value]="type">
@@ -27,8 +27,8 @@
         </mat-select>
         @if (rfidReaderForm.controls['type'].hasError('required')) {
           <mat-error>
-            {{ 'rfidReaders.fields.type' | translate }}
-            {{ 'rfidReaders.dialogs.editRfidReader.errors.required' | translate }}
+            {{ 'rfidReaders.shared.rfidReaderProperties.type' | translate }}
+            {{ 'shared.dialogs.errors.required' | translate }}
           </mat-error>
         }
       </mat-form-field>
@@ -37,7 +37,7 @@
   <div class="row">
     <div class="col">
       <mat-form-field class="full-width" [floatLabel]="'always'" [hideRequiredMarker]="true">
-        <mat-label>{{ 'rfidReaders.fields.name' | translate }}</mat-label>
+        <mat-label>{{ 'rfidReaders.shared.rfidReaderProperties.name' | translate }}</mat-label>
         <input id="name" matInput formControlName="name" [readonly]="readonly()" />
       </mat-form-field>
     </div>
@@ -45,7 +45,7 @@
   <div class="row">
     <div class="col">
       <mat-form-field class="full-width" [floatLabel]="'always'" [hideRequiredMarker]="true">
-        <mat-label>{{ 'rfidReaders.fields.socketName' | translate }}</mat-label>
+        <mat-label>{{ 'rfidReaders.shared.rfidReaderProperties.socketName' | translate }}</mat-label>
         <input id="socketName" matInput formControlName="socketName" [readonly]="readonly()" />
       </mat-form-field>
     </div>
@@ -54,10 +54,10 @@
   @if (!this.readonly()) {
     <div class="actions">
       <button mat-stroked-button mat-dialog-close (click)="onCancel()">
-        {{ 'rfidReaders.dialogs.editRfidReader.actions.cancel' | translate }}
+        {{ 'shared.dialogs.actions.edit.cancel' | translate }}
       </button>
       <button mat-flat-button color="primary" type="submit" (click)="onSave()">
-        {{ 'rfidReaders.dialogs.editRfidReader.actions.confirm' | translate }}
+        {{ 'shared.dialogs.actions.edit.confirm' | translate }}
       </button>
     </div>
   }

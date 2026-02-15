@@ -5,9 +5,18 @@
       "actionsColumn": "Aktionen"
     },
     "dialogs": {
-      "delete": {
-        "confirm": "Löschen",
-        "cancel": "Abbrechen"
+      "actions": {
+        "delete": {
+          "confirm": "Löschen",
+          "cancel": "Abbrechen"
+        },
+        "edit": {
+          "confirm": "Speichern",
+          "cancel": "Abbrechen"
+        }
+      },
+      "errors": {
+        "required": "ist erforderlich"
       }
     }
   },
@@ -52,7 +61,7 @@
       "editUser": {
         "title": "Benutzer bearbeiten",
         "actions": {
-          "confirm": "Bearbeiten",
+          "confirm": "Speichern",
           "cancel": "Abbrechen"
         }
       },
@@ -136,12 +145,6 @@
     "actions": {
       "addTool": "Werkzeug hinzufügen"
     },
-    "tables": {
-      "list": {
-        "nameColumn": "Name",
-        "descriptionColumn": "Beschreibung"
-      }
-    },
     "tabGroups": {
       "toolDetails": {
         "detailsTab": "Details",
@@ -150,29 +153,30 @@
     },
     "pages": {
       "toolDetails": {
-        "fields": {
-          "description": "Beschreibung"
+        "headers": {
+          "toolInformation": "Werkzeuginformationen"
         }
+      }
+    },
+    "shared": {
+      "toolProperties": {
+        "name": "Name",
+        "description": "Beschreibung",
+        "rfidReader": "RFID-Lesegerät"
       }
     }
   },
   "rfidTags": {
     "title": "RFID-Tags",
-    "tables": {
-      "list": {
-        "idColumn": "ID",
-        "activeColumn": "Aktiv"
+    "shared": {
+      "rfidTagProperties": {
+        "id": "ID",
+        "active": "Aktiv"
       }
     }
   },
   "rfidReaders": {
     "title": "RFID-Lesegeräte",
-    "fields": {
-      "macAddress": "MAC-Adresse",
-      "type": "Typ",
-      "name": "Name",
-      "socketName": "Socket-Name"
-    },
     "types": {
       "rfid_tag_register": "RFID-Tag-Register",
       "rfid_tag_assigner": "RFID-Tag-Zuweiser",
@@ -180,26 +184,19 @@
       "gate_keeper_out": "Türwächter Ausgang",
       "switch_box": "Schaltbox"
     },
-    "sections": {
-      "readerInformation": "Lesegerät-Informationen"
-    },
-    "dialogs": {
-      "editRfidReader": {
-        "title": "RFID-Lesegerät bearbeiten",
-        "actions": {
-          "confirm": "Speichern",
-          "cancel": "Abbrechen"
-        },
-        "errors": {
-          "required": "ist erforderlich"
+    "pages": {
+      "rfidReaderDetails": {
+        "headers": {
+          "rfidReaderInformation": "Lesegerät-Informationen"
         }
       }
     },
-    "tables": {
-      "list": {
-        "macAddressColumn": "MAC-Adresse",
-        "nameColumn": "Name",
-        "typeColumn": "Typ"
+    "shared": {
+      "rfidReaderProperties": {
+        "macAddress": "MAC-Adresse",
+        "type": "Typ",
+        "name": "Name",
+        "socketName": "Socket-Name"
       }
     }
   }

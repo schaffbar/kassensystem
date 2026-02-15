@@ -11,30 +11,10 @@
   <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="center" dynamicHeight>
     <mat-tab [label]="'tools.tabGroups.toolDetails.detailsTab' | translate">
       <div class="tab-content">
-        <div class="row">
-          <div class="col">
-            <mat-form-field class="full-width" appearance="outline" [floatLabel]="'always'" [hideRequiredMarker]="true">
-              <mat-label>{{ 'tools.pages.toolDetails.fields.description' | translate }}</mat-label>
-              <input
-                matInput
-                [placeholder]="'tools.pages.toolDetails.fields.description' | translate"
-                [value]="tool.description"
-                readonly />
-            </mat-form-field>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col">
-            <mat-form-field class="full-width" appearance="outline" [floatLabel]="'always'" [hideRequiredMarker]="true">
-              <mat-label>{{ 'tools.pages.toolDetails.fields.rfidReader' | translate }}</mat-label>
-              <mat-select [value]="tool.rfidReaderId">
-                @for (rfidReader of rfidReaderStore.entities(); track rfidReader.id) {
-                  <mat-option [value]="rfidReader.id">{{ rfidReader.name }}</mat-option>
-                }
-              </mat-select>
-            </mat-form-field>
-          </div>
-        </div>
+        <schbar-tool-detail-info
+          [tool]="tool"
+          [rfidReaders]="rfidReaderStore.entities()"
+          (toolChanged)="onToolChanged($event)" />
       </div>
     </mat-tab>
     <mat-tab [label]="'tools.tabGroups.toolDetails.wlanRelayTab' | translate">

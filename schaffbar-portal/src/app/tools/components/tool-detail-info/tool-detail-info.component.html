@@ -1,0 +1,40 @@
+<h3 class="tool-header">
+  {{ 'tools.pages.toolDetails.headers.toolInformation' | translate }}
+  <button mat-icon-button type="button" aria-label="Edit tool" (click)="updateTool()" [disabled]="!readonly()">
+    <mat-icon>edit</mat-icon>
+  </button>
+</h3>
+
+<form [formGroup]="toolForm" class="tool-content">
+  <div class="row">
+    <div class="col">
+      <mat-form-field class="full-width" [floatLabel]="'always'" [hideRequiredMarker]="true">
+        <mat-label>{{ 'tools.shared.toolProperties.description' | translate }}</mat-label>
+        <input id="description" matInput formControlName="description" [readonly]="readonly()" />
+      </mat-form-field>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col">
+      <mat-form-field class="full-width" [floatLabel]="'always'" [hideRequiredMarker]="true">
+        <mat-label>{{ 'tools.shared.toolProperties.rfidReader' | translate }}</mat-label>
+        <mat-select id="rfidReaderId" formControlName="rfidReaderId" [disabled]="readonly()">
+          @for (rfidReader of rfidReaders(); track rfidReader.id) {
+            <mat-option [value]="rfidReader.id">{{ rfidReader.name }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+    </div>
+  </div>
+
+  @if (!this.readonly()) {
+    <div class="actions">
+      <button mat-stroked-button mat-dialog-close (click)="onCancel()">
+        {{ 'shared.dialogs.actions.edit.cancel' | translate }}
+      </button>
+      <button mat-flat-button color="primary" type="submit" (click)="onSave()">
+        {{ 'shared.dialogs.actions.edit.confirm' | translate }}
+      </button>
+    </div>
+  }
+</form>

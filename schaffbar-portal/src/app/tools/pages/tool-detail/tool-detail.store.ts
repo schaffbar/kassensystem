@@ -6,6 +6,7 @@ import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { exhaustMap, filter, pipe, tap } from 'rxjs';
 
 import { setError, setFulfilled, setPending, withRequestStatus } from '../../../shared/state/request-status.feature';
+import { UpdateToolCommand } from '../../components/tool-detail-info/tool-detail-info.component';
 import { Tool } from '../../tool.model';
 import { ToolsService } from '../../tools.service';
 
@@ -41,6 +42,21 @@ export const ToolDetailStore = signalStore(
         // delay(200), // TODO: Simulate network latency
         exhaustMap((toolId: string) => {
           return store._toolsService.getTool(toolId).pipe(
+            tapResponse({
+              next: (tool) => {
+                patchState(store, { tool }, setFulfilled());
+              },
+              error: (error: { message: string }) => patchState(store, setError(error.message)),
+            }),
+          );
+        }),
+      ),
+    ),
+    updateTool: rxMethod<UpdateToolCommand>(
+      pipe(
+        tap(() => patchState(store, setPending())),
+        exhaustMap((command: UpdateToolCommand) => {
+          return store._toolsService.updateTool(command).pipe(
             tapResponse({
               next: (tool) => {
                 patchState(store, { tool }, setFulfilled());

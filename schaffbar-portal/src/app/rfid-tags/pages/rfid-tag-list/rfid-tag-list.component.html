@@ -9,12 +9,16 @@
   <table mat-table class="full-width-table" [dataSource]="dataSource()" matSort>
     <!-- Columns -->
     <ng-container matColumnDef="id">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'rfidTags.tables.list.idColumn' | translate }}</th>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>
+        {{ 'rfidTags.shared.rfidTagProperties.id' | translate }}
+      </th>
       <td mat-cell *matCellDef="let row">{{ row.id }}</td>
     </ng-container>
 
     <ng-container matColumnDef="active">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'rfidTags.tables.list.activeColumn' | translate }}</th>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>
+        {{ 'rfidTags.shared.rfidTagProperties.active' | translate }}
+      </th>
       <td mat-cell *matCellDef="let row">{{ row.active }}</td>
     </ng-container>
 

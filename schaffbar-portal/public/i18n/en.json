@@ -5,9 +5,18 @@
       "actionsColumn": "Actions"
     },
     "dialogs": {
-      "delete": {
-        "confirm": "Delete",
-        "cancel": "Cancel"
+      "actions": {
+        "delete": {
+          "confirm": "Delete",
+          "cancel": "Cancel"
+        },
+        "edit": {
+          "confirm": "Save",
+          "cancel": "Cancel"
+        }
+      },
+      "errors": {
+        "required": "is required"
       }
     }
   },
@@ -136,12 +145,6 @@
     "actions": {
       "addTool": "Add Tool"
     },
-    "tables": {
-      "list": {
-        "nameColumn": "Name",
-        "descriptionColumn": "Description"
-      }
-    },
     "tabGroups": {
       "toolDetails": {
         "detailsTab": "Details",
@@ -150,29 +153,30 @@
     },
     "pages": {
       "toolDetails": {
-        "fields": {
-          "description": "Description"
+        "headers": {
+          "toolInformation": "Tool Information"
         }
+      }
+    },
+    "shared": {
+      "toolProperties": {
+        "name": "Name",
+        "description": "Description",
+        "rfidReader": "RFID Reader"
       }
     }
   },
   "rfidTags": {
     "title": "RFID Tags",
-    "tables": {
-      "list": {
-        "idColumn": "ID",
-        "activeColumn": "Active"
+    "shared": {
+      "rfidTagProperties": {
+        "id": "ID",
+        "active": "Active"
       }
     }
   },
   "rfidReaders": {
     "title": "RFID Readers",
-    "fields": {
-      "macAddress": "MAC Address",
-      "type": "Type",
-      "name": "Name",
-      "socketName": "Socket Name"
-    },
     "types": {
       "rfid_tag_register": "RFID Tag Register",
       "rfid_tag_assigner": "RFID Tag Assigner",
@@ -180,26 +184,19 @@
       "gate_keeper_out": "Gate Keeper Out",
       "switch_box": "Switch Box"
     },
-    "sections": {
-      "readerInformation": "Reader Information"
-    },
-    "dialogs": {
-      "editRfidReader": {
-        "title": "Edit RFID Reader",
-        "actions": {
-          "confirm": "Save",
-          "cancel": "Cancel"
-        },
-        "errors": {
-          "required": "is required"
+    "pages": {
+      "rfidReaderDetails": {
+        "headers": {
+          "rfidReaderInformation": "RFID Reader Information"
         }
       }
     },
-    "tables": {
-      "list": {
-        "macAddressColumn": "MAC Address",
-        "nameColumn": "Name",
-        "typeColumn": "Type"
+    "shared": {
+      "rfidReaderProperties": {
+        "macAddress": "MAC Address",
+        "type": "Type",
+        "name": "Name",
+        "socketName": "Socket-Name"
       }
     }
   }

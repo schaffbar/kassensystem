@@ -1,30 +1,23 @@
 import { Component, inject, input } from '@angular/core';
-import { ReactiveFormsModule } from '@angular/forms';
 
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { MatInputModule } from '@angular/material/input';
-import { MatSelectModule } from '@angular/material/select';
 import { MatTabsModule } from '@angular/material/tabs';
 
 import { TranslatePipe } from '@ngx-translate/core';
 
 import { RfidReaderStore } from '../../../rfid-readers/rfid-readers.store';
+import {
+  ToolDetailInfoComponent,
+  UpdateToolCommand,
+} from '../../components/tool-detail-info/tool-detail-info.component';
 import { ToolDetailStore } from './tool-detail.store';
 
 @Component({
   selector: 'schbar-tool-detail',
   templateUrl: './tool-detail.component.html',
   styleUrl: './tool-detail.component.scss',
-  imports: [
-    MatTabsModule,
-    MatButtonModule,
-    MatIconModule,
-    MatInputModule,
-    MatSelectModule,
-    ReactiveFormsModule,
-    TranslatePipe,
-  ],
+  imports: [MatTabsModule, MatButtonModule, MatIconModule, TranslatePipe, ToolDetailInfoComponent],
   providers: [ToolDetailStore],
 })
 export class ToolDetailComponent {
@@ -40,5 +33,9 @@ export class ToolDetailComponent {
 
   protected reloadTool(): void {
     this.detailsStore.reloadTool();
+  }
+
+  protected onToolChanged(command: UpdateToolCommand): void {
+    this.detailsStore.updateTool(command);
   }
 }

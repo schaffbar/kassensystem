@@ -9,4 +9,9 @@ public interface ToolCommands {
             String description //
     ) {}
 
+    record UpdateToolCommand( //
+            @NotBlank String name,  //
+            String description //
+    ) {}
+
 }

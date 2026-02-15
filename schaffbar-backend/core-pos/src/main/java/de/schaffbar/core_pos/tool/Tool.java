@@ -8,6 +8,7 @@ import java.util.UUID;
 import de.schaffbar.core_pos.shared.id.RfidReaderId;
 import de.schaffbar.core_pos.shared.id.ToolId;
 import de.schaffbar.core_pos.tool.ToolCommands.CreateToolCommand;
+import de.schaffbar.core_pos.tool.ToolCommands.UpdateToolCommand;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
@@ -55,7 +56,6 @@ class Tool {
         tool.setId(UUID.randomUUID());
         tool.setName(command.name());
         tool.setDescription(command.description());
-        // TODO: implement it
         tool.setCreatedAt(Instant.now());
 
         return tool;
@@ -79,8 +79,13 @@ class Tool {
     // ------------------------------------------------------------------------
     // command
 
+    public void update(UpdateToolCommand command) {
+        setName(command.name());
+        setDescription(command.description());
+    }
+
     public void assignRfidReader(RfidReaderId rfidReaderId) {
-        this.setRfidReaderId(rfidReaderId.getValue());
+        setRfidReaderId(rfidReaderId.getValue());
     }
 
 }

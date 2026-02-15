@@ -2,14 +2,15 @@ package de.schaffbar.core_pos.tool.web;
 
 import java.net.URI;
 import java.util.List;
-import java.util.UUID;
 
 import de.schaffbar.core_pos.shared.exception.ResourceNotFoundException;
 import de.schaffbar.core_pos.shared.id.ToolId;
 import de.schaffbar.core_pos.tool.ToolCommands.CreateToolCommand;
+import de.schaffbar.core_pos.tool.ToolCommands.UpdateToolCommand;
 import de.schaffbar.core_pos.tool.ToolService;
 import de.schaffbar.core_pos.tool.web.ToolApiModel.CreateToolRequestBody;
 import de.schaffbar.core_pos.tool.web.ToolApiModel.ToolApiDto;
+import de.schaffbar.core_pos.tool.web.ToolApiModel.UpdateToolRequestBody;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.NonNull;
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -46,11 +48,10 @@ public class ToolController {
     }
 
     @GetMapping(value = "/{toolId}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<ToolApiDto> getTool(@PathVariable @NotNull UUID toolId) {
-        ToolId id = ToolId.of(toolId);
-        ToolApiDto tool = this.toolService.getTool(id) //
+    public ResponseEntity<ToolApiDto> getTool(@PathVariable @NotNull @Valid ToolId toolId) {
+        ToolApiDto tool = this.toolService.getTool(toolId) //
                 .map(ToolApiModel.MAPPER::toToolApiDto) //
-                .orElseThrow(() -> ResourceNotFoundException.tool(id));
+                .orElseThrow(() -> ResourceNotFoundException.tool(toolId));
 
         return ResponseEntity.ok(tool);
     }
@@ -67,10 +68,17 @@ public class ToolController {
         return ResponseEntity.created(location).build();
     }
 
+    @PutMapping(value = "/{toolId}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Void> updateTool(@PathVariable @NotNull @Valid ToolId toolId, @RequestBody @NotNull @Valid UpdateToolRequestBody requestBody) {
+        UpdateToolCommand command = ToolApiModel.MAPPER.toUpdateToolCommand(requestBody);
+        this.toolService.updateTool(toolId, command);
+
+        return ResponseEntity.noContent().build();
+    }
+
     @DeleteMapping(value = "/{toolId}")
-    public ResponseEntity<Void> deleteTool(@PathVariable @NotNull UUID toolId) {
-        ToolId id = ToolId.of(toolId);
-        this.toolService.deleteTool(id);
+    public ResponseEntity<Void> deleteTool(@PathVariable @NotNull @Valid ToolId toolId) {
+        this.toolService.deleteTool(toolId);
 
         return ResponseEntity.noContent().build();
     }

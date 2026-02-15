@@ -7,6 +7,7 @@ import de.schaffbar.core_pos.shared.exception.ResourceNotFoundException;
 import de.schaffbar.core_pos.shared.id.RfidReaderId;
 import de.schaffbar.core_pos.shared.id.ToolId;
 import de.schaffbar.core_pos.tool.ToolCommands.CreateToolCommand;
+import de.schaffbar.core_pos.tool.ToolCommands.UpdateToolCommand;
 import de.schaffbar.core_pos.tool.ToolViews.ToolView;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
@@ -51,6 +52,14 @@ public class ToolService {
         Tool savedTool = this.toolRepository.save(tool);
 
         return savedTool.getId();
+    }
+
+    @Transactional
+    public void updateTool(@NotNull @Valid ToolId toolId, @NotNull @Valid UpdateToolCommand command) {
+        Tool tool = this.toolRepository.findById(toolId.getValue()) //
+                .orElseThrow(() -> ResourceNotFoundException.tool(toolId));
+
+        tool.update(command);
     }
 
     @Transactional

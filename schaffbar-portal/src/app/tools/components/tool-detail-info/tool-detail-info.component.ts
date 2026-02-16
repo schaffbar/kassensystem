@@ -1,4 +1,4 @@
-import { Component, effect, inject, input, output, signal } from '@angular/core';
+import { Component, computed, effect, inject, input, output, signal } from '@angular/core';
 import { NonNullableFormBuilder, ReactiveFormsModule } from '@angular/forms';
 
 import { MatButtonModule } from '@angular/material/button';
@@ -32,6 +32,10 @@ export class ToolDetailInfoComponent {
   private fb = inject(NonNullableFormBuilder);
 
   protected readonly = signal(true);
+  protected assignedRfidReader = computed(() => {
+    const readerId = this.tool().rfidReaderId;
+    return this.rfidReaders().find((reader) => reader.id === readerId);
+  });
 
   toolForm = this.fb.group({
     name: [''],

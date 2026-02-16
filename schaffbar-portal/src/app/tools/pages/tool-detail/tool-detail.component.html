@@ -1,4 +1,4 @@
-@if (detailsStore.tool(); as tool) {
+@if (selectedTool(); as tool) {
   <div class="tool-detail-header">
     <div class="tool-detail-header__title">
       <h1>{{ tool.name }}</h1>
@@ -11,10 +11,7 @@
   <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="center" dynamicHeight>
     <mat-tab [label]="'tools.tabGroups.toolDetails.detailsTab' | translate">
       <div class="tab-content">
-        <schbar-tool-detail-info
-          [tool]="tool"
-          [rfidReaders]="rfidReaderStore.entities()"
-          (toolChanged)="onToolChanged($event)" />
+        <schbar-tool-detail-info [tool]="tool" [rfidReaders]="allRfidReaders()" (toolChanged)="onToolChanged($event)" />
       </div>
     </mat-tab>
     <mat-tab [label]="'tools.tabGroups.toolDetails.wlanRelayTab' | translate">

@@ -1,4 +1,4 @@
-import { Component, inject, input } from '@angular/core';
+import { Component, computed, inject, input } from '@angular/core';
 
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -21,10 +21,17 @@ import { ToolDetailStore } from './tool-detail.store';
   providers: [ToolDetailStore],
 })
 export class ToolDetailComponent {
-  protected readonly detailsStore = inject(ToolDetailStore);
-  protected readonly rfidReaderStore = inject(RfidReaderStore);
+  private readonly detailsStore = inject(ToolDetailStore);
+  private readonly rfidReaderStore = inject(RfidReaderStore);
 
   id = input.required<string>();
+
+  selectedTool = computed(() => this.detailsStore.tool());
+  allRfidReaders = computed(() => this.rfidReaderStore.entities());
+  assignedRfidReader = computed(() => {
+    const readerId = this.selectedTool()?.rfidReaderId;
+    return this.allRfidReaders().find((reader) => reader.id === readerId);
+  });
 
   constructor() {
     this.detailsStore.setToolId(this.id);

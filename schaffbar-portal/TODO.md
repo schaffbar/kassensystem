@@ -1,8 +1,10 @@
+- check required properties in all entities (update)
 - add refres button in user list and tool list
 - check all refresh buttons
 - always confirm before deleting entity
 - tool detail page: sort out rfid readers which are not switchbox
 - implement add tool button
+- rfid tags list - change coursor to normal when hover item
 
 TODO:
 

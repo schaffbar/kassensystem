@@ -67,7 +67,7 @@ public class ToolService {
         Tool tool = this.toolRepository.findById(toolId.getValue()) //
                 .orElseThrow(() -> ResourceNotFoundException.tool(toolId));
 
-        if (tool.getRfidReaderId().getValue().equals(rfidReaderId.getValue())) {
+        if (rfidReaderId.sameValueAs(tool.getRfidReaderId())) {
             return;
         }
 

@@ -1,13 +1,12 @@
-import { Component, computed, effect, inject, input, output, signal } from '@angular/core';
-import { NonNullableFormBuilder, ReactiveFormsModule } from '@angular/forms';
+import { Component, computed, effect, input, output, signal } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 
 import { MatButtonModule } from '@angular/material/button';
-import { MatIconModule } from '@angular/material/icon';
 import { MatSelectModule } from '@angular/material/select';
 
 import { TranslatePipe } from '@ngx-translate/core';
 
-import { RfidReader } from '../../../rfid-readers/rfid-reader.model';
+import { RfidReader, RfidReaderType } from '../../../rfid-readers/rfid-reader.model';
 import { Tool } from '../../tool.model';
 
 export interface ChangeRfidReaderCommand {
@@ -19,57 +18,39 @@ export interface ChangeRfidReaderCommand {
   selector: 'schbar-tool-rfid-reader-assignment',
   templateUrl: './tool-rfid-reader-assignment.component.html',
   styleUrl: './tool-rfid-reader-assignment.component.scss',
-  imports: [MatSelectModule, MatButtonModule, MatIconModule, ReactiveFormsModule, TranslatePipe],
+  imports: [MatSelectModule, MatButtonModule, FormsModule, TranslatePipe],
 })
 export class ToolRfidReaderAssignmentComponent {
-  private fb = inject(NonNullableFormBuilder);
-
   tool = input.required<Tool>();
   rfidReaders = input.required<RfidReader[]>();
 
   rfidReaderChanged = output<ChangeRfidReaderCommand>();
 
-  protected readonly = signal(true);
-  protected assignedRfidReader = computed(() => {
-    const readerId = this.tool().rfidReaderId;
-    return this.rfidReaders().find((reader) => reader.id === readerId);
+  protected selectedRfidReaderId = signal('');
+
+  protected isDirty = computed(() => {
+    const current = this.tool().rfidReaderId || '';
+    return this.selectedRfidReaderId() !== current;
   });
 
-  rfidReaderForm = this.fb.group({
-    rfidReaderId: [''],
+  protected filteredRfidReaders = computed(() => {
+    return this.rfidReaders().filter((reader) => reader.type === RfidReaderType.SwitchBox);
   });
 
-  initialValues = effect(() => this.setInitialFormValues());
-
-  updateRfidReader() {
-    this.readonly.set(false);
-  }
+  syncSelection = effect(() => {
+    this.selectedRfidReaderId.set(this.tool().rfidReaderId || '');
+  });
 
   onCancel() {
-    this.setInitialFormValues();
-    this.readonly.set(true);
+    this.selectedRfidReaderId.set(this.tool().rfidReaderId || '');
   }
 
   onSave() {
-    if (this.rfidReaderForm.valid) {
-      const formValues = this.rfidReaderForm.value;
-      const command: ChangeRfidReaderCommand = {
-        toolId: this.tool().id,
-        rfidReaderId: formValues.rfidReaderId || undefined,
-      };
+    const command: ChangeRfidReaderCommand = {
+      toolId: this.tool().id,
+      rfidReaderId: this.selectedRfidReaderId() || undefined,
+    };
 
-      this.rfidReaderChanged.emit(command);
-      this.readonly.set(true);
-    }
-  }
-
-  // --------------------------------------------------------------------------
-  // helper
-
-  private setInitialFormValues() {
-    const tool = this.tool();
-    this.rfidReaderForm.setValue({
-      rfidReaderId: tool.rfidReaderId || '',
-    });
+    this.rfidReaderChanged.emit(command);
   }
 }

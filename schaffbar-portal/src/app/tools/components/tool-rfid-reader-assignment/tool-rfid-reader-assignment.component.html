@@ -1,17 +1,17 @@
 <h3 class="tool-rfid-reader-header">
   {{ 'tools.pages.toolDetails.headers.rfidReaderAssignment' | translate }}
-  <button mat-icon-button type="button" (click)="updateRfidReader()" [disabled]="!readonly()">
-    <mat-icon>edit</mat-icon>
-  </button>
 </h3>
 
-<form [formGroup]="rfidReaderForm" class="tool-rfid-reader-content">
+<div class="tool-rfid-reader-content">
   <div class="row">
     <div class="col">
       <mat-form-field class="full-width" [floatLabel]="'always'" [hideRequiredMarker]="true">
         <mat-label>{{ 'tools.shared.toolProperties.rfidReader' | translate }}</mat-label>
-        <mat-select id="rfidReaderId" formControlName="rfidReaderId">
-          @for (rfidReader of rfidReaders(); track rfidReader.id) {
+        <mat-select
+          id="rfidReaderId"
+          [ngModel]="selectedRfidReaderId()"
+          (ngModelChange)="selectedRfidReaderId.set($event)">
+          @for (rfidReader of filteredRfidReaders(); track rfidReader.id) {
             <mat-option [value]="rfidReader.id">{{ rfidReader.name }}</mat-option>
           }
         </mat-select>
@@ -19,14 +19,14 @@
     </div>
   </div>
 
-  @if (!this.readonly()) {
+  @if (isDirty()) {
     <div class="tool-rfid-reader-actions">
-      <button mat-stroked-button mat-dialog-close (click)="onCancel()">
+      <button mat-stroked-button (click)="onCancel()">
         {{ 'shared.dialogs.actions.edit.cancel' | translate }}
       </button>
-      <button mat-flat-button color="primary" type="submit" (click)="onSave()">
+      <button mat-flat-button color="primary" (click)="onSave()">
         {{ 'shared.dialogs.actions.edit.confirm' | translate }}
       </button>
     </div>
   }
-</form>
+</div>

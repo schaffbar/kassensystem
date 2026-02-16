@@ -19,11 +19,17 @@ export class RfidTagAssignmentService {
     }),
   };
 
+  // --------------------------------------------------------------------------
+  // queries
+
   getRfidTagAssignmetByUser(userId: string): Observable<RfidTagAssignment> {
     return this.http
       .get<RfidTagAssignment[]>(`${RFID_TAG_ASSIGNMENT_API_URL}?customer-id=${userId}`)
       .pipe(map((assignments) => assignments[0] || null));
   }
+
+  // --------------------------------------------------------------------------
+  // commands
 
   assignFixedRfidTag(userId: string): Observable<void> {
     const body = {

@@ -11,13 +11,24 @@ import {
   ToolDetailInfoComponent,
   UpdateToolCommand,
 } from '../../components/tool-detail-info/tool-detail-info.component';
+import {
+  ChangeRfidReaderCommand,
+  ToolRfidReaderAssignmentComponent,
+} from '../../components/tool-rfid-reader-assignment/tool-rfid-reader-assignment.component';
 import { ToolDetailStore } from './tool-detail.store';
 
 @Component({
   selector: 'schbar-tool-detail',
   templateUrl: './tool-detail.component.html',
   styleUrl: './tool-detail.component.scss',
-  imports: [MatTabsModule, MatButtonModule, MatIconModule, TranslatePipe, ToolDetailInfoComponent],
+  imports: [
+    MatTabsModule,
+    MatButtonModule,
+    MatIconModule,
+    TranslatePipe,
+    ToolDetailInfoComponent,
+    ToolRfidReaderAssignmentComponent,
+  ],
   providers: [ToolDetailStore],
 })
 export class ToolDetailComponent {
@@ -28,10 +39,6 @@ export class ToolDetailComponent {
 
   selectedTool = computed(() => this.detailsStore.tool());
   allRfidReaders = computed(() => this.rfidReaderStore.entities());
-  assignedRfidReader = computed(() => {
-    const readerId = this.selectedTool()?.rfidReaderId;
-    return this.allRfidReaders().find((reader) => reader.id === readerId);
-  });
 
   constructor() {
     this.detailsStore.setToolId(this.id);
@@ -42,7 +49,11 @@ export class ToolDetailComponent {
     this.detailsStore.reloadTool();
   }
 
-  protected onToolChanged(command: UpdateToolCommand): void {
+  protected onToolUpdated(command: UpdateToolCommand): void {
     this.detailsStore.updateTool(command);
+  }
+
+  protected onRfidReaderChanged(command: ChangeRfidReaderCommand): void {
+    this.detailsStore.changeRfidReader(command);
   }
 }

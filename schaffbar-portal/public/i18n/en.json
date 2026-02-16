@@ -154,7 +154,8 @@
     "pages": {
       "toolDetails": {
         "headers": {
-          "toolInformation": "Tool Information"
+          "toolInformation": "Tool Information",
+          "rfidReaderAssignment": "RFID Reader"
         }
       }
     },

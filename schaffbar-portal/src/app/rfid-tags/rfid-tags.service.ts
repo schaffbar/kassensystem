@@ -19,6 +19,9 @@ export class RfidTagService {
     }),
   };
 
+  // --------------------------------------------------------------------------
+  // queries
+
   getRfidTags(): Observable<RfidTag[]> {
     return this.http.get<RfidTag[]>(RFID_TAGS_API_URL);
   }
@@ -27,9 +30,8 @@ export class RfidTagService {
     return this.http.get<RfidTag>(`${RFID_TAGS_API_URL}/${id}`);
   }
 
-  createRfidTag(rfidTag: RfidTag): Observable<RfidTag> {
-    return this.http.post<RfidTag>(RFID_TAGS_API_URL, rfidTag, this.httpOptions);
-  }
+  // --------------------------------------------------------------------------
+  // commands
 
   deleteRfidTag(id: string): Observable<void> {
     return this.http.delete<void>(`${RFID_TAGS_API_URL}/${id}`);

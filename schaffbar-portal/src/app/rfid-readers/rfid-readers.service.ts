@@ -19,6 +19,9 @@ export class RfidReaderService {
     }),
   };
 
+  // --------------------------------------------------------------------------
+  // queries
+
   getRfidReaders(): Observable<RfidReader[]> {
     return this.http.get<RfidReader[]>(RFID_READERS_API_URL);
   }
@@ -26,6 +29,9 @@ export class RfidReaderService {
   getRfidReader(id: string): Observable<RfidReader> {
     return this.http.get<RfidReader>(`${RFID_READERS_API_URL}/${id}`);
   }
+
+  // --------------------------------------------------------------------------
+  // commands
 
   updateRfidReader(command: UpdateRfidReaderCommand): Observable<void> {
     return this.http.put<void>(`${RFID_READERS_API_URL}/${command.id}`, command, this.httpOptions);

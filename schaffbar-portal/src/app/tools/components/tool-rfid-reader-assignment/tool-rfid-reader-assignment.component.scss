@@ -1,10 +1,10 @@
-.tool-info-header {
+.tool-rfid-reader-header {
   display: flex;
   align-items: center;
   gap: 1rem;
 }
 
-.tool-info-content {
+.tool-rfid-reader-content {
   display: flex;
   flex-direction: column;
 }
@@ -28,7 +28,7 @@
   width: 100%;
 }
 
-.tool-info-actions {
+.tool-rfid-reader-actions {
   display: flex;
   gap: 1rem;
   justify-content: flex-end;

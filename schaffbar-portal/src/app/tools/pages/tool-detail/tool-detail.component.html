@@ -11,7 +11,11 @@
   <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="center" dynamicHeight>
     <mat-tab [label]="'tools.tabGroups.toolDetails.detailsTab' | translate">
       <div class="tab-content">
-        <schbar-tool-detail-info [tool]="tool" [rfidReaders]="allRfidReaders()" (toolChanged)="onToolChanged($event)" />
+        <schbar-tool-detail-info [tool]="tool" (toolUpdated)="onToolUpdated($event)" />
+        <schbar-tool-rfid-reader-assignment
+          [tool]="tool"
+          [rfidReaders]="allRfidReaders()"
+          (rfidReaderChanged)="onRfidReaderChanged($event)" />
       </div>
     </mat-tab>
     <mat-tab [label]="'tools.tabGroups.toolDetails.wlanRelayTab' | translate">

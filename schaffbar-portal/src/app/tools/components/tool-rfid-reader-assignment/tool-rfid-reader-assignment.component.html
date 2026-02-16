@@ -13,18 +13,25 @@
           (ngModelChange)="selectedRfidReaderId.set($event)">
           @for (rfidReader of filteredRfidReaders(); track rfidReader.id) {
             <mat-option [value]="rfidReader.id">
-              {{ rfidReader.name }}
-              @if (isAssigned(rfidReader.id)) {
-                ({{ 'tools.shared.toolProperties.alreadyAssigned' | translate }})
-              }
+              <div class="option-content">
+                <span>{{ rfidReader.name }}</span>
+                @if (isAssigned(rfidReader.id)) {
+                  <span class="option-content-already-assigned">
+                    ({{ 'tools.shared.toolProperties.alreadyAssigned' | translate }})
+                  </span>
+                }
+              </div>
             </mat-option>
           }
         </mat-select>
       </mat-form-field>
+      @if (isSelectedAssigned()) {
+        <mat-error>{{ 'tools.shared.toolProperties.alreadyAssignedError' | translate }}</mat-error>
+      }
     </div>
   </div>
 
-  @if (isDirty()) {
+  @if (isDirty() && !isSelectedAssigned()) {
     <div class="tool-rfid-reader-actions">
       <button mat-stroked-button (click)="onCancel()">
         {{ 'shared.dialogs.actions.edit.cancel' | translate }}

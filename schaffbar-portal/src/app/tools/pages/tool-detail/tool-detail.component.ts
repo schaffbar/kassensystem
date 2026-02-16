@@ -53,6 +53,7 @@ export class ToolDetailComponent {
   constructor() {
     this.detailsStore.setToolId(this.id);
     this.rfidReaderStore.loadAllRfidReaders();
+    this.toolsStore.loadAllTools();
   }
 
   protected reloadTool(): void {

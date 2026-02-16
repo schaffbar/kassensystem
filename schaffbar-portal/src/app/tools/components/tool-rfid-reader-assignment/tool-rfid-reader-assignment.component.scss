@@ -34,3 +34,13 @@
   justify-content: flex-end;
   margin-top: 1rem;
 }
+
+.option-content {
+  display: flex;
+  gap: 1rem;
+}
+
+.option-content-already-assigned {
+  font-style: italic;
+  opacity: 0.6;
+}

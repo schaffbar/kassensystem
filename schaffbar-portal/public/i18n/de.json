@@ -164,7 +164,8 @@
         "name": "Name",
         "description": "Beschreibung",
         "rfidReader": "RFID-Lesegerät",
-        "alreadyAssigned": "bereits zugewiesen"
+        "alreadyAssigned": "bereits zugewiesen",
+        "alreadyAssignedError": "Dieses RFID-Lesegerät ist bereits einem anderen Werkzeug zugewiesen."
       }
     }
   },

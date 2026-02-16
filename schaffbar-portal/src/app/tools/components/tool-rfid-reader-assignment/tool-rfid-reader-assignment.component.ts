@@ -2,6 +2,7 @@ import { Component, computed, effect, input, output, signal } from '@angular/cor
 import { FormsModule } from '@angular/forms';
 
 import { MatButtonModule } from '@angular/material/button';
+import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 
 import { TranslatePipe } from '@ngx-translate/core';
@@ -18,7 +19,7 @@ export interface ChangeRfidReaderCommand {
   selector: 'schbar-tool-rfid-reader-assignment',
   templateUrl: './tool-rfid-reader-assignment.component.html',
   styleUrl: './tool-rfid-reader-assignment.component.scss',
-  imports: [MatSelectModule, MatButtonModule, FormsModule, TranslatePipe],
+  imports: [MatFormFieldModule, MatSelectModule, MatButtonModule, FormsModule, TranslatePipe],
 })
 export class ToolRfidReaderAssignmentComponent {
   tool = input.required<Tool>();
@@ -32,6 +33,11 @@ export class ToolRfidReaderAssignmentComponent {
   protected isDirty = computed(() => {
     const current = this.tool().rfidReaderId || '';
     return this.selectedRfidReaderId() !== current;
+  });
+
+  protected isSelectedAssigned = computed(() => {
+    const selectedId = this.selectedRfidReaderId();
+    return !!selectedId && this.assignedRfidReaderIds().has(selectedId);
   });
 
   protected filteredRfidReaders = computed(() => {

@@ -163,7 +163,8 @@
       "toolProperties": {
         "name": "Name",
         "description": "Beschreibung",
-        "rfidReader": "RFID-Lesegerät"
+        "rfidReader": "RFID-Lesegerät",
+        "alreadyAssigned": "bereits zugewiesen"
       }
     }
   },

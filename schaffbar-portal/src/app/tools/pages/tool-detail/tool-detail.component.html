@@ -15,6 +15,7 @@
         <schbar-tool-rfid-reader-assignment
           [tool]="tool"
           [rfidReaders]="allRfidReaders()"
+          [assignedRfidReaderIds]="assignedRfidReaderIds()"
           (rfidReaderChanged)="onRfidReaderChanged($event)" />
       </div>
     </mat-tab>

@@ -12,7 +12,12 @@
           [ngModel]="selectedRfidReaderId()"
           (ngModelChange)="selectedRfidReaderId.set($event)">
           @for (rfidReader of filteredRfidReaders(); track rfidReader.id) {
-            <mat-option [value]="rfidReader.id">{{ rfidReader.name }}</mat-option>
+            <mat-option [value]="rfidReader.id">
+              {{ rfidReader.name }}
+              @if (isAssigned(rfidReader.id)) {
+                ({{ 'tools.shared.toolProperties.alreadyAssigned' | translate }})
+              }
+            </mat-option>
           }
         </mat-select>
       </mat-form-field>

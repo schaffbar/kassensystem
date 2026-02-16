@@ -23,6 +23,7 @@ export interface ChangeRfidReaderCommand {
 export class ToolRfidReaderAssignmentComponent {
   tool = input.required<Tool>();
   rfidReaders = input.required<RfidReader[]>();
+  assignedRfidReaderIds = input<Set<string>>(new Set());
 
   rfidReaderChanged = output<ChangeRfidReaderCommand>();
 
@@ -36,6 +37,10 @@ export class ToolRfidReaderAssignmentComponent {
   protected filteredRfidReaders = computed(() => {
     return this.rfidReaders().filter((reader) => reader.type === RfidReaderType.SwitchBox);
   });
+
+  protected isAssigned(readerId: string): boolean {
+    return this.assignedRfidReaderIds().has(readerId);
+  }
 
   syncSelection = effect(() => {
     this.selectedRfidReaderId.set(this.tool().rfidReaderId || '');

@@ -163,7 +163,8 @@
       "toolProperties": {
         "name": "Name",
         "description": "Description",
-        "rfidReader": "RFID Reader"
+        "rfidReader": "RFID Reader",
+        "alreadyAssigned": "already assigned"
       }
     }
   },

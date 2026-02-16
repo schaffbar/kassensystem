@@ -15,6 +15,7 @@ import {
   ChangeRfidReaderCommand,
   ToolRfidReaderAssignmentComponent,
 } from '../../components/tool-rfid-reader-assignment/tool-rfid-reader-assignment.component';
+import { ToolsStore } from '../../tools.store';
 import { ToolDetailStore } from './tool-detail.store';
 
 @Component({
@@ -34,11 +35,20 @@ import { ToolDetailStore } from './tool-detail.store';
 export class ToolDetailComponent {
   private readonly detailsStore = inject(ToolDetailStore);
   private readonly rfidReaderStore = inject(RfidReaderStore);
+  private readonly toolsStore = inject(ToolsStore);
 
   id = input.required<string>();
 
   selectedTool = computed(() => this.detailsStore.tool());
   allRfidReaders = computed(() => this.rfidReaderStore.entities());
+  assignedRfidReaderIds = computed(() => {
+    const currentToolId = this.selectedTool()?.id;
+    const ids = this.toolsStore
+      .entities()
+      .filter((tool) => tool.id !== currentToolId && tool.rfidReaderId)
+      .map((tool) => tool.rfidReaderId!);
+    return new Set(ids);
+  });
 
   constructor() {
     this.detailsStore.setToolId(this.id);

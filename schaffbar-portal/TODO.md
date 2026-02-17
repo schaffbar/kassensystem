@@ -1,3 +1,5 @@
+- IMPORTANT tools store is used in tool list and tool details. Is it the same instance?
+
 - when changing type of rfid reader from switch box to other, check if this rfid reader is already assigned to a tool. if yes reject request
 - check required properties in all entities (update)
 - add refres button in user list and tool list
@@ -6,6 +8,7 @@
 - tool detail page: sort out rfid readers which are not switchbox
 - implement add tool button
 - rfid tags list - change coursor to normal when hover item
+- create event for each mutation and store it in the event table
 
 TODO:
 

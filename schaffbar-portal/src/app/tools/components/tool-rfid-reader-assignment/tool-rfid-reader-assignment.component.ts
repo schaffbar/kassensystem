@@ -3,7 +3,9 @@ import { FormsModule } from '@angular/forms';
 
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
 import { MatSelectModule } from '@angular/material/select';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 import { TranslatePipe } from '@ngx-translate/core';
 
@@ -15,11 +17,23 @@ export interface ChangeRfidReaderCommand {
   rfidReaderId?: string;
 }
 
+export interface ClearRfidReaderCommand {
+  toolId: string;
+}
+
 @Component({
   selector: 'schbar-tool-rfid-reader-assignment',
   templateUrl: './tool-rfid-reader-assignment.component.html',
   styleUrl: './tool-rfid-reader-assignment.component.scss',
-  imports: [MatFormFieldModule, MatSelectModule, MatButtonModule, FormsModule, TranslatePipe],
+  imports: [
+    MatFormFieldModule,
+    MatSelectModule,
+    MatButtonModule,
+    MatIconModule,
+    MatTooltipModule,
+    FormsModule,
+    TranslatePipe,
+  ],
 })
 export class ToolRfidReaderAssignmentComponent {
   tool = input.required<Tool>();
@@ -27,6 +41,7 @@ export class ToolRfidReaderAssignmentComponent {
   assignedRfidReaderIds = input<Set<string>>(new Set());
 
   rfidReaderChanged = output<ChangeRfidReaderCommand>();
+  rfidReaderCleared = output<ClearRfidReaderCommand>();
 
   protected selectedRfidReaderId = signal('');
 
@@ -63,5 +78,11 @@ export class ToolRfidReaderAssignmentComponent {
     };
 
     this.rfidReaderChanged.emit(command);
+  }
+
+  onClear() {
+    this.rfidReaderCleared.emit({
+      toolId: this.tool().id,
+    });
   }
 }

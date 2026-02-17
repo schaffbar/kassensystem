@@ -16,7 +16,8 @@
           [tool]="tool"
           [rfidReaders]="allRfidReaders()"
           [assignedRfidReaderIds]="assignedRfidReaderIds()"
-          (rfidReaderChanged)="onRfidReaderChanged($event)" />
+          (rfidReaderChanged)="onRfidReaderChanged($event)"
+          (rfidReaderCleared)="onRfidReaderCleared($event)" />
       </div>
     </mat-tab>
     <mat-tab [label]="'tools.tabGroups.toolDetails.wlanRelayTab' | translate">

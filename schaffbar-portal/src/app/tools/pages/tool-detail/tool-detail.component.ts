@@ -13,6 +13,7 @@ import {
 } from '../../components/tool-detail-info/tool-detail-info.component';
 import {
   ChangeRfidReaderCommand,
+  ClearRfidReaderCommand,
   ToolRfidReaderAssignmentComponent,
 } from '../../components/tool-rfid-reader-assignment/tool-rfid-reader-assignment.component';
 import { ToolsStore } from '../../tools.store';
@@ -66,5 +67,9 @@ export class ToolDetailComponent {
 
   protected onRfidReaderChanged(command: ChangeRfidReaderCommand): void {
     this.detailsStore.changeRfidReader(command);
+  }
+
+  protected onRfidReaderCleared(command: ClearRfidReaderCommand): void {
+    this.detailsStore.clearRfidReader(command);
   }
 }

@@ -51,6 +51,10 @@ export class ToolsService {
     );
   }
 
+  clearRfidReader(toolId: string): Observable<void> {
+    return this.http.put<void>(`${TOOLS_API_URL}/${toolId}/rfid-reader/clear`, {}, this.httpOptions);
+  }
+
   deleteTool(id: string): Observable<void> {
     return this.http.delete<void>(`${TOOLS_API_URL}/${id}`);
   }

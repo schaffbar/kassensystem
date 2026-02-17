@@ -7,7 +7,10 @@ import { exhaustMap, filter, pipe, tap } from 'rxjs';
 
 import { setError, setFulfilled, setPending, withRequestStatus } from '../../../shared/state/request-status.feature';
 import { UpdateToolCommand } from '../../components/tool-detail-info/tool-detail-info.component';
-import { ChangeRfidReaderCommand } from '../../components/tool-rfid-reader-assignment/tool-rfid-reader-assignment.component';
+import {
+  ChangeRfidReaderCommand,
+  ClearRfidReaderCommand,
+} from '../../components/tool-rfid-reader-assignment/tool-rfid-reader-assignment.component';
 import { Tool } from '../../tool.model';
 import { ToolsService } from '../../tools.service';
 
@@ -73,6 +76,21 @@ export const ToolDetailStore = signalStore(
         tap(() => patchState(store, setPending())),
         exhaustMap((command: ChangeRfidReaderCommand) => {
           return store._toolsService.changeRfidReader(command).pipe(
+            tapResponse({
+              next: () => {
+                patchState(store, setFulfilled(), setDirty());
+              },
+              error: (error: { message: string }) => patchState(store, setError(error.message)),
+            }),
+          );
+        }),
+      ),
+    ),
+    clearRfidReader: rxMethod<ClearRfidReaderCommand>(
+      pipe(
+        tap(() => patchState(store, setPending())),
+        exhaustMap((command: ClearRfidReaderCommand) => {
+          return store._toolsService.clearRfidReader(command.toolId).pipe(
             tapResponse({
               next: () => {
                 patchState(store, setFulfilled(), setDirty());

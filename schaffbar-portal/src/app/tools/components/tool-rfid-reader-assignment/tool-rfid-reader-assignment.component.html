@@ -1,5 +1,14 @@
 <h3 class="tool-rfid-reader-header">
   {{ 'tools.pages.toolDetails.headers.rfidReaderAssignment' | translate }}
+  @if (tool().rfidReaderId) {
+    <button
+      mat-icon-button
+      color="warn"
+      (click)="onClear()"
+      [matTooltip]="'tools.shared.toolProperties.clearAssignment' | translate">
+      <mat-icon>link_off</mat-icon>
+    </button>
+  }
 </h3>
 
 <div class="tool-rfid-reader-content">

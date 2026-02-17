@@ -165,7 +165,8 @@
         "description": "Description",
         "rfidReader": "RFID Reader",
         "alreadyAssigned": "already assigned",
-        "alreadyAssignedError": "This RFID reader is already assigned to another tool."
+        "alreadyAssignedError": "This RFID reader is already assigned to another tool.",
+        "clearAssignment": "Clear RFID reader assignment"
       }
     }
   },

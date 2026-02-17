@@ -165,7 +165,8 @@
         "description": "Beschreibung",
         "rfidReader": "RFID-Lesegerät",
         "alreadyAssigned": "bereits zugewiesen",
-        "alreadyAssignedError": "Dieses RFID-Lesegerät ist bereits einem anderen Werkzeug zugewiesen."
+        "alreadyAssignedError": "Dieses RFID-Lesegerät ist bereits einem anderen Werkzeug zugewiesen.",
+        "clearAssignment": "RFID-Lesegerät-Zuweisung aufheben"
       }
     }
   },

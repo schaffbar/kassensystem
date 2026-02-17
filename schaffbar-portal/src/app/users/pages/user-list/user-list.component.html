@@ -1,6 +1,13 @@
 <div class="user-list-header">
-  <h1>{{ 'users.title' | translate }} ({{ usersCount() }})</h1>
-  <button mat-flat-button color="primary" (click)="newUserDialog()">{{ 'users.actions.addUser' | translate }}</button>
+  <div class="user-list-header__title">
+    <h1>{{ 'users.title' | translate }} ({{ usersCount() }})</h1>
+    <button matIconButton color="primary" (click)="reloadUsers()">
+      <mat-icon>refresh</mat-icon>
+    </button>
+  </div>
+  <div class="user-list-header__actions">
+    <button mat-flat-button color="primary" (click)="newUserDialog()">{{ 'users.actions.addUser' | translate }}</button>
+  </div>
 </div>
 
 <mat-form-field class="user-list-filter">

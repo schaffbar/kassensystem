@@ -52,6 +52,10 @@ export class ToolListComponent {
     this.router.navigate([ROUTE.TOOLS, tool.id]);
   }
 
+  protected reloadTools(): void {
+    this.store.loadAllTools();
+  }
+
   protected newToolDialog(): void {
     console.log('Open new tool dialog');
   }

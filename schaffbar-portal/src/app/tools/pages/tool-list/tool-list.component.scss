@@ -3,6 +3,19 @@
   align-items: center;
   justify-content: space-between;
   margin-bottom: 16px;
+  gap: 1rem;
+}
+
+.tool-list-header__title {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.tool-list-header__actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
 }
 
 // styling columns using their auto-generated column names

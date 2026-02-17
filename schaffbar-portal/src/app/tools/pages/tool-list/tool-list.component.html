@@ -1,6 +1,13 @@
 <div class="tool-list-header">
-  <h1>{{ 'tools.title' | translate }} ({{ toolsCount() }})</h1>
-  <button mat-flat-button color="primary" (click)="newToolDialog()">{{ 'tools.actions.addTool' | translate }}</button>
+  <div class="tool-list-header__title">
+    <h1>{{ 'tools.title' | translate }} ({{ toolsCount() }})</h1>
+    <button matIconButton color="primary" (click)="reloadTools()">
+      <mat-icon>refresh</mat-icon>
+    </button>
+  </div>
+  <div class="tool-list-header__actions">
+    <button mat-flat-button color="primary" (click)="newToolDialog()">{{ 'tools.actions.addTool' | translate }}</button>
+  </div>
 </div>
 
 <div class="mat-elevation-z2">

@@ -5,6 +5,18 @@
   margin-bottom: 16px;
 }
 
+.user-list-header__title {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.user-list-header__actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
 .user-list-filter {
   display: flex;
   max-width: 500px;

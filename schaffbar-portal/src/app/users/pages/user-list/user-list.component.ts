@@ -53,6 +53,10 @@ export class UserListComponent {
     return result;
   });
 
+  protected reloadUsers(): void {
+    this.store.loadAllUsers();
+  }
+
   protected applyFilter(event: Event): void {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource().filter = filterValue.trim().toLowerCase();

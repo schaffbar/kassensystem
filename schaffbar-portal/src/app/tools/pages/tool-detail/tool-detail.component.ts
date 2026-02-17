@@ -59,6 +59,8 @@ export class ToolDetailComponent {
 
   protected reloadTool(): void {
     this.detailsStore.reloadTool();
+    this.rfidReaderStore.loadAllRfidReaders();
+    this.toolsStore.loadAllTools();
   }
 
   protected onToolUpdated(command: UpdateToolCommand): void {

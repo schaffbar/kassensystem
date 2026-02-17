@@ -149,7 +149,14 @@
       "deleteTool": {
         "title": "Werkzeug löschen",
         "message": "Sind Sie sicher, dass Sie dieses Werkzeug löschen möchten?"
+      },
+      "clearRfidReader": {
+        "title": "RFID-Lesegerät-Zuweisung aufheben",
+        "message": "Sind Sie sicher, dass Sie die RFID-Lesegerät-Zuweisung aufheben möchten?"
       }
+    },
+    "tooltips": {
+      "clearRfidReader": "RFID-Lesegerät-Zuweisung aufheben"
     },
     "tabGroups": {
       "toolDetails": {
@@ -162,6 +169,10 @@
         "headers": {
           "toolInformation": "Werkzeuginformationen",
           "rfidReaderAssignment": "RFID-Lesegerät"
+        },
+        "messages": {
+          "alreadyAssigned": "bereits zugewiesen",
+          "alreadyAssignedError": "Dieses RFID-Lesegerät ist bereits einem anderen Werkzeug zugewiesen."
         }
       }
     },
@@ -169,10 +180,7 @@
       "toolProperties": {
         "name": "Name",
         "description": "Beschreibung",
-        "rfidReader": "RFID-Lesegerät",
-        "alreadyAssigned": "bereits zugewiesen",
-        "alreadyAssignedError": "Dieses RFID-Lesegerät ist bereits einem anderen Werkzeug zugewiesen.",
-        "clearAssignment": "RFID-Lesegerät-Zuweisung aufheben"
+        "rfidReader": "RFID-Lesegerät"
       }
     }
   },

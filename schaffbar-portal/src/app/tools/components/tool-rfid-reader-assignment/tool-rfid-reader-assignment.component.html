@@ -5,7 +5,7 @@
       mat-icon-button
       color="warn"
       (click)="onClear()"
-      [matTooltip]="'tools.shared.toolProperties.clearAssignment' | translate">
+      [matTooltip]="'tools.tooltips.clearRfidReader' | translate">
       <mat-icon>link_off</mat-icon>
     </button>
   }
@@ -26,7 +26,7 @@
                 <span>{{ rfidReader.name }}</span>
                 @if (isAssigned(rfidReader.id)) {
                   <span class="option-content-already-assigned">
-                    ({{ 'tools.shared.toolProperties.alreadyAssigned' | translate }})
+                    ({{ 'tools.pages.toolDetails.messages.alreadyAssigned' | translate }})
                   </span>
                 }
               </div>
@@ -35,7 +35,7 @@
         </mat-select>
       </mat-form-field>
       @if (isSelectedAssigned()) {
-        <mat-error>{{ 'tools.shared.toolProperties.alreadyAssignedError' | translate }}</mat-error>
+        <mat-error>{{ 'tools.pages.toolDetails.messages.alreadyAssignedError' | translate }}</mat-error>
       }
     </div>
   </div>

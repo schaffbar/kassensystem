@@ -1,5 +1,7 @@
 package de.schaffbar.core_pos.shared.id;
 
+import static java.util.Objects.isNull;
+
 import java.util.UUID;
 
 import de.schaffbar.core_pos.shared.id.ValueObjectAssert.ValueObject;
@@ -13,6 +15,14 @@ public class RfidTagAssignmentId {
     private RfidTagAssignmentId(UUID id) {
         ValueObjectAssert.notNull(id, ValueObject.RFID_TAG_ASSIGNMENT_ID);
         this.value = id;
+    }
+
+    public boolean sameValueAs(RfidTagAssignmentId other) {
+        if (isNull(other)) {
+            return false;
+        }
+
+        return this.value.equals(other.value);
     }
 
 }

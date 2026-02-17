@@ -88,4 +88,8 @@ class Tool {
         setRfidReaderId(rfidReaderId.getValue());
     }
 
+    public void clearRfidReader() {
+        setRfidReaderId(null);
+    }
+
 }

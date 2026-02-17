@@ -80,9 +80,16 @@ public class ToolController {
         return ResponseEntity.noContent().build();
     }
 
-    @PutMapping(value = "/{toolId}/rfid-reader/{rfidReaderId}", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Void> updateTool(@PathVariable @NotNull @Valid ToolId toolId, @PathVariable @NotNull @Valid RfidReaderId rfidReaderId) {
+    @PutMapping(value = "/{toolId}/rfid-reader/{rfidReaderId}")
+    public ResponseEntity<Void> changeRfidReader(@PathVariable @NotNull @Valid ToolId toolId, @PathVariable @NotNull @Valid RfidReaderId rfidReaderId) {
         this.toolAssignRfidReader.process(toolId, rfidReaderId);
+
+        return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping(value = "/{toolId}/rfid-reader/clear")
+    public ResponseEntity<Void> clearRfidReader(@PathVariable @NotNull @Valid ToolId toolId) {
+        this.toolService.clearRfidReader(toolId);
 
         return ResponseEntity.noContent().build();
     }

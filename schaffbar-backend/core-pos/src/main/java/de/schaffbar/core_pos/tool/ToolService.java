@@ -78,6 +78,14 @@ public class ToolService {
     }
 
     @Transactional
+    public void clearRfidReader(@NotNull @Valid ToolId toolId) {
+        Tool tool = this.toolRepository.findById(toolId.getValue()) //
+                .orElseThrow(() -> ResourceNotFoundException.tool(toolId));
+
+        tool.clearRfidReader();
+    }
+
+    @Transactional
     public void deleteTool(@NotNull @Valid ToolId id) {
         ToolView tool = getTool(id) //
                 .orElseThrow(() -> ResourceNotFoundException.tool(id));

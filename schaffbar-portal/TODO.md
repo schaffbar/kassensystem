@@ -2,16 +2,12 @@
 
 - when changing type of rfid reader from switch box to other, check if this rfid reader is already assigned to a tool. if yes reject request
 - check required properties in all entities (update)
-- add refres button in user list and tool list
-- check all refresh buttons
 - always confirm before deleting entity
-- tool detail page: sort out rfid readers which are not switchbox
 - implement add tool button
-- rfid tags list - change coursor to normal when hover item
-- create event for each mutation and store it in the event table
 
 TODO:
 
+1. create event for each mutation and store it in the event table
 2. Scheduler to clean up waiting for assignment
 3. Check if workshop usage is completed before closing session
 4. Validate Session before closing it

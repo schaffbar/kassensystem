@@ -145,6 +145,12 @@
     "actions": {
       "addTool": "Add Tool"
     },
+    "dialogs": {
+      "deleteTool": {
+        "title": "Delete Tool",
+        "message": "Are you sure you want to delete this tool?"
+      }
+    },
     "tabGroups": {
       "toolDetails": {
         "detailsTab": "Details",
@@ -172,6 +178,12 @@
   },
   "rfidTags": {
     "title": "RFID Tags",
+    "dialogs": {
+      "deleteRfidTag": {
+        "title": "Delete RFID Tag",
+        "message": "Are you sure you want to delete this RFID tag?"
+      }
+    },
     "shared": {
       "rfidTagProperties": {
         "id": "ID",
@@ -181,6 +193,12 @@
   },
   "rfidReaders": {
     "title": "RFID Readers",
+    "dialogs": {
+      "deleteRfidReader": {
+        "title": "Delete RFID Reader",
+        "message": "Are you sure you want to delete this RFID reader?"
+      }
+    },
     "types": {
       "rfid_tag_register": "RFID Tag Register",
       "rfid_tag_assigner": "RFID Tag Assigner",

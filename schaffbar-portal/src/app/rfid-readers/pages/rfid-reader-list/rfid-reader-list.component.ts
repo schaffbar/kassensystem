@@ -3,15 +3,16 @@ import { Component, computed, inject, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { MatButtonModule } from '@angular/material/button';
-import { MatDialogModule } from '@angular/material/dialog';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 
-import { TranslatePipe } from '@ngx-translate/core';
+import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 
+import { ConfirmDeleteComponent } from '../../../shared/components/confirm-delete/confirm-delete.component';
 import { RfidReader } from '../../rfid-reader.model';
 import { RfidReaderStore } from '../../rfid-readers.store';
 
@@ -35,6 +36,8 @@ import { RfidReaderStore } from '../../rfid-readers.store';
 export class RfidReaderListComponent {
   readonly store = inject(RfidReaderStore);
   readonly router = inject(Router);
+  private readonly dialog = inject(MatDialog);
+  private readonly translate = inject(TranslateService);
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
@@ -64,6 +67,20 @@ export class RfidReaderListComponent {
       return;
     }
 
-    this.store.deleteRfidReader(rfidReader.id);
+    const dialogRef = this.dialog.open(ConfirmDeleteComponent, {
+      data: {
+        title: this.translate.instant('rfidReaders.dialogs.deleteRfidReader.title'),
+        entity: rfidReader.name || rfidReader.macAddress,
+        message: this.translate.instant('rfidReaders.dialogs.deleteRfidReader.message'),
+      },
+      minWidth: '600px',
+      disableClose: true,
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.store.deleteRfidReader(rfidReader.id);
+      }
+    });
   }
 }

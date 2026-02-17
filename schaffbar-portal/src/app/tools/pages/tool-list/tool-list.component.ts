@@ -2,16 +2,17 @@ import { Component, computed, inject, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { MatButtonModule } from '@angular/material/button';
-import { MatDialogModule } from '@angular/material/dialog';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 
-import { TranslatePipe } from '@ngx-translate/core';
+import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 
 import { ROUTE } from '../../../app.routes';
+import { ConfirmDeleteComponent } from '../../../shared/components/confirm-delete/confirm-delete.component';
 import { Tool } from '../../tool.model';
 import { ToolsStore } from '../../tools.store';
 
@@ -34,6 +35,8 @@ import { ToolsStore } from '../../tools.store';
 export class ToolListComponent {
   readonly store = inject(ToolsStore);
   readonly router = inject(Router);
+  private readonly dialog = inject(MatDialog);
+  private readonly translate = inject(TranslateService);
 
   // TODO: replace with signal version
   @ViewChild(MatPaginator) paginator!: MatPaginator;
@@ -68,6 +71,20 @@ export class ToolListComponent {
       return;
     }
 
-    this.store.deleteTool(tool.id);
+    const dialogRef = this.dialog.open(ConfirmDeleteComponent, {
+      data: {
+        title: this.translate.instant('tools.dialogs.deleteTool.title'),
+        entity: tool.name,
+        message: this.translate.instant('tools.dialogs.deleteTool.message'),
+      },
+      minWidth: '600px',
+      disableClose: true,
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.store.deleteTool(tool.id);
+      }
+    });
   }
 }

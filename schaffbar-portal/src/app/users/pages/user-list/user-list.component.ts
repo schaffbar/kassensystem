@@ -13,7 +13,7 @@ import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 
 import { ROUTE } from '../../../app.routes';
-import { ConfirmDeleteUserComponent } from '../../../shared/components/confirm-delete-user.component';
+import { ConfirmDeleteComponent } from '../../../shared/components/confirm-delete/confirm-delete.component';
 import { NewUserFormComponent } from '../../components/new-user-form/new-user-form.component';
 import { User } from '../../user.model';
 import { UsersStore } from '../../users.store';
@@ -92,7 +92,7 @@ export class UserListComponent {
       return;
     }
 
-    const dialogRef = this.dialog.open(ConfirmDeleteUserComponent, {
+    const dialogRef = this.dialog.open(ConfirmDeleteComponent, {
       data: {
         title: this.translate.instant('users.dialogs.deleteUser.title'),
         entity: user.firstName + ' ' + user.lastName,

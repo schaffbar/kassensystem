@@ -5,12 +5,18 @@ import { MAT_DIALOG_DATA, MatDialogContent, MatDialogModule, MatDialogTitle } fr
 
 import { TranslatePipe } from '@ngx-translate/core';
 
+export interface ConfirmDeleteDialogData {
+  title: string;
+  message: string;
+  entity?: string;
+}
+
 @Component({
-  selector: 'schbar-confirm-delete-user',
-  templateUrl: './confirm-delete-user.component.html',
-  styleUrls: ['./confirm-delete-user.component.scss'],
+  selector: 'schbar-confirm-delete',
+  templateUrl: './confirm-delete.component.html',
+  styleUrl: './confirm-delete.component.scss',
   imports: [MatDialogModule, MatDialogTitle, MatDialogContent, MatButtonModule, TranslatePipe],
 })
-export class ConfirmDeleteUserComponent {
-  data = inject(MAT_DIALOG_DATA);
+export class ConfirmDeleteComponent {
+  data: ConfirmDeleteDialogData = inject(MAT_DIALOG_DATA);
 }

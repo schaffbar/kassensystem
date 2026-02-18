@@ -43,7 +43,7 @@
         <mat-label>{{ 'tools.shared.toolProperties.rfidReader' | translate }}</mat-label>
         <mat-select id="rfidReaderId" formControlName="rfidReaderId">
           <mat-option value="">--</mat-option>
-          @for (rfidReader of rfidReaders; track rfidReader.id) {
+          @for (rfidReader of rfidReaders(); track rfidReader.id) {
             <mat-option [value]="rfidReader.id">
               {{ rfidReader.name }}
             </mat-option>

@@ -13,7 +13,8 @@ import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 
 import { ROUTE } from '../../../app.routes';
 import { ConfirmDeleteComponent } from '../../../shared/components/confirm-delete/confirm-delete.component';
-import { Tool } from '../../tool.model';
+import { NewToolFormComponent } from '../../components/new-tool-form/new-tool-form.component';
+import { CreateToolCommand, Tool } from '../../tool.model';
 import { ToolsStore } from '../../tools.store';
 
 @Component({
@@ -60,7 +61,16 @@ export class ToolListComponent {
   }
 
   protected newToolDialog(): void {
-    console.log('Open new tool dialog');
+    const dialogRef = this.dialog.open(NewToolFormComponent, {
+      minWidth: '600px',
+      disableClose: true,
+    });
+
+    dialogRef.afterClosed().subscribe((result: CreateToolCommand | null) => {
+      if (result) {
+        this.store.createTool(result);
+      }
+    });
   }
 
   protected deleteToolDialog(event: Event, tool: Tool): void {

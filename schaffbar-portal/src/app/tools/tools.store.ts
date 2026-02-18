@@ -7,7 +7,7 @@ import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { exhaustMap, pipe, tap } from 'rxjs';
 
 import { setError, setFulfilled, setPending, withRequestStatus } from '../shared/state/request-status.feature';
-import { Tool } from './tool.model';
+import { CreateToolCommand, Tool } from './tool.model';
 import { ToolsService } from './tools.service';
 
 export const ToolsStore = signalStore(
@@ -35,11 +35,11 @@ export const ToolsStore = signalStore(
     ),
   })),
   withMethods((store) => ({
-    createTool: rxMethod<Tool>(
+    createTool: rxMethod<CreateToolCommand>(
       pipe(
         tap(() => patchState(store, setPending())),
-        exhaustMap((tool: Tool) => {
-          return store._toolsService.createTool(tool).pipe(
+        exhaustMap((command: CreateToolCommand) => {
+          return store._toolsService.createTool(command).pipe(
             tapResponse({
               next: () => patchState(store, setFulfilled()),
               error: (error: { message: string }) => patchState(store, setError(error.message)),

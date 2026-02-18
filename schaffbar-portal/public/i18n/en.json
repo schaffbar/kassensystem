@@ -146,6 +146,9 @@
       "addTool": "Add Tool"
     },
     "dialogs": {
+      "addTool": {
+        "title": "Add New Tool"
+      },
       "deleteTool": {
         "title": "Delete Tool",
         "message": "Are you sure you want to delete this tool?"

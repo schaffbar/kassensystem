@@ -146,6 +146,9 @@
       "addTool": "Werkzeug hinzufügen"
     },
     "dialogs": {
+      "addTool": {
+        "title": "Neues Werkzeug hinzufügen"
+      },
       "deleteTool": {
         "title": "Werkzeug löschen",
         "message": "Sind Sie sicher, dass Sie dieses Werkzeug löschen möchten?"

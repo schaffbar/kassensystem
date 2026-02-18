@@ -1,0 +1,64 @@
+<h2 mat-dialog-title>{{ 'tools.dialogs.addTool.title' | translate }}</h2>
+
+<mat-divider></mat-divider>
+
+<mat-dialog-content [formGroup]="toolForm">
+  <div class="row">
+    <div class="col">
+      <mat-form-field class="full-width">
+        <mat-label>{{ 'tools.shared.toolProperties.name' | translate }}</mat-label>
+        <input
+          id="name"
+          matInput
+          [placeholder]="'tools.shared.toolProperties.name' | translate"
+          formControlName="name" />
+        @if (toolForm.controls['name'].hasError('required')) {
+          <mat-error>
+            {{ 'tools.shared.toolProperties.name' | translate }}
+            {{ 'shared.dialogs.errors.required' | translate }}
+          </mat-error>
+        }
+      </mat-form-field>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col">
+      <mat-form-field class="full-width">
+        <mat-label>{{ 'tools.shared.toolProperties.description' | translate }}</mat-label>
+        <textarea
+          id="description"
+          matInput
+          [placeholder]="'tools.shared.toolProperties.description' | translate"
+          formControlName="description"
+          rows="2">
+        </textarea>
+      </mat-form-field>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col">
+      <mat-form-field class="full-width">
+        <mat-label>{{ 'tools.shared.toolProperties.rfidReader' | translate }}</mat-label>
+        <mat-select id="rfidReaderId" formControlName="rfidReaderId">
+          <mat-option value="">--</mat-option>
+          @for (rfidReader of rfidReaders; track rfidReader.id) {
+            <mat-option [value]="rfidReader.id">
+              {{ rfidReader.name }}
+            </mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+    </div>
+  </div>
+</mat-dialog-content>
+
+<mat-dialog-actions>
+  <button mat-flat-button color="primary" (click)="save()">
+    {{ 'shared.dialogs.actions.edit.confirm' | translate }}
+  </button>
+  <button mat-stroked-button [mat-dialog-close]="null" cdkFocusInitial>
+    {{ 'shared.dialogs.actions.edit.cancel' | translate }}
+  </button>
+</mat-dialog-actions>

@@ -44,7 +44,8 @@ public interface ToolApiModel extends ValueObjectMapper {
 
     record CreateToolRequestBody( //
             @NotBlank String name, //
-            String description //
+            String description, //
+            String rfidReaderId //
     ) {}
 
     record UpdateToolRequestBody( //

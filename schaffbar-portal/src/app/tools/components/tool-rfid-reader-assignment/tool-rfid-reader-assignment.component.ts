@@ -12,16 +12,7 @@ import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 
 import { RfidReader, RfidReaderType } from '../../../rfid-readers/rfid-reader.model';
 import { ConfirmDeleteComponent } from '../../../shared/components/confirm-delete/confirm-delete.component';
-import { Tool } from '../../tool.model';
-
-export interface ChangeRfidReaderCommand {
-  toolId: string;
-  rfidReaderId?: string;
-}
-
-export interface ClearRfidReaderCommand {
-  toolId: string;
-}
+import { ChangeRfidReaderCommand, Tool } from '../../tool.model';
 
 @Component({
   selector: 'schbar-tool-rfid-reader-assignment',
@@ -46,7 +37,7 @@ export class ToolRfidReaderAssignmentComponent {
   assignedRfidReaderIds = input<Set<string>>(new Set());
 
   rfidReaderChanged = output<ChangeRfidReaderCommand>();
-  rfidReaderCleared = output<ClearRfidReaderCommand>();
+  rfidReaderCleared = output<string>();
 
   protected selectedRfidReaderId = signal('');
 
@@ -98,9 +89,7 @@ export class ToolRfidReaderAssignmentComponent {
 
     dialogRef.afterClosed().subscribe((result: boolean) => {
       if (result) {
-        this.rfidReaderCleared.emit({
-          toolId: this.tool().id,
-        });
+        this.rfidReaderCleared.emit(this.tool().id);
       }
     });
   }

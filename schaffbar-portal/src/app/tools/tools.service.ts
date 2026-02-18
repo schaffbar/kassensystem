@@ -4,9 +4,7 @@ import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
 import { environment } from '../../environments/environment';
-import { UpdateToolCommand } from './components/tool-detail-info/tool-detail-info.component';
-import { ChangeRfidReaderCommand } from './components/tool-rfid-reader-assignment/tool-rfid-reader-assignment.component';
-import { Tool } from './tool.model';
+import { ChangeRfidReaderCommand, CreateToolCommand, Tool, UpdateToolCommand } from './tool.model';
 
 const TOOLS_API_URL = `${environment.apiBaseUrl}/api/v1/tools`;
 
@@ -35,8 +33,8 @@ export class ToolsService {
   // --------------------------------------------------------------------------
   // commands
 
-  createTool(tool: Tool): Observable<Tool> {
-    return this.http.post<Tool>(TOOLS_API_URL, tool, this.httpOptions);
+  createTool(command: CreateToolCommand): Observable<Tool> {
+    return this.http.post<Tool>(TOOLS_API_URL, command, this.httpOptions);
   }
 
   updateTool(command: UpdateToolCommand): Observable<void> {
@@ -44,15 +42,13 @@ export class ToolsService {
   }
 
   changeRfidReader(command: ChangeRfidReaderCommand): Observable<void> {
-    return this.http.put<void>(
-      `${TOOLS_API_URL}/${command.toolId}/rfid-reader/${command.rfidReaderId}`,
-      command,
-      this.httpOptions,
-    );
+    const url = `${TOOLS_API_URL}/${command.toolId}/rfid-reader/${command.rfidReaderId}`;
+    return this.http.put<void>(url, {}, this.httpOptions);
   }
 
   clearRfidReader(toolId: string): Observable<void> {
-    return this.http.put<void>(`${TOOLS_API_URL}/${toolId}/rfid-reader/clear`, {}, this.httpOptions);
+    const url = `${TOOLS_API_URL}/${toolId}/rfid-reader/clear`;
+    return this.http.put<void>(url, {}, this.httpOptions);
   }
 
   deleteTool(id: string): Observable<void> {

@@ -7,15 +7,9 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { TranslatePipe } from '@ngx-translate/core';
 
 import { RfidReaderStore } from '../../../rfid-readers/rfid-readers.store';
-import {
-  ToolDetailInfoComponent,
-  UpdateToolCommand,
-} from '../../components/tool-detail-info/tool-detail-info.component';
-import {
-  ChangeRfidReaderCommand,
-  ClearRfidReaderCommand,
-  ToolRfidReaderAssignmentComponent,
-} from '../../components/tool-rfid-reader-assignment/tool-rfid-reader-assignment.component';
+import { ToolDetailInfoComponent } from '../../components/tool-detail-info/tool-detail-info.component';
+import { ToolRfidReaderAssignmentComponent } from '../../components/tool-rfid-reader-assignment/tool-rfid-reader-assignment.component';
+import { ChangeRfidReaderCommand, UpdateToolCommand } from '../../tool.model';
 import { ToolsStore } from '../../tools.store';
 import { ToolDetailStore } from './tool-detail.store';
 
@@ -71,7 +65,7 @@ export class ToolDetailComponent {
     this.detailsStore.changeRfidReader(command);
   }
 
-  protected onRfidReaderCleared(command: ClearRfidReaderCommand): void {
-    this.detailsStore.clearRfidReader(command);
+  protected onRfidReaderCleared(toolId: string): void {
+    this.detailsStore.clearRfidReader(toolId);
   }
 }

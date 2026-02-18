@@ -6,12 +6,7 @@ import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { exhaustMap, filter, pipe, tap } from 'rxjs';
 
 import { setError, setFulfilled, setPending, withRequestStatus } from '../../../shared/state/request-status.feature';
-import { UpdateToolCommand } from '../../components/tool-detail-info/tool-detail-info.component';
-import {
-  ChangeRfidReaderCommand,
-  ClearRfidReaderCommand,
-} from '../../components/tool-rfid-reader-assignment/tool-rfid-reader-assignment.component';
-import { Tool } from '../../tool.model';
+import { ChangeRfidReaderCommand, Tool, UpdateToolCommand } from '../../tool.model';
 import { ToolsService } from '../../tools.service';
 
 interface ToolDetailState {
@@ -86,11 +81,11 @@ export const ToolDetailStore = signalStore(
         }),
       ),
     ),
-    clearRfidReader: rxMethod<ClearRfidReaderCommand>(
+    clearRfidReader: rxMethod<string>(
       pipe(
         tap(() => patchState(store, setPending())),
-        exhaustMap((command: ClearRfidReaderCommand) => {
-          return store._toolsService.clearRfidReader(command.toolId).pipe(
+        exhaustMap((toolId: string) => {
+          return store._toolsService.clearRfidReader(toolId).pipe(
             tapResponse({
               next: () => {
                 patchState(store, setFulfilled(), setDirty());

@@ -7,13 +7,7 @@ import { MatInputModule } from '@angular/material/input';
 
 import { TranslatePipe } from '@ngx-translate/core';
 
-import { Tool } from '../../tool.model';
-
-export interface UpdateToolCommand {
-  id: string;
-  name?: string;
-  description?: string;
-}
+import { Tool, UpdateToolCommand } from '../../tool.model';
 
 @Component({
   selector: 'schbar-tool-detail-info',

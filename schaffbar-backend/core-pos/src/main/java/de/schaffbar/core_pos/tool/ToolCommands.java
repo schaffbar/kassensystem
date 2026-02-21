@@ -9,12 +9,19 @@ public interface ToolCommands {
     record CreateToolCommand( //
             @NotBlank String name,  //
             String description, //
-            @Valid RfidReaderId rfidReaderId //
+            @Valid RfidReaderId rfidReaderId, //
+            WlanRelaisType wlanRelaisType, //
+            String ipAddress //
     ) {}
 
     record UpdateToolCommand( //
             @NotBlank String name,  //
             String description //
+    ) {}
+
+    record UpdateWlanRelaisCommand( //
+            WlanRelaisType wlanRelaisType, //
+            String ipAddress //
     ) {}
 
 }

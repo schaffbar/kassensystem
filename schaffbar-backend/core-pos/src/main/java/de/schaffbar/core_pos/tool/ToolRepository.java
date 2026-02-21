@@ -13,6 +13,8 @@ interface ToolRepository extends JpaRepository<Tool, UUID> {
 
     Optional<Tool> findByName(String name);
 
+    Optional<Tool> findByIpAddress(String ipAddress);
+
     List<Tool> findByRfidReaderId(UUID rfidReaderId);
 
     default Optional<Tool> findByRfidReaderId(RfidReaderId rfidReaderId) {

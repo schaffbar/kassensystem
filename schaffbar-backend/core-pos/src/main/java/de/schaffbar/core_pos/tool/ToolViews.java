@@ -25,7 +25,11 @@ public interface ToolViews {
             @NotNull ToolId id, //
             @NotBlank String name, //
             String description, //
-            RfidReaderId rfidReaderId //
+            RfidReaderId rfidReaderId, //
+            String ipAddress, //
+            String httpStartCommand, //
+            String onCommand, //
+            String offCommand //
     ) {}
 
 }

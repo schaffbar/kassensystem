@@ -1,6 +1,7 @@
 package de.schaffbar.core_pos.tool;
 
 import static java.util.Objects.nonNull;
+import static org.apache.commons.lang3.BooleanUtils.isFalse;
 
 import java.util.List;
 import java.util.Optional;
@@ -10,6 +11,7 @@ import de.schaffbar.core_pos.shared.id.RfidReaderId;
 import de.schaffbar.core_pos.shared.id.ToolId;
 import de.schaffbar.core_pos.tool.ToolCommands.CreateToolCommand;
 import de.schaffbar.core_pos.tool.ToolCommands.UpdateToolCommand;
+import de.schaffbar.core_pos.tool.ToolCommands.UpdateWlanRelaisCommand;
 import de.schaffbar.core_pos.tool.ToolViews.ToolView;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
@@ -58,7 +60,10 @@ public class ToolService {
                     .ifPresent(existingTool -> throwRfidReaderAlreadyAssignedException(command.rfidReaderId(), existingTool));
         }
 
-        // TODO: check if WLAN-Relais configuration (ip address, port) is already used by another tool
+        if (nonNull(command.ipAddress())) {
+            this.toolRepository.findByIpAddress(command.ipAddress()) //
+                    .ifPresent(existingTool -> throwIpAddressAlreadyUsedException(command.ipAddress(), existingTool));
+        }
 
         Tool tool = Tool.of(command);
         Tool savedTool = this.toolRepository.save(tool);
@@ -72,6 +77,20 @@ public class ToolService {
                 .orElseThrow(() -> ResourceNotFoundException.tool(toolId));
 
         tool.update(command);
+    }
+
+    @Transactional
+    public void updateWlanRelais(@NotNull @Valid ToolId toolId, @NotNull @Valid UpdateWlanRelaisCommand command) {
+        Tool tool = this.toolRepository.findById(toolId.getValue()) //
+                .orElseThrow(() -> ResourceNotFoundException.tool(toolId));
+
+        if (nonNull(command.ipAddress())) {
+            this.toolRepository.findByIpAddress(command.ipAddress()) //
+                    .filter(existingTool -> isFalse(toolId.sameValueAs(existingTool.getId()))) //
+                    .ifPresent(existingTool -> throwIpAddressAlreadyUsedException(command.ipAddress(), existingTool));
+        }
+
+        tool.updateWlanRelais(command);
     }
 
     @Transactional
@@ -114,6 +133,10 @@ public class ToolService {
 
     private void throwRfidReaderAlreadyAssignedException(RfidReaderId rfidReaderId, Tool existingTool) {
         throw new IllegalStateException("RFID reader " + rfidReaderId + " is already assigned to tool " + existingTool.getId());
+    }
+
+    private void throwIpAddressAlreadyUsedException(String ipAddress, Tool existingTool) {
+        throw new IllegalStateException("IP address '" + ipAddress + "' is already used by tool " + existingTool.getId());
     }
 
 }

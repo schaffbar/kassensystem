@@ -8,10 +8,12 @@ import de.schaffbar.core_pos.shared.id.RfidReaderId;
 import de.schaffbar.core_pos.shared.id.ToolId;
 import de.schaffbar.core_pos.tool.ToolCommands.CreateToolCommand;
 import de.schaffbar.core_pos.tool.ToolCommands.UpdateToolCommand;
+import de.schaffbar.core_pos.tool.ToolCommands.UpdateWlanRelaisCommand;
 import de.schaffbar.core_pos.tool.ToolService;
 import de.schaffbar.core_pos.tool.web.ToolApiModel.CreateToolRequestBody;
 import de.schaffbar.core_pos.tool.web.ToolApiModel.ToolApiDto;
 import de.schaffbar.core_pos.tool.web.ToolApiModel.UpdateToolRequestBody;
+import de.schaffbar.core_pos.tool.web.ToolApiModel.UpdateWlanRelaisRequestBody;
 import de.schaffbar.core_pos.use_case.ToolAssignRfidReader;
 import de.schaffbar.core_pos.use_case.ToolCreate;
 import jakarta.validation.Valid;
@@ -83,6 +85,8 @@ public class ToolController {
         return ResponseEntity.noContent().build();
     }
 
+    // TODO: streamline with updateWlanRelais either by using a generic update for setting and clearing the WLAN relais and RFID reader
+    // or by introducing dedicated endpoints for setting and clearing the WLAN relais
     @PutMapping(value = "/{toolId}/rfid-reader/{rfidReaderId}")
     public ResponseEntity<Void> changeRfidReader(@PathVariable @NotNull @Valid ToolId toolId, @PathVariable @NotNull @Valid RfidReaderId rfidReaderId) {
         this.toolAssignRfidReader.process(toolId, rfidReaderId);
@@ -93,6 +97,15 @@ public class ToolController {
     @PutMapping(value = "/{toolId}/rfid-reader/clear")
     public ResponseEntity<Void> clearRfidReader(@PathVariable @NotNull @Valid ToolId toolId) {
         this.toolService.clearRfidReader(toolId);
+
+        return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping(value = "/{toolId}/wlan-relais", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Void> updateWlanRelais(@PathVariable @NotNull @Valid ToolId toolId,
+            @RequestBody @NotNull @Valid UpdateWlanRelaisRequestBody requestBody) {
+        UpdateWlanRelaisCommand command = ToolApiModel.MAPPER.toUpdateWlanRelaisCommand(requestBody);
+        this.toolService.updateWlanRelais(toolId, command);
 
         return ResponseEntity.noContent().build();
     }

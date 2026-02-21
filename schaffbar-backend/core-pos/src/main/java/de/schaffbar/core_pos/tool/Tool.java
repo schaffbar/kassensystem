@@ -10,6 +10,7 @@ import de.schaffbar.core_pos.shared.id.RfidReaderId;
 import de.schaffbar.core_pos.shared.id.ToolId;
 import de.schaffbar.core_pos.tool.ToolCommands.CreateToolCommand;
 import de.schaffbar.core_pos.tool.ToolCommands.UpdateToolCommand;
+import de.schaffbar.core_pos.tool.ToolCommands.UpdateWlanRelaisCommand;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
@@ -40,7 +41,13 @@ class Tool {
 
     private UUID rfidReaderId;
 
-    // TODO: add WLAN-Relais configuration
+    private String ipAddress;
+
+    private String httpStartCommand;
+
+    private String onCommand;
+
+    private String offCommand;
 
     @NotNull
     private Instant createdAt;
@@ -61,6 +68,10 @@ class Tool {
 
         if (nonNull(command.rfidReaderId())) {
             tool.setRfidReaderId(command.rfidReaderId().getValue());
+        }
+
+        if (nonNull(command.wlanRelaisType())) {
+            tool.applyWlanRelaisType(command.wlanRelaisType(), command.ipAddress());
         }
 
         return tool;
@@ -95,6 +106,36 @@ class Tool {
 
     public void clearRfidReader() {
         setRfidReaderId(null);
+    }
+
+    public void updateWlanRelais(UpdateWlanRelaisCommand command) {
+        if (isNull(command.wlanRelaisType())) {
+            clearWlanRelais();
+            return;
+        }
+
+        applyWlanRelaisType(command.wlanRelaisType(), command.ipAddress());
+    }
+
+    public void clearWlanRelais() {
+        setIpAddress(null);
+        setHttpStartCommand(null);
+        setOnCommand(null);
+        setOffCommand(null);
+    }
+
+    // ------------------------------------------------------------------------
+    // helper
+
+    private void applyWlanRelaisType(WlanRelaisType type, String ipAddress) {
+        if (isNull(ipAddress)) {
+            throw new IllegalArgumentException("IP address is required when WLAN-Relais type is set");
+        }
+
+        setIpAddress(ipAddress);
+        setHttpStartCommand(type.getHttpStartCommand());
+        setOnCommand(type.getOnCommand());
+        setOffCommand(type.getOffCommand());
     }
 
 }

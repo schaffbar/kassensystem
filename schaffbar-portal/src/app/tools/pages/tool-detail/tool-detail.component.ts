@@ -9,7 +9,8 @@ import { TranslatePipe } from '@ngx-translate/core';
 import { RfidReaderStore } from '../../../rfid-readers/rfid-readers.store';
 import { ToolDetailInfoComponent } from '../../components/tool-detail-info/tool-detail-info.component';
 import { ToolRfidReaderAssignmentComponent } from '../../components/tool-rfid-reader-assignment/tool-rfid-reader-assignment.component';
-import { ChangeRfidReaderCommand, UpdateToolCommand } from '../../tool.model';
+import { ToolWlanRelaisComponent } from '../../components/tool-wlan-relais/tool-wlan-relais.component';
+import { ChangeRfidReaderCommand, UpdateToolCommand, UpdateWlanRelaisCommand } from '../../tool.model';
 import { ToolsStore } from '../../tools.store';
 import { ToolDetailStore } from './tool-detail.store';
 
@@ -24,6 +25,7 @@ import { ToolDetailStore } from './tool-detail.store';
     TranslatePipe,
     ToolDetailInfoComponent,
     ToolRfidReaderAssignmentComponent,
+    ToolWlanRelaisComponent,
   ],
   providers: [ToolDetailStore],
 })
@@ -67,5 +69,9 @@ export class ToolDetailComponent {
 
   protected onRfidReaderCleared(toolId: string): void {
     this.detailsStore.clearRfidReader(toolId);
+  }
+
+  protected onWlanRelaisUpdated(command: UpdateWlanRelaisCommand): void {
+    this.detailsStore.updateWlanRelais(command);
   }
 }

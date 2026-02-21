@@ -1,0 +1,67 @@
+<h3 class="wlan-relais-header">
+  {{ 'tools.pages.toolDetails.headers.wlanRelais' | translate }}
+</h3>
+
+<div class="wlan-relais-content">
+  <div class="row">
+    <div class="col">
+      <mat-form-field class="full-width" [floatLabel]="'always'" [hideRequiredMarker]="true">
+        <mat-label>{{ 'tools.shared.toolProperties.wlanRelaisType' | translate }}</mat-label>
+        <mat-select id="wlanRelaisType" [ngModel]="selectedType()" (ngModelChange)="selectedType.set($event)">
+          <mat-option value="">--</mat-option>
+          @for (type of wlanRelaisTypes; track type) {
+            <mat-option [value]="type">
+              {{ 'tools.wlanRelaisTypes.' + type | translate }}
+            </mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+    </div>
+  </div>
+
+  @if (selectedType()) {
+    <div class="row">
+      <div class="col">
+        <mat-form-field class="full-width" [floatLabel]="'always'" [hideRequiredMarker]="true">
+          <mat-label>{{ 'tools.shared.toolProperties.ipAddress' | translate }}</mat-label>
+          <input id="ipAddress" matInput [ngModel]="ipAddress()" (ngModelChange)="ipAddress.set($event)" />
+        </mat-form-field>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col">
+        <mat-form-field class="full-width" [floatLabel]="'always'" [hideRequiredMarker]="true">
+          <mat-label>{{ 'tools.shared.toolProperties.httpStartCommand' | translate }}</mat-label>
+          <input matInput [value]="derivedCommands().httpStartCommand" readonly />
+        </mat-form-field>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col">
+        <mat-form-field class="full-width" [floatLabel]="'always'" [hideRequiredMarker]="true">
+          <mat-label>{{ 'tools.shared.toolProperties.onCommand' | translate }}</mat-label>
+          <input matInput [value]="derivedCommands().onCommand" readonly />
+        </mat-form-field>
+      </div>
+      <div class="col">
+        <mat-form-field class="full-width" [floatLabel]="'always'" [hideRequiredMarker]="true">
+          <mat-label>{{ 'tools.shared.toolProperties.offCommand' | translate }}</mat-label>
+          <input matInput [value]="derivedCommands().offCommand" readonly />
+        </mat-form-field>
+      </div>
+    </div>
+  }
+
+  @if (isDirty() && isValid()) {
+    <div class="wlan-relais-actions">
+      <button mat-stroked-button (click)="onCancel()">
+        {{ 'shared.dialogs.actions.edit.cancel' | translate }}
+      </button>
+      <button mat-flat-button color="primary" (click)="onSave()">
+        {{ 'shared.dialogs.actions.edit.confirm' | translate }}
+      </button>
+    </div>
+  }
+</div>

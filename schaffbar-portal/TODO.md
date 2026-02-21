@@ -1,12 +1,17 @@
-- IMPORTANT tools store is used in tool list and tool details. Is it the same instance?
+- [Frontend]
+- [Backend]
 
-- add WLAN Relais information to tool and add dialog
+- [Frontend] validate ip address
+- [Frontend] make derived/disabled values grey
+- [Frontend] bugfix: wlan-relais type -- then Shelly 1 then -- no actions
+
+- [Frontend] IMPORTANT tools store is used in tool list and tool details. Is it the same instance?
+- [Backend] Problems API
+- [Frontend] handle API errors
+- [Frontend] Action feedback - Snackbar?
 
 - [Frontend] check required properties in all entities and forms (update)
 - [Backend] when changing type of rfid reader from switch box to other, check if this rfid reader is already assigned to a tool. if yes reject request
-- [Backend] Problems API
-- [Frontend] handle API errors
-- [Frontend] Snackbar
 
 TODO:
 

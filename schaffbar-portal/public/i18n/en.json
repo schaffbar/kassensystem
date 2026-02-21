@@ -164,6 +164,11 @@
     "tooltips": {
       "clearRfidReader": "Clear RFID Reader Assignment"
     },
+    "wlanRelaisTypes": {
+      "SHELLY_1": "Shelly 1",
+      "SHELLY_2": "Shelly 2",
+      "SHELLY_PRO": "Shelly Pro"
+    },
     "tabGroups": {
       "toolDetails": {
         "detailsTab": "Details",
@@ -174,7 +179,8 @@
       "toolDetails": {
         "headers": {
           "toolInformation": "Tool Information",
-          "rfidReaderAssignment": "RFID Reader"
+          "rfidReaderAssignment": "RFID Reader",
+          "wlanRelais": "WLAN Relais"
         },
         "messages": {
           "alreadyAssigned": "already assigned",
@@ -186,7 +192,12 @@
       "toolProperties": {
         "name": "Name",
         "description": "Description",
-        "rfidReader": "RFID Reader"
+        "rfidReader": "RFID Reader",
+        "wlanRelaisType": "WLAN Relais Type",
+        "ipAddress": "IP Address",
+        "httpStartCommand": "HTTP Start Command",
+        "onCommand": "On Command",
+        "offCommand": "Off Command"
       }
     }
   },

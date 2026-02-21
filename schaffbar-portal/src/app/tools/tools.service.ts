@@ -4,7 +4,13 @@ import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
 import { environment } from '../../environments/environment';
-import { ChangeRfidReaderCommand, CreateToolCommand, Tool, UpdateToolCommand } from './tool.model';
+import {
+  ChangeRfidReaderCommand,
+  CreateToolCommand,
+  Tool,
+  UpdateToolCommand,
+  UpdateWlanRelaisCommand,
+} from './tool.model';
 
 const TOOLS_API_URL = `${environment.apiBaseUrl}/api/v1/tools`;
 
@@ -49,6 +55,11 @@ export class ToolsService {
   clearRfidReader(toolId: string): Observable<void> {
     const url = `${TOOLS_API_URL}/${toolId}/rfid-reader/clear`;
     return this.http.put<void>(url, {}, this.httpOptions);
+  }
+
+  updateWlanRelais(command: UpdateWlanRelaisCommand): Observable<void> {
+    const url = `${TOOLS_API_URL}/${command.toolId}/wlan-relais`;
+    return this.http.put<void>(url, command, this.httpOptions);
   }
 
   deleteTool(id: string): Observable<void> {

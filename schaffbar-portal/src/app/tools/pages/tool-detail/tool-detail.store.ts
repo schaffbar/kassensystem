@@ -6,7 +6,7 @@ import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { exhaustMap, filter, pipe, tap } from 'rxjs';
 
 import { setError, setFulfilled, setPending, withRequestStatus } from '../../../shared/state/request-status.feature';
-import { ChangeRfidReaderCommand, Tool, UpdateToolCommand } from '../../tool.model';
+import { ChangeRfidReaderCommand, Tool, UpdateToolCommand, UpdateWlanRelaisCommand } from '../../tool.model';
 import { ToolsService } from '../../tools.service';
 
 interface ToolDetailState {
@@ -86,6 +86,21 @@ export const ToolDetailStore = signalStore(
         tap(() => patchState(store, setPending())),
         exhaustMap((toolId: string) => {
           return store._toolsService.clearRfidReader(toolId).pipe(
+            tapResponse({
+              next: () => {
+                patchState(store, setFulfilled(), setDirty());
+              },
+              error: (error: { message: string }) => patchState(store, setError(error.message)),
+            }),
+          );
+        }),
+      ),
+    ),
+    updateWlanRelais: rxMethod<UpdateWlanRelaisCommand>(
+      pipe(
+        tap(() => patchState(store, setPending())),
+        exhaustMap((command: UpdateWlanRelaisCommand) => {
+          return store._toolsService.updateWlanRelais(command).pipe(
             tapResponse({
               next: () => {
                 patchState(store, setFulfilled(), setDirty());

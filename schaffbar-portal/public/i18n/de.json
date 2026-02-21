@@ -164,6 +164,11 @@
     "tooltips": {
       "clearRfidReader": "RFID-Lesegerät-Zuweisung aufheben"
     },
+    "wlanRelaisTypes": {
+      "SHELLY_1": "Shelly 1",
+      "SHELLY_2": "Shelly 2",
+      "SHELLY_PRO": "Shelly Pro"
+    },
     "tabGroups": {
       "toolDetails": {
         "detailsTab": "Details",
@@ -174,7 +179,8 @@
       "toolDetails": {
         "headers": {
           "toolInformation": "Werkzeuginformationen",
-          "rfidReaderAssignment": "RFID-Lesegerät"
+          "rfidReaderAssignment": "RFID-Lesegerät",
+          "wlanRelais": "WLAN-Relais"
         },
         "messages": {
           "alreadyAssigned": "bereits zugewiesen",
@@ -186,7 +192,12 @@
       "toolProperties": {
         "name": "Name",
         "description": "Beschreibung",
-        "rfidReader": "RFID-Lesegerät"
+        "rfidReader": "RFID-Lesegerät",
+        "wlanRelaisType": "WLAN-Relais-Typ",
+        "ipAddress": "IP-Adresse",
+        "httpStartCommand": "HTTP-Startbefehl",
+        "onCommand": "Ein-Befehl",
+        "offCommand": "Aus-Befehl"
       }
     }
   },

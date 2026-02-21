@@ -21,7 +21,9 @@
       </div>
     </mat-tab>
     <mat-tab [label]="'tools.tabGroups.toolDetails.wlanRelayTab' | translate">
-      <div class="tab-content"></div>
+      <div class="tab-content">
+        <schbar-tool-wlan-relais [tool]="tool" (wlanRelaisUpdated)="onWlanRelaisUpdated($event)" />
+      </div>
     </mat-tab>
   </mat-tab-group>
 }

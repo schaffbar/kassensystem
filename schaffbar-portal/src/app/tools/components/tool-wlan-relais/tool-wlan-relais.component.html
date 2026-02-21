@@ -24,7 +24,24 @@
       <div class="col">
         <mat-form-field class="full-width" [floatLabel]="'always'" [hideRequiredMarker]="true">
           <mat-label>{{ 'tools.shared.toolProperties.ipAddress' | translate }}</mat-label>
-          <input id="ipAddress" matInput [ngModel]="ipAddress()" (ngModelChange)="ipAddress.set($event)" />
+          <input
+            id="ipAddress"
+            matInput
+            [ngModel]="ipAddress()"
+            (ngModelChange)="ipAddress.set($event)"
+            (blur)="ipAddressTouched.set(true)"
+            [errorStateMatcher]="ipAddressErrorStateMatcher" />
+          @if (ipAddressTouched() && ipAddressRequired()) {
+            <mat-error>
+              {{ 'tools.shared.toolProperties.ipAddress' | translate }}
+              {{ 'shared.dialogs.errors.required' | translate }}
+            </mat-error>
+          }
+          @if (ipAddressTouched() && ipAddressInvalidPattern()) {
+            <mat-error>
+              {{ 'tools.pages.toolDetails.errors.invalidIpAddress' | translate }}
+            </mat-error>
+          }
         </mat-form-field>
       </div>
     </div>
@@ -54,7 +71,7 @@
     </div>
   }
 
-  @if (isDirty() && isValid()) {
+  @if (isDirty()) {
     <div class="wlan-relais-actions">
       <button mat-stroked-button (click)="onCancel()">
         {{ 'shared.dialogs.actions.edit.cancel' | translate }}

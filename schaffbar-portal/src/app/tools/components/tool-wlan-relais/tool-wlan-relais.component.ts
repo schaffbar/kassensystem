@@ -2,6 +2,7 @@ import { Component, computed, effect, input, output, signal } from '@angular/cor
 import { FormsModule } from '@angular/forms';
 
 import { MatButtonModule } from '@angular/material/button';
+import { ErrorStateMatcher } from '@angular/material/core';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
@@ -58,12 +59,32 @@ export class ToolWlanRelaisComponent {
     return this.selectedType() !== currentType || this.ipAddress() !== currentIp;
   });
 
+  private static readonly IP_PATTERN = /^((25[0-5]|2[0-4]\d|[01]?\d\d?)\.){3}(25[0-5]|2[0-4]\d|[01]?\d\d?)$/;
+
+  protected ipAddressTouched = signal(false);
+
+  protected ipAddressRequired = computed(() => {
+    return !!this.selectedType() && !this.ipAddress();
+  });
+
+  protected ipAddressInvalidPattern = computed(() => {
+    const ip = this.ipAddress();
+    if (!ip || !this.selectedType()) {
+      return false;
+    }
+    return !ToolWlanRelaisComponent.IP_PATTERN.test(ip);
+  });
+
+  protected ipAddressErrorStateMatcher: ErrorStateMatcher = {
+    isErrorState: () => this.ipAddressTouched() && (this.ipAddressRequired() || this.ipAddressInvalidPattern()),
+  };
+
   protected isValid = computed(() => {
     const type = this.selectedType();
     if (!type) {
-      return true; // clearing is valid
+      return true;
     }
-    return !!this.ipAddress();
+    return !this.ipAddressRequired() && !this.ipAddressInvalidPattern();
   });
 
   syncValues = effect(() => {
@@ -71,10 +92,16 @@ export class ToolWlanRelaisComponent {
   });
 
   protected onCancel(): void {
+    this.ipAddressTouched.set(false);
     this.setCurrentValuesFromTool();
   }
 
   protected onSave(): void {
+    this.ipAddressTouched.set(true);
+    if (!this.isValid()) {
+      return;
+    }
+
     const type = this.selectedType();
     const command: UpdateWlanRelaisCommand = {
       toolId: this.tool().id,

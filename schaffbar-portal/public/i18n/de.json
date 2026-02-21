@@ -185,6 +185,9 @@
         "messages": {
           "alreadyAssigned": "bereits zugewiesen",
           "alreadyAssignedError": "Dieses RFID-Lesegerät ist bereits einem anderen Werkzeug zugewiesen."
+        },
+        "errors": {
+          "invalidIpAddress": "Bitte geben Sie eine gültige IP-Adresse ein (z.B. 192.168.1.1)."
         }
       }
     },

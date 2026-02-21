@@ -55,7 +55,7 @@ class RfidReader {
 
     public static RfidReader of(MacAddress macAddress) {
         RfidReader rfidReader = new RfidReader();
-        rfidReader.setId(UUID.randomUUID());
+        rfidReader.setId(RfidReaderId.random().getValue());
         rfidReader.setMacAddress(macAddress.getValue());
         rfidReader.setCreatedAt(Instant.now());
 

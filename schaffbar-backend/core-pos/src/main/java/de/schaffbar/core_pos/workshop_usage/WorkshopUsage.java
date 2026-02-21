@@ -52,7 +52,7 @@ class WorkshopUsage { // TODO: Consider renaming to WorkshopSlot, or UsageSlot f
 
     public static WorkshopUsage of(CustomerId customerId, WorkshopSessionId workshopSessionId) {
         WorkshopUsage workshopUsage = new WorkshopUsage();
-        workshopUsage.setId(UUID.randomUUID());
+        workshopUsage.setId(WorkshopUsageId.random().getValue());
         workshopUsage.setCustomerId(customerId.getValue());
         workshopUsage.setWorkshopSessionId(workshopSessionId.getValue());
         workshopUsage.setEntryTime(Instant.now());

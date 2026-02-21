@@ -1,5 +1,7 @@
 package de.schaffbar.core_pos.tool;
 
+import static java.util.Objects.nonNull;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -48,6 +50,16 @@ public class ToolService {
 
     @Transactional
     public ToolId createTool(@NotNull @Valid CreateToolCommand command) {
+        this.toolRepository.findByName(command.name()) //
+                .ifPresent(existingTool -> throwToolNameAlreadyUsedException(command.name(), existingTool));
+
+        if (nonNull(command.rfidReaderId())) {
+            this.toolRepository.findByRfidReaderId(command.rfidReaderId()) //
+                    .ifPresent(existingTool -> throwRfidReaderAlreadyAssignedException(command.rfidReaderId(), existingTool));
+        }
+
+        // TODO: check if WLAN-Relais configuration (ip address, port) is already used by another tool
+
         Tool tool = Tool.of(command);
         Tool savedTool = this.toolRepository.save(tool);
 
@@ -95,6 +107,10 @@ public class ToolService {
 
     // ------------------------------------------------------------------------
     // helper
+
+    private void throwToolNameAlreadyUsedException(String name, Tool existingTool) {
+        throw new IllegalStateException("Tool name '" + name + "' is already used by tool " + existingTool.getId());
+    }
 
     private void throwRfidReaderAlreadyAssignedException(RfidReaderId rfidReaderId, Tool existingTool) {
         throw new IllegalStateException("RFID reader " + rfidReaderId + " is already assigned to tool " + existingTool.getId());

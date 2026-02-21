@@ -50,7 +50,7 @@ class WorkshopSession {
 
     public static WorkshopSession of(CustomerId customerId) {
         WorkshopSession workshopSession = new WorkshopSession();
-        workshopSession.setId(UUID.randomUUID());
+        workshopSession.setId(WorkshopSessionId.random().getValue());
         workshopSession.setCustomerId(customerId.getValue());
         workshopSession.setStartTime(Instant.now());
         workshopSession.setStatus(WorkshopSessionStatus.OPEN);

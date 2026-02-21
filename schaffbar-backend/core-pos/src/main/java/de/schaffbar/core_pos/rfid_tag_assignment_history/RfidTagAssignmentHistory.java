@@ -62,7 +62,7 @@ class RfidTagAssignmentHistory {
 
     public static RfidTagAssignmentHistory of(RfidTagAssignmentView activeRfidTagAssignment) {
         RfidTagAssignmentHistory result = new RfidTagAssignmentHistory();
-        result.setId(UUID.randomUUID());
+        result.setId(RfidTagAssignmentId.random().getValue());
         result.setCustomerId(activeRfidTagAssignment.customerId().getValue());
         result.setRfidTagId(activeRfidTagAssignment.rfidTagId().getValue());
         result.setAssignmentType(activeRfidTagAssignment.assignmentType());
@@ -75,6 +75,7 @@ class RfidTagAssignmentHistory {
     // ------------------------------------------------------------------------
     // query
 
+    // FIXME: change to RfidTagAssignmentHistoryId ???
     public RfidTagAssignmentId getId() {
         return RfidTagAssignmentId.of(this.id);
     }

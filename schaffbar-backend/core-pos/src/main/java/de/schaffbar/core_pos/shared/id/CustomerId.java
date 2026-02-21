@@ -17,6 +17,10 @@ public class CustomerId {
         this.value = id;
     }
 
+    public static CustomerId random() {
+        return new CustomerId(UUID.randomUUID());
+    }
+
     public boolean sameValueAs(CustomerId other) {
         if (isNull(other)) {
             return false;

@@ -1,6 +1,7 @@
 package de.schaffbar.core_pos.tool;
 
 import static java.util.Objects.isNull;
+import static java.util.Objects.nonNull;
 
 import java.time.Instant;
 import java.util.UUID;
@@ -53,10 +54,14 @@ class Tool {
 
     public static Tool of(CreateToolCommand command) {
         Tool tool = new Tool();
-        tool.setId(UUID.randomUUID());
+        tool.setId(ToolId.random().getValue());
         tool.setName(command.name());
         tool.setDescription(command.description());
         tool.setCreatedAt(Instant.now());
+
+        if (nonNull(command.rfidReaderId())) {
+            tool.setRfidReaderId(command.rfidReaderId().getValue());
+        }
 
         return tool;
     }

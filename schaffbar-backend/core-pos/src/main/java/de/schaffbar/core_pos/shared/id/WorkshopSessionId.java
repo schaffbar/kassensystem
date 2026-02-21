@@ -17,6 +17,10 @@ public class WorkshopSessionId {
         this.value = id;
     }
 
+    public static WorkshopSessionId random() {
+        return WorkshopSessionId.of(UUID.randomUUID());
+    }
+
     public boolean sameValueAs(WorkshopSessionId other) {
         if (isNull(other)) {
             return false;

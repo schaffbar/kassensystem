@@ -11,6 +11,8 @@ import org.springframework.stereotype.Repository;
 @Repository
 interface ToolRepository extends JpaRepository<Tool, UUID> {
 
+    Optional<Tool> findByName(String name);
+
     List<Tool> findByRfidReaderId(UUID rfidReaderId);
 
     default Optional<Tool> findByRfidReaderId(RfidReaderId rfidReaderId) {

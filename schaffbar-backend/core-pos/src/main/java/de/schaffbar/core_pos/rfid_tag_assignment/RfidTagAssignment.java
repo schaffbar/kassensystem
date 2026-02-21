@@ -58,7 +58,7 @@ class RfidTagAssignment {
 
     public static RfidTagAssignment of(CustomerId customerId, RfidTagAssignmentType assignmentType) {
         RfidTagAssignment result = new RfidTagAssignment();
-        result.setId(UUID.randomUUID());
+        result.setId(RfidTagAssignmentId.random().getValue());
         result.setCustomerId(customerId.getValue());
         result.setAssignmentType(assignmentType);
         result.setStatus(RfidTagAssignmentStatus.WAITING_FOR_ASSIGNMENT);

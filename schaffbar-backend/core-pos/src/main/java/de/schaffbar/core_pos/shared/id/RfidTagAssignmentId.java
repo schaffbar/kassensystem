@@ -17,6 +17,10 @@ public class RfidTagAssignmentId {
         this.value = id;
     }
 
+    public static RfidTagAssignmentId random() {
+        return RfidTagAssignmentId.of(UUID.randomUUID());
+    }
+
     public boolean sameValueAs(RfidTagAssignmentId other) {
         if (isNull(other)) {
             return false;

@@ -13,6 +13,7 @@ import de.schaffbar.core_pos.tool.web.ToolApiModel.CreateToolRequestBody;
 import de.schaffbar.core_pos.tool.web.ToolApiModel.ToolApiDto;
 import de.schaffbar.core_pos.tool.web.ToolApiModel.UpdateToolRequestBody;
 import de.schaffbar.core_pos.use_case.ToolAssignRfidReader;
+import de.schaffbar.core_pos.use_case.ToolCreate;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.NonNull;
@@ -36,6 +37,8 @@ import org.springframework.web.bind.annotation.RestController;
 public class ToolController {
 
     private final @NonNull ToolService toolService;
+
+    private final @NonNull ToolCreate toolCreate;
 
     private final @NonNull ToolAssignRfidReader toolAssignRfidReader;
 
@@ -66,7 +69,7 @@ public class ToolController {
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> createTool(@RequestBody @NotNull @Valid CreateToolRequestBody requestBody) {
         CreateToolCommand command = ToolApiModel.MAPPER.toCreateToolCommand(requestBody);
-        ToolId toolId = this.toolService.createTool(command);
+        ToolId toolId = this.toolCreate.process(command);
         URI location = URI.create("/api/v1/tools/" + toolId.getValue());
 
         return ResponseEntity.created(location).build();

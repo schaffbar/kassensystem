@@ -17,6 +17,10 @@ public class ToolId {
         this.value = id;
     }
 
+    public static ToolId random() {
+        return ToolId.of(UUID.randomUUID());
+    }
+
     public boolean sameValueAs(ToolId other) {
         if (isNull(other)) {
             return false;

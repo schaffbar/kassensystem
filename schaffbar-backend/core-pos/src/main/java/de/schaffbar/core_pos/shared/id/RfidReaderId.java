@@ -17,6 +17,10 @@ public class RfidReaderId {
         this.value = id;
     }
 
+    public static RfidReaderId random() {
+        return new RfidReaderId(UUID.randomUUID());
+    }
+    
     public boolean sameValueAs(RfidReaderId other) {
         if (isNull(other)) {
             return false;

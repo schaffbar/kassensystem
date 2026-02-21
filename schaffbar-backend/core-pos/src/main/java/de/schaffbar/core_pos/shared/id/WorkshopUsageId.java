@@ -17,6 +17,10 @@ public class WorkshopUsageId {
         this.value = id;
     }
 
+    public static WorkshopUsageId random() {
+        return WorkshopUsageId.of(UUID.randomUUID());
+    }
+
     public boolean sameValueAs(WorkshopUsageId other) {
         if (isNull(other)) {
             return false;

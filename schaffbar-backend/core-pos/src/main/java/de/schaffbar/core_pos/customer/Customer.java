@@ -62,15 +62,15 @@ class Customer {
 
     static Customer of(CreateCustomerCommand command) {
         Customer customer = new Customer();
-        customer.id = UUID.randomUUID();
-        customer.firstName = command.firstName();
-        customer.lastName = command.lastName();
-        customer.dateOfBirth = command.dateOfBirth();
-        customer.clubMember = command.clubMember();
-        customer.email = command.email();
-        customer.phone = command.phone();
-        customer.address = CustomerAddress.of(command);
-        customer.createdAt = Instant.now();
+        customer.setId(UUID.randomUUID());
+        customer.setFirstName(command.firstName());
+        customer.setLastName(command.lastName());
+        customer.setDateOfBirth(command.dateOfBirth());
+        customer.setClubMember(command.clubMember());
+        customer.setEmail(command.email());
+        customer.setPhone(command.phone());
+        customer.setAddress(CustomerAddress.of(command));
+        customer.setCreatedAt(Instant.now());
 
         return customer;
     }

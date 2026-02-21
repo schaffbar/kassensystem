@@ -43,7 +43,7 @@ export class ToolListComponent {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
-  protected displayedColumns = ['name', 'description', 'actions'];
+  protected displayedColumns = ['name', 'description', 'rfidReader', 'wlanRelaisType', 'actions'];
   protected toolsCount = computed(() => this.store.entities().length);
   protected dataSource = computed(() => {
     const result = new MatTableDataSource<Tool>(this.store.entities());

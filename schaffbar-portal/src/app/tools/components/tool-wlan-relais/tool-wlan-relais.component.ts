@@ -31,10 +31,28 @@ export class ToolWlanRelaisComponent {
 
   wlanRelaisUpdated = output<UpdateWlanRelaisCommand>();
 
+  private static readonly IP_PATTERN = /^((25[0-5]|2[0-4]\d|[01]?\d\d?)\.){3}(25[0-5]|2[0-4]\d|[01]?\d\d?)$/;
+
   protected readonly wlanRelaisTypes = Object.values(WlanRelaisType);
+  protected readonly ipAddressErrorStateMatcher: ErrorStateMatcher = {
+    isErrorState: () => this.ipAddressTouched() && (this.ipAddressRequired() || this.ipAddressInvalidPattern()),
+  };
 
   protected selectedType = signal<WlanRelaisType | ''>('');
   protected ipAddress = signal('');
+  protected ipAddressTouched = signal(false);
+
+  protected ipAddressRequired = computed(() => {
+    return !!this.selectedType() && !this.ipAddress();
+  });
+
+  protected ipAddressInvalidPattern = computed(() => {
+    const ip = this.ipAddress();
+    if (!ip || !this.selectedType()) {
+      return false;
+    }
+    return !ToolWlanRelaisComponent.IP_PATTERN.test(ip);
+  });
 
   protected derivedCommands = computed(() => {
     const type = this.selectedType();
@@ -58,26 +76,6 @@ export class ToolWlanRelaisComponent {
     const currentIp = tool.ipAddress || '';
     return this.selectedType() !== currentType || this.ipAddress() !== currentIp;
   });
-
-  private static readonly IP_PATTERN = /^((25[0-5]|2[0-4]\d|[01]?\d\d?)\.){3}(25[0-5]|2[0-4]\d|[01]?\d\d?)$/;
-
-  protected ipAddressTouched = signal(false);
-
-  protected ipAddressRequired = computed(() => {
-    return !!this.selectedType() && !this.ipAddress();
-  });
-
-  protected ipAddressInvalidPattern = computed(() => {
-    const ip = this.ipAddress();
-    if (!ip || !this.selectedType()) {
-      return false;
-    }
-    return !ToolWlanRelaisComponent.IP_PATTERN.test(ip);
-  });
-
-  protected ipAddressErrorStateMatcher: ErrorStateMatcher = {
-    isErrorState: () => this.ipAddressTouched() && (this.ipAddressRequired() || this.ipAddressInvalidPattern()),
-  };
 
   protected isValid = computed(() => {
     const type = this.selectedType();

@@ -48,7 +48,7 @@
 
     <div class="row">
       <div class="col">
-        <mat-form-field class="full-width" [floatLabel]="'always'" [hideRequiredMarker]="true">
+        <mat-form-field class="full-width readonly-field" [floatLabel]="'always'" [hideRequiredMarker]="true">
           <mat-label>{{ 'tools.shared.toolProperties.httpStartCommand' | translate }}</mat-label>
           <input matInput [value]="derivedCommands().httpStartCommand" readonly />
         </mat-form-field>
@@ -57,13 +57,13 @@
 
     <div class="row">
       <div class="col">
-        <mat-form-field class="full-width" [floatLabel]="'always'" [hideRequiredMarker]="true">
+        <mat-form-field class="full-width readonly-field" [floatLabel]="'always'" [hideRequiredMarker]="true">
           <mat-label>{{ 'tools.shared.toolProperties.onCommand' | translate }}</mat-label>
           <input matInput [value]="derivedCommands().onCommand" readonly />
         </mat-form-field>
       </div>
       <div class="col">
-        <mat-form-field class="full-width" [floatLabel]="'always'" [hideRequiredMarker]="true">
+        <mat-form-field class="full-width readonly-field" [floatLabel]="'always'" [hideRequiredMarker]="true">
           <mat-label>{{ 'tools.shared.toolProperties.offCommand' | translate }}</mat-label>
           <input matInput [value]="derivedCommands().offCommand" readonly />
         </mat-form-field>

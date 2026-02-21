@@ -1,8 +1,6 @@
 - [Frontend]
 - [Backend]
 
-- [Frontend] validate ip address
-- [Frontend] make derived/disabled values grey
 - [Frontend] bugfix: wlan-relais type -- then Shelly 1 then -- no actions
 
 - [Frontend] IMPORTANT tools store is used in tool list and tool details. Is it the same instance?

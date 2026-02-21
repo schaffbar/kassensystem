@@ -1,8 +1,7 @@
-import { Component, computed, effect, input, output, signal } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { Component, computed, effect, inject, input, output } from '@angular/core';
+import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 
 import { MatButtonModule } from '@angular/material/button';
-import { ErrorStateMatcher } from '@angular/material/core';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
@@ -11,6 +10,8 @@ import { MatSelectModule } from '@angular/material/select';
 import { TranslatePipe } from '@ngx-translate/core';
 
 import { Tool, UpdateWlanRelaisCommand, WLAN_RELAIS_TEMPLATES, WlanRelaisType } from '../../tool.model';
+
+const IP_PATTERN = /^((25[0-5]|2[0-4]\d|[01]?\d\d?)\.){3}(25[0-5]|2[0-4]\d|[01]?\d\d?)$/;
 
 @Component({
   selector: 'schbar-tool-wlan-relais',
@@ -22,47 +23,31 @@ import { Tool, UpdateWlanRelaisCommand, WLAN_RELAIS_TEMPLATES, WlanRelaisType } 
     MatInputModule,
     MatButtonModule,
     MatIconModule,
-    FormsModule,
+    ReactiveFormsModule,
     TranslatePipe,
   ],
 })
 export class ToolWlanRelaisComponent {
+  private readonly fb = inject(NonNullableFormBuilder);
+
   tool = input.required<Tool>();
 
   wlanRelaisUpdated = output<UpdateWlanRelaisCommand>();
 
-  private static readonly IP_PATTERN = /^((25[0-5]|2[0-4]\d|[01]?\d\d?)\.){3}(25[0-5]|2[0-4]\d|[01]?\d\d?)$/;
-
   protected readonly wlanRelaisTypes = Object.values(WlanRelaisType);
-  protected readonly ipAddressErrorStateMatcher: ErrorStateMatcher = {
-    isErrorState: () => this.ipAddressTouched() && (this.ipAddressRequired() || this.ipAddressInvalidPattern()),
-  };
 
-  protected selectedType = signal<WlanRelaisType | ''>('');
-  protected ipAddress = signal('');
-  protected ipAddressTouched = signal(false);
-
-  protected ipAddressRequired = computed(() => {
-    return !!this.selectedType() && !this.ipAddress();
-  });
-
-  protected ipAddressInvalidPattern = computed(() => {
-    const ip = this.ipAddress();
-    if (!ip || !this.selectedType()) {
-      return false;
-    }
-    return !ToolWlanRelaisComponent.IP_PATTERN.test(ip);
+  protected form = this.fb.group({
+    wlanRelaisType: [''],
+    ipAddress: ['', [Validators.required, Validators.pattern(IP_PATTERN)]],
   });
 
   protected derivedCommands = computed(() => {
-    const type = this.selectedType();
-    const ip = this.ipAddress();
+    const type = this.form.controls.wlanRelaisType.value as WlanRelaisType | '';
+    const ip = this.form.controls.ipAddress.value;
     if (!type) {
       return { httpStartCommand: '', onCommand: '', offCommand: '' };
     }
-
     const template = WLAN_RELAIS_TEMPLATES[type];
-
     return {
       httpStartCommand: template.httpStartCommand.replace('{{ipAddress}}', ip || ''),
       onCommand: template.onCommand,
@@ -70,54 +55,44 @@ export class ToolWlanRelaisComponent {
     };
   });
 
-  protected isDirty = computed(() => {
-    const tool = this.tool();
-    const currentType = tool.wlanRelaisType || '';
-    const currentIp = tool.ipAddress || '';
-    return this.selectedType() !== currentType || this.ipAddress() !== currentIp;
-  });
-
-  protected isValid = computed(() => {
-    const type = this.selectedType();
-    if (!type) {
-      return true;
-    }
-    return !this.ipAddressRequired() && !this.ipAddressInvalidPattern();
-  });
-
   syncValues = effect(() => {
-    this.setCurrentValuesFromTool();
+    this.resetFormFromTool();
   });
 
-  clearIpAddress = effect(() => {
-    if (!this.selectedType()) {
-      this.ipAddress.set('');
-    }
-  });
+  protected isDirty(): boolean {
+    const tool = this.tool();
+    return (
+      this.form.controls.wlanRelaisType.value !== (tool.wlanRelaisType || '') ||
+      this.form.controls.ipAddress.value !== (tool.ipAddress || '')
+    );
+  }
 
   protected onCancel(): void {
-    this.ipAddressTouched.set(false);
-    this.setCurrentValuesFromTool();
+    this.resetFormFromTool();
   }
 
   protected onSave(): void {
-    this.ipAddressTouched.set(true);
-    if (!this.isValid()) {
-      return;
+    const type = this.form.controls.wlanRelaisType.value;
+    if (type) {
+      this.form.controls.ipAddress.markAsTouched();
+      if (this.form.controls.ipAddress.invalid) {
+        return;
+      }
     }
 
-    const type = this.selectedType();
     const command: UpdateWlanRelaisCommand = {
       toolId: this.tool().id,
-      wlanRelaisType: type || undefined,
-      ipAddress: type ? this.ipAddress() || undefined : undefined,
+      wlanRelaisType: (type as WlanRelaisType) || undefined,
+      ipAddress: type ? this.form.controls.ipAddress.value || undefined : undefined,
     };
     this.wlanRelaisUpdated.emit(command);
   }
 
-  private setCurrentValuesFromTool(): void {
+  private resetFormFromTool(): void {
     const tool = this.tool();
-    this.selectedType.set(tool.wlanRelaisType || '');
-    this.ipAddress.set(tool.ipAddress || '');
+    this.form.reset({
+      wlanRelaisType: tool.wlanRelaisType || '',
+      ipAddress: tool.ipAddress || '',
+    });
   }
 }

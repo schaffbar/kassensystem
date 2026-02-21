@@ -2,12 +2,12 @@
   {{ 'tools.pages.toolDetails.headers.wlanRelais' | translate }}
 </h3>
 
-<div class="wlan-relais-content">
+<div class="wlan-relais-content" [formGroup]="form">
   <div class="row">
     <div class="col">
       <mat-form-field class="full-width" [floatLabel]="'always'" [hideRequiredMarker]="true">
         <mat-label>{{ 'tools.shared.toolProperties.wlanRelaisType' | translate }}</mat-label>
-        <mat-select id="wlanRelaisType" [ngModel]="selectedType()" (ngModelChange)="selectedType.set($event)">
+        <mat-select id="wlanRelaisType" formControlName="wlanRelaisType">
           <mat-option value="">--</mat-option>
           @for (type of wlanRelaisTypes; track type) {
             <mat-option [value]="type">
@@ -19,25 +19,19 @@
     </div>
   </div>
 
-  @if (selectedType()) {
+  @if (form.controls.wlanRelaisType.value) {
     <div class="row">
       <div class="col">
         <mat-form-field class="full-width" [floatLabel]="'always'" [hideRequiredMarker]="true">
           <mat-label>{{ 'tools.shared.toolProperties.ipAddress' | translate }}</mat-label>
-          <input
-            id="ipAddress"
-            matInput
-            [ngModel]="ipAddress()"
-            (ngModelChange)="ipAddress.set($event)"
-            (blur)="ipAddressTouched.set(true)"
-            [errorStateMatcher]="ipAddressErrorStateMatcher" />
-          @if (ipAddressTouched() && ipAddressRequired()) {
+          <input id="ipAddress" matInput formControlName="ipAddress" />
+          @if (form.controls.ipAddress.hasError('required')) {
             <mat-error>
               {{ 'tools.shared.toolProperties.ipAddress' | translate }}
               {{ 'shared.dialogs.errors.required' | translate }}
             </mat-error>
           }
-          @if (ipAddressTouched() && ipAddressInvalidPattern()) {
+          @if (form.controls.ipAddress.hasError('pattern')) {
             <mat-error>
               {{ 'tools.pages.toolDetails.errors.invalidIpAddress' | translate }}
             </mat-error>

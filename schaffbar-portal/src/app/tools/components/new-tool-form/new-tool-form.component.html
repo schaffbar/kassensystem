@@ -18,6 +18,11 @@
             {{ 'shared.dialogs.errors.required' | translate }}
           </mat-error>
         }
+        @if (toolForm.controls['name'].hasError('nameExists')) {
+          <mat-error>
+            {{ 'tools.dialogs.addTool.errors.nameExists' | translate }}
+          </mat-error>
+        }
       </mat-form-field>
     </div>
   </div>
@@ -46,9 +51,17 @@
           @for (rfidReader of rfidReaders(); track rfidReader.id) {
             <mat-option [value]="rfidReader.id">
               {{ rfidReader.name }}
+              @if (rfidReader.alreadyAssigned) {
+                ({{ 'tools.pages.toolDetails.messages.alreadyAssigned' | translate }})
+              }
             </mat-option>
           }
         </mat-select>
+        @if (toolForm.controls['rfidReaderId'].hasError('alreadyAssigned')) {
+          <mat-error>
+            {{ 'tools.pages.toolDetails.messages.alreadyAssignedError' | translate }}
+          </mat-error>
+        }
       </mat-form-field>
     </div>
   </div>

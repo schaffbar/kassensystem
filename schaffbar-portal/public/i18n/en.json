@@ -147,7 +147,10 @@
     },
     "dialogs": {
       "addTool": {
-        "title": "Add New Tool"
+        "title": "Add New Tool",
+        "errors": {
+          "nameExists": "A tool with this name already exists."
+        }
       },
       "deleteTool": {
         "title": "Delete Tool",

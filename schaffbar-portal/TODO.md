@@ -1,8 +1,12 @@
 - IMPORTANT tools store is used in tool list and tool details. Is it the same instance?
 
-- when changing type of rfid reader from switch box to other, check if this rfid reader is already assigned to a tool. if yes reject request
-- check required properties in all entities and forms (update)
-- implement add tool button
+- add WLAN Relais information to tool and add dialog
+
+- [Frontend] check required properties in all entities and forms (update)
+- [Backend] when changing type of rfid reader from switch box to other, check if this rfid reader is already assigned to a tool. if yes reject request
+- [Backend] Problems API
+- [Frontend] handle API errors
+- [Frontend] Snackbar
 
 TODO:
 

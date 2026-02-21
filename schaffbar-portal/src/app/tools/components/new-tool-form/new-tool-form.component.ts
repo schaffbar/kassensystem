@@ -1,5 +1,11 @@
 import { Component, computed, inject } from '@angular/core';
-import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import {
+  AbstractControl,
+  NonNullableFormBuilder,
+  ReactiveFormsModule,
+  ValidationErrors,
+  Validators,
+} from '@angular/forms';
 
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
@@ -13,6 +19,7 @@ import { TranslatePipe } from '@ngx-translate/core';
 import { RfidReaderType } from '../../../rfid-readers/rfid-reader.model';
 import { RfidReaderStore } from '../../../rfid-readers/rfid-readers.store';
 import { CreateToolCommand } from '../../tool.model';
+import { ToolsStore } from '../../tools.store';
 
 @Component({
   selector: 'schbar-new-tool-form',
@@ -33,15 +40,27 @@ export class NewToolFormComponent {
   private readonly fb = inject(NonNullableFormBuilder);
   private readonly dialogRef = inject(MatDialogRef<NewToolFormComponent>);
   private readonly rfidReaderStore = inject(RfidReaderStore);
+  private readonly toolsStore = inject(ToolsStore);
 
   protected toolForm = this.fb.group({
-    name: ['', Validators.required],
+    name: ['', [Validators.required, this.nameExistsValidator()]],
     description: [''],
-    rfidReaderId: [''],
+    rfidReaderId: ['', [this.alreadyAssignedValidator()]],
+  });
+
+  private readonly assignedRfidReaderIds = computed(() => {
+    const tools = this.toolsStore.entities();
+    return new Set(tools.filter((t) => t.rfidReaderId).map((t) => t.rfidReaderId!));
   });
 
   protected rfidReaders = computed(() =>
-    this.rfidReaderStore.entities().filter((reader) => reader.type === RfidReaderType.SwitchBox),
+    this.rfidReaderStore
+      .entities()
+      .filter((reader) => reader.type === RfidReaderType.SwitchBox)
+      .map((reader) => ({
+        ...reader,
+        alreadyAssigned: this.assignedRfidReaderIds().has(reader.id),
+      })),
   );
 
   constructor() {
@@ -55,7 +74,6 @@ export class NewToolFormComponent {
     }
 
     const formValue = this.toolForm.value;
-    console.log('Form Value:', formValue.rfidReaderId || undefined); // Debug log
 
     const command: CreateToolCommand = {
       name: formValue.name!,
@@ -64,5 +82,24 @@ export class NewToolFormComponent {
     };
 
     this.dialogRef.close(command);
+  }
+
+  private nameExistsValidator(): (control: AbstractControl) => ValidationErrors | null {
+    return (control: AbstractControl): ValidationErrors | null => {
+      if (!control.value) {
+        return null;
+      }
+      const exists = this.toolsStore.entities().some((tool) => tool.name.toLowerCase() === control.value.toLowerCase());
+      return exists ? { nameExists: true } : null;
+    };
+  }
+
+  private alreadyAssignedValidator(): (control: AbstractControl) => ValidationErrors | null {
+    return (control: AbstractControl): ValidationErrors | null => {
+      if (!control.value) {
+        return null;
+      }
+      return this.assignedRfidReaderIds().has(control.value) ? { alreadyAssigned: true } : null;
+    };
   }
 }

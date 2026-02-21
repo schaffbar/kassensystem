@@ -26,6 +26,7 @@ public interface ToolViews {
             @NotBlank String name, //
             String description, //
             RfidReaderId rfidReaderId, //
+            WlanRelaisType wlanRelaisType, //
             String ipAddress, //
             String httpStartCommand, //
             String onCommand, //

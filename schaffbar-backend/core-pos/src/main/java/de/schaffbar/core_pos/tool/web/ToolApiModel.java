@@ -41,6 +41,7 @@ public interface ToolApiModel extends ValueObjectMapper {
             @NotBlank String name, //
             String description, //
             String rfidReaderId, //
+            WlanRelaisType wlanRelaisType, //
             String ipAddress, //
             String httpStartCommand, //
             String onCommand, //

@@ -12,6 +12,8 @@ import de.schaffbar.core_pos.tool.ToolCommands.CreateToolCommand;
 import de.schaffbar.core_pos.tool.ToolCommands.UpdateToolCommand;
 import de.schaffbar.core_pos.tool.ToolCommands.UpdateWlanRelaisCommand;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.persistence.Version;
@@ -40,6 +42,9 @@ class Tool {
     private String description;
 
     private UUID rfidReaderId;
+
+    @Enumerated(EnumType.STRING)
+    private WlanRelaisType wlanRelaisType;
 
     private String ipAddress;
 
@@ -118,6 +123,7 @@ class Tool {
     }
 
     public void clearWlanRelais() {
+        setWlanRelaisType(null);
         setIpAddress(null);
         setHttpStartCommand(null);
         setOnCommand(null);
@@ -132,6 +138,7 @@ class Tool {
             throw new IllegalArgumentException("IP address is required when WLAN-Relais type is set");
         }
 
+        setWlanRelaisType(type);
         setIpAddress(ipAddress);
         setHttpStartCommand(type.getHttpStartCommand());
         setOnCommand(type.getOnCommand());

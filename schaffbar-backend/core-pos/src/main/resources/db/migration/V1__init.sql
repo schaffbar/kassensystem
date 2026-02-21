@@ -26,6 +26,7 @@ CREATE TABLE schaffbar.tool
     name VARCHAR(255) NOT NULL,
     description VARCHAR(255),
     rfid_reader_id UUID,
+    wlan_relais_type VARCHAR(255),
     ip_address VARCHAR(255),
     http_start_command VARCHAR(255),
     on_command VARCHAR(255),

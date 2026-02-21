@@ -24,20 +24,17 @@ VALUES
     (gen_random_uuid(), 'Carolin', 'Bergmann', '1991-06-17', FALSE, 'carolin.bergmann@example.com', '+4918012345678', 'Wilhelmstraße 17', NULL, '34117', 'Kassel', 'Deutschland', NOW(), NOW());
 
 -- Insert tools
-INSERT INTO schaffbar.tool --
-    (id, name, description, ip_address, http_start_command, on_command, off_command, created_at, updated_at) --
-VALUES --
-    (gen_random_uuid(), 'Kreissäge', 'Elektrische Kreissäge', '192.168.33.1', 'http://bohrmaschine/start', 'bohrmaschine_on', 'bohrmaschine_off', NOW(), NOW()), --
-    (gen_random_uuid(), 'Hobel', 'Elektrische Hobel', '192.168.33.2', 'http://schleifmaschine/start', 'schleifmaschine_on', 'schleifmaschine_off', NOW(), NOW()), --
-    (gen_random_uuid(), 'Schleifmaschine', 'Elektrische Schleifmaschine', '192.168.33.3', 'http://schleifmaschine/start', 'schleifmaschine_on', 'schleifmaschine_off', NOW(), NOW()), --
-    (gen_random_uuid(), 'Bohrmaschine', 'Elektrische Bohrmaschine', '192.168.33.4', 'http://bohrmaschine/start', 'bohrmaschine_on', 'bohrmaschine_off', NOW(), NOW()), --
-    (gen_random_uuid(), 'Fräse', 'Elektrische Fräse', '192.168.33.5', 'http://fraese/start', 'fraese_on', 'fraese_off', NOW(), NOW());
+INSERT INTO schaffbar.tool (id,name,description,rfid_reader_id,ip_address,http_start_command,on_command,off_command,created_at,updated_at) VALUES
+	 (gen_random_uuid(),'Schleifmaschine','Elektrische Schleifmaschine',NULL,NULL,NULL,NULL,NULL,'2026-02-11 17:44:31.4393','2026-02-21 18:08:26.922025'),
+	 (gen_random_uuid(),'Hobel','Elektrische Hobel',NULL,NULL,NULL,NULL,NULL,'2026-02-11 17:44:31.4393','2026-02-21 18:10:00.810274'),
+	 (gen_random_uuid(),'Fräse','Elektrische Fräse',NULL,NULL,NULL,NULL,NULL,'2026-02-11 17:44:31.4393','2026-02-21 18:10:38.20927'),
+	 (gen_random_uuid(),'Kreissäge','Elektrische Kreissäge',NULL,NULL,NULL,NULL,NULL,'2026-02-11 17:44:31.4393','2026-02-21 18:11:25.058038');
 
 -- Insert RFID readers
-INSERT INTO schaffbar.rfid_reader (id,mac_address,"type",created_at,updated_at) VALUES
-	 ('b66d5643-d60d-432c-bdb6-bb3403c2fc6e'::uuid,'34:CD:B0:D3:A9:30','RFID_TAG_ASSIGNER','2025-11-08 15:16:34.195646','2025-11-08 15:16:34.19634'),
-	 ('35cd4f38-8100-4331-bb31-f53d5e2e0f08'::uuid,'34:CD:B0:D3:95:C0','GATE_KEEPER_OUT','2025-11-08 15:22:52.748111','2025-11-08 15:22:52.748775'),
-	 ('81721917-21ae-4552-8784-1da8ae9a7578'::uuid,'34:CD:B0:D3:8F:0C','GATE_KEEPER_IN','2025-11-08 15:16:28.069472','2025-11-08 15:16:28.073802');
+INSERT INTO schaffbar.rfid_reader (id,mac_address,name,socket_name,"type",created_at,updated_at) VALUES
+	 (gen_random_uuid(),'34:CD:B0:D3:8F:0C','Werkstatt Eingang',NULL,NULL,'2025-11-08 15:16:28.069472','2026-02-11 18:06:34.245723'),
+	 (gen_random_uuid(),'34:CD:B0:D3:A9:30','Switch Fräse','Socket 6',NULL,'2025-11-08 15:16:34.195646','2026-02-15 23:04:26.155055'),
+	 (gen_random_uuid(),'34:CD:B0:D3:95:C0','Switch Kreissäge','Socket 48',NULL,'2025-11-08 15:22:52.748111','2026-02-16 21:00:29.464559');
 
 -- Insert RFID tags
 INSERT INTO schaffbar.rfid_tag (id,active,created_at,updated_at) VALUES

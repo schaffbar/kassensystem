@@ -89,6 +89,12 @@ export class ToolWlanRelaisComponent {
     this.setCurrentValuesFromTool();
   });
 
+  clearIpAddress = effect(() => {
+    if (!this.selectedType()) {
+      this.ipAddress.set('');
+    }
+  });
+
   protected onCancel(): void {
     this.ipAddressTouched.set(false);
     this.setCurrentValuesFromTool();

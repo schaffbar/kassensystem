@@ -1,4 +1,5 @@
 import { Component, computed, effect, inject, input, output } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
 import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 
 import { MatButtonModule } from '@angular/material/button';
@@ -41,15 +42,18 @@ export class ToolWlanRelaisComponent {
     ipAddress: ['', [Validators.required, Validators.pattern(IP_PATTERN)]],
   });
 
+  private formValues = toSignal(this.form.valueChanges, { initialValue: this.form.getRawValue() });
+
   protected derivedCommands = computed(() => {
-    const type = this.form.controls.wlanRelaisType.value as WlanRelaisType | '';
-    const ip = this.form.controls.ipAddress.value;
+    const values = this.formValues();
+    const type = (values.wlanRelaisType || '') as WlanRelaisType | '';
+    const ip = values.ipAddress || '';
     if (!type) {
       return { httpStartCommand: '', onCommand: '', offCommand: '' };
     }
     const template = WLAN_RELAIS_TEMPLATES[type];
     return {
-      httpStartCommand: template.httpStartCommand.replace('{{ipAddress}}', ip || ''),
+      httpStartCommand: template.httpStartCommand.replace('{{ipAddress}}', ip),
       onCommand: template.onCommand,
       offCommand: template.offCommand,
     };
@@ -87,6 +91,9 @@ export class ToolWlanRelaisComponent {
     };
     this.wlanRelaisUpdated.emit(command);
   }
+
+  // --------------------------------------------------------------------------
+  // helper
 
   private resetFormFromTool(): void {
     const tool = this.tool();

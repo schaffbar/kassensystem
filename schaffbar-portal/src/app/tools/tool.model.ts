@@ -29,19 +29,19 @@ export interface WlanRelaisTemplate {
 
 export const WLAN_RELAIS_TEMPLATES: Record<WlanRelaisType, WlanRelaisTemplate> = {
   [WlanRelaisType.Shelly1]: {
-    httpStartCommand: 'http://{{ipAddress}}/relay/0',
+    httpStartCommand: 'http://{{ipAddress}}/relay/0?',
     onCommand: 'turn=on',
     offCommand: 'turn=off',
   },
   [WlanRelaisType.Shelly2]: {
-    httpStartCommand: 'http://{{ipAddress}}/relay/0',
+    httpStartCommand: 'http://{{ipAddress}}/relay/0?',
     onCommand: 'turn=on',
     offCommand: 'turn=off',
   },
   [WlanRelaisType.ShellyPro]: {
-    httpStartCommand: 'http://{{ipAddress}}/rpc/Switch.Set',
-    onCommand: '?id=0&on=true',
-    offCommand: '?id=0&on=false',
+    httpStartCommand: 'http://{{ipAddress}}/rpc/Switch.Set?',
+    onCommand: 'id=0&on=true',
+    offCommand: 'id=0&on=false',
   },
 };
 

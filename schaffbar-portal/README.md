@@ -284,7 +284,9 @@ ng generate --help
 ## Upgrade project dependencies
 
 ```bash
-ng update @angular/core @angular/cli
-ng update @angular/material
+ng update @angular/core@21 @angular/cli@21
+ng update @angular/material@21
+ng update @ngrx/signals@21
+ng update
 ...
 ```

@@ -1,12 +1,11 @@
 - [Frontend]
-- [Backend]
-
 - [Frontend] IMPORTANT tools store is used in tool list and tool details. Is it the same instance?
-- [Backend] Problems API
+- [Frontend] check required properties in all entities and forms (update)
 - [Frontend] handle API errors
 - [Frontend] Action feedback - Snackbar?
 
-- [Frontend] check required properties in all entities and forms (update)
+- [Backend]
+- [Backend] Problems API
 - [Backend] when changing type of rfid reader from switch box to other, check if this rfid reader is already assigned to a tool. if yes reject request
 
 TODO:
@@ -20,11 +19,8 @@ TODO:
 7. Assignment und Unassignment von fixen RFID tags
 8. Einweisung plus Zuweisung zu User
 9. Switch box implementieren
-
 10. Nutzung von Maschinen in minuten oder stunden
-11. Zuweisung von RFID reader zu tool
-12. Dashboard für aktive user, aktive tools, ...
-13. Auschalten von Maschinen, wenn user Raum verlässt
+11. Auschalten von Maschinen, wenn user Raum verlässt
 
 Technical debt:
 
@@ -36,7 +32,7 @@ Technical debt:
 6. init.sql Add NOT NULL constraints to customer
 7. Enter and leave time as LocalDateTime instead of Instant?
 
-INFO:
+Info:
 
 - bei angefangener arbeit mindestens ein Einheit
 - Zuweisung von Einweisung zu Tool nicht Tool Grupe

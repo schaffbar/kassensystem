@@ -35,6 +35,13 @@ public class WorkshopUsageService {
                 .toList();
     }
 
+    public List<WorkshopUsageView> getAllActiveWorkshopUsages() {
+        return this.workshopUsageRepository.findByExitTimeIsNull().stream() //
+                .map(WorkshopUsageViews.MAPPER::toWorkshopUsageView) //
+                .sorted(comparing(WorkshopUsageView::entryTime)) //
+                .toList();
+    }
+
     // ------------------------------------------------------------------------
     // command
 

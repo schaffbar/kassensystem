@@ -2,11 +2,11 @@
 INSERT INTO schaffbar.customer
     (id, first_name, last_name, date_of_birth, club_member, email, phone, address_line1, address_line2, postal_code, city, country, created_at, updated_at)
 VALUES
-    (gen_random_uuid(), 'Max', 'Mustermann', '1985-03-12', TRUE, 'max.mustermann@example.com', '+4915112345678', 'Musterstraße 1', 'EG', '10115', 'Berlin', 'Deutschland', NOW(), NOW()),
-    (gen_random_uuid(), 'Erika', 'Musterfrau', '1990-07-25', FALSE, 'erika.musterfrau@example.com', '+4915223456789', 'Beispielweg 23', NULL, '80331', 'München', 'Deutschland', NOW(), NOW()),
-    (gen_random_uuid(), 'Hans', 'Schmidt', '1978-11-03', TRUE, 'hans.schmidt@example.com', '+4915334567890', 'Hauptstraße 45', NULL, '50667', 'Köln', 'Deutschland', NOW(), NOW()),
-    (gen_random_uuid(), 'Julia', 'Schneider', '1995-05-18', FALSE, 'julia.schneider@example.com', '+4915445678901', 'Bahnhofstraße 12', NULL, '20095', 'Hamburg', 'Deutschland', NOW(), NOW()),
-    (gen_random_uuid(), 'Peter', 'Fischer', '1982-09-30', TRUE, 'peter.fischer@example.com', '+4915556789012', 'Lindenweg 7', NULL, '04109', 'Leipzig', 'Deutschland', NOW(), NOW()),
+    ('46417d27-ff9a-4cc8-a765-8ac55fc8b793', 'Max', 'Mustermann', '1985-03-12', TRUE, 'max.mustermann@example.com', '+4915112345678', 'Musterstraße 1', 'EG', '10115', 'Berlin', 'Deutschland', NOW(), NOW()),
+    ('015e98c1-8a6e-40c7-88ae-af635644a85f', 'Erika', 'Musterfrau', '1990-07-25', FALSE, 'erika.musterfrau@example.com', '+4915223456789', 'Beispielweg 23', NULL, '80331', 'München', 'Deutschland', NOW(), NOW()),
+    ('57c717c3-cbec-4b33-a413-dff0c07082f0', 'Hans', 'Schmidt', '1978-11-03', TRUE, 'hans.schmidt@example.com', '+4915334567890', 'Hauptstraße 45', NULL, '50667', 'Köln', 'Deutschland', NOW(), NOW()),
+    ('57363bdf-2853-46bf-8477-3e288ee289fb', 'Julia', 'Schneider', '1995-05-18', FALSE, 'julia.schneider@example.com', '+4915445678901', 'Bahnhofstraße 12', NULL, '20095', 'Hamburg', 'Deutschland', NOW(), NOW()),
+    ('3c0825ad-6be3-426b-903c-463762c5c2e5', 'Peter', 'Fischer', '1982-09-30', TRUE, 'peter.fischer@example.com', '+4915556789012', 'Lindenweg 7', NULL, '04109', 'Leipzig', 'Deutschland', NOW(), NOW()),
     (gen_random_uuid(), 'Anna', 'Weber', '1988-02-14', FALSE, 'anna.weber@example.com', '+4915667890123', 'Gartenstraße 3', NULL, '70173', 'Stuttgart', 'Deutschland', NOW(), NOW()),
     (gen_random_uuid(), 'Lukas', 'Meyer', '1992-12-05', TRUE, 'lukas.meyer@example.com', '+4915778901234', 'Kirchplatz 9', NULL, '90402', 'Nürnberg', 'Deutschland', NOW(), NOW()),
     (gen_random_uuid(), 'Sophie', 'Wagner', '1986-06-21', FALSE, 'sophie.wagner@example.com', '+4915889012345', 'Schulstraße 5', NULL, '01067', 'Dresden', 'Deutschland', NOW(), NOW()),
@@ -40,3 +40,28 @@ INSERT INTO schaffbar.rfid_reader (id,mac_address,name,socket_name,"type",create
 INSERT INTO schaffbar.rfid_tag (id,active,created_at,updated_at) VALUES
 	 ('2373C001',true,'2025-11-08 15:24:48.497148','2025-11-08 15:24:48.497704'),
 	 ('C385A62C',true,'2025-11-08 15:25:02.783311','2025-11-08 15:25:02.783622');
+
+-- Open workshop sessions for active users
+INSERT INTO schaffbar.workshop_session (id, customer_id, start_time, close_time, status, updated_at) VALUES
+--    ('275701f9-2fbb-4b15-a370-5a89260d0f2a', '46417d27-ff9a-4cc8-a765-8ac55fc8b793', NOW() - INTERVAL '2 hours',   NULL, 'OPEN', NOW()),  -- seit 2 Stunden
+--    ('0c0d3258-772a-48a9-a564-6fc850787513', '015e98c1-8a6e-40c7-88ae-af635644a85f', NOW() - INTERVAL '45 minutes', NULL, 'OPEN', NOW()),  -- seit 45 Min
+--    ('b2c5c409-281f-482f-9f3d-58a52295f201', '57c717c3-cbec-4b33-a413-dff0c07082f0', NOW() - INTERVAL '3 hours',   NULL, 'OPEN', NOW()),  -- seit 3 Stunden
+--    ('fe72c9b6-e225-4e82-af69-0a48befb863a', '57363bdf-2853-46bf-8477-3e288ee289fb', NOW() - INTERVAL '5 hours',   NOW() - INTERVAL '1 hour', 'PAID', NOW()),  -- bereits bezahlt und weg
+    ('57a43da8-2c4e-49cf-b61c-0fe2f40c5cbc', '3c0825ad-6be3-426b-903c-463762c5c2e5', NOW() - INTERVAL '6 hours',   NULL, 'OPEN', NOW())  -- seit 6 Stunden
+ON CONFLICT (id) DO NOTHING;
+
+-- Active workshop usages (exit_time IS NULL = currently in workshop)
+INSERT INTO schaffbar.workshop_usage (id, customer_id, workshop_session_id, entry_time, exit_time, updated_at) VALUES
+    -- entered 2 hours ago, still working
+--    (gen_random_uuid(), '46417d27-ff9a-4cc8-a765-8ac55fc8b793', '275701f9-2fbb-4b15-a370-5a89260d0f2a', NOW() - INTERVAL '2 hours',   NULL, NOW()),
+    -- entered 45 minutes ago, still working
+--    (gen_random_uuid(), '015e98c1-8a6e-40c7-88ae-af635644a85f', '0c0d3258-772a-48a9-a564-6fc850787513', NOW() - INTERVAL '45 minutes', NULL, NOW()),
+    -- first visit earlier today (already left), then came back 30 min ago
+--    (gen_random_uuid(), '57c717c3-cbec-4b33-a413-dff0c07082f0', 'b2c5c409-281f-482f-9f3d-58a52295f201', NOW() - INTERVAL '3 hours',   NOW() - INTERVAL '1 hour', NOW()),  -- left after 2h
+--    (gen_random_uuid(), '57c717c3-cbec-4b33-a413-dff0c07082f0', 'b2c5c409-281f-482f-9f3d-58a52295f201', NOW() - INTERVAL '30 minutes', NULL, NOW()),  -- came back, still here
+    -- was in workshop but already left (closed session)
+--    (gen_random_uuid(), '57363bdf-2853-46bf-8477-3e288ee289fb', 'fe72c9b6-e225-4e82-af69-0a48befb863a', NOW() - INTERVAL '5 hours',   NOW() - INTERVAL '1 hour', NOW()),
+    -- was in workshop for 6 hours, still here
+    (gen_random_uuid(), '3c0825ad-6be3-426b-903c-463762c5c2e5', '57a43da8-2c4e-49cf-b61c-0fe2f40c5cbc', NOW() - INTERVAL '6 hours',   NOW() - INTERVAL '5 hours', NOW()),
+    (gen_random_uuid(), '3c0825ad-6be3-426b-903c-463762c5c2e5', '57a43da8-2c4e-49cf-b61c-0fe2f40c5cbc', NOW() - INTERVAL '2 hours',   NULL, NOW())
+ON CONFLICT (id) DO NOTHING;

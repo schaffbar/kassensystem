@@ -1,0 +1,42 @@
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>
+      {{ 'dashboard.widgets.activeUsers.title' | translate }} ({{ activeUsersCount() }})
+    </mat-card-title>
+    <button mat-icon-button (click)="reloadActiveUsers()">
+      <mat-icon>refresh</mat-icon>
+    </button>
+  </mat-card-header>
+
+  <mat-card-content>
+    <table mat-table class="full-width-table" [dataSource]="dataSource()">
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef>
+          {{ 'dashboard.widgets.activeUsers.table.name' | translate }}
+        </th>
+        <td mat-cell *matCellDef="let row">{{ row.lastName }}, {{ row.firstName }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="entryTime">
+        <th mat-header-cell *matHeaderCellDef>
+          {{ 'dashboard.widgets.activeUsers.table.entryTime' | translate }}
+        </th>
+        <td mat-cell *matCellDef="let row">{{ row.entryTime | date: 'short' }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="duration">
+        <th mat-header-cell *matHeaderCellDef>
+          {{ 'dashboard.widgets.activeUsers.table.duration' | translate }}
+        </th>
+        <td mat-cell *matCellDef="let row">{{ getDuration(row.entryTime) }}</td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr
+        mat-row
+        *matRowDef="let row; columns: displayedColumns"
+        (click)="openUserSession(row)"
+        class="clickable-row"></tr>
+    </table>
+  </mat-card-content>
+</mat-card>

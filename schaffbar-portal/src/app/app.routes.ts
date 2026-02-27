@@ -1,7 +1,7 @@
 import { Routes } from '@angular/router';
 
-import { HomeComponent } from './core/home/home.component';
 import { NotFoundComponent } from './core/not-found/not-found.component';
+import { DashboardComponent } from './dashboard/pages/dashboard/dashboard.component';
 import { RfidReaderDetailComponent } from './rfid-readers/pages/rfid-reader-detail/rfid-reader-detail.component';
 import { RfidReaderListComponent } from './rfid-readers/pages/rfid-reader-list/rfid-reader-list.component';
 import { RfidTagListComponent } from './rfid-tags/pages/rfid-tag-list/rfid-tag-list.component';
@@ -11,7 +11,7 @@ import { UserDetailComponent } from './users/pages/user-detail/user-detail.compo
 import { UserListComponent } from './users/pages/user-list/user-list.component';
 
 export const ROUTE = {
-  HOME: 'home',
+  DASHBOARD: 'dashboard',
   ABOUT: 'about',
   USERS: 'users',
   TOOLS: 'tools',
@@ -21,8 +21,8 @@ export const ROUTE = {
 
 export const routes: Routes = [
   {
-    path: ROUTE.HOME,
-    component: HomeComponent,
+    path: ROUTE.DASHBOARD,
+    component: DashboardComponent,
   },
   {
     path: ROUTE.USERS,
@@ -54,7 +54,7 @@ export const routes: Routes = [
   },
   {
     path: '',
-    redirectTo: ROUTE.HOME,
+    redirectTo: ROUTE.DASHBOARD,
     pathMatch: 'full',
   },
   {

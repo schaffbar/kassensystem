@@ -1,5 +1,6 @@
 import { LowerCasePipe } from '@angular/common';
-import { Component, inject, input } from '@angular/core';
+import { Component, inject, input, OnInit, signal } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 
 import { MatButtonModule } from '@angular/material/button';
 import { MatChipsModule } from '@angular/material/chips';
@@ -32,14 +33,24 @@ import { UserDetailStore } from './user-detail.store';
   ],
   providers: [UserDetailStore, RfidTagAssignmentService],
 })
-export class UserDetailComponent {
+export class UserDetailComponent implements OnInit {
   private readonly dialog = inject(MatDialog);
+  private readonly route = inject(ActivatedRoute);
   protected readonly detailsStore = inject(UserDetailStore);
 
   id = input.required<string>();
+  protected selectedTabIndex = signal(0);
 
   constructor() {
     this.detailsStore.setUserId(this.id);
+  }
+
+  ngOnInit(): void {
+    this.route.queryParams.subscribe((params) => {
+      if (params['tab'] === 'open-session') {
+        this.selectedTabIndex.set(1);
+      }
+    });
   }
 
   protected reloadUser(): void {

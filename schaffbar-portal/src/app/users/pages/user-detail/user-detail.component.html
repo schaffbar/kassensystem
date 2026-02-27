@@ -58,7 +58,12 @@
     }
   </div>
 
-  <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="center" dynamicHeight>
+  <mat-tab-group
+    mat-stretch-tabs="false"
+    mat-align-tabs="center"
+    dynamicHeight
+    [selectedIndex]="selectedTabIndex()"
+    (selectedIndexChange)="selectedTabIndex.set($event)">
     <mat-tab [label]="'users.tabGroups.userDetails.detailsTab' | translate">
       <div class="tab-content">
         <schbar-user-detail-info

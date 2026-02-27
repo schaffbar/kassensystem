@@ -39,7 +39,7 @@ export class NavigationComponent {
   private breakpointObserver = inject(BreakpointObserver);
 
   menuItems = signal<MenuItem[]>([
-    { icon: 'home', name: 'sidebar.dashboard', route: 'home' },
+    { icon: 'home', name: 'sidebar.dashboard', route: 'dashboard' },
     { icon: 'people', name: 'sidebar.users', route: 'users' },
     { icon: 'construction', name: 'sidebar.tools', route: 'tools' },
     { icon: 'memory', name: 'sidebar.rfidTags', route: 'rfid-tags' },

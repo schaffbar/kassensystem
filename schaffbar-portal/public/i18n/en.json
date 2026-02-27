@@ -1,6 +1,5 @@
 {
   "shared": {
-    "welcome": "Welcome",
     "table": {
       "actionsColumn": "Actions"
     },
@@ -25,11 +24,20 @@
     "users": "Users",
     "tools": "Tools",
     "rfidTags": "RFID Tags",
-    "rfidReaders": "RFID Readers",
-    "about": "About"
+    "rfidReaders": "RFID Readers"
   },
   "dashboard": {
-    "title": "Dashboard"
+    "title": "Dashboard",
+    "widgets": {
+      "activeUsers": {
+        "title": "Active Users in Workshop",
+        "table": {
+          "name": "Name",
+          "entryTime": "Entry Time",
+          "duration": "Duration"
+        }
+      }
+    }
   },
   "users": {
     "title": "Users",

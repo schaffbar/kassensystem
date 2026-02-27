@@ -1,6 +1,5 @@
 {
   "shared": {
-    "welcome": "Willkommen",
     "table": {
       "actionsColumn": "Aktionen"
     },
@@ -25,11 +24,20 @@
     "users": "Benutzer",
     "tools": "Werkzeuge",
     "rfidTags": "RFID-Tags",
-    "rfidReaders": "RFID-Lesegeräte",
-    "about": "Über uns"
+    "rfidReaders": "RFID-Lesegeräte"
   },
   "dashboard": {
-    "title": "Übersicht"
+    "title": "Übersicht",
+    "widgets": {
+      "activeUsers": {
+        "title": "Aktive Benutzer in der Werkstatt",
+        "table": {
+          "name": "Name",
+          "entryTime": "Eintrittszeit",
+          "duration": "Dauer"
+        }
+      }
+    }
   },
   "users": {
     "title": "Benutzer",

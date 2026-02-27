@@ -13,7 +13,6 @@ import { DashboardService } from './dashboard.service';
 const selectId: SelectEntityId<ActiveUser> = (user) => user.customerId;
 
 export const DashboardStore = signalStore(
-  { providedIn: 'root' },
   withEntities<ActiveUser>(),
   withRequestStatus(),
   withProps(() => ({

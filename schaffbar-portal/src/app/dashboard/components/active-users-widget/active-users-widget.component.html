@@ -32,11 +32,7 @@
       </ng-container>
 
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-      <tr
-        mat-row
-        *matRowDef="let row; columns: displayedColumns"
-        (click)="openUserSession(row)"
-        class="clickable-row"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns" (click)="selectUser(row)" class="clickable-row"></tr>
     </table>
   </mat-card-content>
 </mat-card>

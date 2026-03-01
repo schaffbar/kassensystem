@@ -1,0 +1,16 @@
+[project]
+name = "timemachine"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "bootstrap-flask>=2.5.0",
+    "flask-admin[sqlalchemy]>=1.6.1",
+    "flask-sock>=0.7.0",
+    "flask-sqlalchemy>=3.1.1",
+    "flask-wtf>=1.2.2",
+    "flask>=3.1.0",
+    "pydantic>=2.10.6",
+    "wtforms==2.3.3",
+]

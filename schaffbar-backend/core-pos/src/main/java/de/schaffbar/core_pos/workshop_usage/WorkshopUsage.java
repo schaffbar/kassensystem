@@ -5,8 +5,10 @@ import static java.util.Objects.isNull;
 import java.time.Duration;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
+import java.util.List;
 import java.util.UUID;
 
+import de.schaffbar.core_pos.shared.event.SchaffbarEvent;
 import de.schaffbar.core_pos.shared.id.CustomerId;
 import de.schaffbar.core_pos.shared.id.WorkshopSessionId;
 import de.schaffbar.core_pos.shared.id.WorkshopUsageId;
@@ -50,14 +52,16 @@ class WorkshopUsage { // TODO: Consider renaming to WorkshopSlot, or UsageSlot f
     // ------------------------------------------------------------------------
     // static constructor
 
-    public static WorkshopUsage of(CustomerId customerId, WorkshopSessionId workshopSessionId) {
+    public static WorkshopUsageWithEvents of(CustomerId customerId, WorkshopSessionId workshopSessionId) {
         WorkshopUsage workshopUsage = new WorkshopUsage();
         workshopUsage.setId(WorkshopUsageId.random().getValue());
         workshopUsage.setCustomerId(customerId.getValue());
         workshopUsage.setWorkshopSessionId(workshopSessionId.getValue());
         workshopUsage.setEntryTime(Instant.now());
 
-        return workshopUsage;
+        List<SchaffbarEvent> events = List.of(WorkshopUsageEventFactory.workshopUsageEntered(workshopUsage));
+
+        return new WorkshopUsageWithEvents(workshopUsage, events);
     }
 
     // ------------------------------------------------------------------------
@@ -86,8 +90,15 @@ class WorkshopUsage { // TODO: Consider renaming to WorkshopSlot, or UsageSlot f
     // ------------------------------------------------------------------------
     // command
 
-    public void exit() {
+    public List<SchaffbarEvent> exit() {
         this.setExitTime(Instant.now());
+
+        return List.of(WorkshopUsageEventFactory.workshopUsageLeft(this));
     }
+
+    // ------------------------------------------------------------------------
+    // helper
+
+    record WorkshopUsageWithEvents(WorkshopUsage usage, List<SchaffbarEvent> events) {}
 
 }

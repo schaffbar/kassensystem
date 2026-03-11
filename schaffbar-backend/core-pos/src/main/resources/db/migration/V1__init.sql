@@ -1,4 +1,22 @@
 
+CREATE TABLE schaffbar.outbox_event
+(
+    id UUID NOT NULL,
+    event_type VARCHAR(255) NOT NULL,
+    version VARCHAR(255) NOT NULL,
+    aggregate_type VARCHAR(255) NOT NULL,
+    aggregate_id VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+    payload TEXT NOT NULL,
+    owner VARCHAR(255),
+    processed BOOLEAN NOT NULL DEFAULT FALSE,
+    processed_at TIMESTAMP WITHOUT TIME ZONE,
+    CONSTRAINT pk_outbox_event PRIMARY KEY (id)
+);
+
+CREATE INDEX idx_outbox_event_processed ON schaffbar.outbox_event (processed, created_at);
+GRANT ALL ON TABLE schaffbar.outbox_event TO schadmin;
+
 CREATE TABLE schaffbar.customer
 (
     id UUID NOT NULL,

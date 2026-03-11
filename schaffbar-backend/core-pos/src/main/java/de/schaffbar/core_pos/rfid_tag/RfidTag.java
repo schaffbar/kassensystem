@@ -1,8 +1,10 @@
 package de.schaffbar.core_pos.rfid_tag;
 
 import java.time.Instant;
+import java.util.List;
 
 import de.schaffbar.core_pos.rfid_tag.RfidTagCommands.CreateRfidTagCommand;
+import de.schaffbar.core_pos.shared.event.SchaffbarEvent;
 import de.schaffbar.core_pos.shared.id.RfidTagId;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -38,13 +40,15 @@ class RfidTag {
     // ------------------------------------------------------------------------
     // static constructor
 
-    public static RfidTag of(CreateRfidTagCommand command) {
+    public static RfidTagWithEvents of(CreateRfidTagCommand command) {
         RfidTag rfidTag = new RfidTag();
         rfidTag.setId(command.rfidTagId());
         rfidTag.setActive(true);
         rfidTag.setCreatedAt(Instant.now());
 
-        return rfidTag;
+        List<SchaffbarEvent> events = List.of(RfidTagEventFactory.rfidTagCreated(rfidTag));
+
+        return new RfidTagWithEvents(rfidTag, events);
     }
 
     // ------------------------------------------------------------------------
@@ -56,5 +60,10 @@ class RfidTag {
 
     // ------------------------------------------------------------------------
     // command
+
+    // ------------------------------------------------------------------------
+    // helper
+
+    record RfidTagWithEvents(RfidTag rfidTag, List<SchaffbarEvent> events) {}
 
 }

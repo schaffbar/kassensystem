@@ -4,8 +4,10 @@ import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 
 import java.time.Instant;
+import java.util.List;
 import java.util.UUID;
 
+import de.schaffbar.core_pos.shared.event.SchaffbarEvent;
 import de.schaffbar.core_pos.shared.id.RfidReaderId;
 import de.schaffbar.core_pos.shared.id.ToolId;
 import de.schaffbar.core_pos.tool.ToolCommands.CreateToolCommand;
@@ -64,7 +66,7 @@ class Tool {
     // ------------------------------------------------------------------------
     // static constructor
 
-    public static Tool of(CreateToolCommand command) {
+    public static ToolWithEvents of(CreateToolCommand command) {
         Tool tool = new Tool();
         tool.setId(ToolId.random().getValue());
         tool.setName(command.name());
@@ -79,7 +81,9 @@ class Tool {
             tool.applyWlanRelaisType(command.wlanRelaisType(), command.ipAddress());
         }
 
-        return tool;
+        List<SchaffbarEvent> events = List.of(ToolEventFactory.toolCreated(tool));
+
+        return new ToolWithEvents(tool, events);
     }
 
     // ------------------------------------------------------------------------
@@ -100,26 +104,34 @@ class Tool {
     // ------------------------------------------------------------------------
     // command
 
-    public void update(UpdateToolCommand command) {
+    public List<SchaffbarEvent> update(UpdateToolCommand command) {
         setName(command.name());
         setDescription(command.description());
+
+        return List.of(ToolEventFactory.toolUpdated(this));
     }
 
-    public void assignRfidReader(RfidReaderId rfidReaderId) {
+    public List<SchaffbarEvent> assignRfidReader(RfidReaderId rfidReaderId) {
         setRfidReaderId(rfidReaderId.getValue());
+
+        return List.of(ToolEventFactory.toolRfidReaderAssigned(getId(), rfidReaderId));
     }
 
-    public void clearRfidReader() {
+    public List<SchaffbarEvent> clearRfidReader() {
         setRfidReaderId(null);
+
+        return List.of(ToolEventFactory.toolRfidReaderCleared(getId()));
     }
 
-    public void updateWlanRelais(UpdateWlanRelaisCommand command) {
+    public List<SchaffbarEvent> updateWlanRelais(UpdateWlanRelaisCommand command) {
         if (isNull(command.wlanRelaisType())) {
             clearWlanRelais();
-            return;
+        }
+        else {
+            applyWlanRelaisType(command.wlanRelaisType(), command.ipAddress());
         }
 
-        applyWlanRelaisType(command.wlanRelaisType(), command.ipAddress());
+        return List.of(ToolEventFactory.toolWlanRelaisUpdated(this));
     }
 
     public void clearWlanRelais() {
@@ -144,5 +156,7 @@ class Tool {
         setOnCommand(type.getOnCommand());
         setOffCommand(type.getOffCommand());
     }
+
+    record ToolWithEvents(Tool tool, List<SchaffbarEvent> events) {}
 
 }

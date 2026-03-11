@@ -1,8 +1,10 @@
 package de.schaffbar.core_pos.workshop_session;
 
 import java.time.Instant;
+import java.util.List;
 import java.util.UUID;
 
+import de.schaffbar.core_pos.shared.event.SchaffbarEvent;
 import de.schaffbar.core_pos.shared.id.CustomerId;
 import de.schaffbar.core_pos.shared.id.WorkshopSessionId;
 import jakarta.persistence.Entity;
@@ -48,14 +50,16 @@ class WorkshopSession {
     // ------------------------------------------------------------------------
     // static constructor
 
-    public static WorkshopSession of(CustomerId customerId) {
+    public static WorkshopSessionWithEvents of(CustomerId customerId) {
         WorkshopSession workshopSession = new WorkshopSession();
         workshopSession.setId(WorkshopSessionId.random().getValue());
         workshopSession.setCustomerId(customerId.getValue());
         workshopSession.setStartTime(Instant.now());
         workshopSession.setStatus(WorkshopSessionStatus.OPEN);
 
-        return workshopSession;
+        List<SchaffbarEvent> events = List.of(WorkshopSessionEventFactory.workshopSessionStarted(workshopSession));
+
+        return new WorkshopSessionWithEvents(workshopSession, events);
     }
 
     // ------------------------------------------------------------------------
@@ -72,9 +76,16 @@ class WorkshopSession {
     // ------------------------------------------------------------------------
     // command
 
-    public void close() {
+    public List<SchaffbarEvent> close() {
         this.closeTime = Instant.now();
         this.status = WorkshopSessionStatus.PAID;
+
+        return List.of(WorkshopSessionEventFactory.workshopSessionClosed(this));
     }
+
+    // ------------------------------------------------------------------------
+    // helper
+
+    record WorkshopSessionWithEvents(WorkshopSession session, List<SchaffbarEvent> events) {}
 
 }

@@ -3,7 +3,11 @@ package de.schaffbar.core_pos.rfid_tag_assignment;
 import java.util.List;
 import java.util.Optional;
 
+import de.schaffbar.core_pos.rfid_tag_assignment.RfidTagAssignment.RfidTagAssignmentWithEvents;
 import de.schaffbar.core_pos.rfid_tag_assignment.RfidTagAssignmentViews.RfidTagAssignmentView;
+import de.schaffbar.core_pos.shared.event.SchaffbarEvent;
+import de.schaffbar.core_pos.shared.event.outbox.OutboxEvent;
+import de.schaffbar.core_pos.shared.event.outbox.OutboxEventRepository;
 import de.schaffbar.core_pos.shared.exception.NoWaitingAssingmentException;
 import de.schaffbar.core_pos.shared.id.CustomerId;
 import de.schaffbar.core_pos.shared.id.RfidTagId;
@@ -12,15 +16,19 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
+@Slf4j
 @Service
 @Validated
 @RequiredArgsConstructor
 public class RfidTagAssignmentService {
 
     private final @NonNull RfidTagAssignmentRepository rfidTagAssignmentRepository;
+
+    private final @NonNull OutboxEventRepository outboxEventRepository;
 
     // ------------------------------------------------------------------------
     // query
@@ -54,8 +62,12 @@ public class RfidTagAssignmentService {
             throw new RuntimeException("There is already a RFID tag assignment pending");
         }
 
-        RfidTagAssignment rfidTagAssignment = RfidTagAssignment.of(customerId, assignmentType);
-        this.rfidTagAssignmentRepository.save(rfidTagAssignment);
+        RfidTagAssignmentWithEvents result = RfidTagAssignment.of(customerId, assignmentType);
+        this.rfidTagAssignmentRepository.save(result.assignment());
+
+        saveOutboxEvents(result.events());
+
+        log.info("Requested RFID tag assignment for customer {} and published events {}", customerId, result.events());
     }
 
     @Transactional
@@ -64,34 +76,39 @@ public class RfidTagAssignmentService {
             throw new RuntimeException("RFID tag [id: " + rfidTagId.getValue() + "] already assigned");
         }
 
-        this.rfidTagAssignmentRepository.findWaitingForAssignment() //
-                .ifPresentOrElse( //
-                        assignment -> assignment.assignRfidTag(rfidTagId), //
-                        throwNoWaitingAssignmentFound(rfidTagId));
+        RfidTagAssignment assignment = this.rfidTagAssignmentRepository.findWaitingForAssignment() //
+                .orElseThrow(() -> new NoWaitingAssingmentException(rfidTagId));
+
+        List<SchaffbarEvent> events = assignment.assignRfidTag(rfidTagId);
+        saveOutboxEvents(events);
+
+        log.info("Assigned RFID tag {} and published events {}", rfidTagId, events);
     }
 
     @Transactional
     public void unassignRfidTag(@NotNull @Valid CustomerId customerId) {
-        this.rfidTagAssignmentRepository.findByCustomer(customerId) //
+        RfidTagAssignment assignment = this.rfidTagAssignmentRepository.findByCustomer(customerId) //
                 .filter(RfidTagAssignment::isAssigned) //
-                .ifPresentOrElse( //
-                        this.rfidTagAssignmentRepository::delete, //
-                        throwNoRfidTagAssignedToCustomer(customerId));
+                .orElseThrow(() -> new RuntimeException("No RFID tag assigned to customer [id: " + customerId.getValue() + "]"));
+
+        List<SchaffbarEvent> events = assignment.unassignEvents();
+        this.rfidTagAssignmentRepository.delete(assignment);
+
+        saveOutboxEvents(events);
+
+        log.info("Unassigned RFID tag from customer {} and published events {}", customerId, events);
     }
 
     // ------------------------------------------------------------------------
     // helper
 
-    private Runnable throwNoWaitingAssignmentFound(RfidTagId rfidTagId) {
-        return () -> {
-            throw new NoWaitingAssingmentException(rfidTagId);
-        };
-    }
+    // TODO: DRY: this method is duplicated in multiple services, maybe move to a common base class or utility class?
+    private void saveOutboxEvents(List<SchaffbarEvent> events) {
+        List<OutboxEvent> outboxEvents = events.stream() //
+                .map(OutboxEvent::of) //
+                .toList();
 
-    private Runnable throwNoRfidTagAssignedToCustomer(CustomerId customerId) {
-        return () -> {
-            throw new RuntimeException("No RFID tag assigned to customer [id: " + customerId.getValue() + "]");
-        };
+        this.outboxEventRepository.saveAll(outboxEvents);
     }
 
 }

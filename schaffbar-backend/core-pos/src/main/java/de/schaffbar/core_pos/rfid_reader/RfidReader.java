@@ -1,9 +1,11 @@
 package de.schaffbar.core_pos.rfid_reader;
 
 import java.time.Instant;
+import java.util.List;
 import java.util.UUID;
 
 import de.schaffbar.core_pos.rfid_reader.RfidReaderCommands.UpdateRfidReaderCommand;
+import de.schaffbar.core_pos.shared.event.SchaffbarEvent;
 import de.schaffbar.core_pos.shared.id.MacAddress;
 import de.schaffbar.core_pos.shared.id.RfidReaderId;
 import jakarta.persistence.Column;
@@ -53,13 +55,15 @@ class RfidReader {
     // ------------------------------------------------------------------------
     // static constructor
 
-    public static RfidReader of(MacAddress macAddress) {
+    public static RfidReaderWithEvents of(MacAddress macAddress) {
         RfidReader rfidReader = new RfidReader();
         rfidReader.setId(RfidReaderId.random().getValue());
         rfidReader.setMacAddress(macAddress.getValue());
         rfidReader.setCreatedAt(Instant.now());
 
-        return rfidReader;
+        List<SchaffbarEvent> events = List.of(RfidReaderEventFactory.rfidReaderCreated(rfidReader));
+
+        return new RfidReaderWithEvents(rfidReader, events);
     }
 
     // ------------------------------------------------------------------------
@@ -72,10 +76,17 @@ class RfidReader {
     // ------------------------------------------------------------------------
     // command
 
-    public void update(UpdateRfidReaderCommand command) {
+    public List<SchaffbarEvent> update(UpdateRfidReaderCommand command) {
         setType(command.type());
         setName(command.name());
         setSocketName(command.socketName());
+
+        return List.of(RfidReaderEventFactory.rfidReaderUpdated(this));
     }
+
+    // ------------------------------------------------------------------------
+    // helper
+
+    record RfidReaderWithEvents(RfidReader rfidReader, List<SchaffbarEvent> events) {}
 
 }

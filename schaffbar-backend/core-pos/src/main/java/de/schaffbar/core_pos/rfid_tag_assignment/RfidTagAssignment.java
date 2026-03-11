@@ -3,8 +3,10 @@ package de.schaffbar.core_pos.rfid_tag_assignment;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
 import java.time.Instant;
+import java.util.List;
 import java.util.UUID;
 
+import de.schaffbar.core_pos.shared.event.SchaffbarEvent;
 import de.schaffbar.core_pos.shared.id.CustomerId;
 import de.schaffbar.core_pos.shared.id.RfidTagAssignmentId;
 import de.schaffbar.core_pos.shared.id.RfidTagId;
@@ -56,14 +58,16 @@ class RfidTagAssignment {
     // ------------------------------------------------------------------------
     // static constructor
 
-    public static RfidTagAssignment of(CustomerId customerId, RfidTagAssignmentType assignmentType) {
+    public static RfidTagAssignmentWithEvents of(CustomerId customerId, RfidTagAssignmentType assignmentType) {
         RfidTagAssignment result = new RfidTagAssignment();
         result.setId(RfidTagAssignmentId.random().getValue());
         result.setCustomerId(customerId.getValue());
         result.setAssignmentType(assignmentType);
         result.setStatus(RfidTagAssignmentStatus.WAITING_FOR_ASSIGNMENT);
 
-        return result;
+        List<SchaffbarEvent> events = List.of(RfidTagAssignmentEventFactory.rfidTagAssignmentRequested(result));
+
+        return new RfidTagAssignmentWithEvents(result, events);
     }
 
     // ------------------------------------------------------------------------
@@ -92,11 +96,22 @@ class RfidTagAssignment {
     // ------------------------------------------------------------------------
     // command
 
-    public void assignRfidTag(RfidTagId rfidTagId) {
+    public List<SchaffbarEvent> assignRfidTag(RfidTagId rfidTagId) {
         // TODO: check if assignment is in the correct state
         this.rfidTagId = rfidTagId.getValue();
         this.status = RfidTagAssignmentStatus.ASSIGNED;
         this.assignmentDate = Instant.now();
+
+        return List.of(RfidTagAssignmentEventFactory.rfidTagAssigned(this));
     }
+
+    public List<SchaffbarEvent> unassignEvents() {
+        return List.of(RfidTagAssignmentEventFactory.rfidTagUnassigned(this));
+    }
+
+    // ------------------------------------------------------------------------
+    // helper
+
+    record RfidTagAssignmentWithEvents(RfidTagAssignment assignment, List<SchaffbarEvent> events) {}
 
 }

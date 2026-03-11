@@ -2,12 +2,14 @@ package de.schaffbar.core_pos.customer;
 
 import java.time.Instant;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.UUID;
 
 import de.schaffbar.core_pos.customer.CustomerCommands.CreateCustomerCommand;
 import de.schaffbar.core_pos.customer.CustomerCommands.UpdateCustomerAddressCommand;
 import de.schaffbar.core_pos.customer.CustomerCommands.UpdateCustomerCommand;
 import de.schaffbar.core_pos.customer.CustomerCommands.UpdateCustomerContactCommand;
+import de.schaffbar.core_pos.shared.event.SchaffbarEvent;
 import de.schaffbar.core_pos.shared.id.CustomerId;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -60,7 +62,7 @@ class Customer {
     // ------------------------------------------------------------------------
     // constructor
 
-    static Customer of(CreateCustomerCommand command) {
+    static CustomerWithEvents of(CreateCustomerCommand command) {
         Customer customer = new Customer();
         customer.setId(UUID.randomUUID());
         customer.setFirstName(command.firstName());
@@ -72,7 +74,9 @@ class Customer {
         customer.setAddress(CustomerAddress.of(command));
         customer.setCreatedAt(Instant.now());
 
-        return customer;
+        List<SchaffbarEvent> events = List.of(CustomerEventFactory.customerCreated(customer));
+
+        return new CustomerWithEvents(customer, events);
     }
 
     // ------------------------------------------------------------------------
@@ -85,20 +89,31 @@ class Customer {
     // ------------------------------------------------------------------------
     // command
 
-    public void update(UpdateCustomerCommand command) {
+    public List<SchaffbarEvent> update(UpdateCustomerCommand command) {
         this.firstName = command.firstName();
         this.lastName = command.lastName();
         this.dateOfBirth = command.dateOfBirth();
         this.clubMember = command.clubMember();
+
+        return List.of(CustomerEventFactory.customerUpdated(this));
     }
 
-    public void updateAddress(UpdateCustomerAddressCommand command) {
+    public List<SchaffbarEvent> updateAddress(UpdateCustomerAddressCommand command) {
         this.address.update(command);
+
+        return List.of(CustomerEventFactory.customerAddressChanged(this));
     }
 
-    public void updateContact(UpdateCustomerContactCommand command) {
+    public List<SchaffbarEvent> updateContact(UpdateCustomerContactCommand command) {
         this.email = command.email();
         this.phone = command.phone();
+
+        return List.of(CustomerEventFactory.customerContactChanged(this));
     }
+
+    // ------------------------------------------------------------------------
+    // helper
+
+    record CustomerWithEvents(Customer customer, List<SchaffbarEvent> events) {}
 
 }

@@ -63,6 +63,7 @@ public class ValueObjectAssert {
 
         CUSTOMER_ID("customer id"), //
         TOOL_ID("tool id"), //
+        TOOL_USAGE_ID("tool usage id"), //
         RFID_READER_ID("rfid reader id"), //
         MAC_ADDRESS("mac address"), //
         RFID_TAG_ID("rfid tag id"), //

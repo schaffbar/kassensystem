@@ -9,12 +9,14 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import de.schaffbar.core_pos.shared.event.customer.CustomerEventPayload;
 import de.schaffbar.core_pos.shared.event.rfid_reader.RfidReaderEventPayload;
 import de.schaffbar.core_pos.shared.event.rfid_tag.RfidTagEventPayload;
 import de.schaffbar.core_pos.shared.event.rfid_tag_assignment.RfidTagAssignmentEventPayload;
 import de.schaffbar.core_pos.shared.event.tool.ToolEventPayload;
+import de.schaffbar.core_pos.shared.event.tool_usage.ToolUsageEventPayload;
 import de.schaffbar.core_pos.shared.event.workshop_session.WorkshopSessionEventPayload;
 import de.schaffbar.core_pos.shared.event.workshop_usage.WorkshopUsageEventPayload;
 import de.schaffbar.core_pos.shared.id.CustomerId;
@@ -22,6 +24,7 @@ import de.schaffbar.core_pos.shared.id.RfidReaderId;
 import de.schaffbar.core_pos.shared.id.RfidTagAssignmentId;
 import de.schaffbar.core_pos.shared.id.RfidTagId;
 import de.schaffbar.core_pos.shared.id.ToolId;
+import de.schaffbar.core_pos.shared.id.ToolUsageId;
 import de.schaffbar.core_pos.shared.id.WorkshopSessionId;
 import de.schaffbar.core_pos.shared.id.WorkshopUsageId;
 import jakarta.validation.ConstraintViolation;
@@ -46,7 +49,9 @@ import lombok.Setter;
 @EqualsAndHashCode(callSuper = false)
 public class SchaffbarEvent implements ValidationSupport {
 
-    private static final ObjectMapper objectMapper = new ObjectMapper().registerModule(new JavaTimeModule());
+    private static final ObjectMapper objectMapper = new ObjectMapper() //
+            .registerModule(new JavaTimeModule()) //
+            .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
 
     @NotBlank
     private UUID id;
@@ -127,6 +132,14 @@ public class SchaffbarEvent implements ValidationSupport {
         return builderWithDefaultsAndNow(eventType) //
                 .aggregateType(AggregateType.WORKSHOP_USAGE) //
                 .aggregateId(workshopUsageId.getValue().toString()) //
+                .payload(toJsonNode(payload)) //
+                .build();
+    }
+
+    public static SchaffbarEvent toolUsageEvent(EventType eventType, ToolUsageId toolUsageId, ToolUsageEventPayload payload) {
+        return builderWithDefaultsAndNow(eventType) //
+                .aggregateType(AggregateType.TOOL_USAGE) //
+                .aggregateId(toolUsageId.getValue().toString()) //
                 .payload(toJsonNode(payload)) //
                 .build();
     }

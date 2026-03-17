@@ -2,25 +2,30 @@ package de.schaffbar.core_pos.shared.id;
 
 import static java.util.Objects.isNull;
 
+import java.util.UUID;
+
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import de.schaffbar.core_pos.shared.id.ValueObjectAssert.ValueObject;
 import lombok.Value;
 
 @Value(staticConstructor = "of")
-public class MacAddress {
+public class ToolUsageId {
 
     @JsonValue
-    String value;
+    UUID value;
 
     @JsonCreator
-    private MacAddress(String macAddress) {
-        ValueObjectAssert.notBlank(macAddress, ValueObject.MAC_ADDRESS);
-        // TODO: validate MAC address format
-        this.value = macAddress;
+    private ToolUsageId(UUID id) {
+        ValueObjectAssert.notNull(id, ValueObject.TOOL_USAGE_ID);
+        this.value = id;
     }
 
-    public boolean sameValueAs(MacAddress other) {
+    public static ToolUsageId random() {
+        return ToolUsageId.of(UUID.randomUUID());
+    }
+
+    public boolean sameValueAs(ToolUsageId other) {
         if (isNull(other)) {
             return false;
         }

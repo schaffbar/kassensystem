@@ -3,6 +3,7 @@ package de.schaffbar.core_pos.use_case;
 import de.schaffbar.core_pos.shared.exception.NoActiveWorkshopSessionFoundException;
 import de.schaffbar.core_pos.shared.id.CustomerId;
 import de.schaffbar.core_pos.shared.id.WorkshopSessionId;
+import de.schaffbar.core_pos.tool_usage.ToolUsageService;
 import de.schaffbar.core_pos.workshop_session.WorkshopSessionService;
 import de.schaffbar.core_pos.workshop_session.WorkshopSessionViews;
 import de.schaffbar.core_pos.workshop_usage.WorkshopUsageService;
@@ -23,10 +24,13 @@ public class LeaveWorkshop {
 
     private final @NonNull WorkshopUsageService workshopUsageService;
 
+    private final @NonNull ToolUsageService toolUsageService;
+
     @Transactional
     public void process(@NotNull @Valid CustomerId customerId) {
 
-        // TODO: stop any active tool usage associated with the given RFID tag, if present
+        // Stop any active tool usages for the customer before leaving the workshop
+        this.toolUsageService.stopAllUsagesForCustomer(customerId);
 
         WorkshopSessionId sessionId = this.workshopSessionService.getOpenWorkshopSession(customerId) //
                 .map(WorkshopSessionViews.WorkshopSessionView::id) //

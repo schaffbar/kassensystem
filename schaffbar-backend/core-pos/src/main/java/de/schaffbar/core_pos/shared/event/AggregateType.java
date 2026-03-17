@@ -8,4 +8,5 @@ public enum AggregateType {
     TOOL, //
     WORKSHOP_SESSION, //
     WORKSHOP_USAGE, //
+    TOOL_USAGE, //
 }

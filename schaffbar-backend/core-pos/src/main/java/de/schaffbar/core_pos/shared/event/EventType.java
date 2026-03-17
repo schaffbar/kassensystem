@@ -22,6 +22,12 @@ public enum EventType {
     TOOL_DELETED, //
 
     // ------------------------------------------------------------------------
+    // tool usage
+
+    TOOL_USAGE_STARTED, //
+    TOOL_USAGE_STOPPED, //
+
+    // ------------------------------------------------------------------------
     // RFID reader
 
     RFID_READER_CREATED, //

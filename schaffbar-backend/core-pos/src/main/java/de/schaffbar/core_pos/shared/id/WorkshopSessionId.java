@@ -4,14 +4,18 @@ import static java.util.Objects.isNull;
 
 import java.util.UUID;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
 import de.schaffbar.core_pos.shared.id.ValueObjectAssert.ValueObject;
 import lombok.Value;
 
 @Value(staticConstructor = "of")
 public class WorkshopSessionId {
 
+    @JsonValue
     UUID value;
 
+    @JsonCreator
     private WorkshopSessionId(UUID id) {
         ValueObjectAssert.notNull(id, ValueObject.CUSTOMER_ID);
         this.value = id;

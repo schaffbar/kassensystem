@@ -134,3 +134,17 @@ CREATE TABLE schaffbar.workshop_usage
 );
 
 GRANT ALL ON TABLE schaffbar.workshop_usage TO schadmin;
+
+CREATE TABLE schaffbar.tool_usage
+(
+    id UUID NOT NULL,
+    customer_id UUID NOT NULL,
+    tool_id UUID NOT NULL,
+    workshop_session_id UUID NOT NULL,
+    start_time TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+    end_time TIMESTAMP WITHOUT TIME ZONE,
+    updated_at TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+    CONSTRAINT pk_tool_usage PRIMARY KEY (id)
+);
+
+GRANT ALL ON TABLE schaffbar.tool_usage TO schadmin;

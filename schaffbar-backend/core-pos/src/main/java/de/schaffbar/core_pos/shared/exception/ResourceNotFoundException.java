@@ -63,6 +63,7 @@ public class ResourceNotFoundException extends RuntimeException {
 
         CUSTOMER("customer"), //
         TOOL("tool"), //
+        TOOL_USAGE("tool usage"), //
         RFID_READER("RFID reader"), //
         RFID_TAG("RFID tag"), //
         WORKSHOP_SESSION("Workshop session"), //

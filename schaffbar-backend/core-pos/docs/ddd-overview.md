@@ -13,6 +13,7 @@
     - [RfidTagAssignmentHistory](#36-rfidtagassignmenthistory)
     - [WorkshopSession](#37-workshopsession)
     - [WorkshopUsage](#38-workshopusage)
+    - [ToolUsage](#39-toolusage)
 4. [Use Cases (Application Services)](#4-use-cases-application-services)
 5. [Read Models (Query Services)](#5-read-models-query-services)
 6. [Value Objects](#6-value-objects)
@@ -28,6 +29,7 @@ for their time. The core domain revolves around:
 - **Customer management** — personal data, contact info, addresses
 - **RFID infrastructure** — readers, tags, and their assignment to customers
 - **Tool management** — workshop tools with optional WLAN-Relais (Shelly) control and RFID reader pairing
+- **Tool usage tracking** — tracks which customer uses which tool, for billing and safety enforcement
 - **Workshop access tracking** — sessions (billing units) and usages (individual entry/exit time slots)
 - **Workshop dashboard** — a read model showing currently active users
 
@@ -498,7 +500,7 @@ class
 | WU-2 | Customer must have an active usage to leave                                     | `WorkshopUsageService.leaveWorkshop()` — throws `NoActiveWorkshopUsageFoundException`         |
 | WU-3 | Duration is computed as `exitTime - entryTime` (truncated to seconds)           | `WorkshopUsage.getDuration()` — returns `null` if either time is missing                      |
 | WU-4 | A workshop session must exist (OPEN) before entering                            | `EnterWorkshop` use case — creates session if not present                                     |
-| WU-5 | Active tool usages should be stopped when leaving                               | **TODO** — noted in `LeaveWorkshop` use case                                                  |
+| WU-5 | Active tool usages are stopped when leaving the workshop                        | `LeaveWorkshop` use case — calls `ToolUsageService.stopAllUsagesForCustomer()`                |
 | WU-6 | Customer must have a valid certificate to enter                                 | **TODO** — noted in `EnterWorkshop` use case                                                  |
 
 #### Domain Events
@@ -510,6 +512,55 @@ class
 
 ---
 
+### 3.9 ToolUsage
+
+**Package:** `de.schaffbar.core_pos.tool_usage`
+
+**Aggregate Root:** `ToolUsage`
+
+**Identity:** `ToolUsageId` (UUID)
+
+#### Attributes
+
+| Field               | Type      | Constraints                |
+|---------------------|-----------|----------------------------|
+| `id`                | `UUID`    | PK                         |
+| `customerId`        | `UUID`    | `@NotNull`                 |
+| `toolId`            | `UUID`    | `@NotNull`                 |
+| `workshopSessionId` | `UUID`    | `@NotNull`                 |
+| `startTime`         | `Instant` | `@NotNull`                 |
+| `endTime`           | `Instant` | optional, set when stopped |
+| `updatedAt`         | `Instant` | `@Version`                 |
+
+#### Commands
+
+| Command                 | Fields                                |
+|-------------------------|---------------------------------------|
+| `StartToolUsageCommand` | customerId, toolId, workshopSessionId |
+
+#### Business Rules / Invariants
+
+| #    | Rule                                                                                   | Enforced in                                                                                             |
+|------|----------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------|
+| TU-1 | A customer can use at most 2 tools simultaneously                                      | `ToolUsageService.startUsage()` — checks count via `countActiveByCustomerId()`                          |
+| TU-2 | A customer can only use tools when actively in the workshop (has active WorkshopUsage) | `StartToolUsage` use case — calls `verifyCustomerIsInWorkshop()`                                        |
+| TU-3 | A customer cannot start the same tool twice simultaneously                             | `ToolUsageService.startUsage()` — checks via `findActiveByCustomerIdAndToolId()`                        |
+| TU-4 | When a customer leaves the workshop, all active tool usages are automatically stopped  | `LeaveWorkshop` use case — calls `ToolUsageService.stopAllUsagesForCustomer()`                          |
+| TU-5 | Tool on/off detection happens via RFID reader (type SWITCH_BOX) assigned to the tool   | `DeviceController` — resolves tool via `ToolService.getTool(RfidReaderId)` and toggles start/stop       |
+| TU-6 | Customer identification happens via RFID tag assignment                                | `DeviceController` — resolves customer via `RfidTagAssignmentService`                                   |
+| TU-7 | Duration is computed as `endTime - startTime` (truncated to seconds)                   | `ToolUsage.getDuration()` — returns `null` if either time is missing                                    |
+| TU-8 | Customer must have an open workshop session to start a tool usage                      | `StartToolUsage` use case — checks for active session                                                   |
+| TU-9 | A tool can only be used by one customer at a time                                      | `ToolUsageService.startUsage()` — checks via `findActiveByToolId()`, throws `ToolAlreadyInUseException` |
+
+#### Domain Events
+
+| Event                | Payload             |
+|----------------------|---------------------|
+| `TOOL_USAGE_STARTED` | Tool usage snapshot |
+| `TOOL_USAGE_STOPPED` | Tool usage snapshot |
+
+---
+
 ## 4. Use Cases (Application Services)
 
 Use cases live in the `use_case` package and **orchestrate operations across multiple aggregates**. They are the only
@@ -518,8 +569,10 @@ place where cross-aggregate coordination happens.
 | Use Case                           | Description                                                                                 | Aggregates Involved                                   |
 |------------------------------------|---------------------------------------------------------------------------------------------|-------------------------------------------------------|
 | `EnterWorkshop`                    | Customer enters the workshop. Creates a session if none exists, then creates a usage entry. | WorkshopSession, WorkshopUsage                        |
-| `LeaveWorkshop`                    | Customer leaves the workshop. Finds open session, records exit time.                        | WorkshopSession, WorkshopUsage                        |
+| `LeaveWorkshop`                    | Customer leaves the workshop. Stops all active tool usages, then records exit time.         | WorkshopSession, WorkshopUsage, ToolUsage             |
 | `CloseSession`                     | Closes a customer's workshop session (mark as PAID).                                        | Customer, WorkshopSession                             |
+| `StartToolUsage`                   | Starts tool usage for a customer. Verifies workshop presence and open session.              | ToolUsage, WorkshopSession, WorkshopUsage             |
+| `StopToolUsage`                    | Stops tool usage for a customer on a specific tool.                                         | ToolUsage                                             |
 | `CustomerRequestRfidTagAssignment` | Initiates RFID tag assignment process for a customer.                                       | Customer, RfidTagAssignment                           |
 | `CustomerAssignRfidTag`            | Completes RFID tag assignment by linking tag to pending assignment.                         | RfidTag, RfidTagAssignment                            |
 | `CustomerUnassignRfidTag`          | Removes RFID tag from customer, moves record to history.                                    | Customer, RfidTagAssignment, RfidTagAssignmentHistory |
@@ -548,6 +601,7 @@ All value objects are located in `de.schaffbar.core_pos.shared.id`:
 |-----------------------|----------|---------------------------------|
 | `CustomerId`          | `UUID`   | Customer identity               |
 | `ToolId`              | `UUID`   | Tool identity                   |
+| `ToolUsageId`         | `UUID`   | Tool Usage identity             |
 | `RfidReaderId`        | `UUID`   | RFID Reader identity            |
 | `RfidTagId`           | `String` | RFID Tag identity (hardware ID) |
 | `RfidTagAssignmentId` | `UUID`   | RFID Tag Assignment identity    |
@@ -592,6 +646,7 @@ EventFactory.someEvent(aggregate)
 |-------------------|-------------------------------------------------------------------------------------------------------------------------------------|
 | Customer          | `CUSTOMER_CREATED`, `CUSTOMER_UPDATED`, `CUSTOMER_CONTACT_CHANGED`, `CUSTOMER_ADDRESS_CHANGED`, `CUSTOMER_DELETED`                  |
 | Tool              | `TOOL_CREATED`, `TOOL_UPDATED`, `TOOL_WLAN_RELAIS_UPDATED`, `TOOL_RFID_READER_ASSIGNED`, `TOOL_RFID_READER_CLEARED`, `TOOL_DELETED` |
+| ToolUsage         | `TOOL_USAGE_STARTED`, `TOOL_USAGE_STOPPED`                                                                                          |
 | RfidReader        | `RFID_READER_CREATED`, `RFID_READER_UPDATED`, `RFID_READER_DELETED`                                                                 |
 | RfidTag           | `RFID_TAG_CREATED`, `RFID_TAG_DELETED`                                                                                              |
 | RfidTagAssignment | `RFID_TAG_ASSIGNMENT_REQUESTED`, `RFID_TAG_ASSIGNED`, `RFID_TAG_UNASSIGNED`                                                         |
@@ -608,7 +663,6 @@ EventFactory.someEvent(aggregate)
 | `RfidReaderService.createRfidReader()` | Check for duplicate MAC address on creation                                          |
 | `RfidTagAssignment.assignRfidTag()`    | Validate that assignment is in `WAITING_FOR_ASSIGNMENT` state                        |
 | `EnterWorkshop.process()`              | Check if customer has a valid certificate to enter                                   |
-| `LeaveWorkshop.process()`              | Stop active tool usage sessions on exit                                              |
 | `CloseSession.process()`               | Check for pending workshop usages before closing                                     |
 | `WorkshopUsage`                        | Consider renaming to `WorkshopSlot` or `UsageSlot`                                   |
 | `RfidTagAssignmentHistory`             | Consider renaming ID type to `RfidTagAssignmentHistoryId`                            |

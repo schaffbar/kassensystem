@@ -13,6 +13,7 @@
     - [RfidTagAssignmentHistory (Zuordnungshistorie)](#36-rfidtagassignmenthistory-zuordnungshistorie)
     - [WorkshopSession (Werkstatt-Sitzung)](#37-workshopsession-werkstatt-sitzung)
     - [WorkshopUsage (Werkstatt-Nutzung)](#38-workshopusage-werkstatt-nutzung)
+    - [ToolUsage (Werkzeugnutzung)](#39-toolusage-werkzeugnutzung)
 4. [Anwendungsfälle (Application Services)](#4-anwendungsfälle-application-services)
 5. [Lesemodelle (Query Services)](#5-lesemodelle-query-services)
 6. [Wertobjekte (Value Objects)](#6-wertobjekte-value-objects)
@@ -28,6 +29,7 @@ Zeitaufwand abgerechnet werden können. Die Kerndomäne umfasst:
 - **Kundenverwaltung** — Personendaten, Kontaktinformationen, Adressen
 - **RFID-Infrastruktur** — Lesegeräte, Chips und deren Zuordnung zu Kunden
 - **Werkzeugverwaltung** — Werkstattwerkzeuge mit optionaler WLAN-Relais-Steuerung (Shelly) und RFID-Lesegerät-Kopplung
+- **Werkzeugnutzungsverfolgung** — erfasst welcher Kunde welches Werkzeug nutzt, für Abrechnung und Sicherheit
 - **Werkstattzugangsverfolgung** — Sitzungen (Abrechnungseinheiten) und Nutzungen (einzelne Ein-/Austritts-Zeitslots)
 - **Werkstatt-Dashboard** — ein Lesemodell, das aktuell aktive Nutzer anzeigt
 
@@ -502,7 +504,7 @@ zu `RfidTagAssignmentHistoryId` vor*
 | WU-2 | Der Kunde muss eine aktive Nutzung haben, um die Werkstatt zu verlassen                    | `WorkshopUsageService.leaveWorkshop()` — wirft `NoActiveWorkshopUsageFoundException`             |
 | WU-3 | Die Dauer wird als `exitTime - entryTime` berechnet (auf Sekunden gekürzt)                 | `WorkshopUsage.getDuration()` — gibt `null` zurück, wenn einer der Zeitstempel fehlt             |
 | WU-4 | Vor dem Betreten muss eine Werkstatt-Sitzung existieren (OPEN)                             | `EnterWorkshop`-Anwendungsfall — erstellt Sitzung falls nicht vorhanden                          |
-| WU-5 | Aktive Werkzeugnutzungen sollten beim Verlassen gestoppt werden                            | **TODO** — vermerkt im `LeaveWorkshop`-Anwendungsfall                                            |
+| WU-5 | Aktive Werkzeugnutzungen werden beim Verlassen der Werkstatt automatisch gestoppt          | `LeaveWorkshop`-Anwendungsfall — ruft `ToolUsageService.stopAllUsagesForCustomer()` auf          |
 | WU-6 | Der Kunde muss ein gültiges Zertifikat zum Betreten haben                                  | **TODO** — vermerkt im `EnterWorkshop`-Anwendungsfall                                            |
 
 #### Domänenereignisse
@@ -514,6 +516,55 @@ zu `RfidTagAssignmentHistoryId` vor*
 
 ---
 
+### 3.9 ToolUsage (Werkzeugnutzung)
+
+**Paket:** `de.schaffbar.core_pos.tool_usage`
+
+**Aggregat-Root:** `ToolUsage`
+
+**Identität:** `ToolUsageId` (UUID)
+
+#### Attribute
+
+| Feld                | Typ       | Constraints                    |
+|---------------------|-----------|--------------------------------|
+| `id`                | `UUID`    | PK                             |
+| `customerId`        | `UUID`    | `@NotNull`                     |
+| `toolId`            | `UUID`    | `@NotNull`                     |
+| `workshopSessionId` | `UUID`    | `@NotNull`                     |
+| `startTime`         | `Instant` | `@NotNull`                     |
+| `endTime`           | `Instant` | optional, gesetzt beim Stoppen |
+| `updatedAt`         | `Instant` | `@Version`                     |
+
+#### Kommandos
+
+| Kommando                | Felder                                |
+|-------------------------|---------------------------------------|
+| `StartToolUsageCommand` | customerId, toolId, workshopSessionId |
+
+#### Geschäftsregeln / Invarianten
+
+| #    | Regel                                                                                                              | Durchgesetzt in                                                                                       |
+|------|--------------------------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------|
+| TU-1 | Ein Kunde kann maximal 2 Werkzeuge gleichzeitig nutzen                                                             | `ToolUsageService.startUsage()` — prüft Anzahl via `countActiveByCustomerId()`                        |
+| TU-2 | Ein Kunde kann Werkzeuge nur nutzen, wenn er sich aktiv in der Werkstatt befindet (aktive WorkshopUsage)           | `StartToolUsage`-Anwendungsfall — ruft `verifyCustomerIsInWorkshop()` auf                             |
+| TU-3 | Ein Kunde kann dasselbe Werkzeug nicht doppelt gleichzeitig nutzen                                                 | `ToolUsageService.startUsage()` — prüft via `findActiveByCustomerIdAndToolId()`                       |
+| TU-4 | Beim Verlassen der Werkstatt werden alle aktiven Werkzeugnutzungen automatisch gestoppt                            | `LeaveWorkshop`-Anwendungsfall — ruft `ToolUsageService.stopAllUsagesForCustomer()` auf               |
+| TU-5 | Die Werkzeug-Ein-/Ausschalterkennung erfolgt über RFID-Lesegerät (Typ SWITCH_BOX), das dem Werkzeug zugeordnet ist | `DeviceController` — löst Werkzeug via `ToolService.getTool(RfidReaderId)` auf und toggelt Start/Stop |
+| TU-6 | Die Kundenidentifikation erfolgt über die RFID-Chip-Zuordnung                                                      | `DeviceController` — löst Kunde via `RfidTagAssignmentService` auf                                    |
+| TU-7 | Die Dauer wird als `endTime - startTime` berechnet (auf Sekunden gekürzt)                                          | `ToolUsage.getDuration()` — gibt `null` zurück, wenn einer der Zeitstempel fehlt                      |
+| TU-8 | Der Kunde muss eine offene Werkstatt-Sitzung haben, um eine Werkzeugnutzung zu starten                             | `StartToolUsage`-Anwendungsfall — prüft auf aktive Sitzung                                            |
+| TU-9 | Ein Werkzeug kann gleichzeitig nur von einem Kunden genutzt werden                                                 | `ToolUsageService.startUsage()` — prüft via `findActiveByToolId()`, wirft `ToolAlreadyInUseException` |
+
+#### Domänenereignisse
+
+| Ereignis             | Payload                   |
+|----------------------|---------------------------|
+| `TOOL_USAGE_STARTED` | Werkzeugnutzungs-Snapshot |
+| `TOOL_USAGE_STOPPED` | Werkzeugnutzungs-Snapshot |
+
+---
+
 ## 4. Anwendungsfälle (Application Services)
 
 Anwendungsfälle befinden sich im Paket `use_case` und **orchestrieren Operationen über mehrere Aggregate hinweg**. Sie
@@ -522,8 +573,10 @@ sind der einzige Ort, an dem aggregatübergreifende Koordination stattfindet.
 | Anwendungsfall                     | Beschreibung                                                                                                   | Beteiligte Aggregate                                  |
 |------------------------------------|----------------------------------------------------------------------------------------------------------------|-------------------------------------------------------|
 | `EnterWorkshop`                    | Kunde betritt die Werkstatt. Erstellt eine Sitzung falls keine existiert, dann erstellt einen Nutzungseintrag. | WorkshopSession, WorkshopUsage                        |
-| `LeaveWorkshop`                    | Kunde verlässt die Werkstatt. Findet offene Sitzung, erfasst Austrittszeit.                                    | WorkshopSession, WorkshopUsage                        |
+| `LeaveWorkshop`                    | Kunde verlässt die Werkstatt. Stoppt alle aktiven Werkzeugnutzungen, dann erfasst Austrittszeit.               | WorkshopSession, WorkshopUsage, ToolUsage             |
 | `CloseSession`                     | Schließt die Werkstatt-Sitzung eines Kunden (als PAID markieren).                                              | Customer, WorkshopSession                             |
+| `StartToolUsage`                   | Startet die Werkzeugnutzung für einen Kunden. Prüft Werkstatt-Anwesenheit und offene Sitzung.                  | ToolUsage, WorkshopSession, WorkshopUsage             |
+| `StopToolUsage`                    | Stoppt die Werkzeugnutzung für einen Kunden an einem bestimmten Werkzeug.                                      | ToolUsage                                             |
 | `CustomerRequestRfidTagAssignment` | Startet den RFID-Chip-Zuordnungsprozess für einen Kunden.                                                      | Customer, RfidTagAssignment                           |
 | `CustomerAssignRfidTag`            | Vervollständigt die RFID-Chip-Zuordnung durch Verknüpfung des Chips mit der ausstehenden Zuordnung.            | RfidTag, RfidTagAssignment                            |
 | `CustomerUnassignRfidTag`          | Entfernt den RFID-Chip vom Kunden, verschiebt den Datensatz in die Historie.                                   | Customer, RfidTagAssignment, RfidTagAssignmentHistory |
@@ -552,6 +605,7 @@ Alle Wertobjekte befinden sich in `de.schaffbar.core_pos.shared.id`:
 |-----------------------|------------|-----------------------------------|
 | `CustomerId`          | `UUID`     | Kundenidentität                   |
 | `ToolId`              | `UUID`     | Werkzeugidentität                 |
+| `ToolUsageId`         | `UUID`     | Werkzeugnutzungsidentität         |
 | `RfidReaderId`        | `UUID`     | RFID-Lesegerät-Identität          |
 | `RfidTagId`           | `String`   | RFID-Chip-Identität (Hardware-ID) |
 | `RfidTagAssignmentId` | `UUID`     | RFID-Chip-Zuordnungsidentität     |
@@ -596,6 +650,7 @@ EventFactory.einEreignis(aggregat)
 |-------------------|-------------------------------------------------------------------------------------------------------------------------------------|
 | Customer          | `CUSTOMER_CREATED`, `CUSTOMER_UPDATED`, `CUSTOMER_CONTACT_CHANGED`, `CUSTOMER_ADDRESS_CHANGED`, `CUSTOMER_DELETED`                  |
 | Tool              | `TOOL_CREATED`, `TOOL_UPDATED`, `TOOL_WLAN_RELAIS_UPDATED`, `TOOL_RFID_READER_ASSIGNED`, `TOOL_RFID_READER_CLEARED`, `TOOL_DELETED` |
+| ToolUsage         | `TOOL_USAGE_STARTED`, `TOOL_USAGE_STOPPED`                                                                                          |
 | RfidReader        | `RFID_READER_CREATED`, `RFID_READER_UPDATED`, `RFID_READER_DELETED`                                                                 |
 | RfidTag           | `RFID_TAG_CREATED`, `RFID_TAG_DELETED`                                                                                              |
 | RfidTagAssignment | `RFID_TAG_ASSIGNMENT_REQUESTED`, `RFID_TAG_ASSIGNED`, `RFID_TAG_UNASSIGNED`                                                         |
@@ -612,7 +667,6 @@ EventFactory.einEreignis(aggregat)
 | `RfidReaderService.createRfidReader()` | Prüfung auf doppelte MAC-Adresse bei Erstellung                                             |
 | `RfidTagAssignment.assignRfidTag()`    | Validieren, dass die Zuordnung im Status `WAITING_FOR_ASSIGNMENT` ist                       |
 | `EnterWorkshop.process()`              | Prüfen, ob der Kunde ein gültiges Zertifikat zum Betreten hat                               |
-| `LeaveWorkshop.process()`              | Aktive Werkzeugnutzungssitzungen beim Austritt stoppen                                      |
 | `CloseSession.process()`               | Ausstehende Werkstattnutzungen vor dem Schließen prüfen                                     |
 | `WorkshopUsage`                        | Umbenennung zu `WorkshopSlot` oder `UsageSlot` erwägen                                      |
 | `RfidTagAssignmentHistory`             | Umbenennung des ID-Typs zu `RfidTagAssignmentHistoryId` erwägen                             |

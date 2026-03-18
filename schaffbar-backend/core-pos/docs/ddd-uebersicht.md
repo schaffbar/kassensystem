@@ -1,4 +1,4 @@
-# Schaffbar Core-POS — Domain-Driven Design Dokumentation
+# Schaffbar - Dokumentation
 
 ## Inhaltsverzeichnis
 
@@ -273,7 +273,7 @@ class
 
 | Kommando                       | Felder                                                         |
 |--------------------------------|----------------------------------------------------------------|
-| *(Erstellung über MacAddress)* | macAddress (`MacAddress`-Wertobjekt)                           |
+| _(Erstellung über MacAddress)_ | macAddress (`MacAddress`-Wertobjekt)                           |
 | `UpdateRfidReaderCommand`      | id (`RfidReaderId`), type (`RfidReaderType`), name, socketName |
 
 #### Geschäftsregeln / Invarianten
@@ -352,7 +352,7 @@ class
 | `assignmentDate` | `Instant`                 | gesetzt bei Zuordnung                                 |
 | `updatedAt`      | `Instant`                 | `@Version`                                            |
 
-**Lebenszyklus:** `WAITING_FOR_ASSIGNMENT` → `ASSIGNED` → *(gelöscht bei Aufhebung)*
+**Lebenszyklus:** `WAITING_FOR_ASSIGNMENT` → `ASSIGNED` → _(gelöscht bei Aufhebung)_
 
 #### Kommandos
 
@@ -391,8 +391,8 @@ class
 
 **Aggregat-Root:** `RfidTagAssignmentHistory`
 
-**Identität:** `RfidTagAssignmentId` (UUID) — *Hinweis: FIXME im Code schlägt Umbenennung
-zu `RfidTagAssignmentHistoryId` vor*
+**Identität:** `RfidTagAssignmentId` (UUID) — _Hinweis: FIXME im Code schlägt Umbenennung
+zu `RfidTagAssignmentHistoryId` vor_
 
 #### Attribute
 
@@ -417,7 +417,7 @@ zu `RfidTagAssignmentHistoryId` vor*
 
 #### Domänenereignisse
 
-*Keine — dies ist ein Projektions-/Audit-Log-Aggregat.*
+_Keine — dies ist ein Projektions-/Audit-Log-Aggregat._
 
 ---
 
@@ -476,7 +476,7 @@ zu `RfidTagAssignmentHistoryId` vor*
 
 **Identität:** `WorkshopUsageId` (UUID)
 
-*Hinweis: Im Code wird eine Umbenennung zu `WorkshopSlot` oder `UsageSlot` erwogen.*
+_Hinweis: Im Code wird eine Umbenennung zu `WorkshopSlot` oder `UsageSlot` erwogen._
 
 #### Attribute
 

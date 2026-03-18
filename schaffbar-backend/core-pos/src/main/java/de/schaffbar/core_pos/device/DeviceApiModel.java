@@ -150,6 +150,30 @@ public interface DeviceApiModel {
                     .build();
         }
 
+        public static DeviceCardResponse startToolUsage(RfidReaderType type, String customerName, String toolName) {
+            return DeviceCardResponse.builder() //
+                    .DEVUSECASE(type.getKey()) //
+                    .ICON("") //
+                    .ERROR("") //
+                    .STATE("WORKING") //
+                    .CUSTOMERNAME(customerName) //
+                    .CUSTOMERSTARTSTOP(toolName) //
+                    .UNITS("") //
+                    .build();
+        }
+
+        public static DeviceCardResponse stopToolUsage(RfidReaderType type, String customerName, String toolName) {
+            return DeviceCardResponse.builder() //
+                    .DEVUSECASE(type.getKey()) //
+                    .ICON("BYE") //
+                    .ERROR("") //
+                    .STATE("END") //
+                    .CUSTOMERNAME(customerName) //
+                    .CUSTOMERSTARTSTOP(toolName) //
+                    .UNITS("") //
+                    .build();
+        }
+
         public static DeviceCardResponse errorNoUserRecognized(String message, String devUseCase) {
             return DeviceCardResponse.builder() //
                     .DEVUSECASE(devUseCase) //

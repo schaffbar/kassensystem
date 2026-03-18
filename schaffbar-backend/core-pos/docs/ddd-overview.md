@@ -1,4 +1,4 @@
-# Schaffbar Core-POS — Domain-Driven Design Documentation
+# Schaffbar — Documentation
 
 ## Table of Contents
 
@@ -270,7 +270,7 @@ class
 
 | Command                     | Fields                                                         |
 |-----------------------------|----------------------------------------------------------------|
-| *(Creation via MacAddress)* | macAddress (`MacAddress` value object)                         |
+| _(Creation via MacAddress)_ | macAddress (`MacAddress` value object)                         |
 | `UpdateRfidReaderCommand`   | id (`RfidReaderId`), type (`RfidReaderType`), name, socketName |
 
 #### Business Rules / Invariants
@@ -349,7 +349,7 @@ class
 | `assignmentDate` | `Instant`                 | set upon assignment                                 |
 | `updatedAt`      | `Instant`                 | `@Version`                                          |
 
-**Lifecycle:** `WAITING_FOR_ASSIGNMENT` → `ASSIGNED` → *(deleted on unassign)*
+**Lifecycle:** `WAITING_FOR_ASSIGNMENT` → `ASSIGNED` → _(deleted on unassign)_
 
 #### Commands
 
@@ -388,7 +388,7 @@ class
 
 **Aggregate Root:** `RfidTagAssignmentHistory`
 
-**Identity:** `RfidTagAssignmentId` (UUID) — *Note: FIXME in code suggests renaming to `RfidTagAssignmentHistoryId`*
+**Identity:** `RfidTagAssignmentId` (UUID) — _Note: FIXME in code suggests renaming to `RfidTagAssignmentHistoryId`_
 
 #### Attributes
 
@@ -413,7 +413,7 @@ class
 
 #### Domain Events
 
-*None — this is a projection / audit log aggregate.*
+_None — this is a projection / audit log aggregate._
 
 ---
 
@@ -472,7 +472,7 @@ class
 
 **Identity:** `WorkshopUsageId` (UUID)
 
-*Note: Code suggests considering renaming to `WorkshopSlot` or `UsageSlot`.*
+_Note: Code suggests considering renaming to `WorkshopSlot` or `UsageSlot`._
 
 #### Attributes
 

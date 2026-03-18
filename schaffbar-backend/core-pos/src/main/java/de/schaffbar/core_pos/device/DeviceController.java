@@ -24,6 +24,8 @@ import de.schaffbar.core_pos.rfid_tag.RfidTagService;
 import de.schaffbar.core_pos.rfid_tag.RfidTagViews.RfidTagView;
 import de.schaffbar.core_pos.rfid_tag_assignment.RfidTagAssignmentService;
 import de.schaffbar.core_pos.rfid_tag_assignment.RfidTagAssignmentViews.RfidTagAssignmentView;
+import de.schaffbar.core_pos.shared.exception.CustomerNotInWorkshopException;
+import de.schaffbar.core_pos.shared.exception.MaxToolUsageExceededException;
 import de.schaffbar.core_pos.shared.exception.NoActiveWorkshopSessionFoundException;
 import de.schaffbar.core_pos.shared.exception.NoActiveWorkshopUsageFoundException;
 import de.schaffbar.core_pos.shared.exception.NoCustomerAssignedException;
@@ -33,9 +35,14 @@ import de.schaffbar.core_pos.shared.id.CustomerId;
 import de.schaffbar.core_pos.shared.id.MacAddress;
 import de.schaffbar.core_pos.shared.id.RfidReaderId;
 import de.schaffbar.core_pos.shared.id.RfidTagId;
+import de.schaffbar.core_pos.tool.ToolService;
+import de.schaffbar.core_pos.tool.ToolViews.ToolView;
+import de.schaffbar.core_pos.tool_usage.ToolUsageService;
 import de.schaffbar.core_pos.use_case.CustomerAssignRfidTag;
 import de.schaffbar.core_pos.use_case.EnterWorkshop;
 import de.schaffbar.core_pos.use_case.LeaveWorkshop;
+import de.schaffbar.core_pos.use_case.StartToolUsage;
+import de.schaffbar.core_pos.use_case.StopToolUsage;
 import de.schaffbar.core_pos.workshop_session.WorkshopSessionService;
 import de.schaffbar.core_pos.workshop_session.WorkshopSessionViews.WorkshopSessionView;
 import de.schaffbar.core_pos.workshop_usage.WorkshopUsageService;
@@ -68,9 +75,17 @@ public class DeviceController {
 
     private final @NonNull RfidTagAssignmentService rfidTagAssignmentService;
 
+    private final @NonNull ToolService toolService;
+
+    private final @NonNull ToolUsageService toolUsageService;
+
     private final @NonNull EnterWorkshop enterWorkshop;
 
     private final @NonNull LeaveWorkshop leaveWorkshop;
+
+    private final @NonNull StartToolUsage startToolUsage;
+
+    private final @NonNull StopToolUsage stopToolUsage;
 
     private final @NonNull CustomerAssignRfidTag assignRfidTagUseCase;
 
@@ -140,12 +155,15 @@ public class DeviceController {
                 default -> "Unerwarteter Fehler";
             };
 
+            log.error(message);
             return ResponseEntity.ok(DeviceCardResponse.errorNoUserRecognized(message, devUseCase));
         }
         catch (NoCustomerAssignedException e) {
+            log.error("No customer assigned to RFID tag [id: {}]. Returning error response.", e.getMessage());
             return ResponseEntity.ok(DeviceCardResponse.errorNoUserRecognized("Kein Kunde für RFID Tag", devUseCase));
         }
         catch (Exception e) {
+            log.error("An unexpected error occurred while processing RFID tag request", e);
             return ResponseEntity.ok(DeviceCardResponse.errorUnexpected("Unerwarteter Fehler", devUseCase));
         }
 
@@ -153,21 +171,34 @@ public class DeviceController {
             DeviceCardResponse response = switch (rfidReader.type()) {
                 case GATE_KEEPER_IN -> enterWorkshop(customer, rfidReader.type());
                 case GATE_KEEPER_OUT -> leaveWorkshop(customer, rfidReader.type());
+                case SWITCH_BOX -> toggleToolUsage(customer, rfidReader);
                 default -> throw new IllegalStateException("Unexpected value for RFID reader type: " + rfidReader.type());
             };
 
             return ResponseEntity.ok(response);
         }
         catch (UserAlreadyInWorkshopException e) {
+            log.error("User is already in workshop [id: {}]", rfidReader.id());
             return ResponseEntity.ok(DeviceCardResponse.errorNoAccess("Du schaffst schon", customer.getFullName(), devUseCase));
         }
         catch (NoActiveWorkshopUsageFoundException e) {
+            log.error("No active workshop usage [id: {}]", rfidReader.id());
             return ResponseEntity.ok(DeviceCardResponse.errorNoAccess("Zwei mal Pause geht nicht", customer.getFullName(), devUseCase));
         }
         catch (NoActiveWorkshopSessionFoundException e) {
+            log.error("No active workshop [id: {}]", rfidReader.id());
             return ResponseEntity.ok(DeviceCardResponse.errorNoAccess("Du warst nie im Werkstatt", customer.getFullName(), devUseCase));
         }
+        catch (CustomerNotInWorkshopException e) {
+            log.error("Customer is not in workshop [id: {}]", rfidReader.id());
+            return ResponseEntity.ok(DeviceCardResponse.errorNoAccess("Du bist nicht in der Werkstatt", customer.getFullName(), devUseCase));
+        }
+        catch (MaxToolUsageExceededException e) {
+            log.error("Max tool usage [id: {}]", rfidReader.id());
+            return ResponseEntity.ok(DeviceCardResponse.errorNoAccess("Max. Werkzeuge erreicht", customer.getFullName(), devUseCase));
+        }
         catch (Exception e) {
+            log.error("An unexpected error occurred while processing RFID tag request. Message {}", e.getMessage());
             return ResponseEntity.ok(DeviceCardResponse.errorUnexpected("Unerwarteter Fehler", devUseCase));
         }
     }
@@ -289,6 +320,24 @@ public class DeviceController {
                 .toList().getFirst();
 
         return DeviceCardResponse.leaveOk(type, customer.getFullName(), totalUnits, lastWorkshopUsage.entryTime(), lastWorkshopUsage.exitTime());
+    }
+
+    private DeviceCardResponse toggleToolUsage(CustomerView customer, RfidReaderView rfidReader) {
+        ToolView tool = this.toolService.getTool(rfidReader.id()) //
+                .orElseThrow(() -> new RuntimeException("No tool assigned to RFID reader [id: " + rfidReader.id() + "]"));
+
+        //        boolean hasActiveUsage = this.toolUsageService.getActiveToolUsages(customer.id()).stream() //
+        //                .anyMatch(usage -> usage.toolId().sameValueAs(tool.id()));
+        boolean hasActiveUsage = this.toolUsageService.getActiveToolUsage(customer.id(), tool.id()).isPresent();
+        if (hasActiveUsage) {
+            this.stopToolUsage.process(customer.id(), tool.id());
+            return DeviceCardResponse.stopToolUsage(rfidReader.type(), customer.getFullName(), tool.name());
+        }
+        else {
+            this.startToolUsage.process(customer.id(), tool.id());
+            return DeviceCardResponse.startToolUsage(rfidReader.type(), customer.getFullName(), tool.name());
+        }
+
     }
 
     private List<WorkshopUsageView> getWorkshopUsages(CustomerId customerId) {

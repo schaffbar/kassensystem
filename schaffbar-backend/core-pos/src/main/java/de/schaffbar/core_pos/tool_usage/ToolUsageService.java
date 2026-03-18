@@ -44,7 +44,7 @@ public class ToolUsageService {
                 .toList();
     }
 
-    public Optional<ToolUsageView> getActiveToolUsages(@NotNull @Valid CustomerId customerId, @NotNull @Valid ToolId toolId) {
+    public Optional<ToolUsageView> getActiveToolUsage(@NotNull @Valid CustomerId customerId, @NotNull @Valid ToolId toolId) {
         return this.toolUsageRepository.findActiveByCustomerIdAndToolId(customerId, toolId) //
                 .map(ToolUsageViews.MAPPER::toToolUsageView);
     }

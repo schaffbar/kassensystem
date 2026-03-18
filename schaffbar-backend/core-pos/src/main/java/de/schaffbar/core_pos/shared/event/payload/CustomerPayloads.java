@@ -1,4 +1,4 @@
-package de.schaffbar.core_pos.shared.event.customer;
+package de.schaffbar.core_pos.shared.event.payload;
 
 import java.time.Instant;
 import java.time.LocalDate;

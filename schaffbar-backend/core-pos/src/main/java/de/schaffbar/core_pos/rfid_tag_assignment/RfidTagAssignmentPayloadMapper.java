@@ -1,8 +1,8 @@
 package de.schaffbar.core_pos.rfid_tag_assignment;
 
-import de.schaffbar.core_pos.shared.event.rfid_tag_assignment.RfidTagAssignmentPayloads.RfidTagAssignedPayload;
-import de.schaffbar.core_pos.shared.event.rfid_tag_assignment.RfidTagAssignmentPayloads.RfidTagAssignmentRequestedPayload;
-import de.schaffbar.core_pos.shared.event.rfid_tag_assignment.RfidTagAssignmentPayloads.RfidTagUnassignedPayload;
+import de.schaffbar.core_pos.shared.event.payload.RfidTagAssignmentPayloads.RfidTagAssignedPayload;
+import de.schaffbar.core_pos.shared.event.payload.RfidTagAssignmentPayloads.RfidTagAssignmentRequestedPayload;
+import de.schaffbar.core_pos.shared.event.payload.RfidTagAssignmentPayloads.RfidTagUnassignedPayload;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
 import org.mapstruct.factory.Mappers;

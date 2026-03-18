@@ -2,9 +2,9 @@ package de.schaffbar.core_pos.tool;
 
 import de.schaffbar.core_pos.shared.event.EventType;
 import de.schaffbar.core_pos.shared.event.SchaffbarEvent;
-import de.schaffbar.core_pos.shared.event.tool.ToolPayloads.ToolDeletedPayload;
-import de.schaffbar.core_pos.shared.event.tool.ToolPayloads.ToolRfidReaderAssignedPayload;
-import de.schaffbar.core_pos.shared.event.tool.ToolPayloads.ToolRfidReaderClearedPayload;
+import de.schaffbar.core_pos.shared.event.payload.ToolPayloads.ToolDeletedPayload;
+import de.schaffbar.core_pos.shared.event.payload.ToolPayloads.ToolRfidReaderAssignedPayload;
+import de.schaffbar.core_pos.shared.event.payload.ToolPayloads.ToolRfidReaderClearedPayload;
 import de.schaffbar.core_pos.shared.id.RfidReaderId;
 import de.schaffbar.core_pos.shared.id.ToolId;
 import lombok.AccessLevel;

@@ -1,7 +1,7 @@
 package de.schaffbar.core_pos.workshop_session;
 
-import de.schaffbar.core_pos.shared.event.workshop_session.WorkshopSessionPayloads.WorkshopSessionClosedPayload;
-import de.schaffbar.core_pos.shared.event.workshop_session.WorkshopSessionPayloads.WorkshopSessionStartedPayload;
+import de.schaffbar.core_pos.shared.event.payload.WorkshopSessionPayloads.WorkshopSessionClosedPayload;
+import de.schaffbar.core_pos.shared.event.payload.WorkshopSessionPayloads.WorkshopSessionStartedPayload;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
 import org.mapstruct.factory.Mappers;

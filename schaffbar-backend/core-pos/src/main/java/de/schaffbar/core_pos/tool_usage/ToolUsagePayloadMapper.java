@@ -1,7 +1,7 @@
 package de.schaffbar.core_pos.tool_usage;
 
-import de.schaffbar.core_pos.shared.event.tool_usage.ToolUsagePayloads.ToolUsageStartedPayload;
-import de.schaffbar.core_pos.shared.event.tool_usage.ToolUsagePayloads.ToolUsageStoppedPayload;
+import de.schaffbar.core_pos.shared.event.payload.ToolUsagePayloads.ToolUsageStartedPayload;
+import de.schaffbar.core_pos.shared.event.payload.ToolUsagePayloads.ToolUsageStoppedPayload;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
 import org.mapstruct.factory.Mappers;

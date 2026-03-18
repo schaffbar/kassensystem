@@ -1,4 +1,4 @@
-package de.schaffbar.core_pos.shared.event.rfid_tag_assignment;
+package de.schaffbar.core_pos.shared.event.payload;
 
 import de.schaffbar.core_pos.shared.event.EventPayload;
 

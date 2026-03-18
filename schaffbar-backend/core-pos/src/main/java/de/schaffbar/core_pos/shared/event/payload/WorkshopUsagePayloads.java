@@ -1,4 +1,4 @@
-package de.schaffbar.core_pos.shared.event.workshop_usage;
+package de.schaffbar.core_pos.shared.event.payload;
 
 import java.time.Instant;
 

@@ -1,7 +1,7 @@
 package de.schaffbar.core_pos.workshop_usage;
 
-import de.schaffbar.core_pos.shared.event.workshop_usage.WorkshopUsagePayloads.WorkshopUsageEnteredPayload;
-import de.schaffbar.core_pos.shared.event.workshop_usage.WorkshopUsagePayloads.WorkshopUsageLeftPayload;
+import de.schaffbar.core_pos.shared.event.payload.WorkshopUsagePayloads.WorkshopUsageEnteredPayload;
+import de.schaffbar.core_pos.shared.event.payload.WorkshopUsagePayloads.WorkshopUsageLeftPayload;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
 import org.mapstruct.factory.Mappers;

@@ -1,8 +1,8 @@
 package de.schaffbar.core_pos.tool;
 
-import de.schaffbar.core_pos.shared.event.tool.ToolPayloads.ToolCreatedPayload;
-import de.schaffbar.core_pos.shared.event.tool.ToolPayloads.ToolUpdatedPayload;
-import de.schaffbar.core_pos.shared.event.tool.ToolPayloads.ToolWlanRelaisUpdatedPayload;
+import de.schaffbar.core_pos.shared.event.payload.ToolPayloads.ToolCreatedPayload;
+import de.schaffbar.core_pos.shared.event.payload.ToolPayloads.ToolUpdatedPayload;
+import de.schaffbar.core_pos.shared.event.payload.ToolPayloads.ToolWlanRelaisUpdatedPayload;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
 import org.mapstruct.factory.Mappers;

@@ -2,7 +2,7 @@ package de.schaffbar.core_pos.rfid_reader;
 
 import de.schaffbar.core_pos.shared.event.EventType;
 import de.schaffbar.core_pos.shared.event.SchaffbarEvent;
-import de.schaffbar.core_pos.shared.event.rfid_reader.RfidReaderPayloads.RfidReaderDeletedPayload;
+import de.schaffbar.core_pos.shared.event.payload.RfidReaderPayloads.RfidReaderDeletedPayload;
 import de.schaffbar.core_pos.shared.id.RfidReaderId;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;

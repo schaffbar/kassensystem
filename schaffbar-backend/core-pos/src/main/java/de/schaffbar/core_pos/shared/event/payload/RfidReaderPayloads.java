@@ -1,4 +1,4 @@
-package de.schaffbar.core_pos.shared.event.rfid_reader;
+package de.schaffbar.core_pos.shared.event.payload;
 
 import de.schaffbar.core_pos.shared.id.RfidReaderId;
 import jakarta.validation.Valid;

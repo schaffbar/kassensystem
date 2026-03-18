@@ -1,4 +1,4 @@
-package de.schaffbar.core_pos.shared.event.workshop_session;
+package de.schaffbar.core_pos.shared.event.payload;
 
 import de.schaffbar.core_pos.shared.event.EventPayload;
 

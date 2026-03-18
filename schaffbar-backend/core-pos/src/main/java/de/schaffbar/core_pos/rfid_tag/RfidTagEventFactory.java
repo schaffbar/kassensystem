@@ -2,7 +2,7 @@ package de.schaffbar.core_pos.rfid_tag;
 
 import de.schaffbar.core_pos.shared.event.EventType;
 import de.schaffbar.core_pos.shared.event.SchaffbarEvent;
-import de.schaffbar.core_pos.shared.event.rfid_tag.RfidTagPayloads;
+import de.schaffbar.core_pos.shared.event.payload.RfidTagPayloads;
 import de.schaffbar.core_pos.shared.id.RfidTagId;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;

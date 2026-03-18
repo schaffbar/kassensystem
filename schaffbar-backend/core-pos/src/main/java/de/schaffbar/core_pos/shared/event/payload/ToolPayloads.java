@@ -1,4 +1,4 @@
-package de.schaffbar.core_pos.shared.event.tool;
+package de.schaffbar.core_pos.shared.event.payload;
 
 import de.schaffbar.core_pos.shared.id.RfidReaderId;
 import de.schaffbar.core_pos.shared.id.ToolId;

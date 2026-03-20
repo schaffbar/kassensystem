@@ -11,11 +11,11 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { TranslatePipe } from '@ngx-translate/core';
 
 import { UpdateUserFormComponent } from '../../components/update-user-form/update-user-form.component';
-import { RfidTagAssignmentService } from '../../rfid-tag-assignment.service';
-import { User, UserAddress } from '../../user.model';
+import { User, UserAddress } from '../../shared/models/user.model';
+import { RfidTagAssignmentService } from '../../shared/services/rfid-tag-assignment.service';
+import { UserDetailStore } from '../../shared/stores/user-detail.store';
 import { UserDetailInfoComponent } from '../user-detail-info/user-detail-info.component';
 import { UserOpenSessionComponent } from '../user-open-session/user-open-session.component';
-import { UserDetailStore } from './user-detail.store';
 
 @Component({
   selector: 'schbar-user-detail',

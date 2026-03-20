@@ -7,7 +7,7 @@ import { MatInputModule } from '@angular/material/input';
 
 import { TranslatePipe } from '@ngx-translate/core';
 
-import { User } from '../../user.model';
+import { User } from '../../shared/models/user.model';
 
 @Component({
   selector: 'schbar-user-contact',

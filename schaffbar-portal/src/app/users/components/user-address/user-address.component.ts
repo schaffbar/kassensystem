@@ -10,7 +10,7 @@ import { MatSelectModule } from '@angular/material/select';
 
 import { TranslatePipe } from '@ngx-translate/core';
 
-import { UserAddress } from '../../user.model';
+import { UserAddress } from '../../shared/models/user.model';
 
 @Component({
   selector: 'schbar-user-address',

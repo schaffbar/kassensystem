@@ -15,8 +15,8 @@ import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { ROUTE } from '../../../app.routes';
 import { ConfirmDeleteComponent } from '../../../shared/components/confirm-delete/confirm-delete.component';
 import { NewUserFormComponent } from '../../components/new-user-form/new-user-form.component';
-import { User } from '../../user.model';
-import { UsersStore } from '../../users.store';
+import { User } from '../../shared/models/user.model';
+import { UsersStore } from '../../shared/stores/users.store';
 
 @Component({
   selector: 'schbar-user-list',

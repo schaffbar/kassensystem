@@ -6,9 +6,9 @@ import { setAllEntities, setEntity, withEntities } from '@ngrx/signals/entities'
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { exhaustMap, pipe, tap } from 'rxjs';
 
-import { setError, setFulfilled, setPending, withRequestStatus } from '../shared/state/request-status.feature';
-import { User } from './user.model';
-import { UsersService } from './users.service';
+import { setError, setFulfilled, setPending, withRequestStatus } from '../../../shared/state/request-status.feature';
+import { User } from '../models/user.model';
+import { UsersService } from '../services/users.service';
 
 export const UsersStore = signalStore(
   { providedIn: 'root' },

@@ -1,4 +1,7 @@
+- [Backend] [bug] when changing type of rfid reader from switch box to other, check if this rfid reader is already assigned to a tool. if yes reject request
+
 - [Frontend]
+- [Frontend] Select/highligt menu entry when going into the details
 - [Frontend] IMPORTANT tools store is used in tool list and tool details. Is it the same instance?
 - [Frontend] check required properties in all entities and forms (update)
 - [Frontend] handle API errors
@@ -6,11 +9,10 @@
 
 - [Backend]
 - [Backend] Problems API
-- [Backend] when changing type of rfid reader from switch box to other, check if this rfid reader is already assigned to a tool. if yes reject request
+- [Backend] validate all events before storing in outbox table
 
 TODO:
 
-1. create event for each mutation and store it in the event table
 2. Scheduler to clean up waiting for assignment
 3. Check if workshop usage is completed before closing session
 4. Validate Session before closing it

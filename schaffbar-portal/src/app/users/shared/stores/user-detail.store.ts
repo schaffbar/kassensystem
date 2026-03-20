@@ -15,12 +15,12 @@ import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { exhaustMap, filter, pipe, tap } from 'rxjs';
 
 import { setError, setFulfilled, setPending, withRequestStatus } from '../../../shared/state/request-status.feature';
-import { RfidTagAssignment, RfidTagAssignmentStatus } from '../../rfid-tag-assignment.model';
-import { RfidTagAssignmentService } from '../../rfid-tag-assignment.service';
-import { User, UserAddress } from '../../user.model';
-import { UsersService } from '../../users.service';
-import { WorkshopSession } from '../../workshop-session.model';
-import { WorkshopSessionService } from '../../workshop-session.service';
+import { RfidTagAssignment, RfidTagAssignmentStatus } from '../../shared/models/rfid-tag-assignment.model';
+import { User, UserAddress } from '../../shared/models/user.model';
+import { WorkshopSession } from '../../shared/models/workshop-session.model';
+import { RfidTagAssignmentService } from '../../shared/services/rfid-tag-assignment.service';
+import { UsersService } from '../../shared/services/users.service';
+import { WorkshopSessionService } from '../../shared/services/workshop-session.service';
 
 interface UserDetailState {
   userId: string | null;

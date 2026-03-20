@@ -4,8 +4,8 @@ import { inject, Injectable } from '@angular/core';
 
 import { Observable } from 'rxjs';
 
-import { environment } from '../../environments/environment';
-import { User, UserAddress } from './user.model';
+import { environment } from '../../../../environments/environment';
+import { User, UserAddress } from '../models/user.model';
 
 const USERS_API_URL = `${environment.apiBaseUrl}/api/v1/customers`;
 

@@ -4,7 +4,7 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 
 import { UserAddressComponent } from '../../components/user-address/user-address.component';
 import { UserContactComponent } from '../../components/user-contact/user-contact.component';
-import { User, UserAddress } from '../../user.model';
+import { User, UserAddress } from '../../shared/models/user.model';
 
 @Component({
   selector: 'schbar-user-detail-info',

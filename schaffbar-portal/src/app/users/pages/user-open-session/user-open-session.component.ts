@@ -6,7 +6,7 @@ import { MatTableModule } from '@angular/material/table';
 
 import { TranslatePipe } from '@ngx-translate/core';
 
-import { UserDetailStore } from '../user-detail/user-detail.store';
+import { UserDetailStore } from '../../shared/stores/user-detail.store';
 
 @Component({
   selector: 'schbar-user-open-session',

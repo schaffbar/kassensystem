@@ -3,8 +3,8 @@ import { inject, Injectable } from '@angular/core';
 
 import { map, Observable } from 'rxjs';
 
-import { environment } from '../../environments/environment';
-import { RfidTagAssignment } from './rfid-tag-assignment.model';
+import { environment } from '../../../../environments/environment';
+import { RfidTagAssignment } from '../models/rfid-tag-assignment.model';
 
 const RFID_TAG_ASSIGNMENT_API_URL = `${environment.apiBaseUrl}/api/v1/rfid-tag-assignments`;
 

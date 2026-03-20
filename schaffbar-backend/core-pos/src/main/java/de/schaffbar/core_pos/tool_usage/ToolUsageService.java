@@ -12,6 +12,7 @@ import de.schaffbar.core_pos.shared.exception.ToolAlreadyInUseByAnotherCustomerE
 import de.schaffbar.core_pos.shared.exception.ToolNotInUseByCustomerException;
 import de.schaffbar.core_pos.shared.id.CustomerId;
 import de.schaffbar.core_pos.shared.id.ToolId;
+import de.schaffbar.core_pos.shared.id.WorkshopSessionId;
 import de.schaffbar.core_pos.tool_usage.ToolUsageCommands.StartToolUsageCommand;
 import de.schaffbar.core_pos.tool_usage.ToolUsageViews.ToolUsageView;
 import jakarta.validation.Valid;
@@ -47,6 +48,12 @@ public class ToolUsageService {
     public Optional<ToolUsageView> getActiveToolUsage(@NotNull @Valid CustomerId customerId, @NotNull @Valid ToolId toolId) {
         return this.toolUsageRepository.findActiveByCustomerIdAndToolId(customerId, toolId) //
                 .map(ToolUsageViews.MAPPER::toToolUsageView);
+    }
+
+    public List<ToolUsageView> getToolUsages(@NotNull @Valid WorkshopSessionId workshopSessionId) {
+        return this.toolUsageRepository.findByWorkshopSessionId(workshopSessionId).stream() //
+                .map(ToolUsageViews.MAPPER::toToolUsageView) //
+                .toList();
     }
 
     // ------------------------------------------------------------------------

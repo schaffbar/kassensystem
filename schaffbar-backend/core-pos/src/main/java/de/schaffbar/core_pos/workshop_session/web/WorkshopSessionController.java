@@ -3,11 +3,21 @@ package de.schaffbar.core_pos.workshop_session.web;
 import static java.util.Objects.isNull;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import de.schaffbar.core_pos.shared.id.CustomerId;
+import de.schaffbar.core_pos.shared.id.ToolId;
+import de.schaffbar.core_pos.tool.ToolService;
+import de.schaffbar.core_pos.tool.ToolViews.ToolView;
+import de.schaffbar.core_pos.tool_usage.ToolUsageService;
+import de.schaffbar.core_pos.tool_usage.ToolUsageViews.ToolUsageView;
 import de.schaffbar.core_pos.use_case.CloseSession;
 import de.schaffbar.core_pos.workshop_session.WorkshopSessionService;
 import de.schaffbar.core_pos.workshop_session.WorkshopSessionViews.WorkshopSessionView;
+import de.schaffbar.core_pos.workshop_session.web.WorkshopSessionApiModel.ToolUsageSummaryApiDto;
 import de.schaffbar.core_pos.workshop_session.web.WorkshopSessionApiModel.WorkshopSessionApiDto;
 import de.schaffbar.core_pos.workshop_usage.WorkshopUsageService;
 import de.schaffbar.core_pos.workshop_usage.WorkshopUsageViews.WorkshopUsageView;
@@ -33,6 +43,10 @@ public class WorkshopSessionController {
 
     private final @NonNull WorkshopUsageService workshopUsageService;
 
+    private final @NonNull ToolUsageService toolUsageService;
+
+    private final @NonNull ToolService toolService;
+
     private final @NonNull CloseSession closeSessionUseCase;
 
     // ------------------------------------------------------------------------
@@ -41,6 +55,7 @@ public class WorkshopSessionController {
     // TODO: REST - remove customerId and active from path, use query parameter instead
     @GetMapping(value = "{customerId}/active", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<WorkshopSessionApiDto> getActiveWorkshopSession(@PathVariable @NotNull CustomerId customerId) {
+        // TODO: check if customer with given id exists
         WorkshopSessionView openSession = this.workshopSessionService.getOpenWorkshopSession(customerId) //
                 .orElse(null);
 
@@ -50,7 +65,10 @@ public class WorkshopSessionController {
 
         List<WorkshopUsageView> usages = this.workshopUsageService.getWorkshopUsages(openSession.id());
 
-        WorkshopSessionApiDto result = WorkshopSessionApiModel.MAPPER.toWorkshopSessionApiDto(openSession, usages);
+        List<ToolUsageView> toolUsages = this.toolUsageService.getToolUsages(openSession.id());
+        List<ToolUsageSummaryApiDto> toolUsageSummaries = buildToolUsageSummaries(toolUsages);
+
+        WorkshopSessionApiDto result = WorkshopSessionApiModel.MAPPER.toWorkshopSessionApiDto(openSession, usages, toolUsageSummaries);
 
         return ResponseEntity.ok(result);
     }
@@ -64,6 +82,24 @@ public class WorkshopSessionController {
         this.closeSessionUseCase.process(customerId);
 
         return ResponseEntity.ok().build();
+    }
+
+    // ------------------------------------------------------------------------
+    // helper
+
+    private List<ToolUsageSummaryApiDto> buildToolUsageSummaries(List<ToolUsageView> toolUsages) {
+        if (toolUsages.isEmpty()) {
+            return List.of();
+        }
+
+        Map<ToolId, ToolView> toolMap = toolUsages.stream() //
+                .map(ToolUsageView::toolId) //
+                .distinct() //
+                .map(toolId -> this.toolService.getTool(toolId).orElse(null)) //
+                .filter(Objects::nonNull) //
+                .collect(Collectors.toMap(ToolView::id, Function.identity()));
+
+        return WorkshopSessionApiModel.MAPPER.toToolUsageSummaries(toolUsages, toolMap);
     }
 
 }

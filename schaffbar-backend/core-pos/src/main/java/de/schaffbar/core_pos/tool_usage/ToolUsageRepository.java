@@ -6,6 +6,7 @@ import java.util.UUID;
 
 import de.schaffbar.core_pos.shared.id.CustomerId;
 import de.schaffbar.core_pos.shared.id.ToolId;
+import de.schaffbar.core_pos.shared.id.WorkshopSessionId;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -17,6 +18,8 @@ interface ToolUsageRepository extends JpaRepository<ToolUsage, UUID> {
     List<ToolUsage> findByCustomerIdAndToolIdAndEndTimeIsNull(UUID customerId, UUID toolId);
 
     List<ToolUsage> findByToolIdAndEndTimeIsNull(UUID toolId);
+
+    List<ToolUsage> findByWorkshopSessionId(UUID workshopSessionId);
 
     long countByCustomerIdAndEndTimeIsNull(UUID customerId);
 
@@ -42,6 +45,10 @@ interface ToolUsageRepository extends JpaRepository<ToolUsage, UUID> {
 
     default long countActiveByCustomerId(CustomerId customerId) {
         return countByCustomerIdAndEndTimeIsNull(customerId.getValue());
+    }
+
+    default List<ToolUsage> findByWorkshopSessionId(WorkshopSessionId workshopSessionId) {
+        return findByWorkshopSessionId(workshopSessionId.getValue());
     }
 
     default Optional<ToolUsage> findActiveByToolId(ToolId toolId) {

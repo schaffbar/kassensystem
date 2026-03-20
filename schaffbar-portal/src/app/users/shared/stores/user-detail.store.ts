@@ -60,9 +60,8 @@ export const UserDetailStore = signalStore(
     toolUsageSummaries: computed(() => openSession()?.toolUsageSummaries ?? []),
   })),
   withComputed(({ slots }) => ({
-    slotsCount: computed(() => slots().length),
-    totalTimeInMinutes: computed(() => slots().reduce((sum, usage) => sum + usage.durationInMinutes, 0)),
-    totalUnitsUsed: computed(() => slots().reduce((sum, usage) => sum + usage.unitsUsed, 0)),
+    totalWorkshopTimeInMinutes: computed(() => slots().reduce((sum, usage) => sum + usage.durationInMinutes, 0)),
+    totalWorkshopUnitsUsed: computed(() => slots().reduce((sum, usage) => sum + usage.unitsUsed, 0)),
   })),
   withRequestStatus(),
   withProps(() => ({

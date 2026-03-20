@@ -1,1 +1,14 @@
+:host {
+  --section-max-width: 1000px;
 
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.workshop-usage-container,
+.tool-usage-container,
+.close-button {
+  max-width: var(--section-max-width);
+  width: 100%;
+}

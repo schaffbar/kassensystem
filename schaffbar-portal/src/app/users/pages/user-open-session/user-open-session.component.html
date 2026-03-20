@@ -1,19 +1,22 @@
 @if (detailsStore.openSession(); as openSession) {
   @if (detailsStore.slots().length > 0) {
     <schbar-workshop-usage-summary
+      class="workshop-usage-container"
       [usages]="detailsStore.slots()"
-      [totalTimeInMinutes]="detailsStore.totalTimeInMinutes()"
-      [totalUnitsUsed]="detailsStore.totalUnitsUsed()" />
+      [totalTimeInMinutes]="detailsStore.totalWorkshopTimeInMinutes()"
+      [totalUnitsUsed]="detailsStore.totalWorkshopUnitsUsed()" />
 
     @if (detailsStore.toolUsageSummaries().length > 0) {
-      <h2>{{ 'users.pages.openSession.headers.toolUsage' | translate }}</h2>
+      <div class="tool-usage-container">
+        <h2>{{ 'users.pages.openSession.headers.toolUsage' | translate }}</h2>
 
-      @for (summary of detailsStore.toolUsageSummaries(); track summary.toolId) {
-        <schbar-tool-usage-summary [summary]="summary" />
-      }
+        @for (summary of detailsStore.toolUsageSummaries(); track summary.toolId) {
+          <schbar-tool-usage-summary [summary]="summary" />
+        }
+      </div>
     }
 
-    <button mat-flat-button color="primary" (click)="closeSession()">
+    <button class="close-button" mat-flat-button color="primary" (click)="closeSession()">
       {{ 'users.actions.closeSession' | translate }}
     </button>
   } @else {

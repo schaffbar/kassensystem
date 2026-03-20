@@ -1,112 +1,16 @@
 @if (detailsStore.openSession(); as openSession) {
   @if (detailsStore.slots().length > 0) {
-    <h2>{{ 'users.pages.openSession.headers.workshopTime' | translate }}</h2>
-    <div class="table-container">
-      <table mat-table [dataSource]="detailsStore.slots()" class="mat-elevation-z8">
-        <ng-container matColumnDef="entryTime">
-          <th mat-header-cell *matHeaderCellDef>
-            {{ 'users.tables.openSession.workshopUsage.entryTimeColumn' | translate }}
-          </th>
-          <td mat-cell *matCellDef="let slot">
-            {{ slot.entryTime | date: 'medium' }}
-          </td>
-        </ng-container>
-
-        <ng-container matColumnDef="exitTime">
-          <th mat-header-cell *matHeaderCellDef>
-            {{ 'users.tables.openSession.workshopUsage.exitTimeColumn' | translate }}
-          </th>
-          <td mat-cell *matCellDef="let slot">
-            {{ slot.exitTime ? (slot.exitTime | date: 'medium') : '-' }}
-          </td>
-        </ng-container>
-
-        <ng-container matColumnDef="durationInMinutes">
-          <th mat-header-cell *matHeaderCellDef>{{ 'users.tables.openSession.durationColumn' | translate }}</th>
-          <td mat-cell *matCellDef="let slot">
-            {{ slot.durationInMinutes ?? '-' }}
-          </td>
-        </ng-container>
-
-        <ng-container matColumnDef="unitsUsed">
-          <th mat-header-cell *matHeaderCellDef>{{ 'users.tables.openSession.unitsUsedColumn' | translate }}</th>
-          <td mat-cell *matCellDef="let slot">
-            {{ slot.unitsUsed ?? '-' }}
-          </td>
-        </ng-container>
-
-        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-      </table>
-    </div>
-
-    <h3>
-      {{ 'users.pages.openSession.headers.total' | translate }}: {{ detailsStore.totalTimeInMinutes() }}
-      {{ 'users.pages.openSession.headers.totalDurationSuffix' | translate }} - {{ detailsStore.totalUnitsUsed() }}
-      {{ 'users.pages.openSession.headers.totalUnitsSuffix' | translate }}
-    </h3>
+    <schbar-workshop-usage-summary
+      [usages]="detailsStore.slots()"
+      [totalTimeInMinutes]="detailsStore.totalTimeInMinutes()"
+      [totalUnitsUsed]="detailsStore.totalUnitsUsed()" />
 
     @if (detailsStore.toolUsageSummaries().length > 0) {
       <h2>{{ 'users.pages.openSession.headers.toolUsage' | translate }}</h2>
 
       @for (summary of detailsStore.toolUsageSummaries(); track summary.toolId) {
-        <div class="tool-summary">
-          <h3 class="tool-summary-header">
-            {{ summary.toolName }}
-            @if (summary.active) {
-              <mat-chip>{{ 'users.chips.openSession.toolUsage.active' | translate }}</mat-chip>
-            }
-          </h3>
-          <p class="tool-summary-totals">
-            {{ 'users.pages.openSession.headers.total' | translate }}: {{ summary.totalDurationInMinutes }}
-            {{ 'users.pages.openSession.headers.totalDurationSuffix' | translate }} - {{ summary.totalUnits }}
-            {{ 'users.pages.openSession.headers.totalUnitsSuffix' | translate }}
-          </p>
-
-          @if (summary.usages.length > 0) {
-            <div class="table-container">
-              <table mat-table [dataSource]="summary.usages" class="mat-elevation-z8">
-                <ng-container matColumnDef="startTime">
-                  <th mat-header-cell *matHeaderCellDef>
-                    {{ 'users.tables.openSession.toolUsage.startTimeColumn' | translate }}
-                  </th>
-                  <td mat-cell *matCellDef="let usage">{{ usage.startTime | date: 'medium' }}</td>
-                </ng-container>
-
-                <ng-container matColumnDef="endTime">
-                  <th mat-header-cell *matHeaderCellDef>
-                    {{ 'users.tables.openSession.toolUsage.endTimeColumn' | translate }}
-                  </th>
-                  <td mat-cell *matCellDef="let usage">{{ usage.endTime ? (usage.endTime | date: 'medium') : '-' }}</td>
-                </ng-container>
-
-                <ng-container matColumnDef="durationInMinutes">
-                  <th mat-header-cell *matHeaderCellDef>{{ 'users.tables.openSession.durationColumn' | translate }}</th>
-                  <td mat-cell *matCellDef="let usage">{{ usage.durationInMinutes ?? '-' }}</td>
-                </ng-container>
-
-                <ng-container matColumnDef="unitsUsed">
-                  <th mat-header-cell *matHeaderCellDef>
-                    {{ 'users.tables.openSession.unitsUsedColumn' | translate }}
-                  </th>
-                  <td mat-cell *matCellDef="let usage">{{ usage.unitsUsed ?? '-' }}</td>
-                </ng-container>
-
-                <tr mat-header-row *matHeaderRowDef="toolUsageColumns"></tr>
-                <tr mat-row *matRowDef="let row; columns: toolUsageColumns"></tr>
-              </table>
-            </div>
-          }
-        </div>
+        <schbar-tool-usage-summary [summary]="summary" />
       }
-
-      <h3>
-        {{ 'users.pages.openSession.headers.toolUsageTotal' | translate }}:
-        {{ detailsStore.totalToolDurationInMinutes() }}
-        {{ 'users.pages.openSession.headers.totalDurationSuffix' | translate }} -
-        {{ detailsStore.totalToolUnitsUsed() }}
-        {{ 'users.pages.openSession.headers.totalUnitsSuffix' | translate }}
-      </h3>
     }
 
     <button mat-flat-button color="primary" (click)="closeSession()">

@@ -20,3 +20,18 @@
   max-width: 100px;
   // text-align: center;
 }
+
+.tool-summary {
+  margin-bottom: 1.5rem;
+}
+
+.tool-summary-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.tool-summary-totals {
+  margin: 0.25rem 0 0.5rem;
+  color: rgba(0, 0, 0, 0.6);
+}

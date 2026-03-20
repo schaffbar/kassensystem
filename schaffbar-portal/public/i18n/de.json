@@ -84,10 +84,16 @@
     },
     "tables": {
       "openSession": {
-        "entryTimeColumn": "Eingangszeit",
-        "exitTimeColumn": "Ausgangszeit",
         "durationColumn": "Dauer (min)",
-        "unitsUsedColumn": "Verwendete Einheiten"
+        "unitsUsedColumn": "Verwendete Einheiten",
+        "workshopUsage": {
+          "entryTimeColumn": "Eingangszeit",
+          "exitTimeColumn": "Ausgangszeit"
+        },
+        "toolUsage": {
+          "startTimeColumn": "Startzeit",
+          "endTimeColumn": "Endzeit"
+        }
       }
     },
     "tabGroups": {
@@ -110,6 +116,11 @@
           "under_18": "Unter 18",
           "adult": "Erwachsener"
         }
+      },
+      "openSession": {
+        "toolUsage": {
+          "active": "Aktiv"
+        }
       }
     },
     "pages": {
@@ -122,7 +133,9 @@
       "openSession": {
         "headers": {
           "workshopTime": "Werkstattzeit",
-          "total": "Gesamt",
+          "toolUsage": "Werkzeugnutzung",
+          "toolUsageTotal": "Werkzeugnutzung gesamt",
+          "total": "Werkstattzeit gesamt",
           "totalDurationSuffix": "Minuten",
           "totalUnitsSuffix": "Einheiten"
         },

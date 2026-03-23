@@ -1,5 +1,6 @@
 :host {
-  --section-max-width: 1000px;
+  --section-min-width: 600px;
+  --section-max-width: 800px;
 
   display: flex;
   flex-direction: column;
@@ -10,5 +11,6 @@
 .tool-usage-container,
 .close-button {
   max-width: var(--section-max-width);
+  min-width: var(--section-min-width);
   width: 100%;
 }

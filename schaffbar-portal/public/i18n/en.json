@@ -85,7 +85,7 @@
     "tables": {
       "openSession": {
         "durationColumn": "Duration (min)",
-        "unitsUsedColumn": "Units Used",
+        "unitsUsedColumn": "Units",
         "workshopUsage": {
           "entryTimeColumn": "Entry Time",
           "exitTimeColumn": "Exit Time"

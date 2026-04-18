@@ -8,12 +8,13 @@
 - [Frontend] Action feedback - Snackbar?
 
 - [Backend]
+- [Backend] Enter and leave time as LocalDateTime instead of Instant?
+- [Backend] Scheduler to clean up waiting for assignment
 - [Backend] Problems API
 - [Backend] validate all events before storing in outbox table
 
 TODO:
 
-2. Scheduler to clean up waiting for assignment
 3. Check if workshop usage is completed before closing session
 4. Validate Session before closing it
 5. ========================================================
@@ -26,13 +27,13 @@ TODO:
 
 Technical debt:
 
-1. Transactional annotation in all services
-2. Pfad zu Daten in docker-compose file konfigurierbar machen
-3. Genauer definieren was erlaubt ist in WaitingForAssignment und was in Assigned status
-4. TestController zerschlagen und responses fixen
-5. init.sql Add indexes after initial testing phase
-6. init.sql Add NOT NULL constraints to customer
-7. Enter and leave time as LocalDateTime instead of Instant?
+1. Migrate to Spring Boot 4
+2. Transactional annotation in all services
+3. Pfad zu Daten in docker-compose file konfigurierbar machen
+4. Genauer definieren was erlaubt ist in WaitingForAssignment und was in Assigned status
+5. TestController zerschlagen und responses fixen
+6. init.sql Add indexes after initial testing phase
+7. init.sql Add NOT NULL constraints to customer
 
 Info:
 

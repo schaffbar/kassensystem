@@ -1,6 +1,7 @@
 package de.schaffbar.core_pos.rfid_reader;
 
 import de.schaffbar.core_pos.shared.event.payload.RfidReaderPayloads.RfidReaderCreatedPayload;
+import de.schaffbar.core_pos.shared.event.payload.RfidReaderPayloads.RfidReaderTypeChangedPayload;
 import de.schaffbar.core_pos.shared.event.payload.RfidReaderPayloads.RfidReaderUpdatedPayload;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
@@ -17,5 +18,7 @@ interface RfidReaderPayloadMapper {
     RfidReaderCreatedPayload toRfidReaderCreatedPayload(RfidReader rfidReader);
 
     RfidReaderUpdatedPayload toRfidReaderUpdatedPayload(RfidReader rfidReader);
+
+    RfidReaderTypeChangedPayload toRfidReaderTypeChangedPayload(RfidReader rfidReader);
 
 }

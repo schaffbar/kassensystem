@@ -19,6 +19,11 @@ public interface RfidReaderPayloads {
             String socketName //
     ) implements RfidReaderEventPayload {}
 
+    record RfidReaderTypeChangedPayload( //
+            @Valid @NotNull RfidReaderId id, //
+            @NotNull String type //
+    ) implements RfidReaderEventPayload {}
+
     record RfidReaderDeletedPayload( //
             @Valid @NotNull RfidReaderId id //
     ) implements RfidReaderEventPayload {}

@@ -24,6 +24,13 @@ final class RfidReaderEventFactory {
         return SchaffbarEvent.rfidReaderEvent(EventType.RFID_READER_UPDATED, rfidReader.getId(), payload);
     }
 
+    static SchaffbarEvent rfidReaderTypeChanged(RfidReader rfidReader) {
+        var payload = RfidReaderPayloadMapper.MAPPER.toRfidReaderTypeChangedPayload(rfidReader);
+        payload.validate();
+
+        return SchaffbarEvent.rfidReaderEvent(EventType.RFID_READER_TYPE_CHANGED, rfidReader.getId(), payload);
+    }
+
     static SchaffbarEvent rfidReaderDeleted(RfidReaderId rfidReaderId) {
         var payload = new RfidReaderDeletedPayload(rfidReaderId);
         payload.validate();

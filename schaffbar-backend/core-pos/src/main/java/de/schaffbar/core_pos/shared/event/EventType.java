@@ -32,6 +32,7 @@ public enum EventType {
 
     RFID_READER_CREATED, //
     RFID_READER_UPDATED, //
+    RFID_READER_TYPE_CHANGED, //
     RFID_READER_DELETED, //
 
     // ------------------------------------------------------------------------

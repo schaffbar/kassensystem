@@ -3,6 +3,7 @@ package de.schaffbar.core_pos.rfid_reader.web;
 import java.time.Instant;
 
 import de.schaffbar.core_pos.rfid_reader.RfidReaderCommands.UpdateRfidReaderCommand;
+import de.schaffbar.core_pos.rfid_reader.RfidReaderCommands.ChangeRfidReaderTypeCommand;
 import de.schaffbar.core_pos.rfid_reader.RfidReaderViews.RfidReaderView;
 import de.schaffbar.core_pos.shared.id.RfidReaderId;
 import de.schaffbar.core_pos.shared.id.ValueObjectMapper;
@@ -29,6 +30,8 @@ public interface RfidReaderApiModel extends ValueObjectMapper {
 
     UpdateRfidReaderCommand toRfidReaderCommand(RfidReaderId id, UpdateRfidReaderRequestBody requestBody);
 
+    ChangeRfidReaderTypeCommand toChangeRfidReaderTypeCommand(RfidReaderId id, ChangeRfidReaderTypeRequestBody requestBody);
+
     // ------------------------------------------------------------------------
     // response
 
@@ -52,6 +55,10 @@ public interface RfidReaderApiModel extends ValueObjectMapper {
             @NotBlank String type, //
             String name, //
             String socketName //
+    ) {}
+
+    record ChangeRfidReaderTypeRequestBody( //
+            @NotBlank String type //
     ) {}
 
 }

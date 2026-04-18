@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import de.schaffbar.core_pos.rfid_reader.RfidReader.RfidReaderWithEvents;
 import de.schaffbar.core_pos.rfid_reader.RfidReaderCommands.UpdateRfidReaderCommand;
+import de.schaffbar.core_pos.rfid_reader.RfidReaderCommands.ChangeRfidReaderTypeCommand;
 import de.schaffbar.core_pos.rfid_reader.RfidReaderViews.RfidReaderView;
 import de.schaffbar.core_pos.shared.event.SchaffbarEvent;
 import de.schaffbar.core_pos.shared.event.outbox.OutboxEvent;
@@ -76,6 +77,17 @@ public class RfidReaderService {
         saveOutboxEvents(events);
 
         log.info("Updated RFID reader with id {} and published events {}", command.id(), events);
+    }
+
+    @Transactional
+    public void changeRfidReaderType(@NotNull @Valid ChangeRfidReaderTypeCommand command) {
+        List<SchaffbarEvent> events = this.rfidReaderRepository.findById(command.id().getValue()) //
+                .map(rfidReader -> rfidReader.changeType(command)) //
+                .orElseThrow(() -> ResourceNotFoundException.rfidReader(command.id()));
+
+        saveOutboxEvents(events);
+
+        log.info("Updated type of RFID reader with id {} and published events {}", command.id(), events);
     }
 
     @Transactional

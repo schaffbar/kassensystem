@@ -12,4 +12,9 @@ public interface RfidReaderCommands {
             String socketName //
     ) {}
 
+    record ChangeRfidReaderTypeCommand( //
+            @NotNull RfidReaderId id, //
+            @NotNull RfidReaderType type //
+    ) {}
+
 }

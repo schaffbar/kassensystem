@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.UUID;
 
 import de.schaffbar.core_pos.rfid_reader.RfidReaderCommands.UpdateRfidReaderCommand;
+import de.schaffbar.core_pos.rfid_reader.RfidReaderCommands.ChangeRfidReaderTypeCommand;
 import de.schaffbar.core_pos.shared.event.SchaffbarEvent;
 import de.schaffbar.core_pos.shared.id.MacAddress;
 import de.schaffbar.core_pos.shared.id.RfidReaderId;
@@ -82,6 +83,12 @@ class RfidReader {
         setSocketName(command.socketName());
 
         return List.of(RfidReaderEventFactory.rfidReaderUpdated(this));
+    }
+
+    public List<SchaffbarEvent> changeType(ChangeRfidReaderTypeCommand command) {
+        setType(command.type());
+
+        return List.of(RfidReaderEventFactory.rfidReaderTypeChanged(this));
     }
 
     // ------------------------------------------------------------------------

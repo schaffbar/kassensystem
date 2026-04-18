@@ -4,9 +4,11 @@ import java.net.URI;
 import java.util.List;
 import java.util.UUID;
 
+import de.schaffbar.core_pos.rfid_reader.RfidReaderCommands.ChangeRfidReaderTypeCommand;
 import de.schaffbar.core_pos.rfid_reader.RfidReaderCommands.UpdateRfidReaderCommand;
 import de.schaffbar.core_pos.rfid_reader.RfidReaderService;
 import de.schaffbar.core_pos.rfid_reader.RfidReaderViews.RfidReaderView;
+import de.schaffbar.core_pos.rfid_reader.web.RfidReaderApiModel.ChangeRfidReaderTypeRequestBody;
 import de.schaffbar.core_pos.rfid_reader.web.RfidReaderApiModel.CreateRfidReaderRequestBody;
 import de.schaffbar.core_pos.rfid_reader.web.RfidReaderApiModel.RfidReaderApiDto;
 import de.schaffbar.core_pos.rfid_reader.web.RfidReaderApiModel.UpdateRfidReaderRequestBody;
@@ -23,6 +25,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -90,10 +93,23 @@ public class RfidReaderController {
     }
 
     @PutMapping(value = "/{rfidReaderId}", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<String> updateRfidReader(@PathVariable @NotNull RfidReaderId rfidReaderId,
-            @RequestBody @NotNull @Valid UpdateRfidReaderRequestBody requestBody) {
+    public ResponseEntity<String> updateRfidReader( //
+            @PathVariable @NotNull RfidReaderId rfidReaderId, //
+            @RequestBody @NotNull @Valid UpdateRfidReaderRequestBody requestBody //
+    ) {
         UpdateRfidReaderCommand command = RfidReaderApiModel.MAPPER.toRfidReaderCommand(rfidReaderId, requestBody);
         this.rfidReaderService.updateRfidReader(command);
+
+        return ResponseEntity.noContent().build();
+    }
+
+    @PatchMapping(value = "/{rfidReaderId}/type", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Void> changeRfidReaderType( //
+            @PathVariable @NotNull RfidReaderId rfidReaderId, //
+            @RequestBody @NotNull @Valid ChangeRfidReaderTypeRequestBody requestBody //
+    ) {
+        ChangeRfidReaderTypeCommand command = RfidReaderApiModel.MAPPER.toChangeRfidReaderTypeCommand(rfidReaderId, requestBody);
+        this.rfidReaderService.changeRfidReaderType(command);
 
         return ResponseEntity.noContent().build();
     }

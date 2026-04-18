@@ -24,7 +24,7 @@ public class ToolDashboardController {
     // ------------------------------------------------------------------------
     // query
 
-    @GetMapping(value = "/active-tool-usages", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/active-tools", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<ToolDashboardEntryApiDto>> getActiveToolUsages() {
         List<ToolDashboardEntryApiDto> activeToolUsages = this.toolDashboardService.getActiveToolUsages().stream() //
                 .map(ToolDashboardApiModel.MAPPER::toToolDashboardEntryApiDto) //

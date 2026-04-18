@@ -1,5 +1,7 @@
 package de.schaffbar.core_pos.tool.web;
 
+import static java.util.Objects.nonNull;
+
 import java.net.URI;
 import java.util.List;
 
@@ -30,6 +32,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @Validated
@@ -48,7 +51,15 @@ public class ToolController {
     // query
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<ToolApiDto>> getAllTools() {
+    public ResponseEntity<List<ToolApiDto>> getAllTools(@RequestParam(required = false) RfidReaderId rfidReaderId) {
+        if (nonNull(rfidReaderId)) {
+            List<ToolApiDto> assignedTool = this.toolService.getTool(rfidReaderId) //
+                    .map(ToolApiModel.MAPPER::toToolApiDto) //
+                    .stream().toList();
+
+            return ResponseEntity.ok(assignedTool);
+        }
+
         List<ToolApiDto> tools = this.toolService.getTools().stream() //
                 .map(ToolApiModel.MAPPER::toToolApiDto) //
                 .toList();
@@ -78,7 +89,10 @@ public class ToolController {
     }
 
     @PutMapping(value = "/{toolId}", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Void> updateTool(@PathVariable @NotNull @Valid ToolId toolId, @RequestBody @NotNull @Valid UpdateToolRequestBody requestBody) {
+    public ResponseEntity<Void> updateTool( //
+            @PathVariable @NotNull @Valid ToolId toolId, //
+            @RequestBody @NotNull @Valid UpdateToolRequestBody requestBody //
+    ) {
         UpdateToolCommand command = ToolApiModel.MAPPER.toUpdateToolCommand(requestBody);
         this.toolService.updateTool(toolId, command);
 
@@ -88,7 +102,10 @@ public class ToolController {
     // TODO: streamline with updateWlanRelais either by using a generic update for setting and clearing the WLAN relais and RFID reader
     // or by introducing dedicated endpoints for setting and clearing the WLAN relais
     @PutMapping(value = "/{toolId}/rfid-reader/{rfidReaderId}")
-    public ResponseEntity<Void> changeRfidReader(@PathVariable @NotNull @Valid ToolId toolId, @PathVariable @NotNull @Valid RfidReaderId rfidReaderId) {
+    public ResponseEntity<Void> changeRfidReader( //
+            @PathVariable @NotNull @Valid ToolId toolId, //
+            @PathVariable @NotNull @Valid RfidReaderId rfidReaderId //
+    ) {
         this.toolAssignRfidReader.process(toolId, rfidReaderId);
 
         return ResponseEntity.noContent().build();

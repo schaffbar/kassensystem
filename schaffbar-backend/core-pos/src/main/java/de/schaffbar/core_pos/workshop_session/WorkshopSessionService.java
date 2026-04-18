@@ -80,7 +80,7 @@ public class WorkshopSessionService {
         List<OutboxEvent> outboxEvents = events.stream() //
                 .map(OutboxEvent::of) //
                 .toList();
-        
+
         this.outboxEventRepository.saveAll(outboxEvents);
     }
 

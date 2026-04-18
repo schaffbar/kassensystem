@@ -4,8 +4,8 @@ import java.util.List;
 import java.util.Optional;
 
 import de.schaffbar.core_pos.rfid_reader.RfidReader.RfidReaderWithEvents;
-import de.schaffbar.core_pos.rfid_reader.RfidReaderCommands.UpdateRfidReaderCommand;
 import de.schaffbar.core_pos.rfid_reader.RfidReaderCommands.ChangeRfidReaderTypeCommand;
+import de.schaffbar.core_pos.rfid_reader.RfidReaderCommands.UpdateRfidReaderCommand;
 import de.schaffbar.core_pos.rfid_reader.RfidReaderViews.RfidReaderView;
 import de.schaffbar.core_pos.shared.event.SchaffbarEvent;
 import de.schaffbar.core_pos.shared.event.outbox.OutboxEvent;

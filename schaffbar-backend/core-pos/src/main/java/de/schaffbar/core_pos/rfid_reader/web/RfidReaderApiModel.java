@@ -2,8 +2,8 @@ package de.schaffbar.core_pos.rfid_reader.web;
 
 import java.time.Instant;
 
-import de.schaffbar.core_pos.rfid_reader.RfidReaderCommands.UpdateRfidReaderCommand;
 import de.schaffbar.core_pos.rfid_reader.RfidReaderCommands.ChangeRfidReaderTypeCommand;
+import de.schaffbar.core_pos.rfid_reader.RfidReaderCommands.UpdateRfidReaderCommand;
 import de.schaffbar.core_pos.rfid_reader.RfidReaderViews.RfidReaderView;
 import de.schaffbar.core_pos.shared.id.RfidReaderId;
 import de.schaffbar.core_pos.shared.id.ValueObjectMapper;

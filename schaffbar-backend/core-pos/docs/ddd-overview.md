@@ -268,19 +268,19 @@ class
 
 #### Commands
 
-| Command                     | Fields                                                         |
-|-----------------------------|----------------------------------------------------------------|
-| _(Creation via MacAddress)_     | macAddress (`MacAddress` value object)                         |
-| `UpdateRfidReaderCommand`       | id (`RfidReaderId`), type (`RfidReaderType`), name, socketName |
-| `ChangeRfidReaderTypeCommand`   | id (`RfidReaderId`), type (`RfidReaderType`)                   |
+| Command                       | Fields                                                         |
+|-------------------------------|----------------------------------------------------------------|
+| _(Creation via MacAddress)_   | macAddress (`MacAddress` value object)                         |
+| `UpdateRfidReaderCommand`     | id (`RfidReaderId`), type (`RfidReaderType`), name, socketName |
+| `ChangeRfidReaderTypeCommand` | id (`RfidReaderId`), type (`RfidReaderType`)                   |
 
 #### Business Rules / Invariants
 
-| #   | Rule                                                                                                           | Enforced in                                                              |
-|-----|----------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------|
-| R-1 | `macAddress` must be unique across all RFID readers                                                            | DB unique constraint, **TODO** in `RfidReaderService.createRfidReader()` |
-| R-2 | `macAddress` must not be blank                                                                                 | Bean Validation                                                          |
-| R-3 | The type of an RFID reader of type `SWITCH_BOX` cannot be changed while a tool is assigned to it               | `ChangeRfidReaderType` use case                                          |
+| #   | Rule                                                                                             | Enforced in                                                              |
+|-----|--------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------|
+| R-1 | `macAddress` must be unique across all RFID readers                                              | DB unique constraint, **TODO** in `RfidReaderService.createRfidReader()` |
+| R-2 | `macAddress` must not be blank                                                                   | Bean Validation                                                          |
+| R-3 | The type of an RFID reader of type `SWITCH_BOX` cannot be changed while a tool is assigned to it | `ChangeRfidReaderType` use case                                          |
 
 #### Domain Events
 
@@ -569,18 +569,18 @@ _Note: Code suggests considering renaming to `WorkshopSlot` or `UsageSlot`._
 Use cases live in the `use_case` package and **orchestrate operations across multiple aggregates**. They are the only
 place where cross-aggregate coordination happens.
 
-| Use Case                           | Description                                                                                 | Aggregates Involved                                   |
-|------------------------------------|---------------------------------------------------------------------------------------------|-------------------------------------------------------|
-| `EnterWorkshop`                    | Customer enters the workshop. Creates a session if none exists, then creates a usage entry. | WorkshopSession, WorkshopUsage                        |
-| `LeaveWorkshop`                    | Customer leaves the workshop. Stops all active tool usages, then records exit time.         | WorkshopSession, WorkshopUsage, ToolUsage             |
-| `CloseSession`                     | Closes a customer's workshop session (mark as PAID).                                        | Customer, WorkshopSession                             |
-| `StartToolUsage`                   | Starts tool usage for a customer. Verifies workshop presence and open session.              | ToolUsage, WorkshopSession, WorkshopUsage             |
-| `StopToolUsage`                    | Stops tool usage for a customer on a specific tool.                                         | ToolUsage                                             |
-| `CustomerRequestRfidTagAssignment` | Initiates RFID tag assignment process for a customer.                                       | Customer, RfidTagAssignment                           |
-| `CustomerAssignRfidTag`            | Completes RFID tag assignment by linking tag to pending assignment.                         | RfidTag, RfidTagAssignment                            |
-| `CustomerUnassignRfidTag`          | Removes RFID tag from customer, moves record to history.                                    | Customer, RfidTagAssignment, RfidTagAssignmentHistory |
-| `ToolCreate`                       | Creates a tool with optional RFID reader validation (must be SWITCH_BOX).                   | RfidReader, Tool                                      |
-| `ToolAssignRfidReader`             | Assigns an RFID reader to a tool (reader must be SWITCH_BOX).                               | RfidReader, Tool                                      |
+| Use Case                           | Description                                                                                       | Aggregates Involved                                   |
+|------------------------------------|---------------------------------------------------------------------------------------------------|-------------------------------------------------------|
+| `EnterWorkshop`                    | Customer enters the workshop. Creates a session if none exists, then creates a usage entry.       | WorkshopSession, WorkshopUsage                        |
+| `LeaveWorkshop`                    | Customer leaves the workshop. Stops all active tool usages, then records exit time.               | WorkshopSession, WorkshopUsage, ToolUsage             |
+| `CloseSession`                     | Closes a customer's workshop session (mark as PAID).                                              | Customer, WorkshopSession                             |
+| `StartToolUsage`                   | Starts tool usage for a customer. Verifies workshop presence and open session.                    | ToolUsage, WorkshopSession, WorkshopUsage             |
+| `StopToolUsage`                    | Stops tool usage for a customer on a specific tool.                                               | ToolUsage                                             |
+| `CustomerRequestRfidTagAssignment` | Initiates RFID tag assignment process for a customer.                                             | Customer, RfidTagAssignment                           |
+| `CustomerAssignRfidTag`            | Completes RFID tag assignment by linking tag to pending assignment.                               | RfidTag, RfidTagAssignment                            |
+| `CustomerUnassignRfidTag`          | Removes RFID tag from customer, moves record to history.                                          | Customer, RfidTagAssignment, RfidTagAssignmentHistory |
+| `ToolCreate`                       | Creates a tool with optional RFID reader validation (must be SWITCH_BOX).                         | RfidReader, Tool                                      |
+| `ToolAssignRfidReader`             | Assigns an RFID reader to a tool (reader must be SWITCH_BOX).                                     | RfidReader, Tool                                      |
 | `ChangeRfidReaderType`             | Changes the type of an RFID reader. If current type is SWITCH_BOX and a tool is assigned → error. | RfidReader, Tool                                      |
 
 ---

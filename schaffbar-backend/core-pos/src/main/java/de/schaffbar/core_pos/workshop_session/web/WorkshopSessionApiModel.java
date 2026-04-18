@@ -36,7 +36,8 @@ public interface WorkshopSessionApiModel {
     @Mapping(target = "customerId", source = "session.customerId.value")
     @Mapping(target = "workshopUsages", source = "workshopUsages")
     @Mapping(target = "toolUsageSummaries", source = "toolUsageSummaries")
-    WorkshopSessionApiDto toWorkshopSessionApiDto(WorkshopSessionView session, List<WorkshopUsageView> workshopUsages, List<ToolUsageSummaryApiDto> toolUsageSummaries);
+    WorkshopSessionApiDto toWorkshopSessionApiDto(WorkshopSessionView session, List<WorkshopUsageView> workshopUsages,
+            List<ToolUsageSummaryApiDto> toolUsageSummaries);
 
     @Mapping(target = "id", source = "id.value")
     @Mapping(target = "durationInMinutes", source = "durationInMinutes")
@@ -68,7 +69,8 @@ public interface WorkshopSessionApiModel {
                                     return mins;
                                 }
                                 // active usage: calculate from startTime until now
-                                long seconds = Duration.between(u.startTime().truncatedTo(ChronoUnit.SECONDS), Instant.now().truncatedTo(ChronoUnit.SECONDS)).getSeconds();
+                                long seconds = Duration.between(u.startTime().truncatedTo(ChronoUnit.SECONDS),
+                                        Instant.now().truncatedTo(ChronoUnit.SECONDS)).getSeconds();
                                 return (long) Math.ceil(seconds / 60.0);
                             }) //
                             .sum();
@@ -80,7 +82,8 @@ public interface WorkshopSessionApiModel {
                                     return units;
                                 }
                                 // active usage: calculate from startTime until now
-                                long seconds = Duration.between(u.startTime().truncatedTo(ChronoUnit.SECONDS), Instant.now().truncatedTo(ChronoUnit.SECONDS)).getSeconds();
+                                long seconds = Duration.between(u.startTime().truncatedTo(ChronoUnit.SECONDS),
+                                        Instant.now().truncatedTo(ChronoUnit.SECONDS)).getSeconds();
                                 long totalMinutes = (long) Math.ceil(seconds / 60.0);
                                 return (long) Math.ceil(totalMinutes / 6.0);
                             }) //

@@ -1,3 +1,5 @@
+- [Frontend] dashboard store - withEntities vs withState
+- [Backend] Merge dashboard packages (tool_dashboard, workshop_dashboard)
 - [Frontend] Fix Geburtsdatum
 
 #######################################

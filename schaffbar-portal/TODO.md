@@ -1,4 +1,6 @@
-- [Story] Assignment und Unassignment von fixen RFID tags
+- [Frontend] Fix Geburtsdatum
+
+#######################################
 
 - [Frontend]
 - [Frontend] Select/highligt menu entry when going into the details
@@ -19,25 +21,24 @@
 - [Backend] Check if workshop usage is completed before closing session
 - [Backend] Validate Session before closing it
 
-Technical debt:
+- [Technical]
+- [Technical] Migrate to Spring Boot 4
+- [Technical] Facade vs Use Case
+- [Technical] Move all mutations to use cases
+- [Technical] Transactional annotation in all services
+- [Technical] Pfad zu Daten in docker-compose file konfigurierbar machen
+- [Technical] Genauer definieren was erlaubt ist in WaitingForAssignment und was in Assigned status
+- [Technical] TestController zerschlagen und responses fixen
+- [Technical] init.sql Add indexes after initial testing phase
+- [Technical] init.sql Add NOT NULL constraints to customer
 
-1. Migrate to Spring Boot 4
-2. Facade vs Use Case
-3. Move all mutations to use cases
-4. Transactional annotation in all services
-5. Pfad zu Daten in docker-compose file konfigurierbar machen
-6. Genauer definieren was erlaubt ist in WaitingForAssignment und was in Assigned status
-7. TestController zerschlagen und responses fixen
-8. init.sql Add indexes after initial testing phase
-9. init.sql Add NOT NULL constraints to customer
+- [Story]
+- [Story] Assignment und Unassignment von fixen RFID tags
 
-Info:
+- [Docu]
+- [Docu] bei angefangener arbeit mindestens ein Einheit
+- [Docu] Zuweisung von Einweisung zu Tool nicht Tool Grupe
+- [Docu] Unassingment auch ohne token im sonderfall
 
-- bei angefangener arbeit mindestens ein Einheit
-- Zuweisung von Einweisung zu Tool nicht Tool Grupe
-- Unassingment auch ohne token im sonderfall
--
-
-Fragen:
-
-- Jahresabo vom 1.1 oder vom Tag wo es gakauft wurde
+- [Question]
+- [Question] Jahresabo vom 1.1 oder vom Tag wo es gakauft wurde

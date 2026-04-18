@@ -275,21 +275,24 @@ class
 |--------------------------------|----------------------------------------------------------------|
 | _(Erstellung über MacAddress)_ | macAddress (`MacAddress`-Wertobjekt)                           |
 | `UpdateRfidReaderCommand`      | id (`RfidReaderId`), type (`RfidReaderType`), name, socketName |
+| `ChangeRfidReaderTypeCommand`  | id (`RfidReaderId`), type (`RfidReaderType`)                   |
 
 #### Geschäftsregeln / Invarianten
 
-| #   | Regel                                                      | Durchgesetzt in                                                          |
-|-----|------------------------------------------------------------|--------------------------------------------------------------------------|
-| R-1 | `macAddress` muss über alle RFID-Lesegeräte eindeutig sein | DB-Unique-Constraint, **TODO** in `RfidReaderService.createRfidReader()` |
-| R-2 | `macAddress` darf nicht leer sein                          | Bean Validation                                                          |
+| #   | Regel                                                                                                            | Durchgesetzt in                                                          |
+|-----|------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------|
+| R-1 | `macAddress` muss über alle RFID-Lesegeräte eindeutig sein                                                       | DB-Unique-Constraint, **TODO** in `RfidReaderService.createRfidReader()` |
+| R-2 | `macAddress` darf nicht leer sein                                                                                | Bean Validation                                                          |
+| R-3 | Der Typ eines RFID-Lesegeräts vom Typ `SWITCH_BOX` darf nicht geändert werden, solange ein Werkzeug zugeordnet ist | `ChangeRfidReaderType`-Anwendungsfall                                    |
 
 #### Domänenereignisse
 
-| Ereignis              | Payload                          |
-|-----------------------|----------------------------------|
-| `RFID_READER_CREATED` | Vollständiger Lesegerät-Snapshot |
-| `RFID_READER_UPDATED` | Aktualisierte Felder             |
-| `RFID_READER_DELETED` | rfidReaderId                     |
+| Ereignis                    | Payload                          |
+|-----------------------------|----------------------------------|
+| `RFID_READER_CREATED`       | Vollständiger Lesegerät-Snapshot |
+| `RFID_READER_UPDATED`       | Aktualisierte Felder             |
+| `RFID_READER_TYPE_CHANGED`  | rfidReaderId, type               |
+| `RFID_READER_DELETED`       | rfidReaderId                     |
 
 ---
 
@@ -582,6 +585,7 @@ sind der einzige Ort, an dem aggregatübergreifende Koordination stattfindet.
 | `CustomerUnassignRfidTag`          | Entfernt den RFID-Chip vom Kunden, verschiebt den Datensatz in die Historie.                                   | Customer, RfidTagAssignment, RfidTagAssignmentHistory |
 | `ToolCreate`                       | Erstellt ein Werkzeug mit optionaler RFID-Lesegerät-Validierung (muss SWITCH_BOX sein).                        | RfidReader, Tool                                      |
 | `ToolAssignRfidReader`             | Ordnet ein RFID-Lesegerät einem Werkzeug zu (Lesegerät muss SWITCH_BOX sein).                                  | RfidReader, Tool                                      |
+| `ChangeRfidReaderType`             | Ändert den Typ eines RFID-Lesegeräts. Wenn aktueller Typ SWITCH_BOX und Werkzeug zugeordnet → Fehler.          | RfidReader, Tool                                      |
 
 ---
 

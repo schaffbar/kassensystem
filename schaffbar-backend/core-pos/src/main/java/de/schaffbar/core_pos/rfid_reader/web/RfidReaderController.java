@@ -15,6 +15,7 @@ import de.schaffbar.core_pos.rfid_reader.web.RfidReaderApiModel.UpdateRfidReader
 import de.schaffbar.core_pos.shared.exception.ResourceNotFoundException;
 import de.schaffbar.core_pos.shared.id.MacAddress;
 import de.schaffbar.core_pos.shared.id.RfidReaderId;
+import de.schaffbar.core_pos.use_case.ChangeRfidReaderType;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -41,6 +42,8 @@ import org.springframework.web.bind.annotation.RestController;
 public class RfidReaderController {
 
     private final @NonNull RfidReaderService rfidReaderService;
+
+    private final @NonNull ChangeRfidReaderType changeRfidReaderType;
 
     // ------------------------------------------------------------------------
     // query
@@ -109,7 +112,7 @@ public class RfidReaderController {
             @RequestBody @NotNull @Valid ChangeRfidReaderTypeRequestBody requestBody //
     ) {
         ChangeRfidReaderTypeCommand command = RfidReaderApiModel.MAPPER.toChangeRfidReaderTypeCommand(rfidReaderId, requestBody);
-        this.rfidReaderService.changeRfidReaderType(command);
+        this.changeRfidReaderType.process(command);
 
         return ResponseEntity.noContent().build();
     }

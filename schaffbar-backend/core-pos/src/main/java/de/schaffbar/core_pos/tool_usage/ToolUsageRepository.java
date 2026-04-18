@@ -19,6 +19,8 @@ interface ToolUsageRepository extends JpaRepository<ToolUsage, UUID> {
 
     List<ToolUsage> findByToolIdAndEndTimeIsNull(UUID toolId);
 
+    List<ToolUsage> findByEndTimeIsNull();
+
     List<ToolUsage> findByWorkshopSessionId(UUID workshopSessionId);
 
     long countByCustomerIdAndEndTimeIsNull(UUID customerId);

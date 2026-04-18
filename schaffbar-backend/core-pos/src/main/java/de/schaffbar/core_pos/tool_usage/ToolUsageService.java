@@ -45,6 +45,12 @@ public class ToolUsageService {
                 .toList();
     }
 
+    public List<ToolUsageView> getAllActiveToolUsages() {
+        return this.toolUsageRepository.findByEndTimeIsNull().stream() //
+                .map(ToolUsageViews.MAPPER::toToolUsageView) //
+                .toList();
+    }
+
     public Optional<ToolUsageView> getActiveToolUsage(@NotNull @Valid CustomerId customerId, @NotNull @Valid ToolId toolId) {
         return this.toolUsageRepository.findActiveByCustomerIdAndToolId(customerId, toolId) //
                 .map(ToolUsageViews.MAPPER::toToolUsageView);
@@ -117,14 +123,14 @@ public class ToolUsageService {
     private void ensureToolNotInUseByAnotherCustomer(ToolId toolId, CustomerId customerId) {
         this.toolUsageRepository.findActiveByToolId(toolId) //
                 .filter(existing -> !existing.getCustomerId().sameValueAs(customerId)) //
-                .ifPresent(existing -> {
+                .ifPresent(_ -> {
                     throw new ToolAlreadyInUseByAnotherCustomerException(toolId);
                 });
     }
 
     private void ensureCustomerNotAlreadyUsingTool(CustomerId customerId, ToolId toolId) {
         this.toolUsageRepository.findActiveByCustomerIdAndToolId(customerId, toolId) //
-                .ifPresent(existing -> {
+                .ifPresent(_ -> {
                     throw new CustomerAlreadyUsingToolException(customerId, toolId);
                 });
     }

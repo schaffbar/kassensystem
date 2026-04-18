@@ -23,12 +23,13 @@ Technical debt:
 
 1. Migrate to Spring Boot 4
 2. Facade vs Use Case
-3. Transactional annotation in all services
-4. Pfad zu Daten in docker-compose file konfigurierbar machen
-5. Genauer definieren was erlaubt ist in WaitingForAssignment und was in Assigned status
-6. TestController zerschlagen und responses fixen
-7. init.sql Add indexes after initial testing phase
-8. init.sql Add NOT NULL constraints to customer
+3. Move all mutations to use cases
+4. Transactional annotation in all services
+5. Pfad zu Daten in docker-compose file konfigurierbar machen
+6. Genauer definieren was erlaubt ist in WaitingForAssignment und was in Assigned status
+7. TestController zerschlagen und responses fixen
+8. init.sql Add indexes after initial testing phase
+9. init.sql Add NOT NULL constraints to customer
 
 Info:
 

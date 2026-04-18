@@ -36,6 +36,10 @@ export class ToolsService {
     return this.http.get<Tool>(`${TOOLS_API_URL}/${id}`);
   }
 
+  getToolsByRfidReader(rfidReaderId: string): Observable<Tool[]> {
+    return this.http.get<Tool[]>(`${TOOLS_API_URL}?rfidReaderId=${rfidReaderId}`);
+  }
+
   // --------------------------------------------------------------------------
   // commands
 

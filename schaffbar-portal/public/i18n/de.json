@@ -246,6 +246,12 @@
       "deleteRfidReader": {
         "title": "RFID-Lesegerät löschen",
         "message": "Sind Sie sicher, dass Sie dieses RFID-Lesegerät löschen möchten?"
+      },
+      "changeRfidReaderType": {
+        "title": "Typ ändern",
+        "errors": {
+          "switchBoxHasAssignedTool": "Diesem Lesegerät ist ein Werkzeug zugewiesen. Bitte zuerst die Zuweisung entfernen."
+        }
       }
     },
     "types": {

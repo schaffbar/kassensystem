@@ -19,7 +19,11 @@ export enum RfidReaderType {
 
 export interface UpdateRfidReaderCommand {
   id: string;
-  type: RfidReaderType;
   name?: string;
   socketName?: string;
+}
+
+export interface ChangeRfidReaderTypeCommand {
+  id: string;
+  type: RfidReaderType;
 }

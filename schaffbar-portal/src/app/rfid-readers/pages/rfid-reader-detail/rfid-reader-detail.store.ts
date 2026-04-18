@@ -15,7 +15,7 @@ import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { exhaustMap, filter, pipe, tap } from 'rxjs';
 
 import { setError, setFulfilled, setPending, withRequestStatus } from '../../../shared/state/request-status.feature';
-import { RfidReader, UpdateRfidReaderCommand } from '../../rfid-reader.model';
+import { ChangeRfidReaderTypeCommand, RfidReader, UpdateRfidReaderCommand } from '../../rfid-reader.model';
 import { RfidReaderService } from '../../rfid-readers.service';
 
 interface RfidReaderDetailState {
@@ -71,6 +71,21 @@ export const RfidReaderDetailStore = signalStore(
         tap(() => patchState(store, setPending())),
         exhaustMap((command) => {
           return store._rfidReaderService.updateRfidReader(command).pipe(
+            tapResponse({
+              next: () => {
+                patchState(store, setFulfilled(), setDirty());
+              },
+              error: (error: { message: string }) => patchState(store, setError(error.message)),
+            }),
+          );
+        }),
+      ),
+    ),
+    changeRfidReaderType: rxMethod<ChangeRfidReaderTypeCommand>(
+      pipe(
+        tap(() => patchState(store, setPending())),
+        exhaustMap((command) => {
+          return store._rfidReaderService.changeRfidReaderType(command).pipe(
             tapResponse({
               next: () => {
                 patchState(store, setFulfilled(), setDirty());

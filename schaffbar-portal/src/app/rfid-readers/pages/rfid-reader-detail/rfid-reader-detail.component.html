@@ -3,6 +3,9 @@
     <div class="rfid-reader-detail-header-title">
       <div class="rfid-reader-detail-header-title-actions">
         <h1>{{ rfidReader.name || rfidReader.macAddress }}</h1>
+        <button mat-icon-button (click)="changeType()">
+          <mat-icon>swap_horiz</mat-icon>
+        </button>
         <button mat-icon-button (click)="reloadRfidReader()">
           <mat-icon>refresh</mat-icon>
         </button>

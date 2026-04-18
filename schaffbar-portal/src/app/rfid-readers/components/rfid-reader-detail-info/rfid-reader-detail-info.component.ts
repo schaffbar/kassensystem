@@ -5,25 +5,16 @@ import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angula
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
-import { MatSelectModule } from '@angular/material/select';
 
 import { TranslatePipe } from '@ngx-translate/core';
 
-import { RfidReader, RfidReaderType, UpdateRfidReaderCommand } from '../../rfid-reader.model';
+import { RfidReader, UpdateRfidReaderCommand } from '../../rfid-reader.model';
 
 @Component({
   selector: 'schbar-rfid-reader-detail-info',
   templateUrl: './rfid-reader-detail-info.component.html',
   styleUrl: './rfid-reader-detail-info.component.scss',
-  imports: [
-    MatInputModule,
-    MatSelectModule,
-    MatButtonModule,
-    MatIconModule,
-    ReactiveFormsModule,
-    TranslatePipe,
-    LowerCasePipe,
-  ],
+  imports: [MatInputModule, MatButtonModule, MatIconModule, ReactiveFormsModule, TranslatePipe, LowerCasePipe],
 })
 export class RfidReaderDetailInfoComponent {
   rfidReader = input.required<RfidReader>();
@@ -33,12 +24,10 @@ export class RfidReaderDetailInfoComponent {
   private fb = inject(NonNullableFormBuilder);
 
   protected readonly = signal(true);
-  protected rfidReaderTypes = Object.values(RfidReaderType);
 
   // TODO: make type read only initially
   rfidReaderForm = this.fb.group({
     macAddress: ['', Validators.required],
-    type: ['', Validators.required],
     name: [''],
     socketName: [''],
   });
@@ -59,7 +48,6 @@ export class RfidReaderDetailInfoComponent {
       const formValues = this.rfidReaderForm.value;
       const command: UpdateRfidReaderCommand = {
         id: this.rfidReader().id,
-        type: formValues.type as RfidReaderType,
         name: formValues.name || undefined,
         socketName: formValues.socketName || undefined,
       };
@@ -76,7 +64,6 @@ export class RfidReaderDetailInfoComponent {
     const reader = this.rfidReader();
     this.rfidReaderForm.setValue({
       macAddress: reader.macAddress,
-      type: reader.type,
       name: reader.name || '',
       socketName: reader.socketName || '',
     });

@@ -1,0 +1,35 @@
+<h2 mat-dialog-title>{{ 'rfidReaders.dialogs.changeRfidReaderType.title' | translate }}</h2>
+
+<mat-divider></mat-divider>
+
+<mat-dialog-content [formGroup]="typeForm">
+  <div class="row">
+    <div class="col">
+      <mat-form-field class="full-width">
+        <mat-label>{{ 'rfidReaders.shared.rfidReaderProperties.type' | translate }}</mat-label>
+        <mat-select id="type" formControlName="type">
+          @for (type of rfidReaderTypes; track type) {
+            <mat-option [value]="type">
+              {{ 'rfidReaders.types.' + (type | lowercase) | translate }}
+            </mat-option>
+          }
+        </mat-select>
+        @if (typeForm.controls['type'].hasError('required')) {
+          <mat-error>
+            {{ 'rfidReaders.shared.rfidReaderProperties.type' | translate }}
+            {{ 'shared.dialogs.errors.required' | translate }}
+          </mat-error>
+        }
+      </mat-form-field>
+    </div>
+  </div>
+</mat-dialog-content>
+
+<mat-dialog-actions>
+  <button mat-stroked-button [mat-dialog-close]="false" cdkFocusInitial>
+    {{ 'shared.dialogs.actions.edit.cancel' | translate }}
+  </button>
+  <button mat-flat-button color="primary" (click)="save()">
+    {{ 'shared.dialogs.actions.edit.confirm' | translate }}
+  </button>
+</mat-dialog-actions>

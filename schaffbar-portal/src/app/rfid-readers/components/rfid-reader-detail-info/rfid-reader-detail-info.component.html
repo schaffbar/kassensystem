@@ -16,32 +16,10 @@
   </div>
   <div class="row">
     <div class="col">
-      @if (readonly()) {
-        <mat-form-field class="full-width" [floatLabel]="'always'" [hideRequiredMarker]="true">
-          <mat-label>{{ 'rfidReaders.shared.rfidReaderProperties.type' | translate }}</mat-label>
-          <input
-            matInput
-            [value]="'rfidReaders.types.' + (rfidReaderForm.controls.type.value | lowercase) | translate"
-            readonly />
-        </mat-form-field>
-      } @else {
-        <mat-form-field class="full-width" [floatLabel]="'always'" [hideRequiredMarker]="true">
-          <mat-label>{{ 'rfidReaders.shared.rfidReaderProperties.type' | translate }}</mat-label>
-          <mat-select id="type" formControlName="type">
-            @for (type of rfidReaderTypes; track type) {
-              <mat-option [value]="type">
-                {{ 'rfidReaders.types.' + (type | lowercase) | translate }}
-              </mat-option>
-            }
-          </mat-select>
-          @if (rfidReaderForm.controls['type'].hasError('required')) {
-            <mat-error>
-              {{ 'rfidReaders.shared.rfidReaderProperties.type' | translate }}
-              {{ 'shared.dialogs.errors.required' | translate }}
-            </mat-error>
-          }
-        </mat-form-field>
-      }
+      <mat-form-field class="full-width" [floatLabel]="'always'" [hideRequiredMarker]="true">
+        <mat-label>{{ 'rfidReaders.shared.rfidReaderProperties.type' | translate }}</mat-label>
+        <input matInput [value]="'rfidReaders.types.' + (rfidReader().type | lowercase) | translate" readonly />
+      </mat-form-field>
     </div>
   </div>
   <div class="row">

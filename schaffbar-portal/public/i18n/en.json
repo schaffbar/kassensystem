@@ -246,6 +246,12 @@
       "deleteRfidReader": {
         "title": "Delete RFID Reader",
         "message": "Are you sure you want to delete this RFID reader?"
+      },
+      "changeRfidReaderType": {
+        "title": "Change Type",
+        "errors": {
+          "switchBoxHasAssignedTool": "A tool is assigned to this reader. Please remove the assignment first."
+        }
       }
     },
     "types": {

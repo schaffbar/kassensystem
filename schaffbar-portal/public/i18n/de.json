@@ -36,6 +36,13 @@
           "entryTime": "Eintrittszeit",
           "duration": "Dauer"
         }
+      },
+      "activeTools": {
+        "title": "Werkzeugstatus",
+        "table": {
+          "name": "Name",
+          "user": "Benutzer"
+        }
       }
     }
   },

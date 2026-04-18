@@ -36,6 +36,13 @@
           "entryTime": "Entry Time",
           "duration": "Duration"
         }
+      },
+      "activeTools": {
+        "title": "Tool Status",
+        "table": {
+          "name": "Name",
+          "user": "User"
+        }
       }
     }
   },

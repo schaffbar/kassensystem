@@ -4,3 +4,11 @@ export interface ActiveUser {
   lastName: string;
   entryTime: string;
 }
+
+export interface ActiveTool {
+  toolId: string;
+  toolName: string;
+  userId: string;
+  firstName: string;
+  lastName: string;
+}

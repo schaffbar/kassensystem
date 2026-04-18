@@ -1,19 +1,20 @@
 import { inject } from '@angular/core';
 
 import { tapResponse } from '@ngrx/operators';
-import { patchState, signalStore, withHooks, withMethods, withProps } from '@ngrx/signals';
+import { patchState, signalStore, withHooks, withMethods, withProps, withState } from '@ngrx/signals';
 import { SelectEntityId, setAllEntities, withEntities } from '@ngrx/signals/entities';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { exhaustMap, pipe, tap } from 'rxjs';
 
 import { setError, setFulfilled, setPending, withRequestStatus } from '../shared/state/request-status.feature';
-import { ActiveUser } from './dashboard.model';
+import { ActiveTool, ActiveUser } from './dashboard.model';
 import { DashboardService } from './dashboard.service';
 
 const selectId: SelectEntityId<ActiveUser> = (user) => user.customerId;
 
 export const DashboardStore = signalStore(
   withEntities<ActiveUser>(),
+  withState({ activeTools: [] as ActiveTool[] }),
   withRequestStatus(),
   withProps(() => ({
     _dashboardService: inject(DashboardService),
@@ -32,11 +33,25 @@ export const DashboardStore = signalStore(
         }),
       ),
     ),
+    loadActiveTools: rxMethod<void>(
+      pipe(
+        tap(() => patchState(store, setPending())),
+        exhaustMap(() => {
+          return store._dashboardService.getActiveTools().pipe(
+            tapResponse({
+              next: (activeTools) => patchState(store, { activeTools }, setFulfilled()),
+              error: (error: { message: string }) => patchState(store, setError(error.message)),
+            }),
+          );
+        }),
+      ),
+    ),
   })),
   withHooks((store) => ({
     onInit() {
-      console.log('[DashboardStore - onInit] Loading active users');
+      console.log('[DashboardStore - onInit] Loading active users and tools');
       store.loadActiveUsers();
+      store.loadActiveTools();
     },
     onDestroy() {
       console.log('[DashboardStore - onDestroy] Store destroyed');

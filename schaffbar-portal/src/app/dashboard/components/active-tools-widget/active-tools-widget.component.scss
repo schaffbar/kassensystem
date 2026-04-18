@@ -1,0 +1,21 @@
+mat-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.full-width-table {
+  width: 100%;
+}
+
+.status-circle {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background-color: #4caf50;
+
+  &.in-use {
+    background-color: #f44336;
+  }
+}

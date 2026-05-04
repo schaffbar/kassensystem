@@ -1,5 +1,6 @@
 - [Frontend] dashboard store - withEntities vs withState
 - [Backend] Merge dashboard packages (tool_dashboard, workshop_dashboard)
+- [Backend] fix/implement/remove TODOs
 - [Frontend] Fix Geburtsdatum
 
 #######################################

@@ -52,7 +52,6 @@ public interface RfidReaderApiModel extends ValueObjectMapper {
     ) {}
 
     record UpdateRfidReaderRequestBody( //
-            @NotBlank String type, //
             String name, //
             String socketName //
     ) {}

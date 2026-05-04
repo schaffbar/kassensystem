@@ -7,7 +7,6 @@ public interface RfidReaderCommands {
 
     record UpdateRfidReaderCommand( //
             @NotNull RfidReaderId id, //
-            @NotNull RfidReaderType type, //
             String name, //
             String socketName //
     ) {}

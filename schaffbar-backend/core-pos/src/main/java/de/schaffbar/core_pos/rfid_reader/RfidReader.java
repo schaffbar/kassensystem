@@ -78,7 +78,6 @@ class RfidReader {
     // command
 
     public List<SchaffbarEvent> update(UpdateRfidReaderCommand command) {
-        setType(command.type());
         setName(command.name());
         setSocketName(command.socketName());
 

@@ -105,10 +105,30 @@ public class DeviceController {
         RfidReaderView rfidReader = this.rfidReaderService.getRfidReader(id) //
                 .orElseThrow(() -> ResourceNotFoundException.rfidReader(id));
 
+        String startHttp = "";
+        String devIp = "";
+        String switchOn = "";
+        String switchOff = "";
+
+        if (rfidReader.type() == RfidReaderType.SWITCH_BOX) {
+            Optional<ToolView> tool = this.toolService.getTool(rfidReader.id());
+            if (tool.isPresent()) {
+                ToolView t = tool.get();
+                startHttp = Objects.toString(t.httpStartCommand(), "");
+                devIp = Objects.toString(t.ipAddress(), "");
+                switchOn = Objects.toString(t.onCommand(), "");
+                switchOff = Objects.toString(t.offCommand(), "");
+            }
+        }
+
         LocalDateTime now = LocalDateTime.now();
         InitResponse response = InitResponse.builder() //
                 .STATE(isNull(rfidReader.type()) ? "ERROR" : "START") //
                 .DEVNAME(getDeviceNme(rfidReader)) //
+                .STARTHTTP(startHttp) //
+                .DEVIP(devIp) //
+                .SWITCHON(switchOn) //
+                .SWITCHOFF(switchOff) //
                 .DEVUSECASE(isNull(rfidReader.type()) ? "ERROR" : rfidReader.type().getKey()) //
                 .TERMINAL("") //
                 .ERROR(isNull(rfidReader.type()) ? "Nicht Gefunden" : "") //

@@ -114,7 +114,9 @@ public class DeviceController {
             Optional<ToolView> tool = this.toolService.getTool(rfidReader.id());
             if (tool.isPresent()) {
                 ToolView t = tool.get();
-                startHttp = Objects.toString(t.httpStartCommand(), "");
+                startHttp = t.httpStartCommand() != null && t.ipAddress() != null
+                        ? t.httpStartCommand().replace("{{ipAddress}}", t.ipAddress())
+                        : Objects.toString(t.httpStartCommand(), "");
                 devIp = Objects.toString(t.ipAddress(), "");
                 switchOn = Objects.toString(t.onCommand(), "");
                 switchOff = Objects.toString(t.offCommand(), "");

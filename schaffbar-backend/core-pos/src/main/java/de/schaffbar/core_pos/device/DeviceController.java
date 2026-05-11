@@ -140,6 +140,8 @@ public class DeviceController {
                 .TIMES(now.getSecond()) //
                 .build();
 
+        log.info("RFID reader init response: {}", response);
+
         return ResponseEntity.ok(response);
     }
 

@@ -16,6 +16,7 @@ import de.schaffbar.core_pos.shared.event.payload.RfidReaderEventPayload;
 import de.schaffbar.core_pos.shared.event.payload.RfidTagAssignmentEventPayload;
 import de.schaffbar.core_pos.shared.event.payload.RfidTagEventPayload;
 import de.schaffbar.core_pos.shared.event.payload.ToolEventPayload;
+import de.schaffbar.core_pos.shared.event.payload.ToolCertificationEventPayload;
 import de.schaffbar.core_pos.shared.event.payload.ToolUsageEventPayload;
 import de.schaffbar.core_pos.shared.event.payload.WorkshopSessionEventPayload;
 import de.schaffbar.core_pos.shared.event.payload.WorkshopUsageEventPayload;
@@ -23,6 +24,7 @@ import de.schaffbar.core_pos.shared.id.CustomerId;
 import de.schaffbar.core_pos.shared.id.RfidReaderId;
 import de.schaffbar.core_pos.shared.id.RfidTagAssignmentId;
 import de.schaffbar.core_pos.shared.id.RfidTagId;
+import de.schaffbar.core_pos.shared.id.ToolCertificationId;
 import de.schaffbar.core_pos.shared.id.ToolId;
 import de.schaffbar.core_pos.shared.id.ToolUsageId;
 import de.schaffbar.core_pos.shared.id.WorkshopSessionId;
@@ -140,6 +142,14 @@ public class SchaffbarEvent implements ValidationSupport {
         return builderWithDefaultsAndNow(eventType) //
                 .aggregateType(AggregateType.TOOL_USAGE) //
                 .aggregateId(toolUsageId.getValue().toString()) //
+                .payload(toJsonNode(payload)) //
+                .build();
+    }
+
+    public static SchaffbarEvent toolCertificationEvent(EventType eventType, ToolCertificationId toolCertificationId, ToolCertificationEventPayload payload) {
+        return builderWithDefaultsAndNow(eventType) //
+                .aggregateType(AggregateType.TOOL_CERTIFICATION) //
+                .aggregateId(toolCertificationId.getValue().toString()) //
                 .payload(toJsonNode(payload)) //
                 .build();
     }

@@ -67,7 +67,8 @@ public class ValueObjectAssert {
         RFID_READER_ID("rfid reader id"), //
         MAC_ADDRESS("mac address"), //
         RFID_TAG_ID("rfid tag id"), //
-        RFID_TAG_ASSIGNMENT_ID("rfid tag assignment id");
+        RFID_TAG_ASSIGNMENT_ID("rfid tag assignment id"), //
+        TOOL_CERTIFICATION_ID("tool certification id");
 
         private final String value;
 

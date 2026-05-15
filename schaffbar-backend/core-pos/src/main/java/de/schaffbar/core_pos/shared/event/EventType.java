@@ -28,6 +28,14 @@ public enum EventType {
     TOOL_USAGE_STOPPED, //
 
     // ------------------------------------------------------------------------
+    // tool certification
+
+    TOOL_CERTIFICATION_CREATED, //
+    TOOL_CERTIFICATION_PAUSED, //
+    TOOL_CERTIFICATION_REACTIVATED, //
+    TOOL_CERTIFICATION_REVOKED, //
+
+    // ------------------------------------------------------------------------
     // RFID reader
 
     RFID_READER_CREATED, //

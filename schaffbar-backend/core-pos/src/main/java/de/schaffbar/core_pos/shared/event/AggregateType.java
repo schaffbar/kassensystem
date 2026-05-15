@@ -9,4 +9,5 @@ public enum AggregateType {
     WORKSHOP_SESSION, //
     WORKSHOP_USAGE, //
     TOOL_USAGE, //
+    TOOL_CERTIFICATION, //
 }

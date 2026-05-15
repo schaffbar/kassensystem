@@ -6,6 +6,7 @@ import de.schaffbar.core_pos.shared.id.CustomerId;
 import de.schaffbar.core_pos.shared.id.MacAddress;
 import de.schaffbar.core_pos.shared.id.RfidReaderId;
 import de.schaffbar.core_pos.shared.id.RfidTagId;
+import de.schaffbar.core_pos.shared.id.ToolCertificationId;
 import de.schaffbar.core_pos.shared.id.ToolId;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -50,6 +51,10 @@ public class ResourceNotFoundException extends RuntimeException {
         return new ResourceNotFoundException(Resource.RFID_TAG, id.getValue());
     }
 
+    public static ResourceNotFoundException toolCertification(ToolCertificationId id) {
+        return new ResourceNotFoundException(Resource.TOOL_CERTIFICATION, id.getValue().toString());
+    }
+
     // ------------------------------------------------------------------------
     // helper
 
@@ -64,6 +69,7 @@ public class ResourceNotFoundException extends RuntimeException {
         CUSTOMER("customer"), //
         TOOL("tool"), //
         TOOL_USAGE("tool usage"), //
+        TOOL_CERTIFICATION("tool certification"), //
         RFID_READER("RFID reader"), //
         RFID_TAG("RFID tag"), //
         WORKSHOP_SESSION("Workshop session"), //

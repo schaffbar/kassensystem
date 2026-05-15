@@ -5,15 +5,6 @@
 1. [Domain Overview](#1-domain-overview)
 2. [Aggregate Structure Pattern](#2-aggregate-structure-pattern)
 3. [Aggregate Catalog](#3-aggregate-catalog)
-    - [Customer](#31-customer)
-    - [Tool](#32-tool)
-    - [RfidReader](#33-rfidreader)
-    - [RfidTag](#34-rfidtag)
-    - [RfidTagAssignment](#35-rfidtagassignment)
-    - [RfidTagAssignmentHistory](#36-rfidtagassignmenthistory)
-    - [WorkshopSession](#37-workshopsession)
-    - [WorkshopUsage](#38-workshopusage)
-    - [ToolUsage](#39-toolusage)
 4. [Use Cases (Application Services)](#4-use-cases-application-services)
 5. [Read Models (Query Services)](#5-read-models-query-services)
 6. [Value Objects](#6-value-objects)
@@ -30,6 +21,7 @@ for their time. The core domain revolves around:
 - **RFID infrastructure** — readers, tags, and their assignment to customers
 - **Tool management** — workshop tools with optional WLAN-Relais (Shelly) control and RFID reader pairing
 - **Tool usage tracking** — tracks which customer uses which tool, for billing and safety enforcement
+- **Tool certification management** — per-customer, per-tool certifications (Einweisungen) that gate access to machines (ACTIVE/PAUSED/REVOKED lifecycle)
 - **Workshop access tracking** — sessions (billing units) and usages (individual entry/exit time slots)
 - **Workshop dashboard** — a read model showing currently active users
 
@@ -120,447 +112,21 @@ class
 
 ## 3. Aggregate Catalog
 
-### 3.1 Customer
-
-**Package:** `de.schaffbar.core_pos.customer`
-
-**Aggregate Root:** `Customer`
-
-**Identity:** `CustomerId` (UUID)
-
-#### Attributes
-
-| Field         | Type              | Constraints               |
-|---------------|-------------------|---------------------------|
-| `id`          | `UUID`            | PK                        |
-| `firstName`   | `String`          | `@NotBlank`               |
-| `lastName`    | `String`          | `@NotBlank`               |
-| `dateOfBirth` | `LocalDate`       | `@NotNull`                |
-| `clubMember`  | `boolean`         | —                         |
-| `email`       | `String`          | `@NotBlank`               |
-| `phone`       | `String`          | optional                  |
-| `address`     | `CustomerAddress` | `@NotNull`, `@Embeddable` |
-| `createdAt`   | `Instant`         | `@NotNull`                |
-| `updatedAt`   | `Instant`         | `@Version`                |
-
-**Value Object:** `CustomerAddress` (embedded)
-
-- `addressLine1` (`@NotBlank`), `addressLine2` (optional), `postalCode` (`@NotBlank`), `city` (`@NotBlank`), `country` (
-  `@NotBlank`)
-
-#### Commands
-
-| Command                        | Fields                                                                                                            |
-|--------------------------------|-------------------------------------------------------------------------------------------------------------------|
-| `CreateCustomerCommand`        | firstName, lastName, dateOfBirth, clubMember, email, phone, addressLine1, addressLine2, postalCode, city, country |
-| `UpdateCustomerCommand`        | id (`CustomerId`), firstName, lastName, dateOfBirth, clubMember                                                   |
-| `UpdateCustomerContactCommand` | id (`CustomerId`), email, phone                                                                                   |
-| `UpdateCustomerAddressCommand` | id (`CustomerId`), addressLine1, addressLine2, postalCode, city, country                                          |
-
-#### Business Rules / Invariants
-
-| #   | Rule                                                    | Enforced in                                            |
-|-----|---------------------------------------------------------|--------------------------------------------------------|
-| C-1 | `firstName`, `lastName`, `email` must not be blank      | Bean Validation on Entity + Commands                   |
-| C-2 | `dateOfBirth` must not be null                          | Bean Validation                                        |
-| C-3 | Address must always be present and valid                | `@NotNull` on embedded `CustomerAddress`               |
-| C-4 | Customer must not be deleted if assigned to an RFID tag | **TODO** — noted in `CustomerService.deleteCustomer()` |
-
-#### Domain Events
-
-| Event                      | Payload                |
-|----------------------------|------------------------|
-| `CUSTOMER_CREATED`         | Full customer snapshot |
-| `CUSTOMER_UPDATED`         | Updated base fields    |
-| `CUSTOMER_CONTACT_CHANGED` | email, phone           |
-| `CUSTOMER_ADDRESS_CHANGED` | Full address           |
-| `CUSTOMER_DELETED`         | CustomerId             |
-
----
-
-### 3.2 Tool
-
-**Package:** `de.schaffbar.core_pos.tool`
-
-**Aggregate Root:** `Tool`
-
-**Identity:** `ToolId` (UUID)
-
-#### Attributes
-
-| Field              | Type             | Constraints                                          |
-|--------------------|------------------|------------------------------------------------------|
-| `id`               | `UUID`           | PK                                                   |
-| `name`             | `String`         | `@NotBlank`                                          |
-| `description`      | `String`         | optional                                             |
-| `rfidReaderId`     | `UUID`           | optional, FK-like reference                          |
-| `wlanRelaisType`   | `WlanRelaisType` | optional enum (`SHELLY_1`, `SHELLY_2`, `SHELLY_PRO`) |
-| `ipAddress`        | `String`         | required when `wlanRelaisType` is set                |
-| `httpStartCommand` | `String`         | auto-derived from `WlanRelaisType` template          |
-| `onCommand`        | `String`         | auto-derived from `WlanRelaisType` template          |
-| `offCommand`       | `String`         | auto-derived from `WlanRelaisType` template          |
-| `createdAt`        | `Instant`        | `@NotNull`                                           |
-| `updatedAt`        | `Instant`        | `@Version`                                           |
-
-#### Commands
-
-| Command                   | Fields                                                                      |
-|---------------------------|-----------------------------------------------------------------------------|
-| `CreateToolCommand`       | name, description, rfidReaderId (`RfidReaderId`), wlanRelaisType, ipAddress |
-| `UpdateToolCommand`       | name, description                                                           |
-| `UpdateWlanRelaisCommand` | wlanRelaisType, ipAddress                                                   |
-
-#### Business Rules / Invariants
-
-| #   | Rule                                                                                                                                    | Enforced in                                                      |
-|-----|-----------------------------------------------------------------------------------------------------------------------------------------|------------------------------------------------------------------|
-| T-1 | `name` must not be blank                                                                                                                | Bean Validation                                                  |
-| T-2 | Tool name must be unique across all tools                                                                                               | `ToolService.createTool()`                                       |
-| T-3 | An RFID reader can only be assigned to one tool at a time                                                                               | `ToolService.createTool()`, `ToolService.assignRfidReader()`     |
-| T-4 | An IP address can only be used by one tool at a time                                                                                    | `ToolService.createTool()`, `ToolService.updateWlanRelais()`     |
-| T-5 | When `wlanRelaisType` is set, `ipAddress` is required                                                                                   | `Tool.applyWlanRelaisType()` — throws `IllegalArgumentException` |
-| T-6 | WLAN-Relais commands (`httpStartCommand`, `onCommand`, `offCommand`) are derived from the `WlanRelaisType` template — not user-settable | `Tool.applyWlanRelaisType()`                                     |
-| T-7 | Clearing WLAN-Relais resets all relais-related fields to null                                                                           | `Tool.clearWlanRelais()`                                         |
-| T-8 | If assigning an RFID reader that is already assigned to the same tool → no-op (idempotent)                                              | `ToolService.assignRfidReader()`                                 |
-| T-9 | Only RFID readers of type `SWITCH_BOX` can be assigned to tools                                                                         | `ToolCreate` / `ToolAssignRfidReader` use cases                  |
-
-#### Domain Events
-
-| Event                       | Payload                   |
-|-----------------------------|---------------------------|
-| `TOOL_CREATED`              | Full tool snapshot        |
-| `TOOL_UPDATED`              | Updated name, description |
-| `TOOL_WLAN_RELAIS_UPDATED`  | WLAN-Relais config        |
-| `TOOL_RFID_READER_ASSIGNED` | toolId, rfidReaderId      |
-| `TOOL_RFID_READER_CLEARED`  | toolId                    |
-| `TOOL_DELETED`              | toolId                    |
-
----
-
-### 3.3 RfidReader
-
-**Package:** `de.schaffbar.core_pos.rfid_reader`
-
-**Aggregate Root:** `RfidReader`
-
-**Identity:** `RfidReaderId` (UUID)
-
-#### Attributes
-
-| Field        | Type             | Constraints                           |
-|--------------|------------------|---------------------------------------|
-| `id`         | `UUID`           | PK                                    |
-| `macAddress` | `String`         | `@NotBlank`, `@Column(unique = true)` |
-| `type`       | `RfidReaderType` | optional enum                         |
-| `name`       | `String`         | optional                              |
-| `socketName` | `String`         | optional                              |
-| `createdAt`  | `Instant`        | `@NotNull`                            |
-| `updatedAt`  | `Instant`        | `@Version`                            |
-
-**Enum:** `RfidReaderType`
-| Value | Code | Purpose |
-|---|---|---|
-| `RFID_TAG_REGISTER` | `A` | Registers new RFID tags |
-| `RFID_TAG_ASSIGNER` | `C` | Assigns RFID tags to customers |
-| `GATE_KEEPER_IN` | `GI` | Workshop entry gate |
-| `GATE_KEEPER_OUT` | `GO` | Workshop exit gate |
-| `SWITCH_BOX` | `S` | Controls tool power (paired with Tool) |
-
-#### Commands
-
-| Command                       | Fields                                                         |
-|-------------------------------|----------------------------------------------------------------|
-| _(Creation via MacAddress)_   | macAddress (`MacAddress` value object)                         |
-| `UpdateRfidReaderCommand`     | id (`RfidReaderId`), type (`RfidReaderType`), name, socketName |
-| `ChangeRfidReaderTypeCommand` | id (`RfidReaderId`), type (`RfidReaderType`)                   |
-
-#### Business Rules / Invariants
-
-| #   | Rule                                                                                             | Enforced in                                                              |
-|-----|--------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------|
-| R-1 | `macAddress` must be unique across all RFID readers                                              | DB unique constraint, **TODO** in `RfidReaderService.createRfidReader()` |
-| R-2 | `macAddress` must not be blank                                                                   | Bean Validation                                                          |
-| R-3 | The type of an RFID reader of type `SWITCH_BOX` cannot be changed while a tool is assigned to it | `ChangeRfidReaderType` use case                                          |
-
-#### Domain Events
-
-| Event                      | Payload              |
-|----------------------------|----------------------|
-| `RFID_READER_CREATED`      | Full reader snapshot |
-| `RFID_READER_UPDATED`      | Updated fields       |
-| `RFID_READER_TYPE_CHANGED` | rfidReaderId, type   |
-| `RFID_READER_DELETED`      | rfidReaderId         |
-
----
-
-### 3.4 RfidTag
-
-**Package:** `de.schaffbar.core_pos.rfid_tag`
-
-**Aggregate Root:** `RfidTag`
-
-**Identity:** `RfidTagId` (String — hardware ID)
-
-#### Attributes
-
-| Field       | Type      | Constraints                    |
-|-------------|-----------|--------------------------------|
-| `id`        | `String`  | PK (hardware tag ID)           |
-| `active`    | `boolean` | defaults to `true` on creation |
-| `createdAt` | `Instant` | `@NotNull`                     |
-| `updatedAt` | `Instant` | `@Version`                     |
-
-#### Commands
-
-| Command                | Fields             |
-|------------------------|--------------------|
-| `CreateRfidTagCommand` | rfidTagId (String) |
-
-#### Business Rules / Invariants
-
-| #    | Rule                                 | Enforced in                                     |
-|------|--------------------------------------|-------------------------------------------------|
-| RT-1 | RFID Tag ID must not be blank        | `@NotBlank` on `CreateRfidTagCommand.rfidTagId` |
-| RT-2 | Newly created tags are always active | `RfidTag.of()` sets `active = true`             |
-
-#### Domain Events
-
-| Event              | Payload           |
-|--------------------|-------------------|
-| `RFID_TAG_CREATED` | Full tag snapshot |
-| `RFID_TAG_DELETED` | rfidTagId         |
-
----
-
-### 3.5 RfidTagAssignment
-
-**Package:** `de.schaffbar.core_pos.rfid_tag_assignment`
-
-**Aggregate Root:** `RfidTagAssignment`
-
-**Identity:** `RfidTagAssignmentId` (UUID)
-
-#### Attributes
-
-| Field            | Type                      | Constraints                                         |
-|------------------|---------------------------|-----------------------------------------------------|
-| `id`             | `UUID`                    | PK                                                  |
-| `customerId`     | `UUID`                    | `@NotNull`, `@Column(unique = true)`                |
-| `assignmentType` | `RfidTagAssignmentType`   | `@NotNull` (`FIXED` or `TEMPORARY`)                 |
-| `status`         | `RfidTagAssignmentStatus` | `@NotNull` (`WAITING_FOR_ASSIGNMENT` or `ASSIGNED`) |
-| `rfidTagId`      | `String`                  | `@Column(unique = true)`, set upon assignment       |
-| `assignmentDate` | `Instant`                 | set upon assignment                                 |
-| `updatedAt`      | `Instant`                 | `@Version`                                          |
-
-**Lifecycle:** `WAITING_FOR_ASSIGNMENT` → `ASSIGNED` → _(deleted on unassign)_
-
-#### Commands
-
-| Operation          | Input                      |
-|--------------------|----------------------------|
-| Request assignment | customerId, assignmentType |
-| Assign RFID tag    | rfidTagId                  |
-| Unassign           | customerId                 |
-
-#### Business Rules / Invariants
-
-| #    | Rule                                                                                    | Enforced in                                                                                               |
-|------|-----------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------|
-| TA-1 | A customer can have at most one active RFID tag assignment                              | `@Column(unique = true)` on `customerId` + check in `RfidTagAssignmentService.requestRfidTagAssignment()` |
-| TA-2 | An RFID tag can be assigned to at most one customer                                     | `@Column(unique = true)` on `rfidTagId` + check in `RfidTagAssignmentService.assignRfidTag()`             |
-| TA-3 | Only one pending assignment (`WAITING_FOR_ASSIGNMENT`) may exist at a time              | `RfidTagAssignmentService.requestRfidTagAssignment()`                                                     |
-| TA-4 | Assignment can only happen when status is `WAITING_FOR_ASSIGNMENT`                      | **TODO** — noted in `RfidTagAssignment.assignRfidTag()`                                                   |
-| TA-5 | Only `ASSIGNED` assignments can be unassigned                                           | `RfidTagAssignmentService.unassignRfidTag()` filters by `isAssigned()`                                    |
-| TA-6 | On unassign, the assignment record is deleted (not soft-deleted) and history is created | `CustomerUnassignRfidTag` use case                                                                        |
-| TA-7 | Customer must exist before requesting assignment                                        | `CustomerRequestRfidTagAssignment` use case                                                               |
-| TA-8 | RFID tag must exist before it can be assigned                                           | `CustomerAssignRfidTag` use case                                                                          |
-
-#### Domain Events
-
-| Event                           | Payload             |
-|---------------------------------|---------------------|
-| `RFID_TAG_ASSIGNMENT_REQUESTED` | Assignment snapshot |
-| `RFID_TAG_ASSIGNED`             | Assignment snapshot |
-| `RFID_TAG_UNASSIGNED`           | Assignment snapshot |
-
----
-
-### 3.6 RfidTagAssignmentHistory
-
-**Package:** `de.schaffbar.core_pos.rfid_tag_assignment_history`
-
-**Aggregate Root:** `RfidTagAssignmentHistory`
-
-**Identity:** `RfidTagAssignmentId` (UUID) — _Note: FIXME in code suggests renaming to `RfidTagAssignmentHistoryId`_
-
-#### Attributes
-
-| Field              | Type                    | Constraints                  |
-|--------------------|-------------------------|------------------------------|
-| `id`               | `UUID`                  | PK                           |
-| `customerId`       | `UUID`                  | `@NotNull`                   |
-| `rfidTagId`        | `String`                | `@NotNull`                   |
-| `assignmentType`   | `RfidTagAssignmentType` | `@NotNull`                   |
-| `assignmentDate`   | `Instant`               | `@NotNull`, `@Past`          |
-| `unassignmentDate` | `Instant`               | `@NotNull`, `@PastOrPresent` |
-| `updatedAt`        | `Instant`               | `@Version`                   |
-
-#### Business Rules / Invariants
-
-| #     | Rule                                                                     | Enforced in                                          |
-|-------|--------------------------------------------------------------------------|------------------------------------------------------|
-| TAH-1 | History is created from a previously active (ASSIGNED) RfidTagAssignment | `RfidTagAssignmentHistory.of(RfidTagAssignmentView)` |
-| TAH-2 | `assignmentDate` must be in the past                                     | `@Past` validation                                   |
-| TAH-3 | `unassignmentDate` must be in the past or present                        | `@PastOrPresent` validation                          |
-| TAH-4 | History records are immutable — no update commands                       | No command methods                                   |
-
-#### Domain Events
-
-_None — this is a projection / audit log aggregate._
-
----
-
-### 3.7 WorkshopSession
-
-**Package:** `de.schaffbar.core_pos.workshop_session`
-
-**Aggregate Root:** `WorkshopSession`
-
-**Identity:** `WorkshopSessionId` (UUID)
-
-#### Attributes
-
-| Field        | Type                    | Constraints                   |
-|--------------|-------------------------|-------------------------------|
-| `id`         | `UUID`                  | PK                            |
-| `customerId` | `UUID`                  | `@NotNull`                    |
-| `startTime`  | `Instant`               | `@NotNull`                    |
-| `closeTime`  | `Instant`               | optional, set on close        |
-| `status`     | `WorkshopSessionStatus` | `@NotNull` (`OPEN` or `PAID`) |
-| `updatedAt`  | `Instant`               | `@Version`                    |
-
-**Lifecycle:** `OPEN` → `PAID`
-
-#### Commands
-
-| Operation     | Input      |
-|---------------|------------|
-| Start session | customerId |
-| Close session | customerId |
-
-#### Business Rules / Invariants
-
-| #    | Rule                                                     | Enforced in                                                                |
-|------|----------------------------------------------------------|----------------------------------------------------------------------------|
-| WS-1 | A customer can have at most one `OPEN` session at a time | `WorkshopSessionService.startSession()` — checks for existing open session |
-| WS-2 | Closing sets status to `PAID` and records `closeTime`    | `WorkshopSession.close()`                                                  |
-| WS-3 | Customer must exist before closing a session             | `CloseSession` use case                                                    |
-| WS-4 | Cannot close a session that doesn't exist                | `WorkshopSessionService.closeSession()`                                    |
-| WS-5 | Pending workshop usages should be checked before closing | **TODO** — noted in `CloseSession` use case                                |
-
-#### Domain Events
-
-| Event                      | Payload          |
-|----------------------------|------------------|
-| `WORKSHOP_SESSION_STARTED` | Session snapshot |
-| `WORKSHOP_SESSION_CLOSED`  | Session snapshot |
-
----
-
-### 3.8 WorkshopUsage
-
-**Package:** `de.schaffbar.core_pos.workshop_usage`
-
-**Aggregate Root:** `WorkshopUsage`
-
-**Identity:** `WorkshopUsageId` (UUID)
-
-_Note: Code suggests considering renaming to `WorkshopSlot` or `UsageSlot`._
-
-#### Attributes
-
-| Field               | Type      | Constraints           |
-|---------------------|-----------|-----------------------|
-| `id`                | `UUID`    | PK                    |
-| `customerId`        | `UUID`    | `@NotNull`            |
-| `workshopSessionId` | `UUID`    | `@NotNull`            |
-| `entryTime`         | `Instant` | `@NotNull`            |
-| `exitTime`          | `Instant` | optional, set on exit |
-| `updatedAt`         | `Instant` | `@Version`            |
-
-#### Commands
-
-| Operation      | Input                         |
-|----------------|-------------------------------|
-| Enter workshop | customerId, workshopSessionId |
-| Leave workshop | customerId, workshopSessionId |
-
-#### Business Rules / Invariants
-
-| #    | Rule                                                                            | Enforced in                                                                                   |
-|------|---------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------|
-| WU-1 | A customer can have at most one active (no `exitTime`) workshop usage at a time | `WorkshopUsageService.enterWorkshop()` — checks for open usage via `findActiveByCustomerId()` |
-| WU-2 | Customer must have an active usage to leave                                     | `WorkshopUsageService.leaveWorkshop()` — throws `NoActiveWorkshopUsageFoundException`         |
-| WU-3 | Duration is computed as `exitTime - entryTime` (truncated to seconds)           | `WorkshopUsage.getDuration()` — returns `null` if either time is missing                      |
-| WU-4 | A workshop session must exist (OPEN) before entering                            | `EnterWorkshop` use case — creates session if not present                                     |
-| WU-5 | Active tool usages are stopped when leaving the workshop                        | `LeaveWorkshop` use case — calls `ToolUsageService.stopAllUsagesForCustomer()`                |
-| WU-6 | Customer must have a valid certificate to enter                                 | **TODO** — noted in `EnterWorkshop` use case                                                  |
-
-#### Domain Events
-
-| Event                    | Payload        |
-|--------------------------|----------------|
-| `WORKSHOP_USAGE_ENTERED` | Usage snapshot |
-| `WORKSHOP_USAGE_LEFT`    | Usage snapshot |
-
----
-
-### 3.9 ToolUsage
-
-**Package:** `de.schaffbar.core_pos.tool_usage`
-
-**Aggregate Root:** `ToolUsage`
-
-**Identity:** `ToolUsageId` (UUID)
-
-#### Attributes
-
-| Field               | Type      | Constraints                |
-|---------------------|-----------|----------------------------|
-| `id`                | `UUID`    | PK                         |
-| `customerId`        | `UUID`    | `@NotNull`                 |
-| `toolId`            | `UUID`    | `@NotNull`                 |
-| `workshopSessionId` | `UUID`    | `@NotNull`                 |
-| `startTime`         | `Instant` | `@NotNull`                 |
-| `endTime`           | `Instant` | optional, set when stopped |
-| `updatedAt`         | `Instant` | `@Version`                 |
-
-#### Commands
-
-| Command                 | Fields                                |
-|-------------------------|---------------------------------------|
-| `StartToolUsageCommand` | customerId, toolId, workshopSessionId |
-
-#### Business Rules / Invariants
-
-| #    | Rule                                                                                   | Enforced in                                                                                             |
-|------|----------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------|
-| TU-1 | A customer can use at most 2 tools simultaneously                                      | `ToolUsageService.startUsage()` — checks count via `countActiveByCustomerId()`                          |
-| TU-2 | A customer can only use tools when actively in the workshop (has active WorkshopUsage) | `StartToolUsage` use case — calls `verifyCustomerIsInWorkshop()`                                        |
-| TU-3 | A customer cannot start the same tool twice simultaneously                             | `ToolUsageService.startUsage()` — checks via `findActiveByCustomerIdAndToolId()`                        |
-| TU-4 | When a customer leaves the workshop, all active tool usages are automatically stopped  | `LeaveWorkshop` use case — calls `ToolUsageService.stopAllUsagesForCustomer()`                          |
-| TU-5 | Tool on/off detection happens via RFID reader (type SWITCH_BOX) assigned to the tool   | `DeviceController` — resolves tool via `ToolService.getTool(RfidReaderId)` and toggles start/stop       |
-| TU-6 | Customer identification happens via RFID tag assignment                                | `DeviceController` — resolves customer via `RfidTagAssignmentService`                                   |
-| TU-7 | Duration is computed as `endTime - startTime` (truncated to seconds)                   | `ToolUsage.getDuration()` — returns `null` if either time is missing                                    |
-| TU-8 | Customer must have an open workshop session to start a tool usage                      | `StartToolUsage` use case — checks for active session                                                   |
-| TU-9 | A tool can only be used by one customer at a time                                      | `ToolUsageService.startUsage()` — checks via `findActiveByToolId()`, throws `ToolAlreadyInUseException` |
-
-#### Domain Events
-
-| Event                | Payload             |
-|----------------------|---------------------|
-| `TOOL_USAGE_STARTED` | Tool usage snapshot |
-| `TOOL_USAGE_STOPPED` | Tool usage snapshot |
+Each aggregate's detailed documentation (attributes, commands, business rules, domain events) lives in a `README.md`
+inside its package. This keeps the documentation close to the code it describes.
+
+| #    | Aggregate                  | Package                                            | Identity                 | README                                                                          |
+|------|----------------------------|----------------------------------------------------|--------------------------|---------------------------------------------------------------------------------|
+| 3.1  | Customer                   | `de.schaffbar.core_pos.customer`                   | `CustomerId` (UUID)      | [customer/README.md](../src/main/java/de/schaffbar/core_pos/customer/README.md) |
+| 3.2  | Tool                       | `de.schaffbar.core_pos.tool`                       | `ToolId` (UUID)          | [tool/README.md](../src/main/java/de/schaffbar/core_pos/tool/README.md)         |
+| 3.3  | RfidReader                 | `de.schaffbar.core_pos.rfid_reader`                | `RfidReaderId` (UUID)    | [rfid_reader/README.md](../src/main/java/de/schaffbar/core_pos/rfid_reader/README.md) |
+| 3.4  | RfidTag                    | `de.schaffbar.core_pos.rfid_tag`                   | `RfidTagId` (String)     | [rfid_tag/README.md](../src/main/java/de/schaffbar/core_pos/rfid_tag/README.md) |
+| 3.5  | RfidTagAssignment          | `de.schaffbar.core_pos.rfid_tag_assignment`        | `RfidTagAssignmentId` (UUID) | [rfid_tag_assignment/README.md](../src/main/java/de/schaffbar/core_pos/rfid_tag_assignment/README.md) |
+| 3.6  | RfidTagAssignmentHistory   | `de.schaffbar.core_pos.rfid_tag_assignment_history` | `RfidTagAssignmentId` (UUID) | [rfid_tag_assignment_history/README.md](../src/main/java/de/schaffbar/core_pos/rfid_tag_assignment_history/README.md) |
+| 3.7  | WorkshopSession            | `de.schaffbar.core_pos.workshop_session`           | `WorkshopSessionId` (UUID) | [workshop_session/README.md](../src/main/java/de/schaffbar/core_pos/workshop_session/README.md) |
+| 3.8  | WorkshopUsage              | `de.schaffbar.core_pos.workshop_usage`             | `WorkshopUsageId` (UUID) | [workshop_usage/README.md](../src/main/java/de/schaffbar/core_pos/workshop_usage/README.md) |
+| 3.9  | ToolUsage                  | `de.schaffbar.core_pos.tool_usage`                 | `ToolUsageId` (UUID)     | [tool_usage/README.md](../src/main/java/de/schaffbar/core_pos/tool_usage/README.md) |
+| 3.10 | ToolCertification          | `de.schaffbar.core_pos.tool_certification`         | `ToolCertificationId` (UUID) | [tool_certification/README.md](../src/main/java/de/schaffbar/core_pos/tool_certification/README.md) |
 
 ---
 
@@ -574,8 +140,12 @@ place where cross-aggregate coordination happens.
 | `EnterWorkshop`                    | Customer enters the workshop. Creates a session if none exists, then creates a usage entry.       | WorkshopSession, WorkshopUsage                        |
 | `LeaveWorkshop`                    | Customer leaves the workshop. Stops all active tool usages, then records exit time.               | WorkshopSession, WorkshopUsage, ToolUsage             |
 | `CloseSession`                     | Closes a customer's workshop session (mark as PAID).                                              | Customer, WorkshopSession                             |
-| `StartToolUsage`                   | Starts tool usage for a customer. Verifies workshop presence and open session.                    | ToolUsage, WorkshopSession, WorkshopUsage             |
+| `StartToolUsage`                   | Starts tool usage for a customer. Verifies tool certification, workshop presence, and open session. | ToolUsage, WorkshopSession, WorkshopUsage, ToolCertification |
 | `StopToolUsage`                    | Stops tool usage for a customer on a specific tool.                                               | ToolUsage                                             |
+| `CertifyCustomersForTool`          | Creates certifications for multiple customers after a training session. Supports partial success with error report. | ToolCertification                                     |
+| `PauseToolCertification`           | Pauses a customer's tool certification.                                                           | ToolCertification                                     |
+| `ReactivateToolCertification`      | Reactivates a paused tool certification.                                                          | ToolCertification                                     |
+| `RevokeToolCertification`          | Permanently revokes a customer's tool certification.                                              | ToolCertification                                     |
 | `CustomerRequestRfidTagAssignment` | Initiates RFID tag assignment process for a customer.                                             | Customer, RfidTagAssignment                           |
 | `CustomerAssignRfidTag`            | Completes RFID tag assignment by linking tag to pending assignment.                               | RfidTag, RfidTagAssignment                            |
 | `CustomerUnassignRfidTag`          | Removes RFID tag from customer, moves record to history.                                          | Customer, RfidTagAssignment, RfidTagAssignmentHistory |
@@ -606,6 +176,7 @@ All value objects are located in `de.schaffbar.core_pos.shared.id`:
 | `CustomerId`          | `UUID`   | Customer identity               |
 | `ToolId`              | `UUID`   | Tool identity                   |
 | `ToolUsageId`         | `UUID`   | Tool Usage identity             |
+| `ToolCertificationId` | `UUID`   | Tool Certification identity     |
 | `RfidReaderId`        | `UUID`   | RFID Reader identity            |
 | `RfidTagId`           | `String` | RFID Tag identity (hardware ID) |
 | `RfidTagAssignmentId` | `UUID`   | RFID Tag Assignment identity    |
@@ -651,6 +222,7 @@ EventFactory.someEvent(aggregate)
 | Customer          | `CUSTOMER_CREATED`, `CUSTOMER_UPDATED`, `CUSTOMER_CONTACT_CHANGED`, `CUSTOMER_ADDRESS_CHANGED`, `CUSTOMER_DELETED`                  |
 | Tool              | `TOOL_CREATED`, `TOOL_UPDATED`, `TOOL_WLAN_RELAIS_UPDATED`, `TOOL_RFID_READER_ASSIGNED`, `TOOL_RFID_READER_CLEARED`, `TOOL_DELETED` |
 | ToolUsage         | `TOOL_USAGE_STARTED`, `TOOL_USAGE_STOPPED`                                                                                          |
+| ToolCertification | `TOOL_CERTIFICATION_CREATED`, `TOOL_CERTIFICATION_PAUSED`, `TOOL_CERTIFICATION_REACTIVATED`, `TOOL_CERTIFICATION_REVOKED`             |
 | RfidReader        | `RFID_READER_CREATED`, `RFID_READER_UPDATED`, `RFID_READER_DELETED`                                                                 |
 | RfidTag           | `RFID_TAG_CREATED`, `RFID_TAG_DELETED`                                                                                              |
 | RfidTagAssignment | `RFID_TAG_ASSIGNMENT_REQUESTED`, `RFID_TAG_ASSIGNED`, `RFID_TAG_UNASSIGNED`                                                         |
@@ -666,7 +238,7 @@ EventFactory.someEvent(aggregate)
 | `CustomerService.deleteCustomer()`     | Deletion concept needed — check RFID tag assignment before deleting                  |
 | `RfidReaderService.createRfidReader()` | Check for duplicate MAC address on creation                                          |
 | `RfidTagAssignment.assignRfidTag()`    | Validate that assignment is in `WAITING_FOR_ASSIGNMENT` state                        |
-| `EnterWorkshop.process()`              | Check if customer has a valid certificate to enter                                   |
+| `EnterWorkshop.process()`              | ~~Check if customer has a valid certificate to enter~~ — resolved via `StartToolUsage` certification check |
 | `CloseSession.process()`               | Check for pending workshop usages before closing                                     |
 | `WorkshopUsage`                        | Consider renaming to `WorkshopSlot` or `UsageSlot`                                   |
 | `RfidTagAssignmentHistory`             | Consider renaming ID type to `RfidTagAssignmentHistoryId`                            |

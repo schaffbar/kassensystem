@@ -41,4 +41,10 @@ public interface ToolCertificationPayloads {
             @NotNull ToolCertificationStatus status //
     ) implements ToolCertificationEventPayload {}
 
+    record ToolCertificationDeletedPayload( //
+            @Valid @NotNull ToolCertificationId id, //
+            @Valid @NotNull CustomerId customerId, //
+            @Valid @NotNull ToolId toolId //
+    ) implements ToolCertificationEventPayload {}
+
 }

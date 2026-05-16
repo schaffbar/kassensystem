@@ -1,5 +1,6 @@
 package de.schaffbar.core_pos.tool_certification;
 
+import de.schaffbar.core_pos.shared.event.payload.ToolCertificationPayloads.ToolCertificationDeletedPayload;
 import de.schaffbar.core_pos.shared.event.payload.ToolCertificationPayloads.ToolCertificationCreatedPayload;
 import de.schaffbar.core_pos.shared.event.payload.ToolCertificationPayloads.ToolCertificationPausedPayload;
 import de.schaffbar.core_pos.shared.event.payload.ToolCertificationPayloads.ToolCertificationReactivatedPayload;
@@ -23,5 +24,7 @@ interface ToolCertificationPayloadMapper {
     ToolCertificationReactivatedPayload toToolCertificationReactivatedPayload(ToolCertification toolCertification);
 
     ToolCertificationRevokedPayload toToolCertificationRevokedPayload(ToolCertification toolCertification);
+
+    ToolCertificationDeletedPayload toToolCertificationDeletedPayload(ToolCertification toolCertification);
 
 }

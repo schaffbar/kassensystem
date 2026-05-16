@@ -104,6 +104,18 @@ public class ToolCertificationService {
         log.info("Revoked tool certification for customer {} on tool {} and published events {}", customerId, toolId, events);
     }
 
+    @Transactional
+    public void delete(@NotNull @Valid CustomerId customerId, @NotNull @Valid ToolId toolId) {
+        ToolCertification certification = findByCustomerAndToolOrThrow(customerId, toolId);
+
+        List<SchaffbarEvent> events = List.of(ToolCertificationEventFactory.toolCertificationDeleted(certification));
+        saveOutboxEvents(events);
+
+        this.toolCertificationRepository.delete(certification);
+
+        log.info("Deleted tool certification for customer {} on tool {} and published events {}", customerId, toolId, events);
+    }
+
     // ------------------------------------------------------------------------
     // helper
 

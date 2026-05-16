@@ -36,4 +36,11 @@ final class ToolCertificationEventFactory {
         return SchaffbarEvent.toolCertificationEvent(EventType.TOOL_CERTIFICATION_REVOKED, toolCertification.getId(), payload);
     }
 
+    static SchaffbarEvent toolCertificationDeleted(ToolCertification toolCertification) {
+        var payload = ToolCertificationPayloadMapper.MAPPER.toToolCertificationDeletedPayload(toolCertification);
+        payload.validate();
+
+        return SchaffbarEvent.toolCertificationEvent(EventType.TOOL_CERTIFICATION_DELETED, toolCertification.getId(), payload);
+    }
+
 }

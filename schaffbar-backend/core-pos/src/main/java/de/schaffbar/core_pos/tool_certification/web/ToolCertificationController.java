@@ -13,6 +13,7 @@ import de.schaffbar.core_pos.tool_certification.ToolCertificationService;
 import de.schaffbar.core_pos.tool_certification.web.ToolCertificationApiModel.BatchCertifyRequestBody;
 import de.schaffbar.core_pos.tool_certification.web.ToolCertificationApiModel.ToolCertificationApiDto;
 import de.schaffbar.core_pos.use_case.CertifyCustomersForTool;
+import de.schaffbar.core_pos.use_case.DeleteToolCertification;
 import de.schaffbar.core_pos.use_case.PauseToolCertification;
 import de.schaffbar.core_pos.use_case.ReactivateToolCertification;
 import de.schaffbar.core_pos.use_case.RevokeToolCertification;
@@ -23,6 +24,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -47,6 +49,8 @@ public class ToolCertificationController {
     private final @NonNull ReactivateToolCertification reactivateToolCertification;
 
     private final @NonNull RevokeToolCertification revokeToolCertification;
+
+    private final @NonNull DeleteToolCertification deleteToolCertification;
 
     // ------------------------------------------------------------------------
     // query
@@ -110,6 +114,13 @@ public class ToolCertificationController {
     @PutMapping(value = "/customers/{customerId}/tools/{toolId}/revoke")
     public ResponseEntity<Void> revoke(@PathVariable @NotNull @Valid CustomerId customerId, @PathVariable @NotNull @Valid ToolId toolId) {
         this.revokeToolCertification.process(customerId, toolId);
+
+        return ResponseEntity.noContent().build();
+    }
+
+    @DeleteMapping(value = "/customers/{customerId}/tools/{toolId}")
+    public ResponseEntity<Void> delete(@PathVariable @NotNull @Valid CustomerId customerId, @PathVariable @NotNull @Valid ToolId toolId) {
+        this.deleteToolCertification.process(customerId, toolId);
 
         return ResponseEntity.noContent().build();
     }

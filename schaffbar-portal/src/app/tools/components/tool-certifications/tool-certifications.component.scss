@@ -1,0 +1,50 @@
+.tool-certifications {
+  .certifications-layout {
+    display: flex;
+    gap: 2rem;
+    align-items: flex-start;
+  }
+
+  .batch-create-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    flex: 1;
+    min-width: 0;
+
+    .user-search-field,
+    .certifier-search-field {
+      width: 100%;
+    }
+
+    .selected-users-chips {
+      margin-bottom: 0.5rem;
+    }
+  }
+
+  .certifications-list {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .table-container {
+    overflow-x: auto;
+  }
+
+  table {
+    width: 100%;
+  }
+
+  .active {
+    background-color: #c8e6c9;
+  }
+
+  .paused {
+    background-color: #fff9c4;
+  }
+
+  .revoked {
+    background-color: #ffcdd2;
+  }
+}

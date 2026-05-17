@@ -54,7 +54,13 @@
       "assignTempRfidTag": "Assign Temporary RFID Tag",
       "assignFixedRfidTag": "Assign Fixed RFID Tag",
       "unassignRfidTag": "Unassign RFID Tag",
-      "closeSession": "Close Session"
+      "closeSession": "Close Session",
+      "toolCertifications": {
+        "pause": "Pause Certification",
+        "reactivate": "Reactivate Certification",
+        "revoke": "Revoke Certification",
+        "delete": "Delete Certification"
+      }
     },
     "dialogs": {
       "addNewUser": {
@@ -87,6 +93,27 @@
           "confirm": "Delete",
           "cancel": "Cancel"
         }
+      },
+      "certifications": {
+        "pauseCertification": {
+          "title": "Pause Certification",
+          "message": "Are you sure you want to pause this certification?",
+          "confirm": "Pause"
+        },
+        "reactivateCertification": {
+          "title": "Reactivate Certification",
+          "message": "Are you sure you want to reactivate this certification?",
+          "confirm": "Reactivate"
+        },
+        "revokeCertification": {
+          "title": "Revoke Certification",
+          "message": "Are you sure you want to revoke this certification?",
+          "confirm": "Revoke"
+        },
+        "deleteCertification": {
+          "title": "Delete Certification",
+          "message": "Are you sure you want to delete this certification?"
+        }
       }
     },
     "tables": {
@@ -100,6 +127,16 @@
         "toolUsage": {
           "startTimeColumn": "Start Time",
           "endTimeColumn": "End Time"
+        }
+      },
+      "toolCertifications": {
+        "toolNameColumn": "Tool",
+        "statusColumn": "Status",
+        "certifiedAtColumn": "Certified At",
+        "statuses": {
+          "ACTIVE": "Active",
+          "PAUSED": "Paused",
+          "REVOKED": "Revoked"
         }
       }
     },
@@ -134,7 +171,11 @@
       "userDetails": {
         "headers": {
           "contactInformation": "Contact Information",
-          "address": "Address"
+          "address": "Address",
+          "toolCertifications": "Tool Certifications"
+        },
+        "messages": {
+          "noCertifications": "No certifications for this user."
         }
       },
       "openSession": {
@@ -192,6 +233,13 @@
     "tooltips": {
       "clearRfidReader": "Clear RFID Reader Assignment"
     },
+    "tables": {
+      "toolCertifications": {
+        "userNameColumn": "User",
+        "statusColumn": "Status",
+        "certifiedAtColumn": "Certified At"
+      }
+    },
     "wlanRelaisTypes": {
       "SHELLY_1": "Shelly 1",
       "SHELLY_2": "Shelly 2",
@@ -200,7 +248,8 @@
     "tabGroups": {
       "toolDetails": {
         "detailsTab": "Details",
-        "wlanRelayTab": "WLAN Relay"
+        "wlanRelayTab": "WLAN Relay",
+        "certificationsTab": "Certifications"
       }
     },
     "pages": {
@@ -208,7 +257,18 @@
         "headers": {
           "toolInformation": "Tool Information",
           "rfidReaderAssignment": "RFID Reader",
-          "wlanRelais": "WLAN Relais"
+          "wlanRelais": "WLAN Relais",
+          "certifications": "Certifications"
+        },
+        "certifications": {
+          "batchCreate": {
+            "title": "Add New Certifications",
+            "searchUsers": "Search Users",
+            "certifiedBy": "Certified By",
+            "submit": "Add Certifications"
+          },
+          "noCertifications": "No certifications for this tool.",
+          "listTitle": "Certified Users"
         },
         "messages": {
           "alreadyAssigned": "already assigned",

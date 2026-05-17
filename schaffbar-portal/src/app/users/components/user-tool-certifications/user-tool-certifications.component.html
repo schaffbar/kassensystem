@@ -1,0 +1,82 @@
+<div class="certifications-section">
+  <h3>{{ 'users.pages.userDetails.headers.toolCertifications' | translate }}</h3>
+
+  @if (certifications().length > 0) {
+    <div class="table-container">
+      <table mat-table [dataSource]="certifications()" class="mat-elevation-z8">
+        <ng-container matColumnDef="toolName">
+          <th mat-header-cell *matHeaderCellDef>
+            {{ 'users.tables.toolCertifications.toolNameColumn' | translate }}
+          </th>
+          <td mat-cell *matCellDef="let cert">{{ toolNameMap().get(cert.toolId) ?? cert.toolId }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="status">
+          <th mat-header-cell *matHeaderCellDef>
+            {{ 'users.tables.toolCertifications.statusColumn' | translate }}
+          </th>
+          <td mat-cell *matCellDef="let cert">
+            <mat-chip-set>
+              <mat-chip
+                [class.active]="cert.status === CertificationStatus.Active"
+                [class.paused]="cert.status === CertificationStatus.Paused"
+                [class.revoked]="cert.status === CertificationStatus.Revoked">
+                {{ 'users.tables.toolCertifications.statuses.' + cert.status | translate }}
+              </mat-chip>
+            </mat-chip-set>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="certifiedAt">
+          <th mat-header-cell *matHeaderCellDef>
+            {{ 'users.tables.toolCertifications.certifiedAtColumn' | translate }}
+          </th>
+          <td mat-cell *matCellDef="let cert">{{ cert.certifiedAt | date: 'mediumDate' }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef>{{ 'shared.table.actionsColumn' | translate }}</th>
+          <td mat-cell *matCellDef="let cert">
+            @if (cert.status === CertificationStatus.Active) {
+              <button
+                mat-icon-button
+                color="warn"
+                [title]="'users.actions.toolCertifications.pause' | translate"
+                (click)="onPause(cert)">
+                <mat-icon>pause_circle</mat-icon>
+              </button>
+              <button
+                mat-icon-button
+                color="warn"
+                [title]="'users.actions.toolCertifications.revoke' | translate"
+                (click)="onRevoke(cert)">
+                <mat-icon>block</mat-icon>
+              </button>
+            }
+            @if (cert.status === CertificationStatus.Paused) {
+              <button
+                mat-icon-button
+                color="primary"
+                [title]="'users.actions.toolCertifications.reactivate' | translate"
+                (click)="onReactivate(cert)">
+                <mat-icon>play_circle</mat-icon>
+              </button>
+              <button
+                mat-icon-button
+                color="warn"
+                [title]="'users.actions.toolCertifications.revoke' | translate"
+                (click)="onRevoke(cert)">
+                <mat-icon>block</mat-icon>
+              </button>
+            }
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+      </table>
+    </div>
+  } @else {
+    <p>{{ 'users.pages.userDetails.messages.noCertifications' | translate }}</p>
+  }
+</div>

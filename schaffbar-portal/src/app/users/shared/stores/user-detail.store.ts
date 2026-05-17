@@ -16,9 +16,11 @@ import { exhaustMap, filter, pipe, tap } from 'rxjs';
 
 import { setError, setFulfilled, setPending, withRequestStatus } from '../../../shared/state/request-status.feature';
 import { RfidTagAssignment, RfidTagAssignmentStatus } from '../../shared/models/rfid-tag-assignment.model';
+import { ToolCertification } from '../../shared/models/tool-certification.model';
 import { User, UserAddress } from '../../shared/models/user.model';
 import { WorkshopSession } from '../../shared/models/workshop-session.model';
 import { RfidTagAssignmentService } from '../../shared/services/rfid-tag-assignment.service';
+import { ToolCertificationService } from '../../shared/services/tool-certification.service';
 import { UsersService } from '../../shared/services/users.service';
 import { WorkshopSessionService } from '../../shared/services/workshop-session.service';
 
@@ -27,6 +29,7 @@ interface UserDetailState {
   user: User | null;
   rfidTagAssignment: RfidTagAssignment | null;
   openSession: WorkshopSession | null;
+  toolCertifications: ToolCertification[];
   dirty: boolean;
 }
 
@@ -35,6 +38,7 @@ const initialState: UserDetailState = {
   user: null,
   rfidTagAssignment: null,
   openSession: null,
+  toolCertifications: [],
   dirty: false,
 };
 
@@ -68,6 +72,7 @@ export const UserDetailStore = signalStore(
     _usersService: inject(UsersService),
     _assignmentService: inject(RfidTagAssignmentService),
     _workshopSessionService: inject(WorkshopSessionService),
+    _toolCertificationService: inject(ToolCertificationService),
   })),
   withMethods((store) => ({
     setUserId: signalMethod<string>((userId) => {
@@ -236,6 +241,69 @@ export const UserDetailStore = signalStore(
       ),
     ),
   })),
+  withMethods((store) => ({
+    loadToolCertifications: rxMethod<string>(
+      pipe(
+        filter((userId: string) => !!userId),
+        tap(() => patchState(store, setPending())),
+        exhaustMap((userId: string) => {
+          return store._toolCertificationService.getCertificationsByUser(userId).pipe(
+            tapResponse({
+              next: (toolCertifications) => {
+                patchState(store, { toolCertifications }, setFulfilled());
+              },
+              error: (error: { message: string }) => patchState(store, setError(error.message)),
+            }),
+          );
+        }),
+      ),
+    ),
+    pauseCertification: rxMethod<{ customerId: string; toolId: string }>(
+      pipe(
+        tap(() => patchState(store, setPending())),
+        exhaustMap(({ customerId, toolId }) => {
+          return store._toolCertificationService.pause(customerId, toolId).pipe(
+            tapResponse({
+              next: () => {
+                patchState(store, setFulfilled(), setDirty());
+              },
+              error: (error: { message: string }) => patchState(store, setError(error.message)),
+            }),
+          );
+        }),
+      ),
+    ),
+    reactivateCertification: rxMethod<{ customerId: string; toolId: string }>(
+      pipe(
+        tap(() => patchState(store, setPending())),
+        exhaustMap(({ customerId, toolId }) => {
+          return store._toolCertificationService.reactivate(customerId, toolId).pipe(
+            tapResponse({
+              next: () => {
+                patchState(store, setFulfilled(), setDirty());
+              },
+              error: (error: { message: string }) => patchState(store, setError(error.message)),
+            }),
+          );
+        }),
+      ),
+    ),
+    revokeCertification: rxMethod<{ customerId: string; toolId: string }>(
+      pipe(
+        tap(() => patchState(store, setPending())),
+        exhaustMap(({ customerId, toolId }) => {
+          return store._toolCertificationService.revoke(customerId, toolId).pipe(
+            tapResponse({
+              next: () => {
+                patchState(store, setFulfilled(), setDirty());
+              },
+              error: (error: { message: string }) => patchState(store, setError(error.message)),
+            }),
+          );
+        }),
+      ),
+    ),
+  })),
   withHooks({
     onInit(store) {
       effect(() => {
@@ -246,6 +314,7 @@ export const UserDetailStore = signalStore(
           store.loadSelectedUser(userId);
           store.loadRfidTagAssignments(userId);
           store.loadOpenSession(userId);
+          store.loadToolCertifications(userId);
           patchState(store, { dirty: false });
         }
       });

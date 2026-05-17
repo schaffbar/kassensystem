@@ -34,3 +34,15 @@
 .tab-content {
   padding: 1rem;
 }
+
+.tab-content--split {
+  padding: 1rem;
+  display: flex;
+  gap: 2rem;
+  align-items: flex-start;
+
+  > * {
+    flex: 1;
+    min-width: 0;
+  }
+}

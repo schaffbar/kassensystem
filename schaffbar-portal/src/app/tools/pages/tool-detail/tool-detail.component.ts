@@ -7,6 +7,9 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { TranslatePipe } from '@ngx-translate/core';
 
 import { RfidReaderStore } from '../../../rfid-readers/rfid-readers.store';
+import { BatchCreateToolCertificationCommand } from '../../../users/shared/models/tool-certification.model';
+import { UsersStore } from '../../../users/shared/stores/users.store';
+import { ToolCertificationsComponent } from '../../components/tool-certifications/tool-certifications.component';
 import { ToolDetailInfoComponent } from '../../components/tool-detail-info/tool-detail-info.component';
 import { ToolRfidReaderAssignmentComponent } from '../../components/tool-rfid-reader-assignment/tool-rfid-reader-assignment.component';
 import { ToolWlanRelaisComponent } from '../../components/tool-wlan-relais/tool-wlan-relais.component';
@@ -26,6 +29,7 @@ import { ToolDetailStore } from './tool-detail.store';
     ToolDetailInfoComponent,
     ToolRfidReaderAssignmentComponent,
     ToolWlanRelaisComponent,
+    ToolCertificationsComponent,
   ],
   providers: [ToolDetailStore],
 })
@@ -33,10 +37,13 @@ export class ToolDetailComponent {
   private readonly detailsStore = inject(ToolDetailStore);
   private readonly rfidReaderStore = inject(RfidReaderStore);
   private readonly toolsStore = inject(ToolsStore);
+  private readonly usersStore = inject(UsersStore);
 
   id = input.required<string>();
 
   selectedTool = computed(() => this.detailsStore.tool());
+  toolCertifications = computed(() => this.detailsStore.toolCertifications());
+  allUsers = computed(() => this.usersStore.entities());
   allRfidReaders = computed(() => this.rfidReaderStore.entities());
   assignedRfidReaderIds = computed(() => {
     const currentToolId = this.selectedTool()?.id;
@@ -51,6 +58,7 @@ export class ToolDetailComponent {
     this.detailsStore.setToolId(this.id);
     this.rfidReaderStore.loadAllRfidReaders();
     this.toolsStore.loadAllTools();
+    this.usersStore.loadAllUsers();
   }
 
   protected reloadTool(): void {
@@ -73,5 +81,13 @@ export class ToolDetailComponent {
 
   protected onWlanRelaisUpdated(command: UpdateWlanRelaisCommand): void {
     this.detailsStore.updateWlanRelais(command);
+  }
+
+  protected onBatchCreateCertifications(command: BatchCreateToolCertificationCommand): void {
+    this.detailsStore.batchCreateCertifications(command);
+  }
+
+  protected onDeleteCertification(event: { customerId: string; toolId: string }): void {
+    this.detailsStore.deleteCertification(event);
   }
 }

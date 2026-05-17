@@ -9,6 +9,7 @@ export interface ConfirmDeleteDialogData {
   title: string;
   message: string;
   entity?: string;
+  confirmLabel?: string;
 }
 
 @Component({

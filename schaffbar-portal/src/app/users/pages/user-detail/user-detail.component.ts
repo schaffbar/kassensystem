@@ -1,5 +1,5 @@
 import { LowerCasePipe } from '@angular/common';
-import { Component, inject, input, OnInit, signal } from '@angular/core';
+import { Component, computed, inject, input, OnInit, signal } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { MatButtonModule } from '@angular/material/button';
@@ -10,7 +10,9 @@ import { MatTabsModule } from '@angular/material/tabs';
 
 import { TranslatePipe } from '@ngx-translate/core';
 
+import { ToolsStore } from '../../../tools/tools.store';
 import { UpdateUserFormComponent } from '../../components/update-user-form/update-user-form.component';
+import { UserToolCertificationsComponent } from '../../components/user-tool-certifications/user-tool-certifications.component';
 import { User, UserAddress } from '../../shared/models/user.model';
 import { RfidTagAssignmentService } from '../../shared/services/rfid-tag-assignment.service';
 import { UserDetailStore } from '../../shared/stores/user-detail.store';
@@ -24,6 +26,7 @@ import { UserOpenSessionComponent } from '../user-open-session/user-open-session
   imports: [
     UserDetailInfoComponent,
     UserOpenSessionComponent,
+    UserToolCertificationsComponent,
     MatTabsModule,
     MatButtonModule,
     MatChipsModule,
@@ -37,9 +40,12 @@ export class UserDetailComponent implements OnInit {
   private readonly dialog = inject(MatDialog);
   private readonly route = inject(ActivatedRoute);
   protected readonly detailsStore = inject(UserDetailStore);
+  private readonly toolsStore = inject(ToolsStore);
 
   id = input.required<string>();
+
   protected selectedTabIndex = signal(0);
+  protected allTools = computed(() => this.toolsStore.entities());
 
   constructor() {
     this.detailsStore.setUserId(this.id);
@@ -98,5 +104,17 @@ export class UserDetailComponent implements OnInit {
 
   protected onContactChanged(contact: { email: string; phone: string }) {
     this.detailsStore.updateUserContact({ id: this.id(), ...contact });
+  }
+
+  protected onPauseCertification(event: { customerId: string; toolId: string }): void {
+    this.detailsStore.pauseCertification(event);
+  }
+
+  protected onReactivateCertification(event: { customerId: string; toolId: string }): void {
+    this.detailsStore.reactivateCertification(event);
+  }
+
+  protected onRevokeCertification(event: { customerId: string; toolId: string }): void {
+    this.detailsStore.revokeCertification(event);
   }
 }

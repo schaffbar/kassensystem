@@ -25,5 +25,15 @@
         <schbar-tool-wlan-relais [tool]="tool" (wlanRelaisUpdated)="onWlanRelaisUpdated($event)" />
       </div>
     </mat-tab>
+    <mat-tab [label]="'tools.tabGroups.toolDetails.certificationsTab' | translate">
+      <div class="tab-content--wide">
+        <schbar-tool-certifications
+          [toolId]="tool.id"
+          [certifications]="toolCertifications()"
+          [allUsers]="allUsers()"
+          (batchCreate)="onBatchCreateCertifications($event)"
+          (deleteCertification)="onDeleteCertification($event)" />
+      </div>
+    </mat-tab>
   </mat-tab-group>
 }

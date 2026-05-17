@@ -6,18 +6,25 @@ import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { exhaustMap, filter, pipe, tap } from 'rxjs';
 
 import { setError, setFulfilled, setPending, withRequestStatus } from '../../../shared/state/request-status.feature';
+import {
+  BatchCreateToolCertificationCommand,
+  ToolCertification,
+} from '../../../users/shared/models/tool-certification.model';
+import { ToolCertificationService } from '../../../users/shared/services/tool-certification.service';
 import { ChangeRfidReaderCommand, Tool, UpdateToolCommand, UpdateWlanRelaisCommand } from '../../tool.model';
 import { ToolsService } from '../../tools.service';
 
 interface ToolDetailState {
   toolId: string | null;
   tool: Tool | null;
+  toolCertifications: ToolCertification[];
   dirty: boolean;
 }
 
 const initialState: ToolDetailState = {
   toolId: null,
   tool: null,
+  toolCertifications: [],
   dirty: false,
 };
 
@@ -26,6 +33,7 @@ export const ToolDetailStore = signalStore(
   withRequestStatus(),
   withProps(() => ({
     _toolsService: inject(ToolsService),
+    _toolCertificationService: inject(ToolCertificationService),
   })),
   withMethods((store) => ({
     setToolId: signalMethod<string>((toolId) => {
@@ -112,6 +120,54 @@ export const ToolDetailStore = signalStore(
       ),
     ),
   })),
+  withMethods((store) => ({
+    loadToolCertifications: rxMethod<string>(
+      pipe(
+        filter((toolId: string) => !!toolId),
+        tap(() => patchState(store, setPending())),
+        exhaustMap((toolId: string) => {
+          return store._toolCertificationService.getCertificationsByTool(toolId).pipe(
+            tapResponse({
+              next: (toolCertifications) => {
+                patchState(store, { toolCertifications }, setFulfilled());
+              },
+              error: (error: { message: string }) => patchState(store, setError(error.message)),
+            }),
+          );
+        }),
+      ),
+    ),
+    batchCreateCertifications: rxMethod<BatchCreateToolCertificationCommand>(
+      pipe(
+        tap(() => patchState(store, setPending())),
+        exhaustMap((command: BatchCreateToolCertificationCommand) => {
+          return store._toolCertificationService.batchCreate(command).pipe(
+            tapResponse({
+              next: () => {
+                patchState(store, setFulfilled(), setDirty());
+              },
+              error: (error: { message: string }) => patchState(store, setError(error.message)),
+            }),
+          );
+        }),
+      ),
+    ),
+    deleteCertification: rxMethod<{ customerId: string; toolId: string }>(
+      pipe(
+        tap(() => patchState(store, setPending())),
+        exhaustMap(({ customerId, toolId }) => {
+          return store._toolCertificationService.delete(customerId, toolId).pipe(
+            tapResponse({
+              next: () => {
+                patchState(store, setFulfilled(), setDirty());
+              },
+              error: (error: { message: string }) => patchState(store, setError(error.message)),
+            }),
+          );
+        }),
+      ),
+    ),
+  })),
   withHooks({
     onInit(store) {
       effect(() => {
@@ -120,6 +176,7 @@ export const ToolDetailStore = signalStore(
         if (dirty && toolId) {
           console.log('[Store - onInit] Loading tool details for toolId:', toolId, 'Dirty:', dirty);
           store.loadSelectedTool(toolId);
+          store.loadToolCertifications(toolId);
         }
         patchState(store, { dirty: false });
       });

@@ -9,7 +9,7 @@
 
 <mat-dialog-actions>
   <button mat-stroked-button [mat-dialog-close]="true">
-    {{ 'shared.dialogs.actions.delete.confirm' | translate }}
+    {{ data.confirmLabel ?? ('shared.dialogs.actions.delete.confirm' | translate) }}
   </button>
   <button mat-stroked-button [mat-dialog-close]="false" cdkFocusInitial>
     {{ 'shared.dialogs.actions.delete.cancel' | translate }}

@@ -1,0 +1,123 @@
+<div class="tool-certifications">
+  <!-- <h3>{{ 'tools.pages.toolDetails.headers.certifications' | translate }}</h3> -->
+
+  <div class="certifications-layout">
+    <!-- Batch create form -->
+    <div class="batch-create-form">
+      <h4>{{ 'tools.pages.toolDetails.certifications.batchCreate.title' | translate }}</h4>
+
+      <mat-form-field appearance="outline" class="certifier-search-field">
+        <mat-label>{{ 'tools.pages.toolDetails.certifications.batchCreate.certifiedBy' | translate }}</mat-label>
+        <input
+          matInput
+          #certifierSearchInput
+          [value]="certifierSearchText()"
+          (input)="onCertifierInput(certifierSearchInput.value)"
+          [matAutocomplete]="certifierAuto"
+          placeholder="{{ 'tools.pages.toolDetails.certifications.batchCreate.certifiedBy' | translate }}" />
+        <mat-autocomplete #certifierAuto="matAutocomplete" (optionSelected)="onCertifierSelected($event.option.value)">
+          @for (user of filteredCertifiers(); track user.id) {
+            <mat-option [value]="user">{{ user.firstName }} {{ user.lastName }}</mat-option>
+          }
+        </mat-autocomplete>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="user-search-field">
+        <mat-label>{{ 'tools.pages.toolDetails.certifications.batchCreate.searchUsers' | translate }}</mat-label>
+        <input
+          matInput
+          #userSearchInput
+          [value]="searchText()"
+          (input)="searchText.set(userSearchInput.value)"
+          [matAutocomplete]="userAuto"
+          placeholder="{{ 'tools.pages.toolDetails.certifications.batchCreate.searchUsers' | translate }}" />
+        <mat-autocomplete
+          #userAuto="matAutocomplete"
+          (optionSelected)="onUserSelected($event.option.value); userSearchInput.value = ''">
+          @for (user of filteredUsers(); track user.id) {
+            <mat-option [value]="user">{{ user.firstName }} {{ user.lastName }}</mat-option>
+          }
+        </mat-autocomplete>
+      </mat-form-field>
+
+      @if (selectedUsers().length > 0) {
+        <mat-chip-set class="selected-users-chips">
+          @for (user of selectedUsers(); track user.id) {
+            <mat-chip (removed)="removeSelectedUser(user)">
+              {{ user.firstName }} {{ user.lastName }}
+              <button matChipRemove>
+                <mat-icon>cancel</mat-icon>
+              </button>
+            </mat-chip>
+          }
+        </mat-chip-set>
+      }
+
+      <button
+        mat-flat-button
+        color="primary"
+        [disabled]="selectedUsers().length === 0 || !selectedCertifier()"
+        (click)="onSubmitBatch()">
+        {{ 'tools.pages.toolDetails.certifications.batchCreate.submit' | translate }}
+      </button>
+    </div>
+
+    <!-- Existing certifications table -->
+    <div class="certifications-list">
+      <h4>{{ 'tools.pages.toolDetails.certifications.listTitle' | translate }}</h4>
+      @if (certifications().length > 0) {
+        <div class="table-container">
+          <table mat-table [dataSource]="certifications()" class="mat-elevation-z8">
+            <ng-container matColumnDef="userName">
+              <th mat-header-cell *matHeaderCellDef>
+                {{ 'tools.tables.toolCertifications.userNameColumn' | translate }}
+              </th>
+              <td mat-cell *matCellDef="let cert">{{ userNameMap().get(cert.customerId) ?? cert.customerId }}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="status">
+              <th mat-header-cell *matHeaderCellDef>
+                {{ 'tools.tables.toolCertifications.statusColumn' | translate }}
+              </th>
+              <td mat-cell *matCellDef="let cert">
+                <mat-chip-set>
+                  <mat-chip
+                    [class.active]="cert.status === CertificationStatus.Active"
+                    [class.paused]="cert.status === CertificationStatus.Paused"
+                    [class.revoked]="cert.status === CertificationStatus.Revoked">
+                    {{ 'users.tables.toolCertifications.statuses.' + cert.status | translate }}
+                  </mat-chip>
+                </mat-chip-set>
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="certifiedAt">
+              <th mat-header-cell *matHeaderCellDef>
+                {{ 'tools.tables.toolCertifications.certifiedAtColumn' | translate }}
+              </th>
+              <td mat-cell *matCellDef="let cert">{{ cert.certifiedAt | date: 'mediumDate' }}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="actions">
+              <th mat-header-cell *matHeaderCellDef>{{ 'shared.table.actionsColumn' | translate }}</th>
+              <td mat-cell *matCellDef="let cert">
+                <button
+                  mat-icon-button
+                  color="warn"
+                  [title]="'users.actions.toolCertifications.delete' | translate"
+                  (click)="onDelete(cert)">
+                  <mat-icon>delete</mat-icon>
+                </button>
+              </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+          </table>
+        </div>
+      } @else {
+        <p>{{ 'tools.pages.toolDetails.certifications.noCertifications' | translate }}</p>
+      }
+    </div>
+  </div>
+</div>

@@ -54,7 +54,13 @@
       "assignTempRfidTag": "Temporäres RFID-Tag zuweisen",
       "assignFixedRfidTag": "Festes RFID-Tag zuweisen",
       "unassignRfidTag": "RFID-Tag entfernen",
-      "closeSession": "Sitzung beenden"
+      "closeSession": "Sitzung beenden",
+      "toolCertifications": {
+        "pause": "Einweisung pausieren",
+        "reactivate": "Einweisung reaktivieren",
+        "revoke": "Einweisung entziehen",
+        "delete": "Einweisung löschen"
+      }
     },
     "dialogs": {
       "addNewUser": {
@@ -87,6 +93,27 @@
           "confirm": "Löschen",
           "cancel": "Abbrechen"
         }
+      },
+      "certifications": {
+        "pauseCertification": {
+          "title": "Einweisung pausieren",
+          "message": "Sind Sie sicher, dass Sie diese Einweisung pausieren möchten?",
+          "confirm": "Pausieren"
+        },
+        "reactivateCertification": {
+          "title": "Einweisung reaktivieren",
+          "message": "Sind Sie sicher, dass Sie diese Einweisung reaktivieren möchten?",
+          "confirm": "Reaktivieren"
+        },
+        "revokeCertification": {
+          "title": "Einweisung entziehen",
+          "message": "Sind Sie sicher, dass Sie diese Einweisung entziehen möchten?",
+          "confirm": "Entziehen"
+        },
+        "deleteCertification": {
+          "title": "Einweisung löschen",
+          "message": "Sind Sie sicher, dass Sie diese Einweisung löschen möchten?"
+        }
       }
     },
     "tables": {
@@ -100,6 +127,16 @@
         "toolUsage": {
           "startTimeColumn": "Startzeit",
           "endTimeColumn": "Endzeit"
+        }
+      },
+      "toolCertifications": {
+        "toolNameColumn": "Werkzeug",
+        "statusColumn": "Status",
+        "certifiedAtColumn": "Eingewiesen am",
+        "statuses": {
+          "ACTIVE": "Aktiv",
+          "PAUSED": "Pausiert",
+          "REVOKED": "Entzogen"
         }
       }
     },
@@ -134,7 +171,11 @@
       "userDetails": {
         "headers": {
           "contactInformation": "Kontaktinformationen",
-          "address": "Adresse"
+          "address": "Adresse",
+          "toolCertifications": "Einweisungen"
+        },
+        "messages": {
+          "noCertifications": "Keine Einweisungen für diesen Benutzer vorhanden."
         }
       },
       "openSession": {
@@ -192,6 +233,13 @@
     "tooltips": {
       "clearRfidReader": "RFID-Lesegerät-Zuweisung aufheben"
     },
+    "tables": {
+      "toolCertifications": {
+        "userNameColumn": "Benutzer",
+        "statusColumn": "Status",
+        "certifiedAtColumn": "Eingewiesen am"
+      }
+    },
     "wlanRelaisTypes": {
       "SHELLY_1": "Shelly 1",
       "SHELLY_2": "Shelly 2",
@@ -200,7 +248,8 @@
     "tabGroups": {
       "toolDetails": {
         "detailsTab": "Details",
-        "wlanRelayTab": "WLAN-Relais"
+        "wlanRelayTab": "WLAN-Relais",
+        "certificationsTab": "Einweisungen"
       }
     },
     "pages": {
@@ -208,7 +257,18 @@
         "headers": {
           "toolInformation": "Werkzeuginformationen",
           "rfidReaderAssignment": "RFID-Lesegerät",
-          "wlanRelais": "WLAN-Relais"
+          "wlanRelais": "WLAN-Relais",
+          "certifications": "Einweisungen"
+        },
+        "certifications": {
+          "batchCreate": {
+            "title": "Neue Einweisungen eintragen",
+            "searchUsers": "Benutzer suchen",
+            "certifiedBy": "Eingewiesen von",
+            "submit": "Einweisungen eintragen"
+          },
+          "noCertifications": "Keine Einweisungen für dieses Werkzeug vorhanden.",
+          "listTitle": "Eingewiesene Benutzer"
         },
         "messages": {
           "alreadyAssigned": "bereits zugewiesen",

@@ -1,0 +1,23 @@
+.certifications-section {
+  margin-top: 1rem;
+
+  .table-container {
+    overflow-x: auto;
+  }
+
+  table {
+    width: 100%;
+  }
+
+  .active {
+    background-color: #c8e6c9;
+  }
+
+  .paused {
+    background-color: #fff9c4;
+  }
+
+  .revoked {
+    background-color: #ffcdd2;
+  }
+}

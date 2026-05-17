@@ -1,7 +1,23 @@
+- [Story] Save list of Einweiser for each tool in Details Page
+- [Story] Add flag for Tool - Need Tool Certification and check it during StartToolUsage use case
+- [Frontend] Tool Detail Page - RFID reader and relay zu Configuration mergen
+- [Frontend] Remove RFID-Reader input field from Create Tool dialog
+- [Frontend] users and tools store should be global?
 - [Frontend] dashboard store - withEntities vs withState
 - [Backend] Merge dashboard packages (tool_dashboard, workshop_dashboard)
 - [Backend] fix/implement/remove TODOs
 - [Frontend] Fix Geburtsdatum
+- [Technical] Migrate to Spring Boot 4
+- [Technical] upgrade Angular version
+
+#######################################
+
+Der gesamte Ausdruck http://<IP-Adresse>/relay/0 ist eine URL (Uniform Resource Locator).
+Wenn du den Ausdruck jedoch in seine einzelnen Bestandteile zerlegst, haben die verschiedenen Abschnitte eigene Namen:
+
+- http:// = Das Schema / Protokoll
+- <IP-Adresse> = Der Host (oder die Domain)
+- /relay/0 = Der Path (Pfad)
 
 #######################################
 
@@ -25,7 +41,6 @@
 - [Backend] Validate Session before closing it
 
 - [Technical]
-- [Technical] Migrate to Spring Boot 4
 - [Technical] Facade vs Use Case
 - [Technical] Move all mutations to use cases
 - [Technical] Transactional annotation in all services

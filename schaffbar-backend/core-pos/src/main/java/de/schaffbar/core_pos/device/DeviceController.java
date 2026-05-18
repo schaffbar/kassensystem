@@ -24,6 +24,7 @@ import de.schaffbar.core_pos.rfid_tag.RfidTagService;
 import de.schaffbar.core_pos.rfid_tag.RfidTagViews.RfidTagView;
 import de.schaffbar.core_pos.rfid_tag_assignment.RfidTagAssignmentService;
 import de.schaffbar.core_pos.rfid_tag_assignment.RfidTagAssignmentViews.RfidTagAssignmentView;
+import de.schaffbar.core_pos.shared.exception.CustomerNotCertifiedForToolException;
 import de.schaffbar.core_pos.shared.exception.CustomerNotInWorkshopException;
 import de.schaffbar.core_pos.shared.exception.MaxToolUsageExceededException;
 import de.schaffbar.core_pos.shared.exception.NoActiveWorkshopSessionFoundException;
@@ -218,6 +219,10 @@ public class DeviceController {
         catch (MaxToolUsageExceededException e) {
             log.error("Max tool usage [id: {}]", rfidReader.id());
             return ResponseEntity.ok(DeviceCardResponse.errorNoAccess("Max. Werkzeuge erreicht", customer.getFullName(), devUseCase));
+        }
+        catch (CustomerNotCertifiedForToolException e) {
+            log.error("Customer not certified for tool [id: {}]", rfidReader.id());
+            return ResponseEntity.ok(DeviceCardResponse.errorNoAccess("Nicht zertifiziert für Werkzeug", customer.getFullName(), devUseCase));
         }
         catch (Exception e) {
             log.error("An unexpected error occurred while processing RFID tag request. Message {}", e.getMessage());

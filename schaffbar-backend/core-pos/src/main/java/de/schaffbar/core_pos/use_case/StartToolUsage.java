@@ -1,9 +1,11 @@
 package de.schaffbar.core_pos.use_case;
 
+import de.schaffbar.core_pos.shared.exception.CustomerNotCertifiedForToolException;
 import de.schaffbar.core_pos.shared.exception.CustomerNotInWorkshopException;
 import de.schaffbar.core_pos.shared.id.CustomerId;
 import de.schaffbar.core_pos.shared.id.ToolId;
 import de.schaffbar.core_pos.shared.id.WorkshopSessionId;
+import de.schaffbar.core_pos.tool_certification.ToolCertificationService;
 import de.schaffbar.core_pos.tool_usage.ToolUsageCommands.StartToolUsageCommand;
 import de.schaffbar.core_pos.tool_usage.ToolUsageService;
 import de.schaffbar.core_pos.workshop_session.WorkshopSessionService;
@@ -25,6 +27,8 @@ public class StartToolUsage {
 
     private final @NonNull ToolUsageService toolUsageService;
 
+    private final @NonNull ToolCertificationService toolCertificationService;
+
     private final @NonNull WorkshopSessionService workshopSessionService;
 
     private final @NonNull WorkshopUsageService workshopUsageService;
@@ -32,6 +36,7 @@ public class StartToolUsage {
     @Transactional
     public void process(@NotNull @Valid CustomerId customerId, @NotNull @Valid ToolId toolId) {
         verifyCustomerIsInWorkshop(customerId);
+        verifyCustomerHasActiveCertification(customerId, toolId);
 
         WorkshopSessionId sessionId = this.workshopSessionService.getOpenWorkshopSession(customerId) //
                 .map(WorkshopSessionView::id) //
@@ -51,6 +56,12 @@ public class StartToolUsage {
 
         if (!isInWorkshop) {
             throw new CustomerNotInWorkshopException(customerId);
+        }
+    }
+
+    private void verifyCustomerHasActiveCertification(CustomerId customerId, ToolId toolId) {
+        if (!this.toolCertificationService.hasActiveCertification(customerId, toolId)) {
+            throw new CustomerNotCertifiedForToolException(customerId, toolId);
         }
     }
 

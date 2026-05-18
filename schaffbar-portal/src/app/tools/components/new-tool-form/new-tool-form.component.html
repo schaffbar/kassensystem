@@ -41,30 +41,6 @@
       </mat-form-field>
     </div>
   </div>
-
-  <div class="row">
-    <div class="col">
-      <mat-form-field class="full-width">
-        <mat-label>{{ 'tools.shared.toolProperties.rfidReader' | translate }}</mat-label>
-        <mat-select id="rfidReaderId" formControlName="rfidReaderId">
-          <mat-option value="">--</mat-option>
-          @for (rfidReader of rfidReaders(); track rfidReader.id) {
-            <mat-option [value]="rfidReader.id">
-              {{ rfidReader.name }}
-              @if (rfidReader.alreadyAssigned) {
-                ({{ 'tools.pages.toolDetails.messages.alreadyAssigned' | translate }})
-              }
-            </mat-option>
-          }
-        </mat-select>
-        @if (toolForm.controls['rfidReaderId'].hasError('alreadyAssigned')) {
-          <mat-error>
-            {{ 'tools.pages.toolDetails.messages.alreadyAssignedError' | translate }}
-          </mat-error>
-        }
-      </mat-form-field>
-    </div>
-  </div>
 </mat-dialog-content>
 
 <mat-dialog-actions>

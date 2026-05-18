@@ -51,7 +51,6 @@ export const WLAN_RELAIS_TEMPLATES: Record<WlanRelaisType, WlanRelaisTemplate> =
 export interface CreateToolCommand {
   name: string;
   description?: string;
-  rfidReaderId?: string;
 }
 
 export interface UpdateToolCommand {

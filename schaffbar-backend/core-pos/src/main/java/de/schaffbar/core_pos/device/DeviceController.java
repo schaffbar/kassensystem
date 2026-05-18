@@ -222,7 +222,7 @@ public class DeviceController {
         }
         catch (CustomerNotCertifiedForToolException e) {
             log.error("Customer not certified for tool [id: {}]", rfidReader.id());
-            return ResponseEntity.ok(DeviceCardResponse.errorNoAccess("Nicht zertifiziert für Werkzeug", customer.getFullName(), devUseCase));
+            return ResponseEntity.ok(DeviceCardResponse.errorNoAccess("Keine Einweisung", customer.getFullName(), devUseCase));
         }
         catch (Exception e) {
             log.error("An unexpected error occurred while processing RFID tag request. Message {}", e.getMessage());

@@ -1,7 +1,8 @@
 - [Story] Save list of Einweiser for each tool in Details Page
 - [Story] Add flag for Tool - Need Tool Certification and check it during StartToolUsage use case
-- [Frontend] Tool Detail Page - RFID reader and relay zu Configuration mergen
-- [Frontend] Remove RFID-Reader input field from Create Tool dialog
+
+- [Frontend] Tool Detail Page - RFID reader and WLAN relay zu Configuration mergen
+- [Backend] Clean up Create Tool flow (only Name and Description) needed
 - [Frontend] users and tools store should be global?
 - [Frontend] dashboard store - withEntities vs withState
 - [Backend] Merge dashboard packages (tool_dashboard, workshop_dashboard)

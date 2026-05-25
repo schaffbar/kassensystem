@@ -56,15 +56,13 @@ class RfidReader {
     // ------------------------------------------------------------------------
     // static constructor
 
-    public static RfidReaderWithEvents of(MacAddress macAddress) {
+    public static RfidReader of(MacAddress macAddress) {
         RfidReader rfidReader = new RfidReader();
         rfidReader.setId(RfidReaderId.random().getValue());
         rfidReader.setMacAddress(macAddress.getValue());
         rfidReader.setCreatedAt(Instant.now());
 
-        List<SchaffbarEvent> events = List.of(RfidReaderEventFactory.rfidReaderCreated(rfidReader));
-
-        return new RfidReaderWithEvents(rfidReader, events);
+        return rfidReader;
     }
 
     // ------------------------------------------------------------------------
@@ -90,9 +88,5 @@ class RfidReader {
         return List.of(RfidReaderEventFactory.rfidReaderTypeChanged(this));
     }
 
-    // ------------------------------------------------------------------------
-    // helper
-
-    record RfidReaderWithEvents(RfidReader rfidReader, List<SchaffbarEvent> events) {}
 
 }

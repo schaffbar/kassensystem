@@ -50,16 +50,14 @@ class WorkshopSession {
     // ------------------------------------------------------------------------
     // static constructor
 
-    public static WorkshopSessionWithEvents of(CustomerId customerId) {
+    public static WorkshopSession of(CustomerId customerId) {
         WorkshopSession workshopSession = new WorkshopSession();
         workshopSession.setId(WorkshopSessionId.random().getValue());
         workshopSession.setCustomerId(customerId.getValue());
         workshopSession.setStartTime(Instant.now());
         workshopSession.setStatus(WorkshopSessionStatus.OPEN);
 
-        List<SchaffbarEvent> events = List.of(WorkshopSessionEventFactory.workshopSessionStarted(workshopSession));
-
-        return new WorkshopSessionWithEvents(workshopSession, events);
+        return workshopSession;
     }
 
     // ------------------------------------------------------------------------
@@ -83,9 +81,5 @@ class WorkshopSession {
         return List.of(WorkshopSessionEventFactory.workshopSessionClosed(this));
     }
 
-    // ------------------------------------------------------------------------
-    // helper
-
-    record WorkshopSessionWithEvents(WorkshopSession session, List<SchaffbarEvent> events) {}
 
 }

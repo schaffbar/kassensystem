@@ -3,7 +3,6 @@ package de.schaffbar.core_pos.rfid_tag_assignment;
 import java.util.List;
 import java.util.Optional;
 
-import de.schaffbar.core_pos.rfid_tag_assignment.RfidTagAssignment.RfidTagAssignmentWithEvents;
 import de.schaffbar.core_pos.rfid_tag_assignment.RfidTagAssignmentViews.RfidTagAssignmentView;
 import de.schaffbar.core_pos.shared.event.SchaffbarEvent;
 import de.schaffbar.core_pos.shared.event.outbox.OutboxEvent;
@@ -62,12 +61,13 @@ public class RfidTagAssignmentService {
             throw new RuntimeException("There is already a RFID tag assignment pending");
         }
 
-        RfidTagAssignmentWithEvents result = RfidTagAssignment.of(customerId, assignmentType);
-        this.rfidTagAssignmentRepository.save(result.assignment());
+        RfidTagAssignment assignment = RfidTagAssignment.of(customerId, assignmentType);
+        RfidTagAssignment savedAssignment = this.rfidTagAssignmentRepository.save(assignment);
+        List<SchaffbarEvent> events = List.of(RfidTagAssignmentEventFactory.rfidTagAssignmentRequested(savedAssignment));
 
-        saveOutboxEvents(result.events());
+        saveOutboxEvents(events);
 
-        log.info("Requested RFID tag assignment for customer {} and published events {}", customerId, result.events());
+        log.info("Requested RFID tag assignment for customer {} and published events {}", customerId, events);
     }
 
     @Transactional

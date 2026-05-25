@@ -3,7 +3,6 @@ package de.schaffbar.core_pos.customer;
 import java.util.List;
 import java.util.Optional;
 
-import de.schaffbar.core_pos.customer.Customer.CustomerWithEvents;
 import de.schaffbar.core_pos.customer.CustomerCommands.CreateCustomerCommand;
 import de.schaffbar.core_pos.customer.CustomerCommands.UpdateCustomerAddressCommand;
 import de.schaffbar.core_pos.customer.CustomerCommands.UpdateCustomerCommand;
@@ -52,12 +51,13 @@ public class CustomerService {
 
     @Transactional
     public CustomerId createCustomer(@NotNull @Valid CreateCustomerCommand command) {
-        CustomerWithEvents result = Customer.of(command);
-        Customer savedCustomer = this.customerRepository.save(result.customer());
+        Customer customer = Customer.of(command);
+        Customer savedCustomer = this.customerRepository.save(customer);
+        List<SchaffbarEvent> events = List.of(CustomerEventFactory.customerCreated(savedCustomer));
 
-        saveOutboxEvents(result.events());
+        saveOutboxEvents(events);
 
-        log.info("Created customer with id {} and published events {}", savedCustomer.getCustomerId(), result.events());
+        log.info("Created customer with id {} and published events {}", savedCustomer.getCustomerId(), events);
 
         return savedCustomer.getCustomerId();
     }

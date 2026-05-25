@@ -3,7 +3,6 @@ package de.schaffbar.core_pos.rfid_tag;
 import java.util.List;
 import java.util.Optional;
 
-import de.schaffbar.core_pos.rfid_tag.RfidTag.RfidTagWithEvents;
 import de.schaffbar.core_pos.rfid_tag.RfidTagCommands.CreateRfidTagCommand;
 import de.schaffbar.core_pos.rfid_tag.RfidTagViews.RfidTagView;
 import de.schaffbar.core_pos.shared.event.SchaffbarEvent;
@@ -51,12 +50,13 @@ public class RfidTagService {
     public RfidTagId createRfidTag(@NotNull @Valid CreateRfidTagCommand command) {
         // TODO: check if rfidTag with given id already exists
 
-        RfidTagWithEvents result = RfidTag.of(command);
-        RfidTag savedRfidTag = this.rfidTagRepository.save(result.rfidTag());
+        RfidTag rfidTag = RfidTag.of(command);
+        RfidTag savedRfidTag = this.rfidTagRepository.save(rfidTag);
+        List<SchaffbarEvent> events = List.of(RfidTagEventFactory.rfidTagCreated(savedRfidTag));
 
-        saveOutboxEvents(result.events());
+        saveOutboxEvents(events);
 
-        log.info("Created RFID tag with id {} and published events {}", savedRfidTag.getId(), result.events());
+        log.info("Created RFID tag with id {} and published events {}", savedRfidTag.getId(), events);
 
         return savedRfidTag.getId();
     }

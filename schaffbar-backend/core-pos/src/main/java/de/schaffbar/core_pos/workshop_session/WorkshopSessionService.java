@@ -7,7 +7,6 @@ import de.schaffbar.core_pos.shared.event.SchaffbarEvent;
 import de.schaffbar.core_pos.shared.event.outbox.OutboxEvent;
 import de.schaffbar.core_pos.shared.event.outbox.OutboxEventRepository;
 import de.schaffbar.core_pos.shared.id.CustomerId;
-import de.schaffbar.core_pos.workshop_session.WorkshopSession.WorkshopSessionWithEvents;
 import de.schaffbar.core_pos.workshop_session.WorkshopSessionViews.WorkshopSessionView;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
@@ -45,12 +44,13 @@ public class WorkshopSessionService {
         fetchOpenWorkshopSession(customerId) //
                 .ifPresent(this::throwHasAlreadyOpenWorkshopSession);
 
-        WorkshopSessionWithEvents result = WorkshopSession.of(customerId);
-        this.workshopSessionRepository.save(result.session());
+        WorkshopSession workshopSession = WorkshopSession.of(customerId);
+        WorkshopSession savedWorkshopSession = this.workshopSessionRepository.save(workshopSession);
+        List<SchaffbarEvent> events = List.of(WorkshopSessionEventFactory.workshopSessionStarted(savedWorkshopSession));
 
-        saveOutboxEvents(result.events());
+        saveOutboxEvents(events);
 
-        log.info("Started workshop session for customer {} and published events {}", customerId, result.events());
+        log.info("Started workshop session for customer {} and published events {}", customerId, events);
     }
 
     @Transactional

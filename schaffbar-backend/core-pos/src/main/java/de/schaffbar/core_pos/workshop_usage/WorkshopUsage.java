@@ -52,16 +52,14 @@ class WorkshopUsage { // TODO: Consider renaming to WorkshopSlot, or UsageSlot f
     // ------------------------------------------------------------------------
     // static constructor
 
-    public static WorkshopUsageWithEvents of(CustomerId customerId, WorkshopSessionId workshopSessionId) {
+    public static WorkshopUsage of(CustomerId customerId, WorkshopSessionId workshopSessionId) {
         WorkshopUsage workshopUsage = new WorkshopUsage();
         workshopUsage.setId(WorkshopUsageId.random().getValue());
         workshopUsage.setCustomerId(customerId.getValue());
         workshopUsage.setWorkshopSessionId(workshopSessionId.getValue());
         workshopUsage.setEntryTime(Instant.now());
 
-        List<SchaffbarEvent> events = List.of(WorkshopUsageEventFactory.workshopUsageEntered(workshopUsage));
-
-        return new WorkshopUsageWithEvents(workshopUsage, events);
+        return workshopUsage;
     }
 
     // ------------------------------------------------------------------------
@@ -96,9 +94,5 @@ class WorkshopUsage { // TODO: Consider renaming to WorkshopSlot, or UsageSlot f
         return List.of(WorkshopUsageEventFactory.workshopUsageLeft(this));
     }
 
-    // ------------------------------------------------------------------------
-    // helper
-
-    record WorkshopUsageWithEvents(WorkshopUsage usage, List<SchaffbarEvent> events) {}
 
 }

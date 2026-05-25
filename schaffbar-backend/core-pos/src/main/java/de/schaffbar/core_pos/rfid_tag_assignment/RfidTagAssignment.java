@@ -58,16 +58,14 @@ class RfidTagAssignment {
     // ------------------------------------------------------------------------
     // static constructor
 
-    public static RfidTagAssignmentWithEvents of(CustomerId customerId, RfidTagAssignmentType assignmentType) {
+    public static RfidTagAssignment of(CustomerId customerId, RfidTagAssignmentType assignmentType) {
         RfidTagAssignment result = new RfidTagAssignment();
         result.setId(RfidTagAssignmentId.random().getValue());
         result.setCustomerId(customerId.getValue());
         result.setAssignmentType(assignmentType);
         result.setStatus(RfidTagAssignmentStatus.WAITING_FOR_ASSIGNMENT);
 
-        List<SchaffbarEvent> events = List.of(RfidTagAssignmentEventFactory.rfidTagAssignmentRequested(result));
-
-        return new RfidTagAssignmentWithEvents(result, events);
+        return result;
     }
 
     // ------------------------------------------------------------------------
@@ -109,9 +107,5 @@ class RfidTagAssignment {
         return List.of(RfidTagAssignmentEventFactory.rfidTagUnassigned(this));
     }
 
-    // ------------------------------------------------------------------------
-    // helper
-
-    record RfidTagAssignmentWithEvents(RfidTagAssignment assignment, List<SchaffbarEvent> events) {}
 
 }

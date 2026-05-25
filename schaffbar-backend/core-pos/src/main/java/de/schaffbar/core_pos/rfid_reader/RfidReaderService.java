@@ -3,7 +3,6 @@ package de.schaffbar.core_pos.rfid_reader;
 import java.util.List;
 import java.util.Optional;
 
-import de.schaffbar.core_pos.rfid_reader.RfidReader.RfidReaderWithEvents;
 import de.schaffbar.core_pos.rfid_reader.RfidReaderCommands.ChangeRfidReaderTypeCommand;
 import de.schaffbar.core_pos.rfid_reader.RfidReaderCommands.UpdateRfidReaderCommand;
 import de.schaffbar.core_pos.rfid_reader.RfidReaderViews.RfidReaderView;
@@ -58,12 +57,13 @@ public class RfidReaderService {
     public RfidReaderId createRfidReader(@NotNull @Valid MacAddress macAddress) {
         // TODO: check if rfidReader with same mac address already exists
 
-        RfidReaderWithEvents result = RfidReader.of(macAddress);
-        RfidReader savedRfidReader = this.rfidReaderRepository.save(result.rfidReader());
+        RfidReader rfidReader = RfidReader.of(macAddress);
+        RfidReader savedRfidReader = this.rfidReaderRepository.save(rfidReader);
+        List<SchaffbarEvent> events = List.of(RfidReaderEventFactory.rfidReaderCreated(savedRfidReader));
 
-        saveOutboxEvents(result.events());
+        saveOutboxEvents(events);
 
-        log.info("Created RFID reader with id {} and published events {}", savedRfidReader.getId(), result.events());
+        log.info("Created RFID reader with id {} and published events {}", savedRfidReader.getId(), events);
 
         return savedRfidReader.getId();
     }

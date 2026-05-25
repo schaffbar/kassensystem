@@ -62,7 +62,7 @@ class Customer {
     // ------------------------------------------------------------------------
     // constructor
 
-    static CustomerWithEvents of(CreateCustomerCommand command) {
+    static Customer of(CreateCustomerCommand command) {
         Customer customer = new Customer();
         customer.setId(UUID.randomUUID());
         customer.setFirstName(command.firstName());
@@ -74,9 +74,7 @@ class Customer {
         customer.setAddress(CustomerAddress.of(command));
         customer.setCreatedAt(Instant.now());
 
-        List<SchaffbarEvent> events = List.of(CustomerEventFactory.customerCreated(customer));
-
-        return new CustomerWithEvents(customer, events);
+        return customer;
     }
 
     // ------------------------------------------------------------------------
@@ -111,9 +109,5 @@ class Customer {
         return List.of(CustomerEventFactory.customerContactChanged(this));
     }
 
-    // ------------------------------------------------------------------------
-    // helper
-
-    record CustomerWithEvents(Customer customer, List<SchaffbarEvent> events) {}
 
 }

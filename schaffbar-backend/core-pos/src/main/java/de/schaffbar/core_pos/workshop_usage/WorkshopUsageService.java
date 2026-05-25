@@ -12,7 +12,6 @@ import de.schaffbar.core_pos.shared.exception.NoActiveWorkshopUsageFoundExceptio
 import de.schaffbar.core_pos.shared.exception.UserAlreadyInWorkshopException;
 import de.schaffbar.core_pos.shared.id.CustomerId;
 import de.schaffbar.core_pos.shared.id.WorkshopSessionId;
-import de.schaffbar.core_pos.workshop_usage.WorkshopUsage.WorkshopUsageWithEvents;
 import de.schaffbar.core_pos.workshop_usage.WorkshopUsageViews.WorkshopUsageView;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
@@ -58,12 +57,13 @@ public class WorkshopUsageService {
         getOpenWorkshopUsage(customerId, workshopSessionId) //
                 .ifPresent(this::throwCustomerIsAlreadyInWorkshop);
 
-        WorkshopUsageWithEvents result = WorkshopUsage.of(customerId, workshopSessionId);
-        this.workshopUsageRepository.save(result.usage());
+        WorkshopUsage workshopUsage = WorkshopUsage.of(customerId, workshopSessionId);
+        WorkshopUsage savedWorkshopUsage = this.workshopUsageRepository.save(workshopUsage);
+        List<SchaffbarEvent> events = List.of(WorkshopUsageEventFactory.workshopUsageEntered(savedWorkshopUsage));
 
-        saveOutboxEvents(result.events());
+        saveOutboxEvents(events);
 
-        log.info("Customer {} entered workshop and published events {}", customerId, result.events());
+        log.info("Customer {} entered workshop and published events {}", customerId, events);
     }
 
     @Transactional

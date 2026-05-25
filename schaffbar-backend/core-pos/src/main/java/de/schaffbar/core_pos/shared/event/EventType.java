@@ -19,6 +19,8 @@ public enum EventType {
     TOOL_WLAN_RELAIS_UPDATED, //
     TOOL_RFID_READER_ASSIGNED, //
     TOOL_RFID_READER_CLEARED, //
+    TOOL_INSTRUCTORS_ADDED, //
+    TOOL_INSTRUCTORS_REMOVED, //
     TOOL_DELETED, //
 
     // ------------------------------------------------------------------------

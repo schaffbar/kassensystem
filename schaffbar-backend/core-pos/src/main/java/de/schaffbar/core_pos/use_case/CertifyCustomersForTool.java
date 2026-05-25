@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.schaffbar.core_pos.customer.CustomerService;
+import de.schaffbar.core_pos.shared.exception.CustomerNotInstructorException;
 import de.schaffbar.core_pos.shared.exception.ResourceNotFoundException;
 import de.schaffbar.core_pos.shared.id.CustomerId;
 import de.schaffbar.core_pos.shared.id.ToolId;
@@ -33,10 +34,13 @@ public class CertifyCustomersForTool {
 
     private final @NonNull ToolService toolService;
 
-    public BatchCertificationResult process(@NotEmpty List<@Valid @NotNull CustomerId> customerIds, @NotNull @Valid ToolId toolId,
-            @Valid CustomerId certifiedBy) {
-
+    public BatchCertificationResult process( //
+            @NotEmpty List<@Valid @NotNull CustomerId> customerIds, //
+            @NotNull @Valid ToolId toolId, //
+            @NotNull @Valid CustomerId certifiedBy //
+    ) {
         verifyToolExists(toolId);
+        verifyCertifiedByIsInstructor(certifiedBy, toolId);
 
         List<CustomerId> succeeded = new ArrayList<>();
         List<BatchCertificationError> failed = new ArrayList<>();
@@ -70,6 +74,15 @@ public class CertifyCustomersForTool {
     private void verifyCustomerExists(CustomerId customerId) {
         this.customerService.getCustomer(customerId) //
                 .orElseThrow(() -> ResourceNotFoundException.customer(customerId));
+    }
+
+    private void verifyCertifiedByIsInstructor(CustomerId certifiedBy, ToolId toolId) {
+        this.customerService.getCustomer(certifiedBy) //
+                .orElseThrow(() -> ResourceNotFoundException.customer(certifiedBy));
+
+        if (!this.toolService.isInstructor(toolId, certifiedBy)) {
+            throw new CustomerNotInstructorException(certifiedBy, toolId);
+        }
     }
 
 }

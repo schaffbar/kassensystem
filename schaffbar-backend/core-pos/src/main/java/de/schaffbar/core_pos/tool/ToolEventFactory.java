@@ -1,10 +1,15 @@
 package de.schaffbar.core_pos.tool;
 
+import java.util.List;
+
 import de.schaffbar.core_pos.shared.event.EventType;
 import de.schaffbar.core_pos.shared.event.SchaffbarEvent;
 import de.schaffbar.core_pos.shared.event.payload.ToolPayloads.ToolDeletedPayload;
+import de.schaffbar.core_pos.shared.event.payload.ToolPayloads.ToolInstructorsAddedPayload;
+import de.schaffbar.core_pos.shared.event.payload.ToolPayloads.ToolInstructorsRemovedPayload;
 import de.schaffbar.core_pos.shared.event.payload.ToolPayloads.ToolRfidReaderAssignedPayload;
 import de.schaffbar.core_pos.shared.event.payload.ToolPayloads.ToolRfidReaderClearedPayload;
+import de.schaffbar.core_pos.shared.id.CustomerId;
 import de.schaffbar.core_pos.shared.id.RfidReaderId;
 import de.schaffbar.core_pos.shared.id.ToolId;
 import lombok.AccessLevel;
@@ -46,6 +51,20 @@ final class ToolEventFactory {
         payload.validate();
 
         return SchaffbarEvent.toolEvent(EventType.TOOL_RFID_READER_CLEARED, toolId, payload);
+    }
+
+    static SchaffbarEvent toolInstructorsAdded(ToolId toolId, List<CustomerId> instructorIds) {
+        var payload = new ToolInstructorsAddedPayload(toolId, instructorIds);
+        payload.validate();
+
+        return SchaffbarEvent.toolEvent(EventType.TOOL_INSTRUCTORS_ADDED, toolId, payload);
+    }
+
+    static SchaffbarEvent toolInstructorsRemoved(ToolId toolId, List<CustomerId> instructorIds) {
+        var payload = new ToolInstructorsRemovedPayload(toolId, instructorIds);
+        payload.validate();
+
+        return SchaffbarEvent.toolEvent(EventType.TOOL_INSTRUCTORS_REMOVED, toolId, payload);
     }
 
     static SchaffbarEvent toolDeleted(ToolId toolId) {

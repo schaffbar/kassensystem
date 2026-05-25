@@ -13,11 +13,14 @@ import de.schaffbar.core_pos.tool.ToolCommands.UpdateToolCommand;
 import de.schaffbar.core_pos.tool.ToolCommands.UpdateWlanRelaisCommand;
 import de.schaffbar.core_pos.tool.ToolService;
 import de.schaffbar.core_pos.tool.web.ToolApiModel.CreateToolRequestBody;
+import de.schaffbar.core_pos.tool.web.ToolApiModel.InstructorsRequestBody;
 import de.schaffbar.core_pos.tool.web.ToolApiModel.ToolApiDto;
 import de.schaffbar.core_pos.tool.web.ToolApiModel.UpdateToolRequestBody;
 import de.schaffbar.core_pos.tool.web.ToolApiModel.UpdateWlanRelaisRequestBody;
+import de.schaffbar.core_pos.use_case.ToolAddInstructors;
 import de.schaffbar.core_pos.use_case.ToolAssignRfidReader;
 import de.schaffbar.core_pos.use_case.ToolCreate;
+import de.schaffbar.core_pos.use_case.ToolRemoveInstructors;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.NonNull;
@@ -46,6 +49,10 @@ public class ToolController {
     private final @NonNull ToolCreate toolCreate;
 
     private final @NonNull ToolAssignRfidReader toolAssignRfidReader;
+
+    private final @NonNull ToolAddInstructors toolAddInstructors;
+
+    private final @NonNull ToolRemoveInstructors toolRemoveInstructors;
 
     // ------------------------------------------------------------------------
     // query
@@ -111,6 +118,7 @@ public class ToolController {
         return ResponseEntity.noContent().build();
     }
 
+    // TODO: change to DeleteMapping and remove clear from path
     @PutMapping(value = "/{toolId}/rfid-reader/clear")
     public ResponseEntity<Void> clearRfidReader(@PathVariable @NotNull @Valid ToolId toolId) {
         this.toolService.clearRfidReader(toolId);
@@ -119,10 +127,32 @@ public class ToolController {
     }
 
     @PutMapping(value = "/{toolId}/wlan-relais", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Void> updateWlanRelais(@PathVariable @NotNull @Valid ToolId toolId,
-            @RequestBody @NotNull @Valid UpdateWlanRelaisRequestBody requestBody) {
+    public ResponseEntity<Void> updateWlanRelais( //
+            @PathVariable @NotNull @Valid ToolId toolId, //
+            @RequestBody @NotNull @Valid UpdateWlanRelaisRequestBody requestBody //
+    ) {
         UpdateWlanRelaisCommand command = ToolApiModel.MAPPER.toUpdateWlanRelaisCommand(requestBody);
         this.toolService.updateWlanRelais(toolId, command);
+
+        return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping(value = "/{toolId}/instructors", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Void> addInstructors( //
+            @PathVariable @NotNull @Valid ToolId toolId, //
+            @RequestBody @NotNull @Valid InstructorsRequestBody requestBody //
+    ) {
+        this.toolAddInstructors.process(toolId, requestBody.instructorIds());
+
+        return ResponseEntity.noContent().build();
+    }
+
+    @DeleteMapping(value = "/{toolId}/instructors", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Void> removeInstructors( //
+            @PathVariable @NotNull @Valid ToolId toolId, //
+            @RequestBody @NotNull @Valid InstructorsRequestBody requestBody //
+    ) {
+        this.toolRemoveInstructors.process(toolId, requestBody.instructorIds());
 
         return ResponseEntity.noContent().build();
     }

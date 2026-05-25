@@ -72,9 +72,9 @@ public class ToolUsageService {
         ensureMaxSimultaneousUsagesNotExceeded(command.customerId());
 
         ToolUsage toolUsage = ToolUsage.of(command);
-        this.toolUsageRepository.save(toolUsage);
+        ToolUsage savedToolUsage = this.toolUsageRepository.save(toolUsage);
 
-        List<SchaffbarEvent> events = List.of(ToolUsageEventFactory.toolUsageStarted(toolUsage));
+        List<SchaffbarEvent> events = List.of(ToolUsageEventFactory.toolUsageStarted(savedToolUsage));
         saveOutboxEvents(events);
 
         log.info("Started tool usage for customer {} on tool {} and published events {}", command.customerId(), command.toolId(), events);

@@ -1,5 +1,6 @@
 - [Story] Save list of Einweiser for each tool in Details Page
 - [Story] Add flag for Tool - Need Tool Certification and check it during StartToolUsage use case
+- [Story] Add Bereich property to Tool aggregate
 
 - [Frontend] Tool Detail Page - RFID reader and WLAN relay zu Configuration mergen
 - [Backend] Clean up Create Tool flow (only Name and Description) needed

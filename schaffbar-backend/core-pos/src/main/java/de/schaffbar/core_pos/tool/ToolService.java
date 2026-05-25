@@ -10,14 +10,15 @@ import de.schaffbar.core_pos.shared.event.SchaffbarEvent;
 import de.schaffbar.core_pos.shared.event.outbox.OutboxEvent;
 import de.schaffbar.core_pos.shared.event.outbox.OutboxEventRepository;
 import de.schaffbar.core_pos.shared.exception.ResourceNotFoundException;
+import de.schaffbar.core_pos.shared.id.CustomerId;
 import de.schaffbar.core_pos.shared.id.RfidReaderId;
 import de.schaffbar.core_pos.shared.id.ToolId;
-import de.schaffbar.core_pos.tool.Tool.ToolWithEvents;
 import de.schaffbar.core_pos.tool.ToolCommands.CreateToolCommand;
 import de.schaffbar.core_pos.tool.ToolCommands.UpdateToolCommand;
 import de.schaffbar.core_pos.tool.ToolCommands.UpdateWlanRelaisCommand;
 import de.schaffbar.core_pos.tool.ToolViews.ToolView;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -55,6 +56,13 @@ public class ToolService {
                 .map(ToolViews.MAPPER::toToolView);
     }
 
+    public boolean isInstructor(@NotNull @Valid ToolId toolId, @NotNull @Valid CustomerId customerId) {
+        Tool tool = this.toolRepository.findById(toolId.getValue()) //
+                .orElseThrow(() -> ResourceNotFoundException.tool(toolId));
+
+        return tool.isInstructor(customerId);
+    }
+
     // ------------------------------------------------------------------------
     // command
 
@@ -73,12 +81,13 @@ public class ToolService {
                     .ifPresent(existingTool -> throwIpAddressAlreadyUsedException(command.ipAddress(), existingTool));
         }
 
-        ToolWithEvents result = Tool.of(command);
-        Tool savedTool = this.toolRepository.save(result.tool());
+        Tool tool = Tool.of(command);
+        Tool savedTool = this.toolRepository.save(tool);
 
-        saveOutboxEvents(result.events());
+        List<SchaffbarEvent> events = List.of(ToolEventFactory.toolCreated(tool));
+        saveOutboxEvents(events);
 
-        log.info("Created tool with id {} and published events {}", savedTool.getId(), result.events());
+        log.info("Created tool with id {} and published events {}", savedTool.getId(), events);
 
         return savedTool.getId();
     }
@@ -94,6 +103,7 @@ public class ToolService {
         log.info("Updated tool with id {} and published events {}", toolId, events);
     }
 
+    // TODO: introduce dedicated commands for setting and clearing the WLAN relais
     @Transactional
     public void updateWlanRelais(@NotNull @Valid ToolId toolId, @NotNull @Valid UpdateWlanRelaisCommand command) {
         Tool tool = this.toolRepository.findById(toolId.getValue()) //
@@ -138,6 +148,28 @@ public class ToolService {
         saveOutboxEvents(events);
 
         log.info("Cleared RFID reader from tool {} and published events {}", toolId, events);
+    }
+
+    @Transactional
+    public void addInstructors(@NotNull @Valid ToolId toolId, @NotEmpty List<@NotNull @Valid CustomerId> instructorIds) {
+        Tool tool = this.toolRepository.findById(toolId.getValue()) //
+                .orElseThrow(() -> ResourceNotFoundException.tool(toolId));
+
+        List<SchaffbarEvent> events = tool.addInstructors(instructorIds);
+        saveOutboxEvents(events);
+
+        log.info("Added instructors {} to tool {} and published events {}", instructorIds, toolId, events);
+    }
+
+    @Transactional
+    public void removeInstructors(@NotNull @Valid ToolId toolId, @NotEmpty List<@NotNull @Valid CustomerId> instructorIds) {
+        Tool tool = this.toolRepository.findById(toolId.getValue()) //
+                .orElseThrow(() -> ResourceNotFoundException.tool(toolId));
+
+        List<SchaffbarEvent> events = tool.removeInstructors(instructorIds);
+        saveOutboxEvents(events);
+
+        log.info("Removed instructors {} from tool {} and published events {}", instructorIds, toolId, events);
     }
 
     @Transactional

@@ -43,7 +43,7 @@ public interface ToolCertificationApiModel extends ValueObjectMapper {
     record BatchCertifyRequestBody( //
             @NotEmpty List<CustomerId> customerIds, //
             @NotNull ToolId toolId, //
-            CustomerId certifiedBy //
+            @NotNull CustomerId certifiedBy //
     ) {}
 
 }

@@ -4,19 +4,29 @@ import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 
 import java.time.Instant;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 import de.schaffbar.core_pos.shared.event.SchaffbarEvent;
+import de.schaffbar.core_pos.shared.exception.CustomerAlreadyInstructorException;
+import de.schaffbar.core_pos.shared.exception.CustomerNotInstructorException;
+import de.schaffbar.core_pos.shared.id.CustomerId;
 import de.schaffbar.core_pos.shared.id.RfidReaderId;
 import de.schaffbar.core_pos.shared.id.ToolId;
 import de.schaffbar.core_pos.tool.ToolCommands.CreateToolCommand;
 import de.schaffbar.core_pos.tool.ToolCommands.UpdateToolCommand;
 import de.schaffbar.core_pos.tool.ToolCommands.UpdateWlanRelaisCommand;
+import jakarta.persistence.CollectionTable;
+import jakarta.persistence.Column;
+import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Table;
 import jakarta.persistence.Version;
 import jakarta.validation.constraints.NotBlank;
@@ -56,6 +66,11 @@ class Tool {
 
     private String offCommand;
 
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "TOOL_INSTRUCTOR", schema = "SCHAFFBAR", joinColumns = @JoinColumn(name = "tool_id"))
+    @Column(name = "instructor_id")
+    private Set<UUID> instructorIds = new HashSet<>();
+
     @NotNull
     private Instant createdAt;
 
@@ -66,7 +81,7 @@ class Tool {
     // ------------------------------------------------------------------------
     // static constructor
 
-    public static ToolWithEvents of(CreateToolCommand command) {
+    public static Tool of(CreateToolCommand command) {
         Tool tool = new Tool();
         tool.setId(ToolId.random().getValue());
         tool.setName(command.name());
@@ -81,9 +96,7 @@ class Tool {
             tool.applyWlanRelaisType(command.wlanRelaisType(), command.ipAddress());
         }
 
-        List<SchaffbarEvent> events = List.of(ToolEventFactory.toolCreated(tool));
-
-        return new ToolWithEvents(tool, events);
+        return tool;
     }
 
     // ------------------------------------------------------------------------
@@ -99,6 +112,16 @@ class Tool {
         }
 
         return RfidReaderId.of(this.rfidReaderId);
+    }
+
+    public Set<CustomerId> getInstructors() {
+        return this.instructorIds.stream() //
+                .map(CustomerId::of) //
+                .collect(java.util.stream.Collectors.toSet());
+    }
+
+    public boolean isInstructor(CustomerId customerId) {
+        return this.instructorIds.contains(customerId.getValue());
     }
 
     // ------------------------------------------------------------------------
@@ -123,6 +146,7 @@ class Tool {
         return List.of(ToolEventFactory.toolRfidReaderCleared(getId()));
     }
 
+    // TODO: introduce dedicated commands for setting and clearing the WLAN relais
     public List<SchaffbarEvent> updateWlanRelais(UpdateWlanRelaisCommand command) {
         if (isNull(command.wlanRelaisType())) {
             clearWlanRelais();
@@ -134,12 +158,28 @@ class Tool {
         return List.of(ToolEventFactory.toolWlanRelaisUpdated(this));
     }
 
-    public void clearWlanRelais() {
-        setWlanRelaisType(null);
-        setIpAddress(null);
-        setHttpStartCommand(null);
-        setOnCommand(null);
-        setOffCommand(null);
+    public List<SchaffbarEvent> addInstructors(List<CustomerId> instructorIds) {
+        for (CustomerId instructorId : instructorIds) {
+            if (this.instructorIds.contains(instructorId.getValue())) {
+                throw new CustomerAlreadyInstructorException(instructorId, getId());
+            }
+        }
+
+        instructorIds.forEach(id -> this.instructorIds.add(id.getValue()));
+
+        return List.of(ToolEventFactory.toolInstructorsAdded(getId(), instructorIds));
+    }
+
+    public List<SchaffbarEvent> removeInstructors(List<CustomerId> instructorIds) {
+        for (CustomerId instructorId : instructorIds) {
+            if (!this.instructorIds.contains(instructorId.getValue())) {
+                throw new CustomerNotInstructorException(instructorId, getId());
+            }
+        }
+
+        instructorIds.forEach(id -> this.instructorIds.remove(id.getValue()));
+
+        return List.of(ToolEventFactory.toolInstructorsRemoved(getId(), instructorIds));
     }
 
     // ------------------------------------------------------------------------
@@ -157,6 +197,12 @@ class Tool {
         setOffCommand(type.getOffCommand());
     }
 
-    record ToolWithEvents(Tool tool, List<SchaffbarEvent> events) {}
+    private void clearWlanRelais() {
+        setWlanRelaisType(null);
+        setIpAddress(null);
+        setHttpStartCommand(null);
+        setOnCommand(null);
+        setOffCommand(null);
+    }
 
 }

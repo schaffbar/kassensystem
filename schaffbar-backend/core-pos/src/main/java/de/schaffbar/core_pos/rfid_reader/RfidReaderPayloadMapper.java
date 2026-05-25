@@ -1,8 +1,8 @@
 package de.schaffbar.core_pos.rfid_reader;
 
-import de.schaffbar.core_pos.shared.event.payload.RfidReaderPayloads.RfidReaderCreatedPayload;
-import de.schaffbar.core_pos.shared.event.payload.RfidReaderPayloads.RfidReaderTypeChangedPayload;
-import de.schaffbar.core_pos.shared.event.payload.RfidReaderPayloads.RfidReaderUpdatedPayload;
+import de.schaffbar.core_pos.shared.event.payload.RfidReaderEventPayload.RfidReaderCreatedPayload;
+import de.schaffbar.core_pos.shared.event.payload.RfidReaderEventPayload.RfidReaderTypeChangedPayload;
+import de.schaffbar.core_pos.shared.event.payload.RfidReaderEventPayload.RfidReaderUpdatedPayload;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
 import org.mapstruct.factory.Mappers;

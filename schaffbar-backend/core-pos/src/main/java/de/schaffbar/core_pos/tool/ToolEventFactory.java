@@ -4,11 +4,11 @@ import java.util.List;
 
 import de.schaffbar.core_pos.shared.event.EventType;
 import de.schaffbar.core_pos.shared.event.SchaffbarEvent;
-import de.schaffbar.core_pos.shared.event.payload.ToolPayloads.ToolDeletedPayload;
-import de.schaffbar.core_pos.shared.event.payload.ToolPayloads.ToolInstructorsAddedPayload;
-import de.schaffbar.core_pos.shared.event.payload.ToolPayloads.ToolInstructorsRemovedPayload;
-import de.schaffbar.core_pos.shared.event.payload.ToolPayloads.ToolRfidReaderAssignedPayload;
-import de.schaffbar.core_pos.shared.event.payload.ToolPayloads.ToolRfidReaderClearedPayload;
+import de.schaffbar.core_pos.shared.event.payload.ToolEventPayload.ToolDeletedPayload;
+import de.schaffbar.core_pos.shared.event.payload.ToolEventPayload.ToolInstructorsAddedPayload;
+import de.schaffbar.core_pos.shared.event.payload.ToolEventPayload.ToolInstructorsRemovedPayload;
+import de.schaffbar.core_pos.shared.event.payload.ToolEventPayload.ToolRfidReaderAssignedPayload;
+import de.schaffbar.core_pos.shared.event.payload.ToolEventPayload.ToolRfidReaderClearedPayload;
 import de.schaffbar.core_pos.shared.id.CustomerId;
 import de.schaffbar.core_pos.shared.id.RfidReaderId;
 import de.schaffbar.core_pos.shared.id.ToolId;

@@ -32,8 +32,9 @@ Wenn ein neues Domain-Package (Aggregate) im Schaffbar Core-POS Projekt erstellt
 
 - `AggregateType` Enum — neuen Wert hinzufügen
 - `EventType` Enum — alle Event-Typen des neuen Aggregats hinzufügen
-- `<Aggregate>EventPayload.java` in `shared/event/payload/` — Marker-Interface: `extends EventPayload`
-- `<Aggregate>Payloads.java` in `shared/event/payload/` — Payload-Records die `<Aggregate>EventPayload` implementieren
+- `<Aggregate>EventPayload.java` in `shared/event/payload/` — Interface `extends EventPayload` mit **nested record
+  payloads**
+    - Beispiel: `record <Aggregate>CreatedPayload(...) implements <Aggregate>EventPayload {}`
     - **Verwende immer Value Objects** (`CustomerId`, `ToolId`, etc.) für ID-Referenzen, niemals `UUID`/`String`
 - `SchaffbarEvent.java` — neue statische Factory-Methode
   `<aggregate>Event(EventType, <Aggregate>Id, <Aggregate>EventPayload)` hinzufügen + Import für Payload und Id

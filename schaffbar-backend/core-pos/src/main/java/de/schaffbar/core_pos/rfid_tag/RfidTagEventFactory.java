@@ -2,7 +2,7 @@ package de.schaffbar.core_pos.rfid_tag;
 
 import de.schaffbar.core_pos.shared.event.EventType;
 import de.schaffbar.core_pos.shared.event.SchaffbarEvent;
-import de.schaffbar.core_pos.shared.event.payload.RfidTagPayloads;
+import de.schaffbar.core_pos.shared.event.payload.RfidTagEventPayload.RfidTagDeletedPayload;
 import de.schaffbar.core_pos.shared.id.RfidTagId;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -18,7 +18,7 @@ final class RfidTagEventFactory {
     }
 
     static SchaffbarEvent rfidTagDeleted(RfidTagId rfidTagId) {
-        var payload = new RfidTagPayloads.RfidTagDeletedPayload(rfidTagId);
+        var payload = new RfidTagDeletedPayload(rfidTagId);
         payload.validate();
 
         return SchaffbarEvent.rfidTagEvent(EventType.RFID_TAG_DELETED, rfidTagId, payload);

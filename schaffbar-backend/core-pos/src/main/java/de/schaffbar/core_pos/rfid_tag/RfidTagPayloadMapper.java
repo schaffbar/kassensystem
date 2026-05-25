@@ -1,6 +1,6 @@
 package de.schaffbar.core_pos.rfid_tag;
 
-import de.schaffbar.core_pos.shared.event.payload.RfidTagPayloads.RfidTagCreatedPayload;
+import de.schaffbar.core_pos.shared.event.payload.RfidTagEventPayload.RfidTagCreatedPayload;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
 import org.mapstruct.factory.Mappers;

@@ -1,9 +1,9 @@
 package de.schaffbar.core_pos.customer;
 
-import de.schaffbar.core_pos.shared.event.payload.CustomerPayloads.CustomerAddressChangedPayload;
-import de.schaffbar.core_pos.shared.event.payload.CustomerPayloads.CustomerContactChangedPayload;
-import de.schaffbar.core_pos.shared.event.payload.CustomerPayloads.CustomerCreatedPayload;
-import de.schaffbar.core_pos.shared.event.payload.CustomerPayloads.CustomerUpdatedPayload;
+import de.schaffbar.core_pos.shared.event.payload.CustomerEventPayload.CustomerAddressChangedPayload;
+import de.schaffbar.core_pos.shared.event.payload.CustomerEventPayload.CustomerContactChangedPayload;
+import de.schaffbar.core_pos.shared.event.payload.CustomerEventPayload.CustomerCreatedPayload;
+import de.schaffbar.core_pos.shared.event.payload.CustomerEventPayload.CustomerUpdatedPayload;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.ReportingPolicy;

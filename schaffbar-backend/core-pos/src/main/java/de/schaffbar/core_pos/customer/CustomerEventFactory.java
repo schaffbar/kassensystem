@@ -2,7 +2,7 @@ package de.schaffbar.core_pos.customer;
 
 import de.schaffbar.core_pos.shared.event.EventType;
 import de.schaffbar.core_pos.shared.event.SchaffbarEvent;
-import de.schaffbar.core_pos.shared.event.payload.CustomerPayloads.CustomerDeletedPayload;
+import de.schaffbar.core_pos.shared.event.payload.CustomerEventPayload.CustomerDeletedPayload;
 import de.schaffbar.core_pos.shared.id.CustomerId;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;

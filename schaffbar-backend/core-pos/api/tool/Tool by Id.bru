@@ -1,0 +1,15 @@
+meta {
+  name: Tool by Id
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{domain_url}}/api/v1/tools/:toolId
+  body: none
+  auth: inherit
+}
+
+params:path {
+  toolId: f8823ac4-c012-4717-86f5-e310ca97668e
+}

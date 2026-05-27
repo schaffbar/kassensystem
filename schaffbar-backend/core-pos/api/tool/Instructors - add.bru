@@ -1,0 +1,25 @@
+meta {
+  name: Instructors - add
+  type: http
+  seq: 10
+}
+
+post {
+  url: {{domain_url}}/api/v1/tools/:toolId/instructors
+  body: json
+  auth: inherit
+}
+
+params:path {
+  toolId: 61252c3a-0e71-4b5d-8068-038fcd7dff1d
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "instructorIds": ["46417d27-ff9a-4cc8-a765-8ac55fc8b793","015e98c1-8a6e-40c7-88ae-af635644a85f"]
+  }
+}

@@ -1,0 +1,26 @@
+meta {
+  name: WLAN Relais - set
+  type: http
+  seq: 8
+}
+
+put {
+  url: {{domain_url}}/api/v1/tools/:toolId/wlan-relais
+  body: json
+  auth: inherit
+}
+
+params:path {
+  toolId: 61252c3a-0e71-4b5d-8068-038fcd7dff1d
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "wlanRelaisType": "SHELLY_1",
+    "ipAddress": "192.168.35.111"
+  }
+}

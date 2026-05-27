@@ -1,0 +1,15 @@
+meta {
+  name: Tools
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{domain_url}}/api/v1/tools
+  body: none
+  auth: inherit
+}
+
+headers {
+  Accept: application/json
+}

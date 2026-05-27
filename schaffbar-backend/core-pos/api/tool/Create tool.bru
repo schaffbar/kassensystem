@@ -1,0 +1,22 @@
+meta {
+  name: Create tool
+  type: http
+  seq: 4
+}
+
+post {
+  url: {{domain_url}}/api/v1/tools
+  body: json
+  auth: inherit
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "name": "Kappsäge",
+    "description": "Elektrische Kappsäge"
+  }
+}

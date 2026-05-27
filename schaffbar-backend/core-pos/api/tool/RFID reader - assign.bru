@@ -1,0 +1,16 @@
+meta {
+  name: RFID reader - assign
+  type: http
+  seq: 6
+}
+
+put {
+  url: {{domain_url}}/api/v1/tools/:toolId/rfid-reader/:rfidReaderId
+  body: none
+  auth: inherit
+}
+
+params:path {
+  rfidReaderId: 788779c4-bd97-450d-b655-e4814caa2e73
+  toolId: 61252c3a-0e71-4b5d-8068-038fcd7dff1d
+}

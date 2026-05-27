@@ -1,0 +1,19 @@
+meta {
+  name: Tools by RFID reader
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{domain_url}}/api/v1/tools?rfidReaderId=788779c4-bd97-450d-b655-e4814caa2e73
+  body: none
+  auth: inherit
+}
+
+params:query {
+  rfidReaderId: 788779c4-bd97-450d-b655-e4814caa2e73
+}
+
+headers {
+  Accept: application/json
+}

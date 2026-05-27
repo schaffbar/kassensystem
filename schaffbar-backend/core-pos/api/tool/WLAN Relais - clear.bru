@@ -1,0 +1,15 @@
+meta {
+  name: WLAN Relais - clear
+  type: http
+  seq: 9
+}
+
+delete {
+  url: {{domain_url}}/api/v1/tools/:toolId/wlan-relais
+  body: none
+  auth: inherit
+}
+
+params:path {
+  toolId: 61252c3a-0e71-4b5d-8068-038fcd7dff1d
+}

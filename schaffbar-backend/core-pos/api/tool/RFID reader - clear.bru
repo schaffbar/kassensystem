@@ -1,0 +1,15 @@
+meta {
+  name: RFID reader - clear
+  type: http
+  seq: 7
+}
+
+delete {
+  url: {{domain_url}}/api/v1/tools/:toolId/rfid-reader
+  body: none
+  auth: inherit
+}
+
+params:path {
+  toolId: 04a2e791-2a5d-4f55-bbf5-ce3474c19dab
+}

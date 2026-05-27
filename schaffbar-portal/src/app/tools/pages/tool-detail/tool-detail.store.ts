@@ -7,11 +7,11 @@ import { exhaustMap, filter, pipe, tap } from 'rxjs';
 
 import { setError, setFulfilled, setPending, withRequestStatus } from '../../../shared/state/request-status.feature';
 import {
-  BatchCreateToolCertificationCommand,
-  ToolCertification,
+    BatchCreateToolCertificationCommand,
+    ToolCertification,
 } from '../../../users/shared/models/tool-certification.model';
 import { ToolCertificationService } from '../../../users/shared/services/tool-certification.service';
-import { ChangeRfidReaderCommand, Tool, UpdateToolCommand, UpdateWlanRelaisCommand } from '../../tool.model';
+import { ChangeRfidReaderCommand, SetWlanRelaisCommand, Tool, UpdateToolCommand } from '../../tool.model';
 import { ToolsService } from '../../tools.service';
 
 interface ToolDetailState {
@@ -104,11 +104,56 @@ export const ToolDetailStore = signalStore(
         }),
       ),
     ),
-    updateWlanRelais: rxMethod<UpdateWlanRelaisCommand>(
+    setWlanRelais: rxMethod<SetWlanRelaisCommand>(
       pipe(
         tap(() => patchState(store, setPending())),
-        exhaustMap((command: UpdateWlanRelaisCommand) => {
-          return store._toolsService.updateWlanRelais(command).pipe(
+        exhaustMap((command: SetWlanRelaisCommand) => {
+          return store._toolsService.setWlanRelais(command).pipe(
+            tapResponse({
+              next: () => {
+                patchState(store, setFulfilled(), setDirty());
+              },
+              error: (error: { message: string }) => patchState(store, setError(error.message)),
+            }),
+          );
+        }),
+      ),
+    ),
+    clearWlanRelais: rxMethod<string>(
+      pipe(
+        tap(() => patchState(store, setPending())),
+        exhaustMap((toolId: string) => {
+          return store._toolsService.clearWlanRelais(toolId).pipe(
+            tapResponse({
+              next: () => {
+                patchState(store, setFulfilled(), setDirty());
+              },
+              error: (error: { message: string }) => patchState(store, setError(error.message)),
+            }),
+          );
+        }),
+      ),
+    ),
+    addInstructors: rxMethod<{ toolId: string; instructorIds: string[] }>(
+      pipe(
+        tap(() => patchState(store, setPending())),
+        exhaustMap(({ toolId, instructorIds }) => {
+          return store._toolsService.addInstructors(toolId, instructorIds).pipe(
+            tapResponse({
+              next: () => {
+                patchState(store, setFulfilled(), setDirty());
+              },
+              error: (error: { message: string }) => patchState(store, setError(error.message)),
+            }),
+          );
+        }),
+      ),
+    ),
+    removeInstructors: rxMethod<{ toolId: string; instructorIds: string[] }>(
+      pipe(
+        tap(() => patchState(store, setPending())),
+        exhaustMap(({ toolId, instructorIds }) => {
+          return store._toolsService.removeInstructors(toolId, instructorIds).pipe(
             tapResponse({
               next: () => {
                 patchState(store, setFulfilled(), setDirty());

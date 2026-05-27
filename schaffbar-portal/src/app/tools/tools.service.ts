@@ -5,11 +5,11 @@ import { Observable } from 'rxjs';
 
 import { environment } from '../../environments/environment';
 import {
-  ChangeRfidReaderCommand,
-  CreateToolCommand,
-  Tool,
-  UpdateToolCommand,
-  UpdateWlanRelaisCommand,
+    ChangeRfidReaderCommand,
+    CreateToolCommand,
+    SetWlanRelaisCommand,
+    Tool,
+    UpdateToolCommand,
 } from './tool.model';
 
 const TOOLS_API_URL = `${environment.apiBaseUrl}/api/v1/tools`;
@@ -57,13 +57,28 @@ export class ToolsService {
   }
 
   clearRfidReader(toolId: string): Observable<void> {
-    const url = `${TOOLS_API_URL}/${toolId}/rfid-reader/clear`;
-    return this.http.put<void>(url, {}, this.httpOptions);
+    const url = `${TOOLS_API_URL}/${toolId}/rfid-reader`;
+    return this.http.delete<void>(url);
   }
 
-  updateWlanRelais(command: UpdateWlanRelaisCommand): Observable<void> {
+  setWlanRelais(command: SetWlanRelaisCommand): Observable<void> {
     const url = `${TOOLS_API_URL}/${command.toolId}/wlan-relais`;
     return this.http.put<void>(url, command, this.httpOptions);
+  }
+
+  clearWlanRelais(toolId: string): Observable<void> {
+    const url = `${TOOLS_API_URL}/${toolId}/wlan-relais`;
+    return this.http.delete<void>(url);
+  }
+
+  addInstructors(toolId: string, instructorIds: string[]): Observable<void> {
+    const url = `${TOOLS_API_URL}/${toolId}/instructors`;
+    return this.http.post<void>(url, { instructorIds }, this.httpOptions);
+  }
+
+  removeInstructors(toolId: string, instructorIds: string[]): Observable<void> {
+    const url = `${TOOLS_API_URL}/${toolId}/instructors`;
+    return this.http.delete<void>(url, { ...this.httpOptions, body: { instructorIds } });
   }
 
   deleteTool(id: string): Observable<void> {

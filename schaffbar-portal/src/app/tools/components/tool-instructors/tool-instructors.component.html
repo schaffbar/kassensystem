@@ -1,0 +1,65 @@
+<h3 class="instructors-header">
+  {{ 'tools.pages.toolDetails.headers.instructors' | translate }}
+</h3>
+
+<!-- Current Instructors List -->
+<div class="instructors-list">
+  @if (instructors().length === 0) {
+    <p class="no-instructors">{{ 'tools.pages.toolDetails.instructors.noInstructors' | translate }}</p>
+  } @else {
+    <mat-list>
+      @for (instructor of instructors(); track instructor.id) {
+        <mat-list-item>
+          <mat-checkbox
+            [checked]="selectedInstructorIdsToRemove().has(instructor.id)"
+            (change)="toggleInstructorSelection(instructor.id)">
+            {{ instructor.firstName }} {{ instructor.lastName }}
+          </mat-checkbox>
+        </mat-list-item>
+      }
+    </mat-list>
+    <button
+      mat-stroked-button
+      color="warn"
+      [disabled]="selectedInstructorIdsToRemove().size === 0"
+      (click)="removeInstructors()">
+      <mat-icon>person_remove</mat-icon>
+      {{ 'tools.pages.toolDetails.instructors.remove' | translate }}
+    </button>
+  }
+</div>
+
+<!-- Add Instructors Section -->
+<div class="add-instructors">
+  <h4>{{ 'tools.pages.toolDetails.instructors.addTitle' | translate }}</h4>
+
+  <mat-form-field class="full-width">
+    <mat-label>{{ 'tools.pages.toolDetails.instructors.searchUsers' | translate }}</mat-label>
+    <input
+      matInput
+      #searchInput
+      [matAutocomplete]="auto"
+      (input)="searchText.set(searchInput.value)" />
+    <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selectUser($event.option.value)">
+      @for (user of filteredUsers(); track user.id) {
+        <mat-option [value]="user">{{ user.firstName }} {{ user.lastName }}</mat-option>
+      }
+    </mat-autocomplete>
+  </mat-form-field>
+
+  @if (selectedUsersToAdd().length > 0) {
+    <mat-chip-set>
+      @for (user of selectedUsersToAdd(); track user.id) {
+        <mat-chip (removed)="removeSelectedUser(user)">
+          {{ user.firstName }} {{ user.lastName }}
+          <mat-icon matChipRemove>cancel</mat-icon>
+        </mat-chip>
+      }
+    </mat-chip-set>
+
+    <button mat-flat-button color="primary" (click)="addInstructors()">
+      <mat-icon>person_add</mat-icon>
+      {{ 'tools.pages.toolDetails.instructors.add' | translate }}
+    </button>
+  }
+</div>

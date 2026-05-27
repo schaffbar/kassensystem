@@ -19,6 +19,24 @@
   width: 100%;
 }
 
+.tab-content--details {
+  display: flex;
+  gap: 40px;
+  padding: 20px;
+
+  &__left {
+    min-width: 300px;
+    max-width: 600px;
+    flex: 1;
+  }
+
+  &__right {
+    min-width: 280px;
+    max-width: 400px;
+    flex: 0 0 auto;
+  }
+}
+
 .tab-content--wide {
   padding: 20px;
   width: 100%;

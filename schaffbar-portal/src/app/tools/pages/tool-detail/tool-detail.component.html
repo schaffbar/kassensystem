@@ -10,19 +10,32 @@
 
   <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="center" dynamicHeight>
     <mat-tab [label]="'tools.tabGroups.toolDetails.detailsTab' | translate">
-      <div class="tab-content">
-        <schbar-tool-detail-info [tool]="tool" (toolUpdated)="onToolUpdated($event)" />
-        <schbar-tool-rfid-reader-assignment
-          [tool]="tool"
-          [rfidReaders]="allRfidReaders()"
-          [assignedRfidReaderIds]="assignedRfidReaderIds()"
-          (rfidReaderChanged)="onRfidReaderChanged($event)"
-          (rfidReaderCleared)="onRfidReaderCleared($event)" />
+      <div class="tab-content--details">
+        <div class="tab-content--details__left">
+          <schbar-tool-detail-info [tool]="tool" (toolUpdated)="onToolUpdated($event)" />
+          <schbar-tool-rfid-reader-assignment
+            [tool]="tool"
+            [rfidReaders]="allRfidReaders()"
+            [assignedRfidReaderIds]="assignedRfidReaderIds()"
+            (rfidReaderChanged)="onRfidReaderChanged($event)"
+            (rfidReaderCleared)="onRfidReaderCleared($event)" />
+        </div>
+        <div class="tab-content--details__right">
+          <schbar-tool-instructors
+            [toolId]="tool.id"
+            [instructorIds]="tool.instructors ?? []"
+            [allUsers]="allUsers()"
+            (instructorsAdded)="onInstructorsAdded($event)"
+            (instructorsRemoved)="onInstructorsRemoved($event)" />
+        </div>
       </div>
     </mat-tab>
     <mat-tab [label]="'tools.tabGroups.toolDetails.wlanRelayTab' | translate">
       <div class="tab-content">
-        <schbar-tool-wlan-relais [tool]="tool" (wlanRelaisUpdated)="onWlanRelaisUpdated($event)" />
+        <schbar-tool-wlan-relais
+          [tool]="tool"
+          (wlanRelaisUpdated)="onWlanRelaisUpdated($event)"
+          (wlanRelaisCleared)="onWlanRelaisCleared($event)" />
       </div>
     </mat-tab>
     <mat-tab [label]="'tools.tabGroups.toolDetails.certificationsTab' | translate">

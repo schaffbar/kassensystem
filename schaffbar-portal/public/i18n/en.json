@@ -258,7 +258,8 @@
           "toolInformation": "Tool Information",
           "rfidReaderAssignment": "RFID Reader",
           "wlanRelais": "WLAN Relais",
-          "certifications": "Certifications"
+          "certifications": "Certifications",
+          "instructors": "Instructors"
         },
         "certifications": {
           "batchCreate": {
@@ -276,6 +277,13 @@
         },
         "errors": {
           "invalidIpAddress": "Please enter a valid IP address (e.g. 192.168.1.1)."
+        },
+        "instructors": {
+          "noInstructors": "No instructors assigned to this tool.",
+          "addTitle": "Add Instructors",
+          "searchUsers": "Search Users",
+          "add": "Add Instructors",
+          "remove": "Remove Selected"
         }
       }
     },

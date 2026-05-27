@@ -11,9 +11,10 @@ import { BatchCreateToolCertificationCommand } from '../../../users/shared/model
 import { UsersStore } from '../../../users/shared/stores/users.store';
 import { ToolCertificationsComponent } from '../../components/tool-certifications/tool-certifications.component';
 import { ToolDetailInfoComponent } from '../../components/tool-detail-info/tool-detail-info.component';
+import { ToolInstructorsComponent } from '../../components/tool-instructors/tool-instructors.component';
 import { ToolRfidReaderAssignmentComponent } from '../../components/tool-rfid-reader-assignment/tool-rfid-reader-assignment.component';
 import { ToolWlanRelaisComponent } from '../../components/tool-wlan-relais/tool-wlan-relais.component';
-import { ChangeRfidReaderCommand, UpdateToolCommand, UpdateWlanRelaisCommand } from '../../tool.model';
+import { ChangeRfidReaderCommand, SetWlanRelaisCommand, UpdateToolCommand } from '../../tool.model';
 import { ToolsStore } from '../../tools.store';
 import { ToolDetailStore } from './tool-detail.store';
 
@@ -27,6 +28,7 @@ import { ToolDetailStore } from './tool-detail.store';
     MatIconModule,
     TranslatePipe,
     ToolDetailInfoComponent,
+    ToolInstructorsComponent,
     ToolRfidReaderAssignmentComponent,
     ToolWlanRelaisComponent,
     ToolCertificationsComponent,
@@ -79,8 +81,12 @@ export class ToolDetailComponent {
     this.detailsStore.clearRfidReader(toolId);
   }
 
-  protected onWlanRelaisUpdated(command: UpdateWlanRelaisCommand): void {
-    this.detailsStore.updateWlanRelais(command);
+  protected onWlanRelaisUpdated(command: SetWlanRelaisCommand): void {
+    this.detailsStore.setWlanRelais(command);
+  }
+
+  protected onWlanRelaisCleared(toolId: string): void {
+    this.detailsStore.clearWlanRelais(toolId);
   }
 
   protected onBatchCreateCertifications(command: BatchCreateToolCertificationCommand): void {
@@ -89,5 +95,13 @@ export class ToolDetailComponent {
 
   protected onDeleteCertification(event: { customerId: string; toolId: string }): void {
     this.detailsStore.deleteCertification(event);
+  }
+
+  protected onInstructorsAdded(event: { toolId: string; instructorIds: string[] }): void {
+    this.detailsStore.addInstructors(event);
+  }
+
+  protected onInstructorsRemoved(event: { toolId: string; instructorIds: string[] }): void {
+    this.detailsStore.removeInstructors(event);
   }
 }

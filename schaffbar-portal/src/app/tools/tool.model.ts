@@ -8,6 +8,7 @@ export interface Tool {
   httpStartCommand?: string;
   onCommand?: string;
   offCommand?: string;
+  instructors?: string[];
   createdAt: Date;
   updatedAt: Date;
 }
@@ -64,8 +65,8 @@ export interface ChangeRfidReaderCommand {
   rfidReaderId?: string;
 }
 
-export interface UpdateWlanRelaisCommand {
+export interface SetWlanRelaisCommand {
   toolId: string;
-  wlanRelaisType?: WlanRelaisType;
-  ipAddress?: string;
+  wlanRelaisType: WlanRelaisType;
+  ipAddress: string;
 }

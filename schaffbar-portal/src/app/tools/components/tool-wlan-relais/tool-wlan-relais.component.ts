@@ -10,7 +10,7 @@ import { MatSelectModule } from '@angular/material/select';
 
 import { TranslatePipe } from '@ngx-translate/core';
 
-import { Tool, UpdateWlanRelaisCommand, WLAN_RELAIS_TEMPLATES, WlanRelaisType } from '../../tool.model';
+import { SetWlanRelaisCommand, Tool, WLAN_RELAIS_TEMPLATES, WlanRelaisType } from '../../tool.model';
 
 const IP_PATTERN = /^((25[0-5]|2[0-4]\d|[01]?\d\d?)\.){3}(25[0-5]|2[0-4]\d|[01]?\d\d?)$/;
 
@@ -33,7 +33,8 @@ export class ToolWlanRelaisComponent {
 
   tool = input.required<Tool>();
 
-  wlanRelaisUpdated = output<UpdateWlanRelaisCommand>();
+  wlanRelaisUpdated = output<SetWlanRelaisCommand>();
+  wlanRelaisCleared = output<string>();
 
   protected readonly wlanRelaisTypes = Object.values(WlanRelaisType);
 
@@ -82,14 +83,16 @@ export class ToolWlanRelaisComponent {
       if (this.form.controls.ipAddress.invalid) {
         return;
       }
-    }
 
-    const command: UpdateWlanRelaisCommand = {
-      toolId: this.tool().id,
-      wlanRelaisType: (type as WlanRelaisType) || undefined,
-      ipAddress: type ? this.form.controls.ipAddress.value || undefined : undefined,
-    };
-    this.wlanRelaisUpdated.emit(command);
+      const command: SetWlanRelaisCommand = {
+        toolId: this.tool().id,
+        wlanRelaisType: type as WlanRelaisType,
+        ipAddress: this.form.controls.ipAddress.value,
+      };
+      this.wlanRelaisUpdated.emit(command);
+    } else {
+      this.wlanRelaisCleared.emit(this.tool().id);
+    }
   }
 
   // --------------------------------------------------------------------------

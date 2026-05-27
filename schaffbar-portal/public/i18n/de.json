@@ -258,7 +258,8 @@
           "toolInformation": "Werkzeuginformationen",
           "rfidReaderAssignment": "RFID-Lesegerät",
           "wlanRelais": "WLAN-Relais",
-          "certifications": "Einweisungen"
+          "certifications": "Einweisungen",
+          "instructors": "Einweiser"
         },
         "certifications": {
           "batchCreate": {
@@ -276,6 +277,13 @@
         },
         "errors": {
           "invalidIpAddress": "Bitte geben Sie eine gültige IP-Adresse ein (z.B. 192.168.1.1)."
+        },
+        "instructors": {
+          "noInstructors": "Keine Einweiser für dieses Werkzeug vorhanden.",
+          "addTitle": "Einweiser hinzufügen",
+          "searchUsers": "Benutzer suchen",
+          "add": "Einweiser hinzufügen",
+          "remove": "Ausgewählte entfernen"
         }
       }
     },

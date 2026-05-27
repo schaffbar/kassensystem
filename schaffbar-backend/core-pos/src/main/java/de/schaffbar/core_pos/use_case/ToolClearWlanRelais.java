@@ -1,7 +1,6 @@
 package de.schaffbar.core_pos.use_case;
 
 import de.schaffbar.core_pos.shared.id.ToolId;
-import de.schaffbar.core_pos.tool.ToolCommands.CreateToolCommand;
 import de.schaffbar.core_pos.tool.ToolService;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
@@ -14,13 +13,13 @@ import org.springframework.validation.annotation.Validated;
 @Service
 @Validated
 @RequiredArgsConstructor
-public class ToolCreate {
+public class ToolClearWlanRelais {
 
     private final @NonNull ToolService toolService;
 
     @Transactional
-    public ToolId process(@NotNull @Valid CreateToolCommand command) {
-        return this.toolService.createTool(command);
+    public void process(@NotNull @Valid ToolId toolId) {
+        this.toolService.clearWlanRelais(toolId);
     }
 
 }

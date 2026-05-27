@@ -9,6 +9,7 @@ import de.schaffbar.core_pos.shared.event.payload.ToolEventPayload.ToolInstructo
 import de.schaffbar.core_pos.shared.event.payload.ToolEventPayload.ToolInstructorsRemovedPayload;
 import de.schaffbar.core_pos.shared.event.payload.ToolEventPayload.ToolRfidReaderAssignedPayload;
 import de.schaffbar.core_pos.shared.event.payload.ToolEventPayload.ToolRfidReaderClearedPayload;
+import de.schaffbar.core_pos.shared.event.payload.ToolEventPayload.ToolWlanRelaisClearedPayload;
 import de.schaffbar.core_pos.shared.id.CustomerId;
 import de.schaffbar.core_pos.shared.id.RfidReaderId;
 import de.schaffbar.core_pos.shared.id.ToolId;
@@ -32,11 +33,18 @@ final class ToolEventFactory {
         return SchaffbarEvent.toolEvent(EventType.TOOL_UPDATED, tool.getId(), payload);
     }
 
-    static SchaffbarEvent toolWlanRelaisUpdated(Tool tool) {
-        var payload = ToolPayloadMapper.MAPPER.toToolWlanRelaisUpdatedPayload(tool);
+    static SchaffbarEvent toolWlanRelaisSet(Tool tool) {
+        var payload = ToolPayloadMapper.MAPPER.toToolWlanRelaisSetPayload(tool);
         payload.validate();
 
-        return SchaffbarEvent.toolEvent(EventType.TOOL_WLAN_RELAIS_UPDATED, tool.getId(), payload);
+        return SchaffbarEvent.toolEvent(EventType.TOOL_WLAN_RELAIS_SET, tool.getId(), payload);
+    }
+
+    static SchaffbarEvent toolWlanRelaisCleared(ToolId toolId) {
+        var payload = new ToolWlanRelaisClearedPayload(toolId);
+        payload.validate();
+
+        return SchaffbarEvent.toolEvent(EventType.TOOL_WLAN_RELAIS_CLEARED, toolId, payload);
     }
 
     static SchaffbarEvent toolRfidReaderAssigned(ToolId toolId, RfidReaderId rfidReaderId) {

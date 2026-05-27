@@ -2,7 +2,7 @@ package de.schaffbar.core_pos.tool;
 
 import de.schaffbar.core_pos.shared.event.payload.ToolEventPayload.ToolCreatedPayload;
 import de.schaffbar.core_pos.shared.event.payload.ToolEventPayload.ToolUpdatedPayload;
-import de.schaffbar.core_pos.shared.event.payload.ToolEventPayload.ToolWlanRelaisUpdatedPayload;
+import de.schaffbar.core_pos.shared.event.payload.ToolEventPayload.ToolWlanRelaisSetPayload;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
 import org.mapstruct.factory.Mappers;
@@ -19,6 +19,6 @@ interface ToolPayloadMapper {
 
     ToolUpdatedPayload toToolUpdatedPayload(Tool tool);
 
-    ToolWlanRelaisUpdatedPayload toToolWlanRelaisUpdatedPayload(Tool tool);
+    ToolWlanRelaisSetPayload toToolWlanRelaisSetPayload(Tool tool);
 
 }

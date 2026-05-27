@@ -222,7 +222,7 @@ EventFactory.someEvent(aggregate)
 | Aggregate         | Event Type                                                                                                                                              |
 |-------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------|
 | Customer          | `CUSTOMER_CREATED`, `CUSTOMER_UPDATED`, `CUSTOMER_CONTACT_CHANGED`, `CUSTOMER_ADDRESS_CHANGED`, `CUSTOMER_DELETED`                                      |
-| Tool              | `TOOL_CREATED`, `TOOL_UPDATED`, `TOOL_WLAN_RELAIS_UPDATED`, `TOOL_RFID_READER_ASSIGNED`, `TOOL_RFID_READER_CLEARED`, `TOOL_DELETED`                     |
+| Tool              | `TOOL_CREATED`, `TOOL_UPDATED`, `TOOL_WLAN_RELAIS_SET`, `TOOL_WLAN_RELAIS_CLEARED`, `TOOL_RFID_READER_ASSIGNED`, `TOOL_RFID_READER_CLEARED`, `TOOL_INSTRUCTORS_ADDED`, `TOOL_INSTRUCTORS_REMOVED`, `TOOL_DELETED` |
 | ToolUsage         | `TOOL_USAGE_STARTED`, `TOOL_USAGE_STOPPED`                                                                                                              |
 | ToolCertification | `TOOL_CERTIFICATION_CREATED`, `TOOL_CERTIFICATION_PAUSED`, `TOOL_CERTIFICATION_REACTIVATED`, `TOOL_CERTIFICATION_REVOKED`, `TOOL_CERTIFICATION_DELETED` |
 | RfidReader        | `RFID_READER_CREATED`, `RFID_READER_UPDATED`, `RFID_READER_DELETED`                                                                                     |

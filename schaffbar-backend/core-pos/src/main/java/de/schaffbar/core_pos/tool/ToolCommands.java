@@ -1,27 +1,25 @@
 package de.schaffbar.core_pos.tool;
 
-import de.schaffbar.core_pos.shared.id.RfidReaderId;
+import de.schaffbar.core_pos.shared.id.IpAddress;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 public interface ToolCommands {
 
     record CreateToolCommand( //
-            @NotBlank String name,  //
-            String description, //
-            @Valid RfidReaderId rfidReaderId, //
-            WlanRelaisType wlanRelaisType, //
-            String ipAddress //
-    ) {}
-
-    record UpdateToolCommand( //
-            @NotBlank String name,  //
+            @NotBlank String name, //
             String description //
     ) {}
 
-    record UpdateWlanRelaisCommand( //
-            WlanRelaisType wlanRelaisType, //
-            String ipAddress //
+    record UpdateToolCommand( //
+            @NotBlank String name, //
+            String description //
+    ) {}
+
+    record SetWlanRelaisCommand( //
+            @NotNull WlanRelaisType wlanRelaisType, //
+            @NotNull @Valid IpAddress ipAddress //
     ) {}
 
 }

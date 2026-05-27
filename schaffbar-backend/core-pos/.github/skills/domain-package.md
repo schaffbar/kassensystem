@@ -92,6 +92,9 @@ Alle folgenden Dateien sind **package-private** (außer Service, Views, Commands
 
 - `<Aggregate>EventFactory.java` — `final class`, `@NoArgsConstructor(access = AccessLevel.PRIVATE)`, package-private
 - Eine statische Methode pro Event: mappt via PayloadMapper, validiert Payload, gibt `SchaffbarEvent` zurück
+- **Jede semantisch unterschiedliche Aktion bekommt ein eigenes Event** — niemals das gleiche Event für
+  Set- und Clear-Operationen verwenden. Beispiel: `TOOL_WLAN_RELAIS_SET` + `TOOL_WLAN_RELAIS_CLEARED` statt
+  eines generischen `TOOL_WLAN_RELAIS_UPDATED`
 
 #### 5g. Views
 
@@ -107,8 +110,9 @@ Alle folgenden Dateien sind **package-private** (außer Service, Views, Commands
 - **Command-Methoden:** `@Transactional`, delegieren an Aggregate, persistieren Entity + Outbox-Events
 - Creation: `Entity.of(command)` → `save()` → `EventFactory.created(entity)` → `saveOutboxEvents()`
 - Mutation: `findOrThrow()` → `entity.command()` → Events → `saveOutboxEvents()`
-- Private Helper: `saveOutboxEvents()`, `findOrThrow()`, Validierungs-Methoden (`ensure...()`)
-
+- Private Helper: `saveOutboxEvents()`, `findOrThrow()`, `throw...Exception()` Methoden
+- **Uniqueness-/Existenz-Prüfungen:** mit `Optional.ifPresent(existing -> throwXxxException(..., existing))` +
+  dedizierter privater `throw...Exception()`-Methode — keine Inline-Lambdas mit `throw new ...`
 #### 5i. Web Layer (`web/`)
 
 - `<Aggregate>ApiModel.java` — MapStruct `@Mapper extends ValueObjectMapper`, `public interface`

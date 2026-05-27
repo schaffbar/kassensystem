@@ -3,6 +3,7 @@ package de.schaffbar.core_pos.tool;
 import java.util.Set;
 
 import de.schaffbar.core_pos.shared.id.CustomerId;
+import de.schaffbar.core_pos.shared.id.IpAddress;
 import de.schaffbar.core_pos.shared.id.RfidReaderId;
 import de.schaffbar.core_pos.shared.id.ToolId;
 import jakarta.validation.constraints.NotBlank;
@@ -30,7 +31,7 @@ public interface ToolViews {
             String description, //
             RfidReaderId rfidReaderId, //
             WlanRelaisType wlanRelaisType, //
-            String ipAddress, //
+            IpAddress ipAddress, //
             String httpStartCommand, //
             String onCommand, //
             String offCommand, //

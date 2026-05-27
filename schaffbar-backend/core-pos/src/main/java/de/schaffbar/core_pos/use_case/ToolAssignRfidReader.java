@@ -3,6 +3,7 @@ package de.schaffbar.core_pos.use_case;
 import de.schaffbar.core_pos.rfid_reader.RfidReaderService;
 import de.schaffbar.core_pos.rfid_reader.RfidReaderType;
 import de.schaffbar.core_pos.rfid_reader.RfidReaderViews.RfidReaderView;
+import de.schaffbar.core_pos.shared.exception.InvalidRfidReaderTypeForToolException;
 import de.schaffbar.core_pos.shared.exception.ResourceNotFoundException;
 import de.schaffbar.core_pos.shared.id.RfidReaderId;
 import de.schaffbar.core_pos.shared.id.ToolId;
@@ -30,7 +31,7 @@ public class ToolAssignRfidReader {
                 .orElseThrow(() -> ResourceNotFoundException.rfidReader(rfidReaderId));
 
         if (rfidReader.type() != RfidReaderType.SWITCH_BOX) {
-            throw new RuntimeException("TODO: Invalid type of RFID reader");
+            throw new InvalidRfidReaderTypeForToolException(rfidReaderId);
         }
 
         this.toolService.assignRfidReader(toolId, rfidReaderId);

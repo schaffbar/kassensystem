@@ -4,8 +4,10 @@ import java.util.List;
 
 import de.schaffbar.core_pos.shared.event.EventPayload;
 import de.schaffbar.core_pos.shared.id.CustomerId;
+import de.schaffbar.core_pos.shared.id.IpAddress;
 import de.schaffbar.core_pos.shared.id.RfidReaderId;
 import de.schaffbar.core_pos.shared.id.ToolId;
+import de.schaffbar.core_pos.tool.WlanRelaisType;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
@@ -18,8 +20,8 @@ public interface ToolEventPayload extends EventPayload {
 			@NotBlank String name, //
 			String description, //
 			RfidReaderId rfidReaderId, //
-			String wlanRelaisType, //
-			String ipAddress //
+			WlanRelaisType wlanRelaisType, //
+			IpAddress ipAddress //
 	) implements ToolEventPayload {}
 
 	record ToolUpdatedPayload( //
@@ -28,10 +30,14 @@ public interface ToolEventPayload extends EventPayload {
 			String description //
 	) implements ToolEventPayload {}
 
-	record ToolWlanRelaisUpdatedPayload( //
+	record ToolWlanRelaisSetPayload( //
 			@Valid @NotNull ToolId id, //
-			String wlanRelaisType, //
-			String ipAddress //
+			@NotNull WlanRelaisType wlanRelaisType, //
+			@Valid @NotNull IpAddress ipAddress //
+	) implements ToolEventPayload {}
+
+	record ToolWlanRelaisClearedPayload( //
+			@Valid @NotNull ToolId id //
 	) implements ToolEventPayload {}
 
 	record ToolRfidReaderAssignedPayload( //

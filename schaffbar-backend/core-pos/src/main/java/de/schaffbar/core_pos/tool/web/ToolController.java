@@ -9,18 +9,23 @@ import de.schaffbar.core_pos.shared.exception.ResourceNotFoundException;
 import de.schaffbar.core_pos.shared.id.RfidReaderId;
 import de.schaffbar.core_pos.shared.id.ToolId;
 import de.schaffbar.core_pos.tool.ToolCommands.CreateToolCommand;
+import de.schaffbar.core_pos.tool.ToolCommands.SetWlanRelaisCommand;
 import de.schaffbar.core_pos.tool.ToolCommands.UpdateToolCommand;
-import de.schaffbar.core_pos.tool.ToolCommands.UpdateWlanRelaisCommand;
 import de.schaffbar.core_pos.tool.ToolService;
 import de.schaffbar.core_pos.tool.web.ToolApiModel.CreateToolRequestBody;
 import de.schaffbar.core_pos.tool.web.ToolApiModel.InstructorsRequestBody;
+import de.schaffbar.core_pos.tool.web.ToolApiModel.SetWlanRelaisRequestBody;
 import de.schaffbar.core_pos.tool.web.ToolApiModel.ToolApiDto;
 import de.schaffbar.core_pos.tool.web.ToolApiModel.UpdateToolRequestBody;
-import de.schaffbar.core_pos.tool.web.ToolApiModel.UpdateWlanRelaisRequestBody;
 import de.schaffbar.core_pos.use_case.ToolAddInstructors;
 import de.schaffbar.core_pos.use_case.ToolAssignRfidReader;
+import de.schaffbar.core_pos.use_case.ToolClearRfidReader;
+import de.schaffbar.core_pos.use_case.ToolClearWlanRelais;
 import de.schaffbar.core_pos.use_case.ToolCreate;
+import de.schaffbar.core_pos.use_case.ToolDelete;
 import de.schaffbar.core_pos.use_case.ToolRemoveInstructors;
+import de.schaffbar.core_pos.use_case.ToolSetWlanRelais;
+import de.schaffbar.core_pos.use_case.ToolUpdate;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.NonNull;
@@ -48,11 +53,21 @@ public class ToolController {
 
     private final @NonNull ToolCreate toolCreate;
 
+    private final @NonNull ToolUpdate toolUpdate;
+
     private final @NonNull ToolAssignRfidReader toolAssignRfidReader;
+
+    private final @NonNull ToolClearRfidReader toolClearRfidReader;
+
+    private final @NonNull ToolSetWlanRelais toolSetWlanRelais;
+
+    private final @NonNull ToolClearWlanRelais toolClearWlanRelais;
 
     private final @NonNull ToolAddInstructors toolAddInstructors;
 
     private final @NonNull ToolRemoveInstructors toolRemoveInstructors;
+
+    private final @NonNull ToolDelete toolDelete;
 
     // ------------------------------------------------------------------------
     // query
@@ -87,7 +102,7 @@ public class ToolController {
     // command
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<String> createTool(@RequestBody @NotNull @Valid CreateToolRequestBody requestBody) {
+    public ResponseEntity<Void> createTool(@RequestBody @NotNull @Valid CreateToolRequestBody requestBody) {
         CreateToolCommand command = ToolApiModel.MAPPER.toCreateToolCommand(requestBody);
         ToolId toolId = this.toolCreate.process(command);
         URI location = URI.create("/api/v1/tools/" + toolId.getValue());
@@ -101,15 +116,13 @@ public class ToolController {
             @RequestBody @NotNull @Valid UpdateToolRequestBody requestBody //
     ) {
         UpdateToolCommand command = ToolApiModel.MAPPER.toUpdateToolCommand(requestBody);
-        this.toolService.updateTool(toolId, command);
+        this.toolUpdate.process(toolId, command);
 
         return ResponseEntity.noContent().build();
     }
 
-    // TODO: streamline with updateWlanRelais either by using a generic update for setting and clearing the WLAN relais and RFID reader
-    // or by introducing dedicated endpoints for setting and clearing the WLAN relais
     @PutMapping(value = "/{toolId}/rfid-reader/{rfidReaderId}")
-    public ResponseEntity<Void> changeRfidReader( //
+    public ResponseEntity<Void> assignRfidReader( //
             @PathVariable @NotNull @Valid ToolId toolId, //
             @PathVariable @NotNull @Valid RfidReaderId rfidReaderId //
     ) {
@@ -118,26 +131,32 @@ public class ToolController {
         return ResponseEntity.noContent().build();
     }
 
-    // TODO: change to DeleteMapping and remove clear from path
-    @PutMapping(value = "/{toolId}/rfid-reader/clear")
+    @DeleteMapping(value = "/{toolId}/rfid-reader")
     public ResponseEntity<Void> clearRfidReader(@PathVariable @NotNull @Valid ToolId toolId) {
-        this.toolService.clearRfidReader(toolId);
+        this.toolClearRfidReader.process(toolId);
 
         return ResponseEntity.noContent().build();
     }
 
     @PutMapping(value = "/{toolId}/wlan-relais", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Void> updateWlanRelais( //
+    public ResponseEntity<Void> setWlanRelais( //
             @PathVariable @NotNull @Valid ToolId toolId, //
-            @RequestBody @NotNull @Valid UpdateWlanRelaisRequestBody requestBody //
+            @RequestBody @NotNull @Valid SetWlanRelaisRequestBody requestBody //
     ) {
-        UpdateWlanRelaisCommand command = ToolApiModel.MAPPER.toUpdateWlanRelaisCommand(requestBody);
-        this.toolService.updateWlanRelais(toolId, command);
+        SetWlanRelaisCommand command = ToolApiModel.MAPPER.toSetWlanRelaisCommand(requestBody);
+        this.toolSetWlanRelais.process(toolId, command);
 
         return ResponseEntity.noContent().build();
     }
 
-    @PutMapping(value = "/{toolId}/instructors", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @DeleteMapping(value = "/{toolId}/wlan-relais")
+    public ResponseEntity<Void> clearWlanRelais(@PathVariable @NotNull @Valid ToolId toolId) {
+        this.toolClearWlanRelais.process(toolId);
+
+        return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping(value = "/{toolId}/instructors", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> addInstructors( //
             @PathVariable @NotNull @Valid ToolId toolId, //
             @RequestBody @NotNull @Valid InstructorsRequestBody requestBody //
@@ -159,7 +178,7 @@ public class ToolController {
 
     @DeleteMapping(value = "/{toolId}")
     public ResponseEntity<Void> deleteTool(@PathVariable @NotNull @Valid ToolId toolId) {
-        this.toolService.deleteTool(toolId);
+        this.toolDelete.process(toolId);
 
         return ResponseEntity.noContent().build();
     }

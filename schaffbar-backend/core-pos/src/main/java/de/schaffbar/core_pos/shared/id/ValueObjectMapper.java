@@ -26,4 +26,8 @@ public interface ValueObjectMapper {
         return isNull(id) ? null : ToolId.of(id);
     }
 
+    default IpAddress toIpAddress(String ipAddress) {
+        return isNull(ipAddress) ? null : IpAddress.of(ipAddress);
+    }
+
 }

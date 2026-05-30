@@ -248,8 +248,8 @@
     "tabGroups": {
       "toolDetails": {
         "detailsTab": "Details",
-        "wlanRelayTab": "WLAN-Relais",
-        "certificationsTab": "Einweisungen"
+        "certificationsTab": "Einweisungen",
+        "configurationTab": "Konfiguration"
       }
     },
     "pages": {

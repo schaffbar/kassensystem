@@ -13,12 +13,6 @@
       <div class="tab-content--details">
         <div class="tab-content--details__left">
           <schbar-tool-detail-info [tool]="tool" (toolUpdated)="onToolUpdated($event)" />
-          <schbar-tool-rfid-reader-assignment
-            [tool]="tool"
-            [rfidReaders]="allRfidReaders()"
-            [assignedRfidReaderIds]="assignedRfidReaderIds()"
-            (rfidReaderChanged)="onRfidReaderChanged($event)"
-            (rfidReaderCleared)="onRfidReaderCleared($event)" />
         </div>
         <div class="tab-content--details__right">
           <schbar-tool-instructors
@@ -30,14 +24,6 @@
         </div>
       </div>
     </mat-tab>
-    <mat-tab [label]="'tools.tabGroups.toolDetails.wlanRelayTab' | translate">
-      <div class="tab-content">
-        <schbar-tool-wlan-relais
-          [tool]="tool"
-          (wlanRelaisUpdated)="onWlanRelaisUpdated($event)"
-          (wlanRelaisCleared)="onWlanRelaisCleared($event)" />
-      </div>
-    </mat-tab>
     <mat-tab [label]="'tools.tabGroups.toolDetails.certificationsTab' | translate">
       <div class="tab-content--wide">
         <schbar-tool-certifications
@@ -46,6 +32,20 @@
           [allUsers]="allUsers()"
           (batchCreate)="onBatchCreateCertifications($event)"
           (deleteCertification)="onDeleteCertification($event)" />
+      </div>
+    </mat-tab>
+    <mat-tab [label]="'tools.tabGroups.toolDetails.configurationTab' | translate">
+      <div class="tab-content--configuration">
+        <schbar-tool-rfid-reader-assignment
+          [tool]="tool"
+          [rfidReaders]="allRfidReaders()"
+          [assignedRfidReaderIds]="assignedRfidReaderIds()"
+          (rfidReaderChanged)="onRfidReaderChanged($event)"
+          (rfidReaderCleared)="onRfidReaderCleared($event)" />
+        <schbar-tool-wlan-relais
+          [tool]="tool"
+          (wlanRelaisUpdated)="onWlanRelaisUpdated($event)"
+          (wlanRelaisCleared)="onWlanRelaisCleared($event)" />
       </div>
     </mat-tab>
   </mat-tab-group>

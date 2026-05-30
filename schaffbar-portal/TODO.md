@@ -1,4 +1,4 @@
-- [Story] Save list of Einweiser for each tool in Details Page
+- [Story] Save list of Einweiser for each tool in Details Page and use this list in Einweisung page
 - [Frontend] Tool Detail Page - RFID reader and WLAN relay zu Configuration mergen
 
 - [Backend] Merge dashboard packages (tool_dashboard, workshop_dashboard)
@@ -62,7 +62,6 @@ Wenn du den Ausdruck jedoch in seine einzelnen Bestandteile zerlegst, haben die 
 - [Question]
 - [Question] Jahresabo vom 1.1 oder vom Tag wo es gakauft wurde
 
-
 #####################
 
 **Steps**
@@ -70,6 +69,7 @@ Wenn du den Ausdruck jedoch in seine einzelnen Bestandteile zerlegst, haben die 
 ### Phase 1: Temporären Clone vorbereiten
 
 1. `kassensystem` in ein temporäres Verzeichnis klonen (Branch `piotr`):
+
    ```
    git clone --branch piotr /Users/krantzp/source/private/kassensystem /tmp/kassensystem-migrate
    ```
@@ -92,11 +92,12 @@ Wenn du den Ausdruck jedoch in seine einzelnen Bestandteile zerlegst, haben die 
      --path use-cases.md \
      --path workshop-usage.md
    ```
-   Commits, die *nur* Hardware-Dateien berührt haben, werden automatisch gedroppt.
+   Commits, die _nur_ Hardware-Dateien berührt haben, werden automatisch gedroppt.
 
 ### Phase 3: In kassensystem-software mergen
 
 4. Den gefilterten Clone als Remote hinzufügen:
+
    ```
    cd /Users/krantzp/source/private/kassensystem-software
    git remote add migration /tmp/kassensystem-migrate
@@ -104,6 +105,7 @@ Wenn du den Ausdruck jedoch in seine einzelnen Bestandteile zerlegst, haben die 
    ```
 
 5. Merge mit `--allow-unrelated-histories` (da unterschiedliche Repo-Wurzeln):
+
    ```
    git merge migration/piotr --allow-unrelated-histories
    ```
@@ -121,6 +123,7 @@ Wenn du den Ausdruck jedoch in seine einzelnen Bestandteile zerlegst, haben die 
 ---
 
 **Verification**
+
 1. Nach filter-repo: `git log --oneline` im Temp-Clone → nur relevante Commits vorhanden
 2. Nach Merge: `git log --oneline` in kassensystem-software → History ist vollständig
 3. `ls` zeigt schaffbar-backend, schaffbar-portal und die Doku-Dateien
@@ -129,6 +132,7 @@ Wenn du den Ausdruck jedoch in seine einzelnen Bestandteile zerlegst, haben die 
 ---
 
 **Decisions**
+
 - timeMachine wird **nicht** migriert
 - Commits die ausschließlich ausgeschlossene Dateien betrafen, fallen weg (gewollt)
 - Original-Repo `kassensystem` bleibt vollständig unverändert
@@ -138,13 +142,12 @@ Wenn du den Ausdruck jedoch in seine einzelnen Bestandteile zerlegst, haben die 
 
 Soll ich den Plan so umsetzen, oder gibt es Anpassungen?
 
-
-
 ########################
 
 Ja, das ist möglich. Der einfachste Weg für inkrementelle Updates ist `git format-patch` + `git am`:
 
 **In kassensystem** (Patches für neue Commits erzeugen):
+
 ```bash
 cd /Users/krantzp/source/private/kassensystem
 git format-patch 905a7ae4..HEAD -- schaffbar-backend/ schaffbar-portal/ deployment.md interfaces.md use-cases.md workshop-usage.md -o /tmp/patches
@@ -153,6 +156,7 @@ git format-patch 905a7ae4..HEAD -- schaffbar-backend/ schaffbar-portal/ deployme
 `905a7ae4` war der letzte Commit im piotr-Branch zum Zeitpunkt der Migration. Alles danach sind neue Commits.
 
 **In kassensystem-software** (Patches anwenden):
+
 ```bash
 cd /Users/krantzp/source/private/kassensystem-software
 git am /tmp/patches/*.patch

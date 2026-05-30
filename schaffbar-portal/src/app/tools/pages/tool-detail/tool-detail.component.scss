@@ -19,6 +19,16 @@
   width: 100%;
 }
 
+.tab-content--configuration {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  padding: 20px;
+  min-width: 300px;
+  max-width: 600px;
+  width: 100%;
+}
+
 .tab-content--details {
   display: flex;
   gap: 40px;

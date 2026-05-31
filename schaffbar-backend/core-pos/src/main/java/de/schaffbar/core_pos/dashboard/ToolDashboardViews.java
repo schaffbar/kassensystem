@@ -1,4 +1,4 @@
-package de.schaffbar.core_pos.tool_dashboard;
+package de.schaffbar.core_pos.dashboard;
 
 import de.schaffbar.core_pos.customer.CustomerViews.CustomerView;
 import de.schaffbar.core_pos.shared.id.CustomerId;

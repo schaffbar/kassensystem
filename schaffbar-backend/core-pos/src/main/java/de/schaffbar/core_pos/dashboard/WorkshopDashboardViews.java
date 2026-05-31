@@ -1,4 +1,4 @@
-package de.schaffbar.core_pos.workshop_dashboard;
+package de.schaffbar.core_pos.dashboard;
 
 import java.time.Instant;
 

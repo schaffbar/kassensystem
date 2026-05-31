@@ -1,9 +1,9 @@
-package de.schaffbar.core_pos.workshop_dashboard.web;
+package de.schaffbar.core_pos.dashboard.web;
 
 import java.util.List;
 
-import de.schaffbar.core_pos.workshop_dashboard.WorkshopDashboardService;
-import de.schaffbar.core_pos.workshop_dashboard.web.WorkshopDashboardApiModel.WorkshopDashboardEntryApiDto;
+import de.schaffbar.core_pos.dashboard.WorkshopDashboardService;
+import de.schaffbar.core_pos.dashboard.web.WorkshopDashboardApiModel.WorkshopDashboardEntryApiDto;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;

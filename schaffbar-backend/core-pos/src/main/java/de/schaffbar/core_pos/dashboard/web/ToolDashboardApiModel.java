@@ -1,36 +1,36 @@
-package de.schaffbar.core_pos.workshop_dashboard.web;
+package de.schaffbar.core_pos.dashboard.web;
 
-import java.time.Instant;
 import java.util.UUID;
 
-import de.schaffbar.core_pos.workshop_dashboard.WorkshopDashboardViews.WorkshopDashboardEntryView;
+import de.schaffbar.core_pos.dashboard.ToolDashboardViews.ToolDashboardEntryView;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.PastOrPresent;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.ReportingPolicy;
 import org.mapstruct.factory.Mappers;
 
 @Mapper(unmappedTargetPolicy = ReportingPolicy.ERROR)
-public interface WorkshopDashboardApiModel {
+public interface ToolDashboardApiModel {
 
-    WorkshopDashboardApiModel MAPPER = Mappers.getMapper(WorkshopDashboardApiModel.class);
+    ToolDashboardApiModel MAPPER = Mappers.getMapper(ToolDashboardApiModel.class);
 
     // ------------------------------------------------------------------------
     // mapping view to response
 
+    @Mapping(target = "toolId", source = "toolId.value")
     @Mapping(target = "customerId", source = "customerId.value")
-    WorkshopDashboardEntryApiDto toWorkshopDashboardEntryApiDto(WorkshopDashboardEntryView view);
+    ToolDashboardEntryApiDto toToolDashboardEntryApiDto(ToolDashboardEntryView view);
 
     // ------------------------------------------------------------------------
     // response
 
-    record WorkshopDashboardEntryApiDto( //
+    record ToolDashboardEntryApiDto( //
+            @NotNull UUID toolId, //
+            @NotBlank String toolName, //
             @NotNull UUID customerId, //
             @NotBlank String firstName, //
-            @NotBlank String lastName, //
-            @NotNull @PastOrPresent Instant entryTime //
+            @NotBlank String lastName //
     ) {}
 
 }

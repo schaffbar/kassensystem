@@ -1,13 +1,13 @@
-package de.schaffbar.core_pos.tool_dashboard;
+package de.schaffbar.core_pos.dashboard;
 
 import java.util.List;
 
 import de.schaffbar.core_pos.customer.CustomerService;
 import de.schaffbar.core_pos.customer.CustomerViews.CustomerView;
+import de.schaffbar.core_pos.dashboard.ToolDashboardViews.ToolDashboardEntryView;
 import de.schaffbar.core_pos.shared.exception.ResourceNotFoundException;
 import de.schaffbar.core_pos.tool.ToolService;
 import de.schaffbar.core_pos.tool.ToolViews.ToolView;
-import de.schaffbar.core_pos.tool_dashboard.ToolDashboardViews.ToolDashboardEntryView;
 import de.schaffbar.core_pos.tool_usage.ToolUsageService;
 import de.schaffbar.core_pos.tool_usage.ToolUsageViews.ToolUsageView;
 import lombok.NonNull;

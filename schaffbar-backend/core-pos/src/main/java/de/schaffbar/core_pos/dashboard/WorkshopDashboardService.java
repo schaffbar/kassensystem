@@ -1,4 +1,4 @@
-package de.schaffbar.core_pos.workshop_dashboard;
+package de.schaffbar.core_pos.dashboard;
 
 import static java.util.Comparator.comparing;
 
@@ -6,7 +6,7 @@ import java.util.List;
 
 import de.schaffbar.core_pos.customer.CustomerService;
 import de.schaffbar.core_pos.customer.CustomerViews.CustomerView;
-import de.schaffbar.core_pos.workshop_dashboard.WorkshopDashboardViews.WorkshopDashboardEntryView;
+import de.schaffbar.core_pos.dashboard.WorkshopDashboardViews.WorkshopDashboardEntryView;
 import de.schaffbar.core_pos.workshop_usage.WorkshopUsageService;
 import de.schaffbar.core_pos.workshop_usage.WorkshopUsageViews.WorkshopUsageView;
 import lombok.NonNull;
@@ -23,7 +23,7 @@ public class WorkshopDashboardService {
 
     private final @NonNull CustomerService customerService;
 
-    // ------------------------------------------------------------------------d
+    // ------------------------------------------------------------------------
     // query
 
     public List<WorkshopDashboardEntryView> getActiveWorkshopUsers() {

@@ -1,9 +1,9 @@
-package de.schaffbar.core_pos.tool_dashboard.web;
+package de.schaffbar.core_pos.dashboard.web;
 
 import java.util.List;
 
-import de.schaffbar.core_pos.tool_dashboard.ToolDashboardService;
-import de.schaffbar.core_pos.tool_dashboard.web.ToolDashboardApiModel.ToolDashboardEntryApiDto;
+import de.schaffbar.core_pos.dashboard.ToolDashboardService;
+import de.schaffbar.core_pos.dashboard.web.ToolDashboardApiModel.ToolDashboardEntryApiDto;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;

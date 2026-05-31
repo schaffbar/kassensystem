@@ -116,6 +116,23 @@ public class ToolCertificationService {
         log.info("Deleted tool certification for customer {} on tool {} and published events {}", customerId, toolId, events);
     }
 
+    @Transactional
+    public void deleteAllByToolId(@NotNull @Valid ToolId toolId) {
+        List<ToolCertification> certifications = this.toolCertificationRepository.findByToolId(toolId.getValue());
+        if (certifications.isEmpty()) {
+            return;
+        }
+
+        List<SchaffbarEvent> events = certifications.stream() //
+                .map(ToolCertificationEventFactory::toolCertificationDeleted) //
+                .toList();
+
+        this.toolCertificationRepository.deleteAllByToolId(toolId.getValue());
+        saveOutboxEvents(events);
+
+        log.info("Deleted {} tool certifications for tool {} and published events {}", certifications.size(), toolId, events);
+    }
+
     // ------------------------------------------------------------------------
     // helper
 

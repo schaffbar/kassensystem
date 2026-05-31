@@ -18,4 +18,6 @@ interface ToolCertificationRepository extends JpaRepository<ToolCertification, U
 
     List<ToolCertification> findByToolId(UUID toolId);
 
+    void deleteAllByToolId(UUID toolId);
+
 }

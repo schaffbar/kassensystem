@@ -142,9 +142,13 @@ Alle folgenden Dateien sind **package-private** (außer Service, Views, Commands
 ### 7. DB-Migration
 
 - `V<next>__<aggregate_name>.sql` in `src/main/resources/db/migration/`
-- `CREATE TABLE schaffbar.<aggregate_name> (...)` mit PK, Constraints, Indizes, FKs
+- `CREATE TABLE schaffbar.<aggregate_name> (...)` mit PK, Constraints, Indizes
 - `GRANT ALL ON TABLE schaffbar.<aggregate_name> TO schadmin;`
 - Unique Constraints und Indizes nach Bedarf
+- **Keine Foreign Keys:** Gemäß DDD werden keine Foreign Keys auf Datenbankebene zwischen Aggregaten verwendet.
+  Referenzielle Integrität wird auf Applikationsebene (Use Cases, Existenzprüfungen) sichergestellt.
+  Foreign Keys innerhalb eines Aggregats (z.B. `@ElementCollection`-Tabellen) werden ebenfalls nicht verwendet —
+  JPA/Hibernate übernimmt das Lifecycle-Management der zugehörigen Einträge.
 
 ### 8. Dokumentation aktualisieren
 

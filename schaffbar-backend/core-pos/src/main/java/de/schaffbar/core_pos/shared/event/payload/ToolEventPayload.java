@@ -22,10 +22,7 @@ public interface ToolEventPayload extends EventPayload {
 			@NotBlank String name, //
 			String description, //
 			@NotNull ToolArea area, //
-			@NotNull CertificationRequirement certificationRequirement, //
-			RfidReaderId rfidReaderId, //
-			WlanRelaisType wlanRelaisType, //
-			IpAddress ipAddress //
+			@NotNull CertificationRequirement certificationRequirement //
 	) implements ToolEventPayload {}
 
 	record ToolUpdatedPayload( //

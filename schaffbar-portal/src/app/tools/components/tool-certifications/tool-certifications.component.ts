@@ -43,6 +43,7 @@ export class ToolCertificationsComponent {
   toolId = input.required<string>();
   certifications = input.required<ToolCertification[]>();
   allUsers = input.required<User[]>();
+  instructorIds = input.required<string[]>();
 
   batchCreate = output<BatchCreateToolCertificationCommand>();
   deleteCertification = output<{ customerId: string; toolId: string }>();
@@ -69,20 +70,23 @@ export class ToolCertificationsComponent {
   filteredUsers = () => {
     const search = this.searchText().toLowerCase();
     const selectedIds = new Set(this.selectedUsers().map((u) => u.id));
-    const certifierId = this.selectedCertifier()?.id;
     const certifiedUserIds = new Set(this.certifications().map((c) => c.customerId));
+    const instructorIdSet = new Set(this.instructorIds());
     return this.allUsers().filter(
       (u) =>
         !selectedIds.has(u.id) &&
-        u.id !== certifierId &&
         !certifiedUserIds.has(u.id) &&
+        !instructorIdSet.has(u.id) &&
         (u.firstName + ' ' + u.lastName).toLowerCase().includes(search),
     );
   };
 
   filteredCertifiers = () => {
     const search = this.certifierSearchText().toLowerCase();
-    return this.allUsers().filter((u) => (u.firstName + ' ' + u.lastName).toLowerCase().includes(search));
+    const ids = new Set(this.instructorIds());
+    return this.allUsers().filter(
+      (u) => ids.has(u.id) && (u.firstName + ' ' + u.lastName).toLowerCase().includes(search),
+    );
   };
 
   onUserSelected(user: User): void {

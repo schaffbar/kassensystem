@@ -30,6 +30,7 @@
           [toolId]="tool.id"
           [certifications]="toolCertifications()"
           [allUsers]="allUsers()"
+          [instructorIds]="tool.instructors ?? []"
           (batchCreate)="onBatchCreateCertifications($event)"
           (deleteCertification)="onDeleteCertification($event)" />
       </div>

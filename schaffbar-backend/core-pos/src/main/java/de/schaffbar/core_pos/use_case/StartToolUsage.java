@@ -2,9 +2,13 @@ package de.schaffbar.core_pos.use_case;
 
 import de.schaffbar.core_pos.shared.exception.CustomerNotCertifiedForToolException;
 import de.schaffbar.core_pos.shared.exception.CustomerNotInWorkshopException;
+import de.schaffbar.core_pos.shared.exception.ResourceNotFoundException;
 import de.schaffbar.core_pos.shared.id.CustomerId;
 import de.schaffbar.core_pos.shared.id.ToolId;
 import de.schaffbar.core_pos.shared.id.WorkshopSessionId;
+import de.schaffbar.core_pos.tool.CertificationRequirement;
+import de.schaffbar.core_pos.tool.ToolService;
+import de.schaffbar.core_pos.tool.ToolViews.ToolView;
 import de.schaffbar.core_pos.tool_certification.ToolCertificationService;
 import de.schaffbar.core_pos.tool_usage.ToolUsageCommands.StartToolUsageCommand;
 import de.schaffbar.core_pos.tool_usage.ToolUsageService;
@@ -25,6 +29,8 @@ import org.springframework.validation.annotation.Validated;
 @RequiredArgsConstructor
 public class StartToolUsage {
 
+    private final @NonNull ToolService toolService;
+
     private final @NonNull ToolUsageService toolUsageService;
 
     private final @NonNull ToolCertificationService toolCertificationService;
@@ -35,8 +41,14 @@ public class StartToolUsage {
 
     @Transactional
     public void process(@NotNull @Valid CustomerId customerId, @NotNull @Valid ToolId toolId) {
+        ToolView tool = this.toolService.getTool(toolId) //
+                .orElseThrow(() -> ResourceNotFoundException.tool(toolId));
+
         verifyCustomerIsInWorkshop(customerId);
-        verifyCustomerHasActiveCertification(customerId, toolId);
+
+        if (tool.certificationRequirement() == CertificationRequirement.RED) {
+            verifyCustomerHasActiveCertification(customerId, toolId);
+        }
 
         WorkshopSessionId sessionId = this.workshopSessionService.getOpenWorkshopSession(customerId) //
                 .map(WorkshopSessionView::id) //

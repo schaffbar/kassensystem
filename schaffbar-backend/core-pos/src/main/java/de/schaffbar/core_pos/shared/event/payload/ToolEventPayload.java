@@ -7,6 +7,8 @@ import de.schaffbar.core_pos.shared.id.CustomerId;
 import de.schaffbar.core_pos.shared.id.IpAddress;
 import de.schaffbar.core_pos.shared.id.RfidReaderId;
 import de.schaffbar.core_pos.shared.id.ToolId;
+import de.schaffbar.core_pos.tool.CertificationRequirement;
+import de.schaffbar.core_pos.tool.ToolArea;
 import de.schaffbar.core_pos.tool.WlanRelaisType;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
@@ -19,6 +21,8 @@ public interface ToolEventPayload extends EventPayload {
 			@Valid @NotNull ToolId id, //
 			@NotBlank String name, //
 			String description, //
+			@NotNull ToolArea area, //
+			@NotNull CertificationRequirement certificationRequirement, //
 			RfidReaderId rfidReaderId, //
 			WlanRelaisType wlanRelaisType, //
 			IpAddress ipAddress //
@@ -27,7 +31,9 @@ public interface ToolEventPayload extends EventPayload {
 	record ToolUpdatedPayload( //
 			@Valid @NotNull ToolId id, //
 			@NotBlank String name, //
-			String description //
+			String description, //
+			@NotNull ToolArea area, //
+			@NotNull CertificationRequirement certificationRequirement //
 	) implements ToolEventPayload {}
 
 	record ToolWlanRelaisSetPayload( //

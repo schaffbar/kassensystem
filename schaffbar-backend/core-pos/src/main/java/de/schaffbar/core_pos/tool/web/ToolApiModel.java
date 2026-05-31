@@ -8,6 +8,8 @@ import de.schaffbar.core_pos.shared.id.IpAddress;
 import de.schaffbar.core_pos.shared.id.RfidReaderId;
 import de.schaffbar.core_pos.shared.id.ToolId;
 import de.schaffbar.core_pos.shared.id.ValueObjectMapper;
+import de.schaffbar.core_pos.tool.CertificationRequirement;
+import de.schaffbar.core_pos.tool.ToolArea;
 import de.schaffbar.core_pos.tool.ToolCommands.CreateToolCommand;
 import de.schaffbar.core_pos.tool.ToolCommands.SetWlanRelaisCommand;
 import de.schaffbar.core_pos.tool.ToolCommands.UpdateToolCommand;
@@ -47,6 +49,8 @@ public interface ToolApiModel extends ValueObjectMapper {
             @NotNull ToolId id, //
             @NotBlank String name, //
             String description, //
+            @NotNull ToolArea area, //
+            @NotNull CertificationRequirement certificationRequirement, //
             RfidReaderId rfidReaderId, //
             WlanRelaisType wlanRelaisType, //
             IpAddress ipAddress, //
@@ -61,12 +65,16 @@ public interface ToolApiModel extends ValueObjectMapper {
 
     record CreateToolRequestBody( //
             @NotBlank String name, //
-            String description //
+            String description, //
+            @NotNull ToolArea area, //
+            @NotNull CertificationRequirement certificationRequirement //
     ) {}
 
     record UpdateToolRequestBody( //
             @NotBlank String name, //
-            String description //
+            String description, //
+            @NotNull ToolArea area, //
+            @NotNull CertificationRequirement certificationRequirement //
     ) {}
 
     record SetWlanRelaisRequestBody( //

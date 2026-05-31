@@ -9,12 +9,16 @@ public interface ToolCommands {
 
     record CreateToolCommand( //
             @NotBlank String name, //
-            String description //
+            String description, //
+            @NotNull ToolArea area, //
+            @NotNull CertificationRequirement certificationRequirement //
     ) {}
 
     record UpdateToolCommand( //
             @NotBlank String name, //
-            String description //
+            String description, //
+            @NotNull ToolArea area, //
+            @NotNull CertificationRequirement certificationRequirement //
     ) {}
 
     record SetWlanRelaisCommand( //

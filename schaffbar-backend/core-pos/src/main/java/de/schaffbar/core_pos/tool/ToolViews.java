@@ -29,6 +29,8 @@ public interface ToolViews {
             @NotNull ToolId id, //
             @NotBlank String name, //
             String description, //
+            @NotNull ToolArea area, //
+            @NotNull CertificationRequirement certificationRequirement, //
             RfidReaderId rfidReaderId, //
             WlanRelaisType wlanRelaisType, //
             IpAddress ipAddress, //

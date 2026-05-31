@@ -56,6 +56,14 @@ class Tool {
 
     private UUID rfidReaderId;
 
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    private ToolArea area;
+
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    private CertificationRequirement certificationRequirement;
+
     @Enumerated(EnumType.STRING)
     private WlanRelaisType wlanRelaisType;
 
@@ -87,6 +95,8 @@ class Tool {
         tool.setId(ToolId.random().getValue());
         tool.setName(command.name());
         tool.setDescription(command.description());
+        tool.setArea(command.area());
+        tool.setCertificationRequirement(command.certificationRequirement());
         tool.setCreatedAt(Instant.now());
 
         return tool;
@@ -131,6 +141,8 @@ class Tool {
     public List<SchaffbarEvent> update(UpdateToolCommand command) {
         setName(command.name());
         setDescription(command.description());
+        setArea(command.area());
+        setCertificationRequirement(command.certificationRequirement());
 
         return List.of(ToolEventFactory.toolUpdated(this));
     }

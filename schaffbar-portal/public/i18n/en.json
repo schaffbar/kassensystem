@@ -245,6 +245,16 @@
       "SHELLY_2": "Shelly 2",
       "SHELLY_PRO": "Shelly Pro"
     },
+    "areas": {
+      "HOLZ": "Wood",
+      "METALL": "Metal",
+      "KREATIV": "Creative",
+      "FABLAB": "FabLab"
+    },
+    "certificationRequirements": {
+      "YELLOW": "Advisory (Yellow)",
+      "RED": "Required (Red)"
+    },
     "tabGroups": {
       "toolDetails": {
         "detailsTab": "Details",
@@ -291,6 +301,8 @@
       "toolProperties": {
         "name": "Name",
         "description": "Description",
+        "area": "Area",
+        "certificationRequirement": "Certification Requirement",
         "rfidReader": "RFID Reader",
         "wlanRelaisType": "WLAN Relais Type",
         "ipAddress": "IP Address",

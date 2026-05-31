@@ -58,9 +58,7 @@ export class ToolInstructorsComponent {
       .filter((user) => !selectedIds.includes(user.id))
       .filter(
         (user) =>
-          !search ||
-          user.firstName.toLowerCase().includes(search) ||
-          user.lastName.toLowerCase().includes(search),
+          !search || user.firstName.toLowerCase().includes(search) || user.lastName.toLowerCase().includes(search),
       );
   });
 

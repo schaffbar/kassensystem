@@ -5,11 +5,11 @@ import { Observable } from 'rxjs';
 
 import { environment } from '../../environments/environment';
 import {
-    ChangeRfidReaderCommand,
-    CreateToolCommand,
-    SetWlanRelaisCommand,
-    Tool,
-    UpdateToolCommand,
+  ChangeRfidReaderCommand,
+  CreateToolCommand,
+  SetWlanRelaisCommand,
+  Tool,
+  UpdateToolCommand,
 } from './tool.model';
 
 const TOOLS_API_URL = `${environment.apiBaseUrl}/api/v1/tools`;

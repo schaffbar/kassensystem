@@ -1,3 +1,4 @@
+import { LowerCasePipe } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import {
   AbstractControl,
@@ -16,7 +17,7 @@ import { MatSelectModule } from '@angular/material/select';
 
 import { TranslatePipe } from '@ngx-translate/core';
 
-import { CreateToolCommand } from '../../tool.model';
+import { CertificationRequirement, CreateToolCommand, ToolArea } from '../../tool.model';
 import { ToolsStore } from '../../tools.store';
 
 @Component({
@@ -25,6 +26,7 @@ import { ToolsStore } from '../../tools.store';
   styleUrl: './new-tool-form.component.scss',
   imports: [
     ReactiveFormsModule,
+    LowerCasePipe,
     MatInputModule,
     MatButtonModule,
     MatDialogModule,
@@ -39,9 +41,14 @@ export class NewToolFormComponent {
   private readonly dialogRef = inject(MatDialogRef<NewToolFormComponent>);
   private readonly toolsStore = inject(ToolsStore);
 
+  protected readonly toolAreas = Object.values(ToolArea);
+  protected readonly certificationRequirements = Object.values(CertificationRequirement);
+
   protected toolForm = this.fb.group({
     name: ['', [Validators.required, this.nameExistsValidator()]],
     description: [''],
+    area: ['' as ToolArea | '', [Validators.required]],
+    certificationRequirement: ['' as CertificationRequirement | '', [Validators.required]],
   });
 
   protected save(): void {
@@ -55,6 +62,8 @@ export class NewToolFormComponent {
     const command: CreateToolCommand = {
       name: formValue.name!,
       description: formValue.description || undefined,
+      area: formValue.area as ToolArea,
+      certificationRequirement: formValue.certificationRequirement as CertificationRequirement,
     };
 
     this.dialogRef.close(command);

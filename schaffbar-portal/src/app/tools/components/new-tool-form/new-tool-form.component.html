@@ -41,6 +41,47 @@
       </mat-form-field>
     </div>
   </div>
+
+  <div class="row">
+    <div class="col">
+      <mat-form-field class="full-width">
+        <mat-label>{{ 'tools.shared.toolProperties.area' | translate }}</mat-label>
+        <mat-select formControlName="area">
+          @for (area of toolAreas; track area) {
+            <mat-option [value]="area">{{ 'tools.areas.' + area | translate }}</mat-option>
+          }
+        </mat-select>
+        @if (toolForm.controls['area'].hasError('required')) {
+          <mat-error>
+            {{ 'tools.shared.toolProperties.area' | translate }}
+            {{ 'shared.dialogs.errors.required' | translate }}
+          </mat-error>
+        }
+      </mat-form-field>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col">
+      <mat-form-field class="full-width">
+        <mat-label>{{ 'tools.shared.toolProperties.certificationRequirement' | translate }}</mat-label>
+        <mat-select formControlName="certificationRequirement">
+          @for (req of certificationRequirements; track req) {
+            <mat-option [value]="req">
+              <span class="certification-indicator certification-indicator--{{ req | lowercase }}"></span>
+              {{ 'tools.certificationRequirements.' + req | translate }}
+            </mat-option>
+          }
+        </mat-select>
+        @if (toolForm.controls['certificationRequirement'].hasError('required')) {
+          <mat-error>
+            {{ 'tools.shared.toolProperties.certificationRequirement' | translate }}
+            {{ 'shared.dialogs.errors.required' | translate }}
+          </mat-error>
+        }
+      </mat-form-field>
+    </div>
+  </div>
 </mat-dialog-content>
 
 <mat-dialog-actions>

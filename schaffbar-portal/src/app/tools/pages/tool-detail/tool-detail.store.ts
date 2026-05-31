@@ -7,8 +7,8 @@ import { exhaustMap, filter, pipe, tap } from 'rxjs';
 
 import { setError, setFulfilled, setPending, withRequestStatus } from '../../../shared/state/request-status.feature';
 import {
-    BatchCreateToolCertificationCommand,
-    ToolCertification,
+  BatchCreateToolCertificationCommand,
+  ToolCertification,
 } from '../../../users/shared/models/tool-certification.model';
 import { ToolCertificationService } from '../../../users/shared/services/tool-certification.service';
 import { ChangeRfidReaderCommand, SetWlanRelaisCommand, Tool, UpdateToolCommand } from '../../tool.model';

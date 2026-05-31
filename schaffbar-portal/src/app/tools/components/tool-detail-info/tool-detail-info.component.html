@@ -22,6 +22,41 @@
       </mat-form-field>
     </div>
   </div>
+  <div class="row">
+    <div class="col">
+      <mat-form-field class="full-width" [floatLabel]="'always'" [hideRequiredMarker]="true">
+        <mat-label>{{ 'tools.shared.toolProperties.area' | translate }}</mat-label>
+        @if (readonly()) {
+          <input matInput [value]="'tools.areas.' + tool().area | translate" [readonly]="true" />
+        } @else {
+          <mat-select formControlName="area">
+            @for (area of toolAreas; track area) {
+              <mat-option [value]="area">{{ 'tools.areas.' + area | translate }}</mat-option>
+            }
+          </mat-select>
+        }
+      </mat-form-field>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col">
+      <mat-form-field class="full-width" [floatLabel]="'always'" [hideRequiredMarker]="true">
+        <mat-label>{{ 'tools.shared.toolProperties.certificationRequirement' | translate }}</mat-label>
+        @if (readonly()) {
+          <input matInput [value]="'tools.certificationRequirements.' + tool().certificationRequirement | translate" [readonly]="true" />
+        } @else {
+          <mat-select formControlName="certificationRequirement">
+            @for (req of certificationRequirements; track req) {
+              <mat-option [value]="req">
+                <span class="certification-indicator certification-indicator--{{ req | lowercase }}"></span>
+                {{ 'tools.certificationRequirements.' + req | translate }}
+              </mat-option>
+            }
+          </mat-select>
+        }
+      </mat-form-field>
+    </div>
+  </div>
 
   @if (!this.readonly()) {
     <div class="tool-info-actions">

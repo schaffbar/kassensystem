@@ -1,3 +1,4 @@
+import { LowerCasePipe } from '@angular/common';
 import { Component, computed, inject, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 
@@ -22,6 +23,7 @@ import { ToolsStore } from '../../tools.store';
   templateUrl: './tool-list.component.html',
   styleUrl: './tool-list.component.scss',
   imports: [
+    LowerCasePipe,
     MatButtonModule,
     MatTableModule,
     MatPaginatorModule,
@@ -43,7 +45,15 @@ export class ToolListComponent {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
-  protected displayedColumns = ['name', 'description', 'rfidReader', 'wlanRelaisType', 'actions'];
+  protected displayedColumns = [
+    'certificationRequirement',
+    'name',
+    'area',
+    'description',
+    'rfidReader',
+    'wlanRelaisType',
+    'actions',
+  ];
   protected toolsCount = computed(() => this.store.entities().length);
   protected dataSource = computed(() => {
     const result = new MatTableDataSource<Tool>(this.store.entities());

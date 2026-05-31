@@ -2,6 +2,8 @@ export interface Tool {
   id: string;
   name: string;
   description: string;
+  area: ToolArea;
+  certificationRequirement: CertificationRequirement;
   rfidReaderId?: string;
   ipAddress?: string;
   wlanRelaisType?: WlanRelaisType;
@@ -20,6 +22,18 @@ export enum WlanRelaisType {
   Shelly1 = 'SHELLY_1',
   Shelly2 = 'SHELLY_2',
   ShellyPro = 'SHELLY_PRO',
+}
+
+export enum ToolArea {
+  Holz = 'HOLZ',
+  Metall = 'METALL',
+  Kreativ = 'KREATIV',
+  FabLab = 'FABLAB',
+}
+
+export enum CertificationRequirement {
+  Yellow = 'YELLOW',
+  Red = 'RED',
 }
 
 export interface WlanRelaisTemplate {
@@ -52,12 +66,16 @@ export const WLAN_RELAIS_TEMPLATES: Record<WlanRelaisType, WlanRelaisTemplate> =
 export interface CreateToolCommand {
   name: string;
   description?: string;
+  area: ToolArea;
+  certificationRequirement: CertificationRequirement;
 }
 
 export interface UpdateToolCommand {
   id: string;
   name?: string;
   description?: string;
+  area: ToolArea;
+  certificationRequirement: CertificationRequirement;
 }
 
 export interface ChangeRfidReaderCommand {

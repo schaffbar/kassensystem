@@ -1,13 +1,13 @@
 package de.schaffbar.core_pos.use_case;
 
-import de.schaffbar.core_pos.rfid_reader.RfidReaderCommands.ChangeRfidReaderTypeCommand;
-import de.schaffbar.core_pos.rfid_reader.RfidReaderService;
-import de.schaffbar.core_pos.rfid_reader.RfidReaderType;
-import de.schaffbar.core_pos.rfid_reader.RfidReaderViews.RfidReaderView;
+import de.schaffbar.core_pos.domain.rfid_reader.RfidReaderCommands.ChangeRfidReaderTypeCommand;
+import de.schaffbar.core_pos.domain.rfid_reader.RfidReaderService;
+import de.schaffbar.core_pos.domain.rfid_reader.RfidReaderType;
+import de.schaffbar.core_pos.domain.rfid_reader.RfidReaderViews.RfidReaderView;
 import de.schaffbar.core_pos.shared.exception.ResourceNotFoundException;
 import de.schaffbar.core_pos.shared.exception.RfidReaderHasToolAssignedException;
 import de.schaffbar.core_pos.shared.id.RfidReaderId;
-import de.schaffbar.core_pos.tool.ToolService;
+import de.schaffbar.core_pos.domain.tool.ToolService;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;

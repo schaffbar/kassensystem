@@ -3,7 +3,7 @@ package de.schaffbar.core_pos.shared.event.payload;
 import java.time.Instant;
 import java.time.LocalDate;
 
-import de.schaffbar.core_pos.customer.CustomerAddress;
+import de.schaffbar.core_pos.domain.customer.CustomerAddress;
 import de.schaffbar.core_pos.shared.event.EventPayload;
 import de.schaffbar.core_pos.shared.id.CustomerId;
 import jakarta.validation.Valid;

@@ -1,10 +1,10 @@
 package de.schaffbar.core_pos.use_case;
 
+import de.schaffbar.core_pos.domain.workshop_session.WorkshopSessionService;
+import de.schaffbar.core_pos.domain.workshop_session.WorkshopSessionViews.WorkshopSessionView;
+import de.schaffbar.core_pos.domain.workshop_usage.WorkshopUsageService;
 import de.schaffbar.core_pos.shared.id.CustomerId;
 import de.schaffbar.core_pos.shared.id.WorkshopSessionId;
-import de.schaffbar.core_pos.workshop_session.WorkshopSessionService;
-import de.schaffbar.core_pos.workshop_session.WorkshopSessionViews.WorkshopSessionView;
-import de.schaffbar.core_pos.workshop_usage.WorkshopUsageService;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;

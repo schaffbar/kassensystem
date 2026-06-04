@@ -1,11 +1,11 @@
 package de.schaffbar.core_pos.use_case;
 
-import de.schaffbar.core_pos.customer.CustomerService;
-import de.schaffbar.core_pos.customer.CustomerViews.CustomerView;
-import de.schaffbar.core_pos.rfid_tag_assignment.RfidTagAssignmentService;
-import de.schaffbar.core_pos.rfid_tag_assignment.RfidTagAssignmentStatus;
-import de.schaffbar.core_pos.rfid_tag_assignment.RfidTagAssignmentViews.RfidTagAssignmentView;
-import de.schaffbar.core_pos.rfid_tag_assignment_history.RfidTagAssignmentHistoryService;
+import de.schaffbar.core_pos.domain.customer.CustomerService;
+import de.schaffbar.core_pos.domain.customer.CustomerViews.CustomerView;
+import de.schaffbar.core_pos.domain.rfid_tag_assignment.RfidTagAssignmentService;
+import de.schaffbar.core_pos.domain.rfid_tag_assignment.RfidTagAssignmentStatus;
+import de.schaffbar.core_pos.domain.rfid_tag_assignment.RfidTagAssignmentViews.RfidTagAssignmentView;
+import de.schaffbar.core_pos.domain.rfid_tag_assignment_history.RfidTagAssignmentHistoryService;
 import de.schaffbar.core_pos.shared.exception.ResourceNotFoundException;
 import de.schaffbar.core_pos.shared.id.CustomerId;
 import jakarta.transaction.Transactional;

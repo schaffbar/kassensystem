@@ -1,11 +1,11 @@
 package de.schaffbar.core_pos.use_case;
 
-import de.schaffbar.core_pos.customer.CustomerService;
+import de.schaffbar.core_pos.domain.customer.CustomerService;
 import de.schaffbar.core_pos.shared.exception.ResourceNotFoundException;
 import de.schaffbar.core_pos.shared.id.CustomerId;
 import de.schaffbar.core_pos.shared.id.ToolId;
-import de.schaffbar.core_pos.tool.ToolService;
-import de.schaffbar.core_pos.tool_certification.ToolCertificationService;
+import de.schaffbar.core_pos.domain.tool.ToolService;
+import de.schaffbar.core_pos.domain.tool_certification.ToolCertificationService;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;

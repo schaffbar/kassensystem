@@ -1,7 +1,7 @@
 package de.schaffbar.core_pos.use_case;
 
 import de.schaffbar.core_pos.shared.id.ToolId;
-import de.schaffbar.core_pos.tool.ToolService;
+import de.schaffbar.core_pos.domain.tool.ToolService;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;

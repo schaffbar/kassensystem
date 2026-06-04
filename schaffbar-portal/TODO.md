@@ -1,20 +1,13 @@
-- [Story] Save list of Einweiser for each tool in Details Page and use this list in Einweisung page
-- [Frontend] Tool Detail Page - RFID reader and WLAN relay zu Configuration mergen
-
-- [Backend] Merge dashboard packages (tool_dashboard, workshop_dashboard)
 - [Backend] Scheduler to clean up waiting for assignment
 - [Backend] put bruno collection to backend
 - [Backend] fix/implement/remove TODOs
+
 - [Technical] Migrate to Spring Boot 4
-- [Backend] add domain to packages
+- [Technical] upgrade Angular version
 
 - [Frontend] Fix Geburtsdatum
-- [Technical] upgrade Angular version
 - [Frontend] users and tools store should be global?
 - [Frontend] dashboard store - withEntities vs withState
-
-- [Story] Add flag for Tool - Need Tool Certification and check it during StartToolUsage use case
-- [Story] Add Bereich property to Tool aggregate
 
 #######################################
 

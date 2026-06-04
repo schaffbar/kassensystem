@@ -3,7 +3,6 @@ package de.schaffbar.core_pos.domain.customer.web;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.Period;
-import java.util.UUID;
 
 import de.schaffbar.core_pos.domain.customer.CustomerCommands.CreateCustomerCommand;
 import de.schaffbar.core_pos.domain.customer.CustomerCommands.UpdateCustomerAddressCommand;
@@ -71,9 +70,8 @@ public interface CustomerApiModel {
         UNDER_16, UNDER_18, ADULT
     }
 
-    // TODO: decide to use String or UUID for id, in other places we use String
     record CustomerApiDto( //
-            @NotNull UUID id, //
+            @NotBlank String id, //
             @NotBlank String firstName, //
             @NotBlank String lastName, //
             @NotBlank String dateOfBirth, //

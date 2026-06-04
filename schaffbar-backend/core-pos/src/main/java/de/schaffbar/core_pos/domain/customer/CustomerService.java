@@ -13,13 +13,13 @@ import de.schaffbar.core_pos.shared.event.outbox.OutboxEvent;
 import de.schaffbar.core_pos.shared.event.outbox.OutboxEventRepository;
 import de.schaffbar.core_pos.shared.exception.ResourceNotFoundException;
 import de.schaffbar.core_pos.shared.id.CustomerId;
-import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 
 @Slf4j
@@ -57,9 +57,9 @@ public class CustomerService {
 
         saveOutboxEvents(events);
 
-        log.info("Created customer with id {} and published events {}", savedCustomer.getCustomerId(), events);
+        log.info("Created customer with id {} and published events {}", savedCustomer.getId(), events);
 
-        return savedCustomer.getCustomerId();
+        return savedCustomer.getId();
     }
 
     @Transactional

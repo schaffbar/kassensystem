@@ -6,6 +6,7 @@ import de.schaffbar.core_pos.domain.rfid_tag_assignment.RfidTagAssignmentService
 import de.schaffbar.core_pos.domain.rfid_tag_assignment.RfidTagAssignmentStatus;
 import de.schaffbar.core_pos.domain.rfid_tag_assignment.RfidTagAssignmentViews.RfidTagAssignmentView;
 import de.schaffbar.core_pos.domain.rfid_tag_assignment_history.RfidTagAssignmentHistoryService;
+import de.schaffbar.core_pos.shared.exception.NoRfidTagAssignedException;
 import de.schaffbar.core_pos.shared.exception.ResourceNotFoundException;
 import de.schaffbar.core_pos.shared.id.CustomerId;
 import jakarta.transaction.Transactional;
@@ -34,7 +35,7 @@ public class CustomerUnassignRfidTag {
 
         RfidTagAssignmentView assignment = this.rfidTagAssignmentService.getRfidTagAssignment(customerId) //
                 .filter(a -> a.status() == RfidTagAssignmentStatus.ASSIGNED) //
-                .orElseThrow(() -> new RuntimeException("No RFID tag assigned to customer [id: " + customerId.getValue() + "]"));
+                .orElseThrow(() -> new NoRfidTagAssignedException(customerId));
 
         this.rfidTagAssignmentHistoryService.moveToHistory(assignment);
 

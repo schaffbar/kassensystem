@@ -7,7 +7,6 @@ import de.schaffbar.core_pos.shared.id.CustomerId;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
 import org.mapstruct.ReportingPolicy;
 import org.mapstruct.factory.Mappers;
 
@@ -19,7 +18,6 @@ public interface CustomerViews {
     // ------------------------------------------------------------------------
     // mapper
 
-    @Mapping(target = "id", source = "customerId")
     CustomerView toCustomerView(Customer customer);
 
     // ------------------------------------------------------------------------

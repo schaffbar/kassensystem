@@ -14,28 +14,28 @@ final class CustomerEventFactory {
         var payload = CustomerPayloadMapper.MAPPER.toCustomerCreatedPayload(customer);
         payload.validate();
 
-        return SchaffbarEvent.customerEvent(EventType.CUSTOMER_CREATED, customer.getCustomerId(), payload);
+        return SchaffbarEvent.customerEvent(EventType.CUSTOMER_CREATED, customer.getId(), payload);
     }
 
     static SchaffbarEvent customerUpdated(Customer customer) {
         var payload = CustomerPayloadMapper.MAPPER.toCustomerUpdatedPayload(customer);
         payload.validate();
 
-        return SchaffbarEvent.customerEvent(EventType.CUSTOMER_UPDATED, customer.getCustomerId(), payload);
+        return SchaffbarEvent.customerEvent(EventType.CUSTOMER_UPDATED, customer.getId(), payload);
     }
 
     static SchaffbarEvent customerContactChanged(Customer customer) {
         var payload = CustomerPayloadMapper.MAPPER.toCustomerContactChangedPayload(customer);
         payload.validate();
 
-        return SchaffbarEvent.customerEvent(EventType.CUSTOMER_CONTACT_CHANGED, customer.getCustomerId(), payload);
+        return SchaffbarEvent.customerEvent(EventType.CUSTOMER_CONTACT_CHANGED, customer.getId(), payload);
     }
 
     static SchaffbarEvent customerAddressChanged(Customer customer) {
         var payload = CustomerPayloadMapper.MAPPER.toCustomerAddressChangedPayload(customer);
         payload.validate();
 
-        return SchaffbarEvent.customerEvent(EventType.CUSTOMER_ADDRESS_CHANGED, customer.getCustomerId(), payload);
+        return SchaffbarEvent.customerEvent(EventType.CUSTOMER_ADDRESS_CHANGED, customer.getId(), payload);
     }
 
     static SchaffbarEvent customerDeleted(CustomerId customerId) {

@@ -89,7 +89,6 @@ public class WorkshopUsageService {
         throw new UserAlreadyInWorkshopException(workshopUsage.getCustomerId());
     }
 
-    // TODO: DRY: this method is duplicated in multiple services, maybe move to a common base class or utility class?
     private void saveOutboxEvents(List<SchaffbarEvent> events) {
         List<OutboxEvent> outboxEvents = events.stream() //
                 .map(OutboxEvent::of) //

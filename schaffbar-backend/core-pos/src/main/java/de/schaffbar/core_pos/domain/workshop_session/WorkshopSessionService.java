@@ -75,7 +75,6 @@ public class WorkshopSessionService {
         throw new RuntimeException("Customer [id: " + session.getCustomerId() + "] has already open workshop session");
     }
 
-    // TODO: DRY: this method is duplicated in multiple services, maybe move to a common base class or utility class?
     private void saveOutboxEvents(List<SchaffbarEvent> events) {
         List<OutboxEvent> outboxEvents = events.stream() //
                 .map(OutboxEvent::of) //

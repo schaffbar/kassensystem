@@ -17,16 +17,12 @@ interface CustomerPayloadMapper {
     // ------------------------------------------------------------------------
     // mapper
 
-    @Mapping(target = "id", source = "customerId")
     CustomerCreatedPayload toCustomerCreatedPayload(Customer customer);
 
-    @Mapping(target = "id", source = "customerId")
     CustomerUpdatedPayload toCustomerUpdatedPayload(Customer customer);
 
-    @Mapping(target = "id", source = "customerId")
     CustomerContactChangedPayload toCustomerContactChangedPayload(Customer customer);
 
-    @Mapping(target = "id", source = "customerId")
     @Mapping(target = "addressLine1", source = "address.addressLine1")
     @Mapping(target = "addressLine2", source = "address.addressLine2")
     @Mapping(target = "postalCode", source = "address.postalCode")

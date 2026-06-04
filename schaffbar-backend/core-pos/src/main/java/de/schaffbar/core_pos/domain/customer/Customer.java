@@ -24,7 +24,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 @Getter
-@Setter
+@Setter(AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @ToString
 @Entity
@@ -64,7 +64,7 @@ class Customer {
 
     static Customer of(CreateCustomerCommand command) {
         Customer customer = new Customer();
-        customer.setId(UUID.randomUUID());
+        customer.setId(CustomerId.random().getValue());
         customer.setFirstName(command.firstName());
         customer.setLastName(command.lastName());
         customer.setDateOfBirth(command.dateOfBirth());
@@ -80,7 +80,7 @@ class Customer {
     // ------------------------------------------------------------------------
     // query
 
-    public CustomerId getCustomerId() {
+    public CustomerId getId() {
         return CustomerId.of(this.id);
     }
 

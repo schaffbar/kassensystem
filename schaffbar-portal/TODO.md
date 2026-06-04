@@ -2,12 +2,18 @@
 - [Backend] put bruno collection to backend
 - [Backend] fix/implement/remove TODOs
 
-- [Technical] Migrate to Spring Boot 4
 - [Technical] upgrade Angular version
+- [Technical] Migrate to Spring Boot 4
+- [Technical] open telemetry
 
+- [Backend] Unit tests
 - [Frontend] Fix Geburtsdatum
 - [Frontend] users and tools store should be global?
 - [Frontend] dashboard store - withEntities vs withState
+
+#######################################
+
+- Nutzt jakarta.transaction.Transactional statt org.springframework.transaction.annotation.Transactional
 
 #######################################
 

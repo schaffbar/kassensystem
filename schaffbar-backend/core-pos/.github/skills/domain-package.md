@@ -27,6 +27,9 @@ Wenn ein neues Domain-Package (Aggregate) im Schaffbar Core-POS Projekt erstellt
 
 - `StringTo<Aggregate>IdConverter.java` — `implements Converter<String, <Aggregate>Id>`, `@Component`
 - Notwendig für `@PathVariable` und `@RequestParam` Deserialisierung
+- **Für JEDES Value Object das in `@PathVariable` oder `@RequestParam` verwendet wird, MUSS ein Converter existieren**
+- Nicht nur für IDs — auch für andere Value Objects wie `MacAddress`, `IpAddress`, etc.
+- Pattern: `return <ValueObject>.of(source)` im `convert()`-Method
 
 ### 3. Event-Infrastruktur (shared/event)
 
@@ -44,8 +47,9 @@ Wenn ein neues Domain-Package (Aggregate) im Schaffbar Core-POS Projekt erstellt
 - Domain-spezifische Exceptions nach Bedarf in `shared/exception/`
 - Pattern: `extends RuntimeException`, `@Serial`, statische `MESSAGE`-Konstante, Konstruktor mit Value Objects
 - Beispiel-Naming: `CustomerAlreadyInstructorException`, `CustomerNotInstructorException`,
-  `CustomerNotCertifiedForToolException`
-- Keine generischen `IllegalStateException` verwenden — immer eigene Exception-Klasse erstellen
+  `MacAddressAlreadyUsedException`, `NoRfidTagAssignedException`
+- Keine generischen `IllegalStateException` oder `RuntimeException` verwenden — **immer** eigene Exception-Klasse
+  erstellen
 - `ResourceNotFoundException` — neue Factory-Methode + neuen `Resource` Enum-Wert hinzufügen falls nötig
 
 ### 5. Aggregate-Package (`<aggregate_name>/`)
@@ -68,10 +72,15 @@ Alle folgenden Dateien sind **package-private** (außer Service, Views, Commands
 
 - `<Aggregate>.java` — JPA `@Entity`, `@Table(name = "...", schema = "SCHAFFBAR")`
 - Lombok: `@Getter`, `@Setter(AccessLevel.PRIVATE)`, `@NoArgsConstructor(access = AccessLevel.PROTECTED)`, `@ToString`
+- **`@Setter` IMMER mit `AccessLevel.PRIVATE`** — niemals ohne Access Level
 - Felder intern als Raw-Typen (`UUID`, `String`), Getter geben Value Objects zurück
 - `@Id` auf UUID, `@Version` auf `Instant updatedAt`, `@Enumerated(EnumType.STRING)` für Enums
+- **ID-Getter heißt `getId()`** und gibt das Value Object zurück (z.B. `ToolId`, `CustomerId`)
+    - Nicht `getToolId()` oder `getCustomerId()` — immer `getId()` für die eigene Identity
+    - Referenz-IDs zu anderen Aggregaten (z.B. `customerId` in `ToolCertification`) behalten ihren vollen Namen
 - **Statische Factory `of(CreateCommand)`** gibt **direkt die Entity** zurück (kein `WithEvents`-Record). Das
   Creation-Event wird im Service erzeugt.
+- In `of()`: `<Aggregate>Id.random().getValue()` verwenden, NICHT `UUID.randomUUID()`
 - **Command-Methoden** (`pause()`, `revoke()`, etc.) geben immer `List<SchaffbarEvent>` zurück
 - Zustandsvalidierung in Command-Methoden, nicht im Service
 - Null-Checks mit `Objects.nonNull()` / `Objects.isNull()`, niemals `!= null`
@@ -101,11 +110,13 @@ Alle folgenden Dateien sind **package-private** (außer Service, Views, Commands
 - `<Aggregate>Views.java` — MapStruct `@Mapper`, `public interface`
 - Singleton: `MAPPER = Mappers.getMapper(...)`
 - View-Records mit Value Objects als Feld-Typen
+- **`@Mapping(target = "id", source = "id")`** — da `getId()` direkt das Value Object zurückgibt
 
 #### 5h. Service
 
 - `<Aggregate>Service.java` — `@Service`, `@Validated`, `@RequiredArgsConstructor`, `public class`
 - Injiziert Repository + `OutboxEventRepository`
+- **Immer `org.springframework.transaction.annotation.Transactional`** verwenden — NICHT `jakarta.transaction.Transactional`
 - **Query-Methoden:** geben Views/Optional zurück
 - **Command-Methoden:** `@Transactional`, delegieren an Aggregate, persistieren Entity + Outbox-Events
 - Creation: `Entity.of(command)` → `save()` → `EventFactory.created(entity)` → `saveOutboxEvents()`
@@ -113,10 +124,11 @@ Alle folgenden Dateien sind **package-private** (außer Service, Views, Commands
 - Private Helper: `saveOutboxEvents()`, `findOrThrow()`, `throw...Exception()` Methoden
 - **Uniqueness-/Existenz-Prüfungen:** mit `Optional.ifPresent(existing -> throwXxxException(..., existing))` +
   dedizierter privater `throw...Exception()`-Methode — keine Inline-Lambdas mit `throw new ...`
+
 #### 5i. Web Layer (`web/`)
 
 - `<Aggregate>ApiModel.java` — MapStruct `@Mapper extends ValueObjectMapper`, `public interface`
-    - Response-DTOs: Verwende Value Objects, `@JsonValue` serialisiert automatisch
+    - Response-DTOs: **ID-Felder als `String`** (via `@Mapping(target = "id", source = "id.value")`)
     - Request-DTOs: Verwende Value Objects, `@JsonCreator` deserialisiert automatisch
     - Kein manuelles `UUID → ValueObject` Mapping im Controller nötig
 - `<Aggregate>Controller.java` — `@RestController`, `@Validated`, `@RequiredArgsConstructor`
@@ -124,11 +136,16 @@ Alle folgenden Dateien sind **package-private** (außer Service, Views, Commands
     - Query-Endpoints: delegieren an Service
     - **Command-Endpoints: delegieren IMMER an Use Cases** — niemals direkt an den Service
     - Path: `/api/v1/<aggregate-name-kebab-case>`
+    - **`@PathVariable` und `@RequestParam` verwenden IMMER Value Objects** (z.B. `@PathVariable RfidReaderId rfidReaderId`)
+      — NIEMALS `UUID` oder `String` mit manueller Konvertierung
+    - Optionale Filter-Parameter: `@RequestParam(required = false) ValueObject param` + `Objects.nonNull()` Check
+    - **Kein Query/Command-Mix:** Ein Endpoint ist entweder Query ODER Command, niemals beides zusammen (kein "get-or-create")
 
 ### 6. Use Cases (`use_case/`)
 
 - Eine Klasse pro Use Case — `@Service`, `@Validated`, `@RequiredArgsConstructor`
 - **Jede Command/Mutation geht über einen Use Case** — der Controller ruft niemals direkt den Domain-Service auf
+- **Immer `org.springframework.transaction.annotation.Transactional`** verwenden — NICHT `jakarta.transaction.Transactional`
 - Orchestriert Validierung, Existenzprüfungen und delegiert dann an den Domain-Service
 - **Existenzprüfungen** für referenzierte Aggregate (Customer, Tool, etc.) gehören hierher
     - Pattern: `service.get(id).orElseThrow(() -> ResourceNotFoundException.xxx(id))`
@@ -136,8 +153,9 @@ Alle folgenden Dateien sind **package-private** (außer Service, Views, Commands
 - `@Transactional` auf der `process()`-Methode (außer bei Batch mit Teilerfolgen — dort ist jeder Einzel-Aufruf im
   Service eigenständig transaktional)
 - Batch-Use-Cases: Teilerfolge mit Result-DTO (`List<Success>` + `List<Error>`)
-- **Naming-Konvention:** `<Aggregate><Verb><Object>` (z.B. `ToolAddInstructors`, `ToolRemoveInstructors`,
-  `ToolCertifyCustomers`, `ToolRevokeCertification`)
+- **Naming-Konvention:** `<Aggregate><Verb><Object>` (z.B. `RfidReaderCreate`, `RfidReaderUpdate`,
+  `RfidReaderDelete`, `RfidReaderChangeType`, `ToolAddInstructors`, `ToolRemoveInstructors`)
+- Auch für einfache CRUD-Operationen (Create, Update, Delete) — damit der Controller konsistent bleibt
 
 ### 7. DB-Migration
 
@@ -159,7 +177,7 @@ Alle folgenden Dateien sind **package-private** (außer Service, Views, Commands
 - Dies ist die **Single Source of Truth** für das Aggregate
 - Bei Änderungen am Domain-Modell (neue Business Rules, Commands, Events, Attribute, etc.) immer README file
   aktualisieren
-- For allem Business Rules immer aktuell halten, da sie die Grundlage für die Implementierung und die Dokumentation der
+- Vor allem Business Rules immer aktuell halten, da sie die Grundlage für die Implementierung und die Dokumentation der
   Domain-Logik bilden
 
 **Zentrale Docs** (`docs/ddd-overview.md` EN + `docs/ddd-uebersicht.md` DE) an folgenden Stellen ergänzen:
@@ -187,8 +205,15 @@ Alle folgenden Dateien sind **package-private** (außer Service, Views, Commands
 - Package-private als Default, `public` nur wo nötig (Service, Views, Commands, Enums, DTOs)
 - Events über Transactional Outbox Pattern
 - `of()` gibt Entity zurück, Creation-Event im Service
+- In `of()`: `<Aggregate>Id.random().getValue()` — NICHT `UUID.randomUUID()`
 - Command-Methoden geben `List<SchaffbarEvent>` zurück
 - Existenzprüfungen in Use Cases, Zustandsprüfungen im Aggregate
-- Keine `IllegalStateException` — immer domain-spezifische Custom Exceptions definieren
+- Keine `IllegalStateException` oder `RuntimeException` — immer domain-spezifische Custom Exceptions definieren
 - Listen-Operationen (add/remove mehrere Einträge) bevorzugen `List<ValueObject>` statt einzelne Werte
 - **Jede Mutation/Command geht über einen Use Case** — Controller delegiert nie direkt an den Domain-Service
+- **Immer `org.springframework.transaction.annotation.Transactional`** — niemals `jakarta.transaction.Transactional`
+- **`@Setter(AccessLevel.PRIVATE)`** — niemals `@Setter` ohne Access Level auf Entities
+- **`getId()` für eigene Identity** — nicht `get<Aggregate>Id()`
+- **`@PathVariable` / `@RequestParam` immer mit Value Objects** — niemals `UUID` / `String` mit manueller Konvertierung
+- **ID-Felder in Response-DTOs als `String`** — nicht `UUID`
+- **Kein Query/Command-Mix in einem Endpoint** — kein "get-or-create" Pattern

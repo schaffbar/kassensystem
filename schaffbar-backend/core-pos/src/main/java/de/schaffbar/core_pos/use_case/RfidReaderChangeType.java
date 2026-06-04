@@ -8,7 +8,7 @@ import de.schaffbar.core_pos.shared.exception.ResourceNotFoundException;
 import de.schaffbar.core_pos.shared.exception.RfidReaderHasToolAssignedException;
 import de.schaffbar.core_pos.shared.id.RfidReaderId;
 import de.schaffbar.core_pos.domain.tool.ToolService;
-import jakarta.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.NonNull;
@@ -19,7 +19,7 @@ import org.springframework.validation.annotation.Validated;
 @Service
 @Validated
 @RequiredArgsConstructor
-public class ChangeRfidReaderType {
+public class RfidReaderChangeType {
 
     private final @NonNull RfidReaderService rfidReaderService;
 

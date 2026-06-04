@@ -9,6 +9,7 @@ import de.schaffbar.core_pos.domain.rfid_reader.RfidReaderViews.RfidReaderView;
 import de.schaffbar.core_pos.shared.event.SchaffbarEvent;
 import de.schaffbar.core_pos.shared.event.outbox.OutboxEvent;
 import de.schaffbar.core_pos.shared.event.outbox.OutboxEventRepository;
+import de.schaffbar.core_pos.shared.exception.MacAddressAlreadyUsedException;
 import de.schaffbar.core_pos.shared.exception.ResourceNotFoundException;
 import de.schaffbar.core_pos.shared.id.MacAddress;
 import de.schaffbar.core_pos.shared.id.RfidReaderId;
@@ -55,7 +56,8 @@ public class RfidReaderService {
 
     @Transactional
     public RfidReaderId createRfidReader(@NotNull @Valid MacAddress macAddress) {
-        // TODO: check if rfidReader with same mac address already exists
+        this.rfidReaderRepository.findByMacAddress(macAddress.getValue()) //
+                .ifPresent(existing -> throwMacAddressAlreadyUsedException(macAddress, existing));
 
         RfidReader rfidReader = RfidReader.of(macAddress);
         RfidReader savedRfidReader = this.rfidReaderRepository.save(rfidReader);
@@ -112,6 +114,10 @@ public class RfidReaderService {
                 .toList();
 
         this.outboxEventRepository.saveAll(outboxEvents);
+    }
+
+    private void throwMacAddressAlreadyUsedException(MacAddress macAddress, RfidReader existingRfidReader) {
+        throw new MacAddressAlreadyUsedException(macAddress, existingRfidReader.getId());
     }
 
 }

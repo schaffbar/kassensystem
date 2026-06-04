@@ -1,0 +1,15 @@
+meta {
+  name: Delete RFID reader
+  type: http
+  seq: 7
+}
+
+delete {
+  url: {{domain_url}}/api/v1/rfid-readers/:rfidReaderId
+  body: none
+  auth: inherit
+}
+
+params:path {
+  rfidReaderId: d9e4d716-959d-4f70-be11-bcf1775e094b
+}

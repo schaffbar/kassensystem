@@ -1,0 +1,27 @@
+meta {
+  name: Update customer
+  type: http
+  seq: 4
+}
+
+put {
+  url: {{domain_url}}/api/v1/customers/:customerId
+  body: json
+  auth: inherit
+}
+
+params:path {
+  customerId: b9e2cb33-350f-4fbf-80d7-31d94058beab
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "firstName": "Piotr",
+    "lastName": "Krantz",
+    "dateOfBirth": "2009-10-26"
+  }
+}

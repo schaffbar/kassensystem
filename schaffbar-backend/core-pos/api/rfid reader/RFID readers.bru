@@ -1,0 +1,15 @@
+meta {
+  name: RFID readers
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{domain_url}}/api/v1/rfid-readers
+  body: none
+  auth: inherit
+}
+
+headers {
+  Accept: application/json
+}

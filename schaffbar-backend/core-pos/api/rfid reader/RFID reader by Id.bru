@@ -1,0 +1,15 @@
+meta {
+  name: RFID reader by Id
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{domain_url}}/api/v1/rfid-readers/:rfidReaderId
+  body: none
+  auth: inherit
+}
+
+params:path {
+  rfidReaderId: 788779c4-bd97-450d-b655-e4814caa2e73
+}

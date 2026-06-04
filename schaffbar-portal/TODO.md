@@ -1,3 +1,4 @@
+- [Frontend] RFID-Reader detail page trennen (mac + type / name + socket)
 - [Backend] Scheduler to clean up waiting for assignment
 - [Backend] put bruno collection to backend
 - [Backend] fix/implement/remove TODOs

@@ -1,0 +1,21 @@
+meta {
+  name: Create RFID reader
+  type: http
+  seq: 4
+}
+
+post {
+  url: {{domain_url}}/api/v1/rfid-readers
+  body: json
+  auth: inherit
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "macAddress": "00:1A:2B:3C:4D:5E"
+  }
+}

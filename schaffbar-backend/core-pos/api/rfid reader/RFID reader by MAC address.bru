@@ -1,0 +1,19 @@
+meta {
+  name: RFID reader by MAC address
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{domain_url}}/api/v1/rfid-readers?macAddress=34:CD:B0:D3:A9:30
+  body: none
+  auth: inherit
+}
+
+params:query {
+  macAddress: 34:CD:B0:D3:A9:30
+}
+
+headers {
+  Accept: application/json
+}

@@ -1,0 +1,26 @@
+meta {
+  name: Change RFID reader type
+  type: http
+  seq: 5
+}
+
+patch {
+  url: {{domain_url}}/api/v1/rfid-readers/:rfidReaderId/type
+  body: json
+  auth: inherit
+}
+
+params:path {
+  rfidReaderId: 788779c4-bd97-450d-b655-e4814caa2e73
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    //"type": "GATE_KEEPER_IN"
+    "type": "SWITCH_BOX"
+  }
+}

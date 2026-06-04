@@ -1,0 +1,30 @@
+meta {
+  name: Create customer
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{domain_url}}/api/v1/customers
+  body: json
+  auth: inherit
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "firstName": "Hans",
+    "lastName": "Müller",
+    "dateOfBirth": "2012-10-30",
+    "email": "hans.müller@example.com",
+    "phone": null,
+    "addressLine1": "Teststr. 123",
+    "addressLine2": null,
+    "postalCode": "71032",
+    "city": "Böblingen",
+    "country": "Deutschland"
+  }
+}

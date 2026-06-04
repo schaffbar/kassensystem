@@ -1,0 +1,29 @@
+meta {
+  name: Update customer address
+  type: http
+  seq: 6
+}
+
+put {
+  url: {{domain_url}}/api/v1/customers/:customerId/address
+  body: json
+  auth: inherit
+}
+
+params:path {
+  customerId: 4ce63444-1673-429f-8895-add8895887ad
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "addressLine1": "Teststr. 123",
+    "addressLine2": null,
+    "postalCode": "71032",
+    "city": "Böblingen",
+    "country": "Deutschland"
+  }
+}

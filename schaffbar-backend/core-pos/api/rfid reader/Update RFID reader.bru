@@ -1,0 +1,26 @@
+meta {
+  name: Update RFID reader
+  type: http
+  seq: 6
+}
+
+put {
+  url: {{domain_url}}/api/v1/rfid-readers/:rfidReaderId
+  body: json
+  auth: inherit
+}
+
+params:path {
+  rfidReaderId: 24467f3c-7f4c-45b7-9df4-1c5f694442a1
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "name": "Rfid tag register",
+    "socketName": "Socket 48"
+  }
+}

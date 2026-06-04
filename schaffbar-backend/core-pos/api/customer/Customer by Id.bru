@@ -1,0 +1,15 @@
+meta {
+  name: Customer by Id
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{domain_url}}/api/v1/customers/:customerId
+  body: none
+  auth: inherit
+}
+
+params:path {
+  customerId: 46417d27-ff9a-4cc8-a765-8ac55fc8b793
+}

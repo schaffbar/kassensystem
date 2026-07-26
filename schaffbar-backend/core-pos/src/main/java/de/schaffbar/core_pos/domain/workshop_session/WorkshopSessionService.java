@@ -56,7 +56,7 @@ public class WorkshopSessionService {
     @Transactional
     public void closeSession(@NotNull @Valid CustomerId customerId) {
         WorkshopSession session = fetchOpenWorkshopSession(customerId) //
-                .orElseThrow(() -> new RuntimeException("No workshop session found for customer [id: " + customerId + "]"));
+                .orElseThrow(() -> new RuntimeException("No workshop session found for customer [id: " + customerId + "]")); // TODO: use proper exception
 
         List<SchaffbarEvent> events = session.close();
         saveOutboxEvents(events);

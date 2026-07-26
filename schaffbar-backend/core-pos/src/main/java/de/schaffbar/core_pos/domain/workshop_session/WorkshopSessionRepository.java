@@ -20,7 +20,7 @@ interface WorkshopSessionRepository extends JpaRepository<WorkshopSession, UUID>
         }
 
         if (workshopSessions.size() > 1) {
-            throw new RuntimeException("More than one open session found");
+            throw new RuntimeException("More than one open session found"); // TODO: create custom exception
         }
 
         return Optional.of(workshopSessions.getFirst());

@@ -1,5 +1,8 @@
-- [Frontend] RFID-Reader detail page trennen (mac + type / name + socket)
+- [Frontend] Validate Session before closing it
 - [Backend] Scheduler to clean up waiting for assignment
+
+- [Frontend] Fix Geburtsdatum
+- [Frontend] RFID-Reader detail page trennen (mac + type / name + socket)
 - [Backend] put bruno collection to backend
 - [Backend] fix/implement/remove TODOs
 
@@ -8,7 +11,6 @@
 - [Technical] open telemetry
 
 - [Backend] Unit tests
-- [Frontend] Fix Geburtsdatum
 - [Frontend] users and tools store should be global?
 - [Frontend] dashboard store - withEntities vs withState
 
@@ -38,8 +40,6 @@ Wenn du den Ausdruck jedoch in seine einzelnen Bestandteile zerlegst, haben die 
 - [Backend] Enter and leave time as LocalDateTime instead of Instant?
 - [Backend] Problems API
 - [Backend] Beim Löschen immer überprüfen ob Entity nicht irgendwo referenziert wird
-- [Backend] Check if workshop usage is completed before closing session
-- [Backend] Validate Session before closing it
 
 - [Technical]
 - [Technical] Facade vs Use Case
